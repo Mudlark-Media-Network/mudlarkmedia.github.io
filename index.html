@@ -1,1 +1,529 @@
-dasdawda
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="A small network of writers, musicians, and researchers. All work public domain.">
+<title>Mudlark Media Network</title>
+<style>
+  :root {
+    --bg:             #17110a;
+    --surface:        #2d2218;
+    --surface-hi:     #362a1e;
+    --text-primary:   #ebe4d4;
+    --text-secondary: #a89978;
+    --text-tertiary:  #776a55;
+    --accent:         #e3b04a;
+    --signal:         #8e7239;
+    --stroke:         rgba(235,228,212,0.09);
+    --stroke-accent:  rgba(227,176,74,0.40);
+    --stroke-signal:  rgba(142,114,57,0.50);
+    --tint-soft:      rgba(54,42,30,0.45);
+    --tint-soft-hi:   rgba(54,42,30,0.70);
+
+    --type-xs:   0.7rem;
+    --type-sm:   0.85rem;
+    --type-base: 1rem;
+    --type-lg:   1.4rem;
+    --type-xl:   2.2rem;
+    --type-hero: 3.8rem;
+  }
+
+  html { font-size: calc(14px + 0.3vw); }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    position: relative;
+    overflow-x: hidden;
+    color: var(--text-primary);
+    font-family: ui-monospace, 'Cascadia Code', 'Menlo', monospace;
+    font-size: var(--type-base);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #mudlark-root {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Animated background panels ──────────────────────── */
+  .bg-panels {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-panels .panel {
+    position: absolute;
+    background: rgba(180,120,20,0.028);
+    will-change: transform;
+    animation-play-state: running !important;
+  }
+  .bg-panels .panel.h { animation: waveH 28s ease-in-out infinite; }
+  .bg-panels .panel.v { animation: waveV 32s ease-in-out infinite; }
+  @keyframes waveH {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(64px, -12px); }
+  }
+  @keyframes waveV {
+    0%, 100% { transform: translate(0, 0); }
+    25%      { transform: translate(10px, -76px); }
+    75%      { transform: translate(-10px, 76px); }
+  }
+  /* Reduced-motion override intentionally removed — panels animate unconditionally */
+
+  #mudlark-root a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+  #mudlark-root a:focus-visible {
+    outline: 1px solid var(--signal);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+  #mudlark-root ::selection {
+    background: var(--stroke-accent);
+    color: var(--text-primary);
+  }
+
+  /* ── Shared box style (tinted, used for content) ─────── */
+  #mudlark-root .box {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--stroke);
+    border-radius: 2px;
+    font-size: var(--type-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background: var(--tint-soft);
+    white-space: nowrap;
+  }
+  #mudlark-root a.box:hover {
+    color: var(--text-primary);
+    border-color: var(--stroke-accent);
+    background: var(--tint-soft-hi);
+  }
+
+  /* Header/footer "chrome" — outline-only boxes, pattern shows through */
+  #mudlark-root > header .box,
+  #mudlark-root > footer .box {
+    background: transparent;
+    min-width: 9rem;
+    text-align: center;
+  }
+  #mudlark-root > header a.box:hover,
+  #mudlark-root > footer a.box:hover {
+    background: rgba(54,42,30,0.35);
+    border-color: var(--stroke-accent);
+    color: var(--text-primary);
+  }
+
+  /* ── Header ──────────────────────────────────────────── */
+  #mudlark-root > header {
+    margin: 0 -5rem;
+    padding: 1.6rem 1.4rem;
+    background: rgba(227,176,74,0.12);
+    border-bottom: 1px solid var(--stroke);
+    border-radius: 3px 3px 0 0;
+  }
+  #mudlark-root .nav-row,
+  #mudlark-root .footer-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+  #mudlark-root .nav-left,
+  #mudlark-root .footer-left { justify-self: start; display: flex; gap: 0.6rem; }
+  #mudlark-root .nav-right,
+  #mudlark-root .footer-right { justify-self: end; display: flex; gap: 0.6rem; }
+  #mudlark-root .brand {
+    font-size: 1.3rem;
+    letter-spacing: 0.2em;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+  }
+  #mudlark-root .brand:hover { color: var(--accent); }
+
+  /* ── Hero feature (now a box) ────────────────────────── */
+  #mudlark-root .hero {
+    display: block;
+    margin: 2rem 0 0;
+    padding: 2rem;
+    border: 1px solid var(--stroke);
+    background: var(--tint-soft);
+    border-radius: 3px;
+  }
+  #mudlark-root .hero:hover {
+    border-color: var(--stroke-accent);
+    background: var(--tint-soft-hi);
+  }
+  #mudlark-root .hero-label {
+    font-size: var(--type-xs);
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+  }
+  #mudlark-root .hero-title {
+    font-size: var(--type-hero);
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin: 1rem 0 0;
+    font-weight: 500;
+  }
+  #mudlark-root .hero-sub {
+    font-size: var(--type-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 44rem;
+    margin: 1.2rem 0 0;
+  }
+  #mudlark-root .hero-meta {
+    font-size: var(--type-xs);
+    color: var(--text-tertiary);
+    letter-spacing: 0.1em;
+    margin-top: 1.4rem;
+  }
+
+  /* ── Also Featured ───────────────────────────────────── */
+  #mudlark-root .strip {
+    padding: 3rem 0;
+  }
+  #mudlark-root .section-label {
+    font-size: var(--type-xs);
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+  }
+  #mudlark-root .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+  #mudlark-root .card {
+    background: var(--tint-soft);
+    border: 1px solid var(--stroke);
+    border-radius: 3px;
+    padding: 1.2rem;
+    display: block;
+  }
+  #mudlark-root .card:hover {
+    border-color: var(--stroke-accent);
+    background: var(--tint-soft-hi);
+  }
+  #mudlark-root .chip {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--stroke-accent);
+    border-radius: 2px;
+    font-size: var(--type-xs);
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    background: transparent;
+  }
+  #mudlark-root .card-title {
+    font-size: var(--type-base);
+    color: var(--text-primary);
+    margin: 1rem 0 0;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  #mudlark-root .card-sub {
+    font-size: var(--type-sm);
+    color: var(--text-secondary);
+    margin: 0.5rem 0 0;
+    line-height: 1.55;
+  }
+
+  /* ── Video strip ─────────────────────────────────────── */
+  #mudlark-root .videos {
+    padding: 3rem 0;
+  }
+  #mudlark-root .video-frame {
+    border: 1px solid var(--stroke);
+    border-radius: 3px;
+    background: var(--tint-soft);
+    padding: 1rem;
+  }
+  #mudlark-root .video-scroll {
+    display: flex;
+    gap: 0.9rem;
+    overflow-x: auto;
+    padding-bottom: 0.8rem;
+    scrollbar-color: var(--signal) rgba(235,228,212,0.05);
+    scrollbar-width: thin;
+  }
+  #mudlark-root .video-scroll::-webkit-scrollbar { height: 8px; }
+  #mudlark-root .video-scroll::-webkit-scrollbar-track {
+    background: rgba(235,228,212,0.05);
+    border-radius: 4px;
+  }
+  #mudlark-root .video-scroll::-webkit-scrollbar-thumb {
+    background: var(--signal);
+    border-radius: 4px;
+  }
+  #mudlark-root .video-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+  #mudlark-root .video {
+    flex: 0 0 12rem;
+    aspect-ratio: 3 / 1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border: 1px solid var(--stroke);
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--tint-soft);
+  }
+  #mudlark-root .video:hover {
+    border-color: var(--stroke-accent);
+    background: var(--tint-soft-hi);
+  }
+  #mudlark-root .video-thumb {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hi) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-size: 1rem;
+    border-right: 1px solid var(--stroke);
+    aspect-ratio: 1 / 1;
+  }
+  #mudlark-root .video:hover .video-thumb { color: var(--accent); }
+  #mudlark-root .video-title {
+    padding: 0.55rem 0.7rem;
+    font-size: var(--type-xs);
+    color: var(--text-primary);
+    line-height: 1.35;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── About ───────────────────────────────────────────── */
+  #mudlark-root .about {
+    margin: 3rem -3rem;
+    padding: 2.2rem 2.5rem;
+    border: 1px solid #000;
+    border-radius: 3px;
+    background: rgba(10,7,4,0.44);
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2.5rem;
+  }
+  #mudlark-root .about-body p {
+    font-size: var(--type-base);
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin: 0 0 1rem;
+  }
+  #mudlark-root .about-body p:last-child { margin-bottom: 0; }
+
+  #mudlark-root .roster {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: stretch;
+  }
+  #mudlark-root .member {
+    display: flex;
+    flex-direction: column;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--stroke);
+    border-radius: 2px;
+    background: var(--tint-soft);
+    line-height: 1.2;
+    width: 100%;
+  }
+  #mudlark-root .member:hover {
+    border-color: var(--stroke-accent);
+    background: var(--tint-soft-hi);
+  }
+  #mudlark-root .member .name {
+    font-size: var(--type-sm);
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+  }
+  #mudlark-root .member .role {
+    font-size: var(--type-xs);
+    color: var(--text-tertiary);
+    margin-top: 0.15rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Footer ──────────────────────────────────────────── */
+  #mudlark-root > footer {
+    margin: 1rem -5rem 0;
+    padding: 1.6rem 1.4rem;
+    background: rgba(227,176,74,0.07);
+    border-top: 1px solid var(--stroke);
+    border-radius: 0 0 3px 3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-panels" aria-hidden="true">
+  <!-- Row 1 — top bleed -->
+  <div class="panel h" style="top:-12%; left:-5%; width:720px;  height:580px; animation: waveH 26.4s ease-in-out 0.0s infinite;"></div>
+  <div class="panel h" style="top:-10%; left:15%; width:920px;  height:520px; animation: waveH 29.4s ease-in-out 0.8s infinite;"></div>
+  <div class="panel h" style="top:-14%; left:38%; width:780px;  height:640px; animation: waveH 25.0s ease-in-out 1.5s infinite;"></div>
+  <div class="panel v" style="top:-8%;  left:60%; width:860px;  height:580px; animation: waveV 31.8s ease-in-out 2.3s infinite;"></div>
+  <div class="panel h" style="top:-11%; left:80%; width:700px;  height:600px; animation: waveH 27.6s ease-in-out 3.1s infinite;"></div>
+
+  <!-- Row 2 -->
+  <div class="panel h" style="top:14%;  left:-7%; width:880px;  height:540px; animation: waveH 32.8s ease-in-out 0.5s infinite;"></div>
+  <div class="panel h" style="top:18%;  left:14%; width:760px;  height:620px; animation: waveH 28.2s ease-in-out 1.2s infinite;"></div>
+  <div class="panel v" style="top:12%;  left:34%; width:900px;  height:500px; animation: waveV 36.4s ease-in-out 2.0s infinite;"></div>
+  <div class="panel h" style="top:20%;  left:54%; width:820px;  height:680px; animation: waveH 25.8s ease-in-out 2.7s infinite;"></div>
+  <div class="panel h" style="top:15%;  left:75%; width:720px;  height:560px; animation: waveH 31.2s ease-in-out 3.4s infinite;"></div>
+
+  <!-- Row 3 -->
+  <div class="panel h" style="top:38%;  left:-4%; width:940px;  height:600px; animation: waveH 34.2s ease-in-out 0.3s infinite;"></div>
+  <div class="panel v" style="top:34%;  left:20%; width:780px;  height:520px; animation: waveV 27.0s ease-in-out 1.1s infinite;"></div>
+  <div class="panel h" style="top:42%;  left:38%; width:860px;  height:640px; animation: waveH 29.8s ease-in-out 1.9s infinite;"></div>
+  <div class="panel h" style="top:36%;  left:60%; width:700px;  height:580px; animation: waveH 33.4s ease-in-out 2.6s infinite;"></div>
+  <div class="panel h" style="top:40%;  left:82%; width:920px;  height:540px; animation: waveH 24.4s ease-in-out 3.3s infinite;"></div>
+
+  <!-- Row 4 -->
+  <div class="panel h" style="top:60%;  left:-6%; width:800px;  height:620px; animation: waveH 27.4s ease-in-out 0.7s infinite;"></div>
+  <div class="panel h" style="top:64%;  left:16%; width:880px;  height:560px; animation: waveH 30.8s ease-in-out 1.4s infinite;"></div>
+  <div class="panel v" style="top:58%;  left:38%; width:740px;  height:680px; animation: waveV 35.6s ease-in-out 2.1s infinite;"></div>
+  <div class="panel h" style="top:62%;  left:58%; width:920px;  height:500px; animation: waveH 28.6s ease-in-out 2.9s infinite;"></div>
+  <div class="panel h" style="top:60%;  left:80%; width:700px;  height:600px; animation: waveH 32.2s ease-in-out 3.6s infinite;"></div>
+
+  <!-- Row 5 — bottom bleed -->
+  <div class="panel h" style="top:84%;  left:-5%; width:880px;  height:580px; animation: waveH 29.2s ease-in-out 0.2s infinite;"></div>
+  <div class="panel h" style="top:80%;  left:16%; width:740px;  height:640px; animation: waveH 33.8s ease-in-out 1.0s infinite;"></div>
+  <div class="panel h" style="top:88%;  left:38%; width:820px;  height:500px; animation: waveH 26.2s ease-in-out 1.8s infinite;"></div>
+  <div class="panel v" style="top:82%;  left:58%; width:900px;  height:620px; animation: waveV 31.6s ease-in-out 2.5s infinite;"></div>
+  <div class="panel h" style="top:85%;  left:78%; width:720px;  height:560px; animation: waveH 35.0s ease-in-out 3.2s infinite;"></div>
+</div>
+
+<div id="mudlark-root">
+
+  <header>
+    <div class="nav-row">
+      <div class="nav-left">
+        <a href="media.html" class="box">Media</a>
+      </div>
+      <a href="index.html" class="brand">Mudlark Media Network</a>
+      <div class="nav-right">
+        <a href="knowledge-base.html" class="box">Database</a>
+      </div>
+    </div>
+  </header>
+
+  <a class="hero" href="#">
+    <div class="hero-label">FEATURED</div>
+    <h1 class="hero-title">They see only their own shadows.</h1>
+    <p class="hero-sub">Released from their chains, they look toward the light — the dazzle confuses them, and they suppose what they had seen before to be truer than what is now shown. A field report on the long quiet work of looking again at what we were certain of.</p>
+    <div class="hero-meta">2026.05.12 · J. ANSEL · 8 MIN READ</div>
+  </a>
+
+  <section class="strip">
+    <h2 class="section-label">ALSO FEATURED</h2>
+    <div class="cards">
+      <a class="card" href="#">
+        <span class="chip">AUDIO</span>
+        <h3 class="card-title">The fire behind them, casting shadows on the wall.</h3>
+        <p class="card-sub">A recording made at the mouth of the cave; what the prisoners take for truth, and what passes by behind them unseen.</p>
+      </a>
+      <a class="card" href="#">
+        <span class="chip">REPORT</span>
+        <h3 class="card-title">Of the figures carried past, and the voices that seem to come from them.</h3>
+        <p class="card-sub">Notes on attribution: which voices we credit to which shapes, and why the error is so difficult to undo once made.</p>
+      </a>
+      <a class="card" href="#">
+        <span class="chip">ARTICLE</span>
+        <h3 class="card-title">Ascending from the den to the upper world.</h3>
+        <p class="card-sub">On the slow pain of adjustment; first the shadows, then reflections in water, then the things themselves, and last of all the sun.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="videos">
+    <h2 class="section-label">VIDEO</h2>
+    <div class="video-frame">
+      <div class="video-scroll">
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">Shadows on the wall — a working primer</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">Marionettes behind the screen: a survey</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">On unchaining: the first ninety seconds</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">The fire is the source — a field tour</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">Echoes inside the cave, recorded at noon</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">What the prisoners discuss among themselves</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">Toward the upper world: an itinerary</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">The pain of the dazzle, in three movements</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">Reflections in still water — a slow study</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">The sun: a long look, uninterrupted</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">Returning to the den, and what is met there</div></a>
+        <a class="video" href="#"><div class="video-thumb"><span>▶</span></div><div class="video-title">The argument continued, with footnotes</div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="about-body">
+      <h2 class="section-label">ABOUT</h2>
+      <p>And now, I said, let me show in a figure how far our nature is enlightened or unenlightened. Behold human beings living in an underground den, which has a mouth open towards the light and reaching all along the den.</p>
+      <p>Here they have been from their childhood, and have their legs and necks chained so that they cannot move, and can only see before them, being prevented by the chains from turning round their heads.</p>
+      <p>Above and behind them a fire is blazing at a distance, and between the fire and the prisoners there is a raised way; and you will see, if you look, a low wall built along the way, like the screen which marionette players have in front of them, over which they show the puppets.</p>
+      <p>To them, I said, the truth would be literally nothing but the shadows of the images.</p>
+    </div>
+    <div>
+      <h2 class="section-label">THE NETWORK</h2>
+      <div class="roster">
+        <a class="member" href="index.html">
+          <span class="name">J. ANSEL</span>
+          <span class="role">field correspondent</span>
+        </a>
+        <a class="member" href="index.html">
+          <span class="name">M. ORLOV</span>
+          <span class="role">archivist</span>
+        </a>
+        <a class="member" href="index.html">
+          <span class="name">R. HALLE</span>
+          <span class="role">sound &amp; field recording</span>
+        </a>
+        <a class="member" href="index.html">
+          <span class="name">S. KIRBY</span>
+          <span class="role">long-form, research</span>
+        </a>
+        <a class="member" href="index.html">
+          <span class="name">T. WREN</span>
+          <span class="role">editor</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-row">
+      <div class="footer-left">
+        <span class="box">All work public domain</span>
+      </div>
+      <a href="#" class="brand">Network Ethos</a>
+      <div class="footer-right">
+        <span class="box">Build 2026.05.12</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
