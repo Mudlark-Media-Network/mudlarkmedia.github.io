@@ -102,7 +102,7 @@
   #mudlark-root .box {
     display: inline-block;
     padding: 0.35rem 0.75rem;
-    border: 1px solid var(--stroke);
+    border: 1px solid var(--stroke-accent);
     border-radius: 2px;
     font-size: var(--type-xs);
     letter-spacing: 0.2em;
@@ -113,7 +113,7 @@
   }
   #mudlark-root a.box:hover {
     color: var(--text-primary);
-    border-color: var(--stroke-accent);
+    border-color: var(--accent);
     background: var(--tint-soft-hi);
   }
 
@@ -127,7 +127,7 @@
   #mudlark-root > header a.box:hover,
   #mudlark-root > footer a.box:hover {
     background: rgba(54,42,30,0.35);
-    border-color: var(--stroke-accent);
+    border-color: var(--accent);
     color: var(--text-primary);
   }
 
@@ -136,7 +136,7 @@
     margin: 0 -5rem;
     padding: 1.6rem 1.4rem;
     background: rgba(227,176,74,0.10);
-    border-bottom: 1px solid var(--stroke);
+    border-bottom: 1px solid var(--stroke-accent);
     border-radius: 3px 3px 0 0;
   }
   #mudlark-root .nav-row,
@@ -165,12 +165,12 @@
     display: block;
     margin: 2rem 0 0;
     padding: 2rem;
-    border: 1px solid var(--stroke);
+    border: 1px solid var(--stroke-accent);
     background: var(--tint-soft);
     border-radius: 3px;
   }
   #mudlark-root .hero:hover {
-    border-color: var(--stroke-accent);
+    border-color: var(--accent);
     background: var(--tint-soft-hi);
   }
   #mudlark-root .hero-label {
@@ -198,6 +198,12 @@
     color: var(--text-tertiary);
     letter-spacing: 0.1em;
     margin-top: 1.4rem;
+  }
+  #mudlark-root .divider {
+    width: 50%;
+    margin: 1rem auto;
+    border: none;
+    border-top: 1px solid var(--stroke);
   }
 
   /* ── Also Featured ───────────────────────────────────── */
@@ -233,13 +239,13 @@
   #mudlark-root .card {
     flex: 0 0 16rem;
     background: var(--tint-soft);
-    border: 1px solid var(--stroke);
+    border: 1px solid var(--stroke-accent);
     border-radius: 3px;
     padding: 1.2rem;
     display: block;
   }
   #mudlark-root .card:hover {
-    border-color: var(--stroke-accent);
+    border-color: var(--accent);
     background: var(--tint-soft-hi);
   }
   #mudlark-root .chip {
@@ -265,13 +271,19 @@
     margin: 0.5rem 0 0;
     line-height: 1.55;
   }
+  #mudlark-root .card-meta {
+    font-size: var(--type-xs);
+    color: var(--text-tertiary);
+    letter-spacing: 0.1em;
+    margin-top: 1rem;
+  }
 
   /* ── Video strip ─────────────────────────────────────── */
   #mudlark-root .videos {
     padding: 3rem 0;
   }
   #mudlark-root .video-frame {
-    border: 1px solid var(--stroke);
+    border: 1px solid var(--stroke-accent);
     border-radius: 3px;
     background: var(--tint-soft);
     padding: 1rem;
@@ -301,13 +313,13 @@
     aspect-ratio: 3 / 1;
     display: grid;
     grid-template-columns: 1fr 2fr;
-    border: 1px solid var(--stroke);
+    border: 1px solid var(--stroke-accent);
     border-radius: 3px;
     overflow: hidden;
     background: var(--tint-soft);
   }
   #mudlark-root .video:hover {
-    border-color: var(--stroke-accent);
+    border-color: var(--accent);
     background: var(--tint-soft-hi);
   }
   #mudlark-root .video-thumb {
@@ -317,7 +329,7 @@
     justify-content: center;
     color: var(--text-tertiary);
     font-size: 1rem;
-    border-right: 1px solid var(--stroke);
+    border-right: 1px solid var(--stroke-accent);
     aspect-ratio: 1 / 1;
   }
   #mudlark-root .video:hover .video-thumb { color: var(--accent); }
@@ -338,7 +350,7 @@
     padding: 2.2rem 2.5rem;
     border: 1px solid #000;
     border-radius: 3px;
-    background: rgba(10,7,4,0.44);
+    background: rgba(10,7,4,0.40);
     display: grid;
     grid-template-columns: 3fr 2fr;
     gap: 2.5rem;
@@ -361,14 +373,14 @@
     display: flex;
     flex-direction: column;
     padding: 0.6rem 0.9rem;
-    border: 1px solid var(--stroke);
+    border: 1px solid var(--stroke-accent);
     border-radius: 2px;
     background: var(--tint-soft);
     line-height: 1.2;
     width: 100%;
   }
   #mudlark-root .member:hover {
-    border-color: var(--stroke-accent);
+    border-color: var(--accent);
     background: var(--tint-soft-hi);
   }
   #mudlark-root .member .name {
@@ -388,7 +400,7 @@
     margin: 1rem -5rem 0;
     padding: 1.6rem 1.4rem;
     background: rgba(227,176,74,0.10);
-    border-top: 1px solid var(--stroke);
+    border-top: 1px solid var(--stroke-accent);
     border-radius: 0 0 3px 3px;
   }
 
@@ -529,34 +541,37 @@
   </header>
 
   <a class="hero" href="#">
-    <div class="hero-label">FEATURED</div>
     <h1 class="hero-title">They see only their own shadows.</h1>
+    <hr class="divider">
     <p class="hero-sub">Released from their chains, they look toward the light — the dazzle confuses them, and they suppose what they had seen before to be truer than what is now shown. A field report on the long quiet work of looking again at what we were certain of.</p>
-    <div class="hero-meta">2026.05.12 · J. ANSEL · 8 MIN READ</div>
+    <div class="hero-meta">2026.05.12 · J. ANSEL</div>
   </a>
 
   <section class="strip">
-    <h2 class="section-label">ALSO FEATURED</h2>
     <div class="cards">
       <a class="card" href="#">
-        <span class="chip">AUDIO</span>
         <h3 class="card-title">The fire behind them, casting shadows on the wall.</h3>
+        <hr class="divider">
         <p class="card-sub">A recording made at the mouth of the cave; what the prisoners take for truth, and what passes by behind them unseen.</p>
+        <div class="card-meta">2026.04.28 · R. HALLE</div>
       </a>
       <a class="card" href="#">
-        <span class="chip">REPORT</span>
         <h3 class="card-title">Of the figures carried past, and the voices that seem to come from them.</h3>
+        <hr class="divider">
         <p class="card-sub">Notes on attribution: which voices we credit to which shapes, and why the error is so difficult to undo once made.</p>
+        <div class="card-meta">2026.04.15 · S. KIRBY</div>
       </a>
       <a class="card" href="#">
-        <span class="chip">ARTICLE</span>
         <h3 class="card-title">Ascending from the den to the upper world.</h3>
+        <hr class="divider">
         <p class="card-sub">On the slow pain of adjustment; first the shadows, then reflections in water, then the things themselves, and last of all the sun.</p>
+        <div class="card-meta">2026.03.30 · M. ORLOV</div>
       </a>
       <a class="card" href="#">
-        <span class="chip">FIELD</span>
         <h3 class="card-title">Returning to the den, and the difficulty of being believed.</h3>
+        <hr class="divider">
         <p class="card-sub">Notes from a correspondent who came back; how the eyes have to readjust to the dark, and why no one is grateful for the news.</p>
+        <div class="card-meta">2026.03.11 · J. ANSEL</div>
       </a>
     </div>
   </section>
@@ -583,14 +598,12 @@
 
   <section class="about">
     <div class="about-body">
-      <h2 class="section-label">ABOUT</h2>
       <p>And now, I said, let me show in a figure how far our nature is enlightened or unenlightened. Behold human beings living in an underground den, which has a mouth open towards the light and reaching all along the den.</p>
       <p>Here they have been from their childhood, and have their legs and necks chained so that they cannot move, and can only see before them, being prevented by the chains from turning round their heads.</p>
       <p>Above and behind them a fire is blazing at a distance, and between the fire and the prisoners there is a raised way; and you will see, if you look, a low wall built along the way, like the screen which marionette players have in front of them, over which they show the puppets.</p>
       <p>To them, I said, the truth would be literally nothing but the shadows of the images.</p>
     </div>
     <div>
-      <h2 class="section-label">THE NETWORK</h2>
       <div class="roster">
         <a class="member" href="index.html">
           <span class="name">J. ANSEL</span>
