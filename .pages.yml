@@ -1,0 +1,13 @@
+content:
+  - name: website
+    label: My Website
+    type: collection
+    path: ""
+    files:
+      - name: home
+        label: Home Page
+        path: index.html
+        fields:
+          - name: body
+            label: Page Text Content
+            type: rich-text
