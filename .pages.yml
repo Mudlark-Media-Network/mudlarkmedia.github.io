@@ -1,9 +1,0 @@
-content:
-  - name: home
-    label: "Edit My Website"
-    type: single
-    path: "index.html"
-    fields:
-      - name: body
-        label: "Main Content"
-        type: rich-text
