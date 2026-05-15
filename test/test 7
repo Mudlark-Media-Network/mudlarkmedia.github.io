@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mudlark Media Network</title>
+<style>
+  /* ============================== FONTS (from the Mudlark repo) ============================== */
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+    font-weight: 100 1000;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Spline Sans Mono';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    /* ============================== PALETTE (popup-driven) ============================== */
+    /* 10-slot palette. c1-c6 are the brand accents, c7-c10 are neutrals.
+       All semantic vars below alias into these slots — change c-N, the whole
+       page follows. */
+    --c-1:  #E8B23A;  /* gold */
+    --c-2:  #DD5E2C;  /* rust */
+    --c-3:  #2EA39C;  /* teal */
+    --c-4:  #4F95CC;  /* blue */
+    --c-5:  #CC6094;  /* pink */
+    --c-6:  #6CB855;  /* green */
+    --c-7:  #131210;  /* background */
+    --c-8:  #1F1D19;  /* surface */
+    --c-9:  #ECE5D2;  /* ink */
+    --c-10: #9C9583;  /* soft ink */
+
+    /* Semantic aliases — these keep the niiiiiice CSS unchanged. */
+    --gold:      var(--c-1);
+    --rust:      var(--c-2);
+    --teal:      var(--c-3);
+    --blue:      var(--c-4);
+    --pink:      var(--c-5);
+    --green:     var(--c-6);
+
+    --bg:        var(--c-7);
+    --bg-up:     color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
+    --bg-surf:   var(--c-8);
+    --bg-elev:   color-mix(in srgb, var(--c-8) 80%, var(--c-9) 20%);
+    --rule:      color-mix(in srgb, var(--c-7) 70%, var(--c-10) 30%);
+    --rule-on:   color-mix(in srgb, var(--c-7) 50%, var(--c-10) 50%);
+
+    --ink:       var(--c-9);
+    --ink-soft:  var(--c-10);
+    --ink-mute:  color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
+
+    /* tinted backgrounds for cards (7% of each color over bg-surf) */
+    --tint-gold: color-mix(in srgb, transparent 93%, var(--c-1));
+    --tint-rust: color-mix(in srgb, transparent 93%, var(--c-2));
+    --tint-teal: color-mix(in srgb, transparent 93%, var(--c-3));
+    --tint-blue: color-mix(in srgb, transparent 93%, var(--c-4));
+    --tint-pink: color-mix(in srgb, transparent 93%, var(--c-5));
+    --tint-green:color-mix(in srgb, transparent 93%, var(--c-6));
+
+    --serif-d:   'Fraunces', 'Georgia', serif;
+    --serif-b:   'Source Serif 4', 'Fraunces', 'Georgia', serif;
+    --sans:      'IBM Plex Sans', system-ui, sans-serif;
+    --mono:      'Spline Sans Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+    --pad-x:     clamp(20px, 4vw, 56px);
+    --max-w:     1360px;
+
+    /* ============================== POPUP-DRIVEN PAGE EFFECTS ============================== */
+    --rhythm:           1;
+    --headline-scale:   1;
+
+    --shadow-alpha:     0.40;
+    --shadow-blur:      30px;
+    --shine-alpha:      0.00;
+    --slot-alpha:       0.00;   /* niiiiiice has rich custom art per figure;
+                                   keep the placeholder overlay hidden by default */
+
+    --bg-pattern-color: var(--c-10);
+    --bg-pattern-alpha: 0.00;
+
+    /* ============================== EDITOR THEME (hardcoded; chrome stays fixed) ============================== */
+    --e-bg:       #1A1916;
+    --e-input-bg: #131210;
+    --e-fg:       #ECE5D2;
+    --e-fg-soft:  #9C9583;
+    --e-rule:     #3F3C33;
+    --e-accent:   #E8B23A;
+    --e-mono:     'Spline Sans Mono', ui-monospace, monospace;
+    --e-display:  'Fraunces', Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif-b);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern', 'liga';
+  }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--gold); color: var(--bg); }
+
+  /* ============================================================
+     TOP STRIP
+     ============================================================ */
+  .topstrip {
+    padding: 10px var(--pad-x);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .topstrip a {
+    color: var(--ink-soft);
+    border-bottom: 1px dotted var(--rule-on);
+    padding-bottom: 1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .topstrip a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+  .topstrip .dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: 1px;
+    box-shadow: 0 0 10px rgba(108, 184, 85, 0.5);
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.55 } 50% { opacity: 1 } }
+
+  /* ============================================================
+     MASTHEAD
+     ============================================================ */
+  .masthead-row {
+    padding: 14px var(--pad-x) 36px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 56px;
+    align-items: end;
+  }
+
+  .wordmark { display: inline-block; line-height: 1; color: var(--ink); }
+  .wordmark .name {
+    font-family: var(--serif-d);
+    font-weight: 600;
+    font-size: 56px;
+    letter-spacing: -0.018em;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+    display: block;
+  }
+  .wordmark .name .stop { color: var(--rust); }
+  .wordmark .sub {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .wordmark .sub em { color: var(--gold); font-style: normal; }
+
+  .strapline {
+    font-family: var(--serif-b);
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 44ch;
+    padding-bottom: 8px;
+  }
+  .strapline em { color: var(--gold); font-style: italic; }
+
+  .util {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding-bottom: 8px;
+  }
+  .util .search {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    border-bottom: 1px solid var(--rule-on);
+    padding: 4px 2px;
+    color: var(--ink-soft);
+    transition: border-color 0.15s;
+    min-width: 220px;
+  }
+  .util .search:focus-within { border-bottom-color: var(--gold); }
+  .util .search .g { font-family: var(--serif-b); color: var(--ink-mute); font-size: 14px; }
+  .util .search input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--ink); font: 13px var(--sans); min-width: 0;
+  }
+  .util .search input::placeholder { color: var(--ink-mute); }
+  .util .gh {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rust);
+    padding-bottom: 3px;
+    transition: color 0.15s;
+  }
+  .util .gh:hover { color: var(--rust); }
+  .util .gh .arr { color: var(--rust); margin-left: 4px; }
+
+  /* ============================================================
+     PRIMARY NAV
+     ============================================================ */
+  .nav {
+    padding: 18px var(--pad-x);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 30px;
+    font-family: var(--sans);
+    font-size: 14.5px;
+  }
+  .nav a {
+    display: inline-flex; align-items: baseline; gap: 9px;
+    padding: 6px 0; color: var(--ink); transition: color 0.15s;
+  }
+  .nav a::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    transform: translateY(-2px);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+  .nav a:hover::before { transform: translateY(-2px) scale(1.4); }
+  .nav a.c-gold::before  { background: var(--gold); }
+  .nav a.c-rust::before  { background: var(--rust); }
+  .nav a.c-teal::before  { background: var(--teal); }
+  .nav a.c-pink::before  { background: var(--pink); }
+  .nav a.c-blue::before  { background: var(--blue); }
+  .nav a.c-green::before { background: var(--green); }
+  .nav a.c-cream::before { background: var(--ink-soft); }
+  .nav a.c-gold:hover  { text-decoration: underline var(--gold); }
+  .nav a.c-rust:hover  { text-decoration: underline var(--rust); }
+  .nav a.c-teal:hover  { text-decoration: underline var(--teal); }
+  .nav a.c-pink:hover  { text-decoration: underline var(--pink); }
+  .nav a.c-blue:hover  { text-decoration: underline var(--blue); }
+  .nav a.c-green:hover { text-decoration: underline var(--green); }
+  .nav a.c-cream:hover { text-decoration: underline var(--ink-soft); }
+
+  /* ============================================================
+     SHARED  —  page rhythm
+     ============================================================ */
+  main { flex: 1; padding: 0 var(--pad-x) 96px; }
+  .wrap { max-width: var(--max-w); margin: 0 auto; }
+
+  /* Section header — name in color, rule across, "see all" link */
+  .sec-head {
+    display: flex; align-items: baseline;
+    gap: 18px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 16px;
+    margin: 64px 0 32px;
+  }
+  .sec-head h2 {
+    font-family: var(--serif-d);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 60, 'SOFT' 50;
+    font-size: clamp(28px, 3.2vw, 40px);
+    letter-spacing: -0.018em;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .sec-head .count {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .sec-head .grow { flex: 1; }
+  .sec-head .all {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule-on);
+    padding-bottom: 2px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .sec-head.h-gold  h2 { color: var(--gold); }
+  .sec-head.h-rust  h2 { color: var(--rust); }
+  .sec-head.h-teal  h2 { color: var(--teal); }
+  .sec-head.h-pink  h2 { color: var(--pink); }
+  .sec-head.h-blue  h2 { color: var(--blue); }
+  .sec-head.h-green h2 { color: var(--green); }
+  .sec-head.h-gold  .all:hover { color: var(--gold);  border-bottom-color: var(--gold); }
+  .sec-head.h-rust  .all:hover { color: var(--rust);  border-bottom-color: var(--rust); }
+  .sec-head.h-teal  .all:hover { color: var(--teal);  border-bottom-color: var(--teal); }
+  .sec-head.h-pink  .all:hover { color: var(--pink);  border-bottom-color: var(--pink); }
+  .sec-head.h-blue  .all:hover { color: var(--blue);  border-bottom-color: var(--blue); }
+  .sec-head.h-green .all:hover { color: var(--green); border-bottom-color: var(--green); }
+
+  /* ============================================================
+     LEAD PIECE
+     ============================================================ */
+  .lead { padding-top: 48px; }
+  .lead-inner {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .lead-fig {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    background:
+      radial-gradient(ellipse 55% 45% at 30% 35%, transparent 22%, rgba(204,96,148,0.22) 23%, transparent 24.5%),
+      radial-gradient(ellipse 42% 35% at 30% 35%, transparent 35%, rgba(204,96,148,0.18) 36%, transparent 37.5%),
+      radial-gradient(ellipse 28% 23% at 30% 35%, transparent 48%, rgba(204,96,148,0.16) 49%, transparent 50.5%),
+      radial-gradient(ellipse 14% 12% at 30% 35%, transparent 60%, rgba(204,96,148,0.20) 61%, transparent 62.5%),
+      radial-gradient(ellipse 50% 42% at 72% 70%, transparent 30%, rgba(221,94,44,0.16) 31%, transparent 32.5%),
+      radial-gradient(ellipse 34% 30% at 72% 70%, transparent 45%, rgba(221,94,44,0.14) 46%, transparent 47.5%),
+      repeating-linear-gradient(0deg, transparent 0, transparent 43px, rgba(236,229,210,0.025) 43px, rgba(236,229,210,0.025) 44px),
+      repeating-linear-gradient(90deg, transparent 0, transparent 43px, rgba(236,229,210,0.025) 43px, rgba(236,229,210,0.025) 44px),
+      var(--bg-surf);
+  }
+  .lead-fig .stamp {
+    position: absolute; top: 16px; left: 16px;
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--pink);
+    padding: 4px 8px;
+    background: rgba(19, 18, 16, 0.7);
+    backdrop-filter: blur(2px);
+  }
+  .lead-fig .cap {
+    position: absolute; bottom: 16px; left: 16px; right: 16px;
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-soft); letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .lead-text { padding-top: 6px; }
+  .lead-kicker {
+    font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 20px;
+  }
+  .lead-kicker .sep { color: var(--ink-mute); margin: 0 10px; }
+  .lead-kicker .id { color: var(--ink-soft); }
+  .lead-head {
+    font-family: var(--serif-d);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+    font-size: clamp(36px, 4.6vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.022em;
+    margin-bottom: 22px;
+    max-width: 16ch;
+  }
+  .lead-head em {
+    font-style: italic;
+    color: var(--rust);
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  }
+  .lead-deck {
+    font-family: var(--serif-b);
+    font-size: 17.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 50ch;
+    margin-bottom: 22px;
+  }
+  .lead-meta {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+  .lead-meta .who { color: var(--ink); }
+  .lead-meta .sep { color: var(--ink-mute); margin: 0 8px; }
+  .lead-tags {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 24px;
+  }
+  .lead-tags span::before { content: '['; margin-right: 2px; }
+  .lead-tags span::after  { content: ']'; margin-left: 2px; }
+  .lead-tags .t1::before, .lead-tags .t1::after { color: var(--pink); }
+  .lead-tags .t2::before, .lead-tags .t2::after { color: var(--rust); }
+  .lead-tags .t3::before, .lead-tags .t3::after { color: var(--gold); }
+
+  .lead-go {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--sans); font-size: 14px; font-weight: 500;
+    padding: 12px 22px; background: var(--ink); color: var(--bg);
+    transition: background 0.15s;
+  }
+  .lead-go:hover { background: var(--pink); }
+  .lead-go .arr { font-family: var(--mono); font-size: 15px; }
+
+  /* ============================================================
+     ARTICLES — 4-up grid, top tick + flow text, no card borders
+     ============================================================ */
+  .articles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .a-card { display: flex; flex-direction: column; gap: 12px; padding-top: 14px; position: relative; }
+  .a-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--rust);
+  }
+  .a-kicker {
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--rust);
+  }
+  .a-head {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 22px; line-height: 1.12; letter-spacing: -0.012em;
+    font-variation-settings: 'opsz' 36;
+    color: var(--ink);
+    transition: color 0.15s;
+  }
+  .a-card:hover .a-head { color: var(--rust); }
+  .a-deck {
+    font-family: var(--serif-b); font-size: 14.5px; line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .a-meta {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+    margin-top: auto; padding-top: 10px;
+  }
+  .a-meta b { color: var(--ink-soft); font-weight: 400; }
+  /* one variant — pulled quote, no headline */
+  .a-card.is-quote::before { background: var(--gold); }
+  .a-card.is-quote .a-kicker { color: var(--gold); }
+  .a-card.is-quote blockquote {
+    font-family: var(--serif-d); font-style: italic; font-weight: 400;
+    font-size: 20px; line-height: 1.28; color: var(--ink);
+    font-variation-settings: 'opsz' 60, 'SOFT' 100;
+  }
+  .a-card.is-quote blockquote em { color: var(--gold); }
+
+  /* ============================================================
+     PSYCHOLOGICAL WARFARE — 1 featured + 3 secondary
+     ============================================================ */
+  .psych-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+  }
+  .pw-feature { display: flex; flex-direction: column; gap: 14px; }
+  .pw-fig {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background:
+      linear-gradient(120deg, rgba(204,96,148,0.18), transparent 60%),
+      linear-gradient(330deg, rgba(79,149,204,0.14), transparent 60%),
+      radial-gradient(circle at 28% 65%, rgba(204,96,148,0.25), transparent 35%),
+      radial-gradient(circle at 80% 30%, rgba(232,178,58,0.12), transparent 40%),
+      repeating-linear-gradient(135deg, transparent 0 11px, rgba(236,229,210,0.04) 11px 12px),
+      var(--bg-surf);
+  }
+  .pw-fig .stamp {
+    position: absolute; top: 14px; left: 14px;
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--pink);
+    padding: 4px 8px;
+    background: rgba(19, 18, 16, 0.7);
+  }
+  .pw-feature .kicker {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--pink);
+  }
+  .pw-feature .head {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: clamp(28px, 2.6vw, 36px); line-height: 1.05;
+    letter-spacing: -0.018em;
+  }
+  .pw-feature .head em { color: var(--pink); font-style: italic; }
+  .pw-feature .deck {
+    font-family: var(--serif-b); font-size: 15.5px;
+    line-height: 1.5; color: var(--ink-soft);
+  }
+  .pw-feature .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  .pw-feature .meta b { color: var(--ink-soft); font-weight: 400; }
+
+  .pw-list { display: flex; flex-direction: column; }
+  .pw-item {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .pw-item:first-child { padding-top: 0; }
+  .pw-item:last-child { border-bottom: none; }
+  .pw-item .n {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--pink); font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+  .pw-item .body h4 {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 17px; line-height: 1.25;
+    font-variation-settings: 'opsz' 30;
+    margin-bottom: 6px;
+    color: var(--ink); transition: color 0.15s;
+  }
+  .pw-item:hover .body h4 { color: var(--pink); }
+  .pw-item .body p {
+    font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  .pw-item .body p b { color: var(--ink-soft); font-weight: 400; }
+
+  /* ============================================================
+     OPSEC + MEMBERS — two columns side by side
+     ============================================================ */
+  .duo {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 64px;
+  }
+
+  /* OpSec — numbered guides, no images */
+  .opsec-list { display: flex; flex-direction: column; }
+  .op-item {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 22px;
+    align-items: baseline;
+    transition: padding-left 0.2s;
+  }
+  .op-item:first-child { padding-top: 4px; }
+  .op-item:hover { padding-left: 8px; }
+  .op-item .num {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 36px; line-height: 1;
+    color: var(--teal);
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: 'opsz' 60;
+  }
+  .op-item h4 {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 18px; line-height: 1.25;
+    color: var(--ink); margin-bottom: 4px;
+    transition: color 0.15s;
+  }
+  .op-item:hover h4 { color: var(--teal); }
+  .op-item p {
+    font-family: var(--serif-b); font-size: 13.5px;
+    color: var(--ink-soft); line-height: 1.45;
+  }
+  .op-item .level {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-mute);
+    align-self: center;
+    white-space: nowrap;
+  }
+  .op-item .level.intro    { color: var(--green); }
+  .op-item .level.field    { color: var(--gold); }
+  .op-item .level.advanced { color: var(--rust); }
+
+  /* Members — names + roles, gold initial blocks */
+  .members-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+  }
+  .mem {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mem .ini {
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--tint-gold);
+    color: var(--gold);
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 16px;
+    border: 1px solid rgba(232, 178, 58, 0.35);
+  }
+  .mem .info { line-height: 1.2; }
+  .mem .nm { font-family: var(--sans); font-size: 14px; color: var(--ink); }
+  .mem .rl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-mute); }
+  .mem .rl b { color: var(--ink-soft); font-weight: 400; }
+  /* a few members get different ini colors for life */
+  .mem.r .ini { background: var(--tint-rust); color: var(--rust); border-color: rgba(221, 94, 44, 0.35); }
+  .mem.t .ini { background: var(--tint-teal); color: var(--teal); border-color: rgba(46, 163, 156, 0.35); }
+  .mem.b .ini { background: var(--tint-blue); color: var(--blue); border-color: rgba(79, 149, 204, 0.35); }
+  .mem.p .ini { background: var(--tint-pink); color: var(--pink); border-color: rgba(204, 96, 148, 0.35); }
+  .mem.g .ini { background: var(--tint-green); color: var(--green); border-color: rgba(108, 184, 85, 0.35); }
+  .members-note {
+    margin-top: 14px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  .members-note a { color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 1px; }
+
+  /* ============================================================
+     MEDIA — mixed-media tiles
+     ============================================================ */
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+  .m-tile {
+    position: relative;
+    display: flex; flex-direction: column;
+    gap: 12px;
+  }
+  .m-art {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+  }
+  .m-tile .kind {
+    position: absolute; top: 12px; left: 12px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 8px;
+    background: rgba(19, 18, 16, 0.7);
+    z-index: 2;
+  }
+  .m-tile .runtime {
+    position: absolute; bottom: 12px; right: 12px;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-soft);
+    padding: 3px 7px;
+    background: rgba(19, 18, 16, 0.7);
+    font-variant-numeric: tabular-nums;
+    z-index: 2;
+  }
+  .m-tile h4 {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 17px; line-height: 1.2;
+    transition: color 0.15s;
+  }
+  .m-tile .by {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  .m-tile .by b { color: var(--ink-soft); font-weight: 400; }
+
+  /* music tile — saturated blue, faux LP rings */
+  .m-music .m-art {
+    background:
+      radial-gradient(circle at 50% 50%, var(--bg) 0%, var(--bg) 8%, transparent 8.5%),
+      repeating-radial-gradient(circle at 50% 50%, var(--blue) 0 1px, transparent 1px 5px),
+      var(--bg-surf);
+  }
+  .m-music .kind { color: var(--blue); }
+  .m-music:hover h4 { color: var(--blue); }
+
+  /* video tile — play triangle, gold */
+  .m-video .m-art {
+    background:
+      linear-gradient(135deg, rgba(232,178,58,0.18), transparent 70%),
+      repeating-linear-gradient(90deg, transparent 0 11px, rgba(236,229,210,0.03) 11px 12px),
+      var(--bg-surf);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .m-video .play {
+    width: 0; height: 0;
+    border-left: 28px solid var(--gold);
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+  }
+  .m-video .kind { color: var(--gold); }
+  .m-video:hover h4 { color: var(--gold); }
+
+  /* audio tile — waveform bars, teal */
+  .m-audio .m-art {
+    background: var(--bg-surf);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 0 20%;
+  }
+  .m-audio .m-art .bar { width: 4px; background: var(--teal); border-radius: 1px; }
+  .m-audio .kind { color: var(--teal); }
+  .m-audio:hover h4 { color: var(--teal); }
+
+  /* visual art tile — color blocks, pink */
+  .m-visual .m-art {
+    background:
+      linear-gradient(45deg, rgba(204,96,148,0.35), rgba(204,96,148,0.0) 60%),
+      linear-gradient(135deg, transparent 50%, rgba(232,178,58,0.18)),
+      linear-gradient(180deg, rgba(108,184,85,0.10), transparent 50%),
+      var(--bg-surf);
+  }
+  .m-visual .kind { color: var(--pink); }
+  .m-visual:hover h4 { color: var(--pink); }
+
+  /* ============================================================
+     PAPERS + MIND MAP
+     ============================================================ */
+  .duo-2 {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 64px;
+  }
+  /* Papers — citation list */
+  .papers { display: flex; flex-direction: column; }
+  .paper {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .paper:first-child { padding-top: 4px; }
+  .paper .yr {
+    font-family: var(--mono); font-size: 14px;
+    color: var(--green); font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+  .paper .cite {
+    font-family: var(--serif-b); font-size: 14.5px;
+    line-height: 1.45; color: var(--ink);
+  }
+  .paper .cite .au { font-style: italic; color: var(--ink-soft); }
+  .paper .cite .ti { color: var(--ink); }
+  .paper .cite .src { color: var(--ink-mute); font-style: italic; }
+  .paper .fmt {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 3px 7px;
+    border: 1px solid var(--rule-on);
+    white-space: nowrap;
+    align-self: center;
+  }
+  .paper .fmt.pdf  { color: var(--rust);  border-color: rgba(221,94,44,0.35); }
+  .paper .fmt.html { color: var(--blue);  border-color: rgba(79,149,204,0.35); }
+  .paper .fmt.book { color: var(--gold);  border-color: rgba(232,178,58,0.35); }
+
+  /* Mind Map — CSS-drawn node graph */
+  .mindmap { position: relative; }
+  .mm-viz {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(79,149,204,0.05), transparent 70%),
+      var(--bg-surf);
+    overflow: hidden;
+  }
+  .mm-node {
+    position: absolute;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 9.5px;
+    color: var(--ink); letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+  .mm-node.x {
+    background: var(--blue);
+    color: var(--bg);
+    width: 78px; height: 78px;
+    font-size: 10.5px; font-weight: 500;
+    box-shadow: 0 0 30px rgba(79,149,204,0.4);
+  }
+  .mm-node.r { background: var(--rust);  color: var(--bg); width: 54px; height: 54px; }
+  .mm-node.p { background: var(--pink);  color: var(--bg); width: 54px; height: 54px; }
+  .mm-node.g { background: var(--green); color: var(--bg); width: 48px; height: 48px; }
+  .mm-node.t { background: var(--teal);  color: var(--bg); width: 48px; height: 48px; }
+  .mm-node.o { background: var(--gold);  color: var(--bg); width: 44px; height: 44px; }
+  .mm-line { position: absolute; height: 1px; background: var(--rule-on); transform-origin: left center; pointer-events: none; }
+  .mm-cap {
+    margin-top: 16px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  .mm-cap b { color: var(--ink-soft); font-weight: 400; }
+  .mm-cap a { color: var(--blue); border-bottom: 1px solid var(--blue); padding-bottom: 1px; }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer { border-top: 1px solid var(--rule); padding: 60px var(--pad-x) 32px; margin-top: 80px; }
+  .foot-inner { max-width: var(--max-w); margin: 0 auto; }
+  .foot-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+  .foot-brand .wordmark .name { font-size: 38px; }
+  .foot-brand p {
+    margin-top: 18px;
+    font-family: var(--serif-b); font-style: italic;
+    font-size: 14.5px; line-height: 1.5;
+    color: var(--ink-soft); max-width: 38ch;
+  }
+  .foot-brand .principles {
+    margin-top: 20px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-mute);
+    display: flex; flex-wrap: wrap; gap: 4px 12px;
+  }
+  .foot-brand .principles b { font-weight: 400; }
+  .foot-brand .principles b.g { color: var(--gold); }
+  .foot-brand .principles b.r { color: var(--rust); }
+  .foot-brand .principles b.t { color: var(--teal); }
+  .foot-brand .principles b.p { color: var(--pink); }
+  .foot-col h4 {
+    font-family: var(--sans); font-size: 13px;
+    letter-spacing: 0.04em; margin-bottom: 16px; font-weight: 500;
+  }
+  .foot-col.a h4 { color: var(--rust); }
+  .foot-col.b h4 { color: var(--teal); }
+  .foot-col.c h4 { color: var(--blue); }
+  .foot-col ul { list-style: none; }
+  .foot-col li { margin-bottom: 9px; }
+  .foot-col a {
+    font-family: var(--serif-b); font-size: 14.5px;
+    color: var(--ink); transition: color 0.15s;
+  }
+  .foot-col a:hover { color: var(--gold); }
+  .foot-bottom {
+    padding-top: 24px; border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between;
+    align-items: baseline; flex-wrap: wrap; gap: 18px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  .foot-bottom .left em { color: var(--gold); font-style: normal; }
+  .foot-bottom .right a {
+    color: var(--ink-soft); border-bottom: 1px dotted var(--rule-on);
+    padding-bottom: 1px;
+  }
+  .foot-bottom .right a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+  .foot-bottom .pip { color: var(--rust); margin: 0 6px; }
+
+  /* ============================================================
+     POPUP-DRIVEN OVERLAYS
+     ============================================================ */
+
+  /* Background pattern — SVG, opacity + color + size all editable */
+  .bg-pattern {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--bg-pattern-color);
+    opacity: var(--bg-pattern-alpha);
+  }
+  body > * { position: relative; z-index: 1; }
+  body > .bg-pattern { z-index: 0; }
+
+  /* Per-section bg band + box tint, driven by --sec / --sec-bg-alpha / --sec-box-alpha.
+     Applied to every section that carries data-section. */
+  main section[data-section] { position: relative; }
+  main section[data-section]::before {
+    content: '';
+    position: absolute;
+    inset: -28px calc(-1 * var(--pad-x));
+    background: var(--sec, transparent);
+    opacity: var(--sec-bg-alpha, 0);
+    z-index: -1;
+    pointer-events: none;
+  }
+  main section[data-section]::after {
+    content: '';
+    position: absolute;
+    inset: 16px 0;
+    background: var(--sec, transparent);
+    opacity: var(--sec-box-alpha, 0);
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  main section[data-section] > * { position: relative; z-index: 1; }
+
+  /* Section rhythm — vertical scale knob */
+  main section[data-section] {
+    padding-top: calc(8px * var(--rhythm));
+    padding-bottom: calc(8px * var(--rhythm));
+  }
+  .sec-head { margin: calc(64px * var(--rhythm)) 0 calc(32px * var(--rhythm)); }
+  .lead { padding-top: calc(48px * var(--rhythm)); }
+
+  /* Headline scale — multiplies the existing display sizes */
+  .wordmark .name       { font-size: calc(56px * var(--headline-scale)); }
+  .lead-head            { font-size: calc(clamp(36px, 4.6vw, 64px) * var(--headline-scale)); }
+  .sec-head h2          { font-size: calc(clamp(28px, 3.2vw, 40px) * var(--headline-scale)); }
+  .pw-feature .head     { font-size: calc(clamp(28px, 2.6vw, 36px) * var(--headline-scale)); }
+  .a-head               { font-size: calc(22px * var(--headline-scale)); }
+
+  /* Per-section heading color override (popup-driven).
+     Only targets direct .sec-head children — duos keep their nested h-* class colors. */
+  section[data-section] > .sec-head h2 { color: var(--sec-heading); }
+
+  /* ============================================================
+     SLOT — figures opt-in via [data-slot] attribute alone
+     Niiiiiice keeps its rich per-figure custom art as the base background;
+     the slot's gradient + label sit as an OVERLAY controlled by --slot-alpha.
+     Default --slot-alpha=0 = invisible. Dial it up to mark placeholders.
+     ============================================================ */
+  [data-slot] {
+    position: relative;
+    overflow: hidden;
+  }
+  [data-slot]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--c-1), var(--c-3));
+    opacity: var(--slot-alpha);
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.2s;
+  }
+  [data-slot] > .slot-label,
+  [data-slot]::before {
+    content: attr(data-slot-purpose);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 4px 10px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 3;
+    opacity: var(--slot-alpha);
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  /* Per-slot gradient flavor */
+  [data-slot="lead-figure"]::after        { background: linear-gradient(135deg, var(--c-5), var(--c-2)); }
+  [data-slot="psych-feature-fig"]::after  { background: linear-gradient( 45deg, var(--c-5), var(--c-4)); }
+  [data-slot="media-music-art"]::after    { background: linear-gradient(135deg, var(--c-4), var(--c-7)); }
+  [data-slot="media-video-art"]::after    { background: linear-gradient(135deg, var(--c-1), var(--c-2)); }
+  [data-slot="media-audio-art"]::after    { background: linear-gradient(135deg, var(--c-3), var(--c-7)); }
+  [data-slot="media-visual-art"]::after   { background: linear-gradient( 45deg, var(--c-5), var(--c-1)); }
+  [data-slot="mindmap-graph"]::after      { background: linear-gradient(135deg, var(--c-4), var(--c-6)); }
+
+  /* Effect: shadow + shine — applied to figure surfaces */
+  .lead-fig,
+  .pw-fig,
+  .m-art,
+  .mm-viz {
+    box-shadow:
+      0 8px var(--shadow-blur) rgba(0, 0, 0, var(--shadow-alpha)),
+      inset 0 80px 60px -40px rgba(255, 255, 255, var(--shine-alpha));
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 1100px) {
+    .masthead-row { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+    .util { padding-bottom: 0; }
+    .util .search { min-width: 0; flex: 1; max-width: 320px; }
+    .lead-inner { grid-template-columns: 1fr; gap: 36px; }
+    .articles { grid-template-columns: repeat(2, 1fr); }
+    .psych-grid { grid-template-columns: 1fr; }
+    .duo, .duo-2 { grid-template-columns: 1fr; gap: 48px; }
+    .media-grid { grid-template-columns: repeat(2, 1fr); }
+    .foot-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+  @media (max-width: 640px) {
+    .articles { grid-template-columns: 1fr; }
+    .media-grid { grid-template-columns: 1fr 1fr; }
+    .members-list { grid-template-columns: 1fr; }
+    .foot-top { grid-template-columns: 1fr; }
+    .nav { gap: 4px 22px; font-size: 13.5px; }
+    .sec-head { flex-wrap: wrap; }
+    .op-item { grid-template-columns: 44px 1fr; }
+    .op-item .level { grid-column: 1 / -1; grid-row: 2; margin-left: 56px; }
+    .paper { grid-template-columns: 50px 1fr; }
+    .paper .fmt { grid-column: 2; justify-self: start; margin-top: 6px; }
+  }
+
+  /* ============================================================
+     EDITOR POPUP CHROME (hardcoded; uses --e-* vars only)
+     ============================================================ */
+  .editor-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid var(--e-rule);
+    padding: 6px 12px;
+    color: var(--e-fg-soft);
+    font-family: var(--e-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .editor-trigger:hover { border-color: var(--e-accent); color: var(--e-fg); }
+  .editor-trigger-glyph {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+  }
+  .editor-trigger-glyph::before,
+  .editor-trigger-glyph::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    background: var(--e-fg-soft);
+    transition: background 0.2s;
+  }
+  .editor-trigger-glyph::before { top: 0; left: 0; }
+  .editor-trigger-glyph::after  { top: 3px; left: 3px; opacity: 0.6; }
+  .editor-trigger:hover .editor-trigger-glyph::before,
+  .editor-trigger:hover .editor-trigger-glyph::after { background: var(--e-accent); }
+
+  .editor-overlay {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 998;
+    display: none;
+  }
+  .editor-overlay.open { display: block; }
+  .editor-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 380px;
+    max-height: 80vh;
+    background: var(--e-bg);
+    border: 1px solid var(--e-rule);
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    font-family: var(--e-mono);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .editor-panel.open { display: flex; }
+  .editor-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--e-rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .editor-header-title {
+    font-family: var(--e-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--e-fg-soft);
+  }
+  .editor-close {
+    background: transparent;
+    border: none;
+    color: var(--e-fg-soft);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 4px;
+    line-height: 1;
+  }
+  .editor-close:hover { color: var(--e-fg); }
+  .editor-body {
+    overflow-y: auto;
+    padding: 18px;
+    flex: 1;
+  }
+  .editor-section { margin-bottom: 24px; }
+  .editor-section h3 {
+    font-family: var(--e-display);
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--e-fg);
+  }
+
+  .editor-lock {
+    width: 14px;
+    height: 14px;
+    background: transparent;
+    border: 1px solid var(--e-fg-soft);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .editor-lock:hover { border-color: var(--e-fg); }
+  .editor-lock.is-locked {
+    background: var(--e-fg-soft);
+    border-color: var(--e-fg-soft);
+  }
+  .editor-lock.is-locked:hover { background: var(--e-fg); border-color: var(--e-fg); }
+
+  .editor-grid-palette {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .editor-palette-cell {
+    background: var(--e-input-bg);
+    border: 1px solid var(--e-rule);
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px 8px;
+    align-items: center;
+    min-width: 0;
+  }
+  .editor-palette-cell.is-empty { opacity: 0.2; }
+  .editor-palette-cell .swatch {
+    grid-row: 1 / 3;
+    width: 26px;
+    height: 26px;
+    background: var(--swatch, transparent);
+  }
+  .editor-palette-cell.is-empty .swatch {
+    background: transparent;
+    border: 1px dashed var(--e-rule);
+  }
+  .editor-palette-cell .label {
+    grid-column: 2;
+    grid-row: 1;
+    font-family: var(--e-mono);
+    font-size: 9.5px;
+    color: var(--e-fg-soft);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .editor-palette-cell .controls {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    min-width: 0;
+  }
+  .editor-palette-cell .controls .editor-input { flex: 1; min-width: 0; }
+
+  .editor-input {
+    background: var(--e-input-bg);
+    border: 1px solid var(--e-rule);
+    color: var(--e-fg);
+    font-family: var(--e-mono);
+    font-size: 10px;
+    padding: 6px 4px;
+    width: 100%;
+    text-align: center;
+  }
+  .editor-input:focus { outline: none; border-color: var(--e-accent); }
+
+  .editor-label-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .editor-label {
+    font-family: var(--e-mono);
+    font-size: 10px;
+    color: var(--e-fg-soft);
+    letter-spacing: 0.04em;
+  }
+
+  .editor-section-group { margin-bottom: 14px; }
+  .editor-section-group-title {
+    font-family: var(--e-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--e-fg);
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--e-rule);
+  }
+  .editor-section-spot {
+    display: grid;
+    grid-template-columns: 16px 60px 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+    align-items: center;
+  }
+  .editor-section-spot .swatch {
+    width: 16px;
+    height: 16px;
+    background: var(--swatch, transparent);
+  }
+  .editor-section-spot .spot-label {
+    font-family: var(--e-mono);
+    font-size: 10px;
+    color: var(--e-fg-soft);
+    letter-spacing: 0.04em;
+  }
+
+  .editor-slot-row {
+    display: grid;
+    grid-template-columns: 1fr 130px;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .editor-slot-row .label {
+    font-family: var(--e-mono);
+    font-size: 10px;
+    color: var(--e-fg-soft);
+    letter-spacing: 0.04em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .editor-select {
+    background: var(--e-input-bg);
+    border: 1px solid var(--e-rule);
+    color: var(--e-fg);
+    font-family: var(--e-mono);
+    font-size: 11px;
+    padding: 6px 8px;
+    width: 100%;
+    cursor: pointer;
+  }
+  .editor-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: linear-gradient(
+      to right,
+      var(--e-accent) 0%,
+      var(--e-accent) var(--fill, 50%),
+      var(--e-rule) var(--fill, 50%),
+      var(--e-rule) 100%
+    );
+    outline: none;
+  }
+  .editor-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--e-accent);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .editor-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--e-accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+
+  .editor-button {
+    background: transparent;
+    border: 1px solid var(--e-rule);
+    color: var(--e-fg-soft);
+    font-family: var(--e-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 6px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .editor-button:hover { border-color: var(--e-accent); color: var(--e-fg); }
+  .editor-actions { display: flex; flex-direction: column; gap: 6px; }
+</style>
+</head>
+<body>
+
+<svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="bg-pattern-tile" width="24" height="24" patternUnits="userSpaceOnUse">
+      <g id="bg-pattern-shape">
+        <circle cx="12" cy="12" r="0.9" fill="currentColor"></circle>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg-pattern-tile)"></rect>
+</svg>
+
+<div class="topstrip">
+  <span><span class="dot"></span>The network is live</span>
+  <span>Updated 13 May 2026</span>
+  <a href="https://github.com/mudlark-media">All work is public &mdash; source on GitHub &nearr;</a>
+  <span style="margin-left:auto;display:inline-flex;align-items:center;">
+    <button class="editor-trigger" type="button" aria-label="Open editor">
+      <span class="editor-trigger-glyph" aria-hidden="true"></span>
+      <span class="editor-trigger-label">Editor</span>
+    </button>
+  </span>
+</div>
+
+<header>
+  <div class="masthead-row">
+    <a href="/" class="wordmark">
+      <span class="name">mudlark<span class="stop">.</span></span>
+      <span class="sub">Media <em>&middot;</em> Network</span>
+    </a>
+    <p class="strapline">A volunteer network for survivor voices and the information institutions would rather <em>bury</em>. Zero-fund. Entirely public.</p>
+    <div class="util">
+      <label class="search">
+        <span class="g">&#9906;</span>
+        <input type="text" placeholder="Find an article, a name, an idea&hellip;" aria-label="Search">
+      </label>
+      <a href="https://github.com/mudlark-media" class="gh">GitHub<span class="arr">&nearr;</span></a>
+    </div>
+  </div>
+
+  <nav class="nav" aria-label="Primary">
+    <a href="/ethos"    class="c-gold">Network Ethos</a>
+    <a href="/articles" class="c-rust">Articles</a>
+    <a href="/opsec"    class="c-teal">Digital OpSec</a>
+    <a href="/psych"    class="c-pink">Psychological Warfare</a>
+    <a href="/media"    class="c-blue">Media</a>
+    <a href="/mindmap"  class="c-green">Mind Map</a>
+    <a href="/contact"  class="c-cream">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================== LEAD ============================== -->
+  <section data-section="lead" data-section-label="Lead"
+           style="--sec: var(--c-5); --sec-heading: var(--c-5); --sec-bg-alpha: 0.06; --sec-box-alpha: 0.00;"
+           class="lead wrap">
+    <div class="lead-inner">
+
+      <figure class="lead-fig" data-slot="lead-figure" data-slot-purpose="Lead figure — document map" aria-label="Figure placeholder">
+        <span class="stamp">Figure A &mdash; document map</span>
+        <span class="cap">
+          <span>Composite of 47 source documents</span>
+          <span>2021&ndash;2026</span>
+        </span>
+      </figure>
+
+      <div class="lead-text">
+        <p class="lead-kicker">
+          <span>Psychological Warfare</span>
+          <span class="sep">&middot;</span>
+          <span class="id">Case file 014</span>
+          <span class="sep">&middot;</span>
+          <span class="id">Five-year investigation</span>
+        </p>
+        <h1 class="lead-head">How an <em>open secret</em> kept itself.</h1>
+        <p class="lead-deck">
+          For two decades the complaints went to the right people. The right people did nothing. This is a record of who knew, when they knew, and what they were rewarded with after &mdash; assembled from 47 public-records requests, four interviews, and one box of letters that survived a shredder.
+        </p>
+        <p class="lead-meta">
+          <span class="who">By M.&nbsp;Halverson</span>
+          <span class="sep">&middot;</span>
+          18 min read
+          <span class="sep">&middot;</span>
+          posted 11 May 2026
+        </p>
+        <p class="lead-tags">
+          <span class="t1">Investigation</span>
+          <span class="t2">Public Records</span>
+          <span class="t3">Long Read</span>
+        </p>
+        <a href="/psych/014" class="lead-go">Read the case file <span class="arr">&rarr;</span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== ARTICLES ============================== -->
+  <section data-section="articles" data-section-label="Articles"
+           style="--sec: var(--c-2); --sec-heading: var(--c-2); --sec-bg-alpha: 0.00; --sec-box-alpha: 0.00;"
+           class="wrap">
+    <div class="sec-head h-rust">
+      <h2>Articles</h2>
+      <span class="count">62 in archive</span>
+      <span class="grow"></span>
+      <a href="/articles" class="all">See the archive &rarr;</a>
+    </div>
+
+    <div class="articles">
+
+      <article class="a-card">
+        <span class="a-kicker">Field Report &middot; 09 May</span>
+        <h3 class="a-head">The witnesses who chose silence, and the language they used to do it.</h3>
+        <p class="a-deck">Three former staff describe a culture of euphemism that hollowed out a quarter-century of reporting policy.</p>
+        <p class="a-meta">By <b>D.&nbsp;Okonkwo</b> &middot; <b>11&nbsp;min</b></p>
+      </article>
+
+      <article class="a-card is-quote">
+        <span class="a-kicker">Editor&rsquo;s Note &middot; 07 May</span>
+        <blockquote>
+          &ldquo;The institution survives because <em>nobody</em> ever has to be the one to say the name.&rdquo;
+        </blockquote>
+        <p class="a-meta">From the introduction to <b>Volume&nbsp;II</b></p>
+      </article>
+
+      <article class="a-card">
+        <span class="a-kicker">Records &middot; 04 May</span>
+        <h3 class="a-head">Two decades of complaints, eighteen warnings, no action.</h3>
+        <p class="a-deck">Timeline reconstruction of an oversight failure across four agencies and three administrations.</p>
+        <p class="a-meta">By <b>A.&nbsp;Vasquez</b> &middot; <b>14&nbsp;min</b></p>
+      </article>
+
+      <article class="a-card">
+        <span class="a-kicker">Method &middot; 01 May</span>
+        <h3 class="a-head">How we verify a story without naming the survivor.</h3>
+        <p class="a-deck">Notes on corroboration, source protection, and the kind of evidence we accept and reject.</p>
+        <p class="a-meta">By <b>S.&nbsp;Lin</b> &middot; <b>7&nbsp;min</b></p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================== PSYCHOLOGICAL WARFARE ============================== -->
+  <section data-section="psych" data-section-label="Psychological Warfare"
+           style="--sec: var(--c-5); --sec-heading: var(--c-5); --sec-bg-alpha: 0.05; --sec-box-alpha: 0.00;"
+           class="wrap">
+    <div class="sec-head h-pink">
+      <h2>Psychological Warfare</h2>
+      <span class="count">23 case files</span>
+      <span class="grow"></span>
+      <a href="/psych" class="all">All case files &rarr;</a>
+    </div>
+
+    <div class="psych-grid">
+
+      <div class="pw-feature">
+        <figure class="pw-fig" data-slot="psych-feature-fig" data-slot-purpose="Psych feature — pattern map">
+          <span class="stamp">Case 011 &mdash; pattern map</span>
+        </figure>
+        <p class="kicker">Case study &middot; pattern analysis</p>
+        <h3 class="head">The architecture of <em>plausible deniability</em>.</h3>
+        <p class="deck">A taxonomy of the linguistic moves powerful people use to admit nothing while appearing to admit everything: passive constructions, third-person displacement, the &ldquo;some say&rdquo; pivot, and other recurring tells.</p>
+        <p class="meta">By <b>J.&nbsp;Brennan</b> &middot; <b>9 min</b> &middot; with annotated transcripts</p>
+      </div>
+
+      <div class="pw-list">
+        <article class="pw-item">
+          <span class="n">01</span>
+          <div class="body">
+            <h4>DARVO in the public record</h4>
+            <p>Deny, attack, reverse victim and offender &middot; <b>case set of 12</b></p>
+          </div>
+        </article>
+        <article class="pw-item">
+          <span class="n">02</span>
+          <div class="body">
+            <h4>How abusers borrow the language of healing</h4>
+            <p>Therapeutic vocabulary as cover &middot; <b>essay, 6 min</b></p>
+          </div>
+        </article>
+        <article class="pw-item">
+          <span class="n">03</span>
+          <div class="body">
+            <h4>The grooming curve in elite networks</h4>
+            <p>Patterns across nine documented cases &middot; <b>research note</b></p>
+          </div>
+        </article>
+        <article class="pw-item">
+          <span class="n">04</span>
+          <div class="body">
+            <h4>Smear-by-procedure</h4>
+            <p>When the complaint process is the retaliation &middot; <b>guide, 8 min</b></p>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== OPSEC + MEMBERS ============================== -->
+  <section data-section="opsec-network" data-section-label="OpSec & Network"
+           style="--sec: var(--c-3); --sec-heading: var(--c-3); --sec-bg-alpha: 0.00; --sec-box-alpha: 0.00;"
+           class="wrap duo">
+
+    <div>
+      <div class="sec-head h-teal">
+        <h2>Digital OpSec</h2>
+        <span class="count">11 guides</span>
+        <span class="grow"></span>
+        <a href="/opsec" class="all">All guides &rarr;</a>
+      </div>
+
+      <div class="opsec-list">
+        <article class="op-item">
+          <span class="num">01</span>
+          <div>
+            <h4>Threat modeling for survivors going public</h4>
+            <p>Who needs to know what, and what they can do with it. Worksheet included.</p>
+          </div>
+          <span class="level intro">Start here</span>
+        </article>
+        <article class="op-item">
+          <span class="num">02</span>
+          <div>
+            <h4>Signal &amp; encrypted chat without performing security</h4>
+            <p>Real-world setup that survives the first stressful week, not a textbook checklist.</p>
+          </div>
+          <span class="level intro">Beginner</span>
+        </article>
+        <article class="op-item">
+          <span class="num">03</span>
+          <div>
+            <h4>Identity hygiene before a name goes public</h4>
+            <p>Data broker removal, account separation, the photo audit nobody wants to do.</p>
+          </div>
+          <span class="level field">Field</span>
+        </article>
+        <article class="op-item">
+          <span class="num">04</span>
+          <div>
+            <h4>PGP for survivors, not cypherpunks</h4>
+            <p>The minimum useful version, with the parts that always break called out.</p>
+          </div>
+          <span class="level field">Field</span>
+        </article>
+        <article class="op-item">
+          <span class="num">05</span>
+          <div>
+            <h4>Adversarial OSINT: assume they&rsquo;re looking</h4>
+            <p>What an investigator with $200 can find about you in an afternoon. And what to do about it.</p>
+          </div>
+          <span class="level advanced">Advanced</span>
+        </article>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head h-gold">
+        <h2>The Network</h2>
+        <span class="count">38 contributors</span>
+        <span class="grow"></span>
+        <a href="/contact" class="all">Join in &rarr;</a>
+      </div>
+
+      <div class="members-list">
+        <div class="mem"><span class="ini">MH</span><div class="info"><div class="nm">M.&nbsp;Halverson</div><div class="rl">Writer &middot; <b>Portland,&nbsp;OR</b></div></div></div>
+        <div class="mem r"><span class="ini">DO</span><div class="info"><div class="nm">D.&nbsp;Okonkwo</div><div class="rl">Researcher &middot; <b>Atlanta,&nbsp;GA</b></div></div></div>
+        <div class="mem t"><span class="ini">AV</span><div class="info"><div class="nm">A.&nbsp;Vasquez</div><div class="rl">Records &middot; <b>El Paso,&nbsp;TX</b></div></div></div>
+        <div class="mem p"><span class="ini">SL</span><div class="info"><div class="nm">S.&nbsp;Lin</div><div class="rl">Editor &middot; <b>Oakland,&nbsp;CA</b></div></div></div>
+        <div class="mem b"><span class="ini">JB</span><div class="info"><div class="nm">J.&nbsp;Brennan</div><div class="rl">Legal observer &middot; <b>Chicago,&nbsp;IL</b></div></div></div>
+        <div class="mem g"><span class="ini">RP</span><div class="info"><div class="nm">R.&nbsp;Patel</div><div class="rl">Audio &middot; <b>Brooklyn,&nbsp;NY</b></div></div></div>
+        <div class="mem"><span class="ini">KM</span><div class="info"><div class="nm">K.&nbsp;Mortensen</div><div class="rl">Visual archive &middot; <b>Minneapolis</b></div></div></div>
+        <div class="mem r"><span class="ini">EF</span><div class="info"><div class="nm">E.&nbsp;Ferreira</div><div class="rl">Web infrastructure &middot; <b>Lisbon</b></div></div></div>
+        <div class="mem t"><span class="ini">NK</span><div class="info"><div class="nm">N.&nbsp;Kowalski</div><div class="rl">Translation &middot; <b>Kraków</b></div></div></div>
+        <div class="mem b"><span class="ini">TJ</span><div class="info"><div class="nm">T.&nbsp;Jian</div><div class="rl">Researcher &middot; <b>Vancouver,&nbsp;BC</b></div></div></div>
+      </div>
+      <p class="members-note">
+        We do not solicit qualifications. <a href="/contact">Reach out</a> with what motivates you and we will find a place for it.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ============================== MEDIA ============================== -->
+  <section data-section="media" data-section-label="Media"
+           style="--sec: var(--c-4); --sec-heading: var(--c-4); --sec-bg-alpha: 0.05; --sec-box-alpha: 0.00;"
+           class="wrap">
+    <div class="sec-head h-blue">
+      <h2>Media</h2>
+      <span class="count">music &middot; video &middot; audio &middot; art</span>
+      <span class="grow"></span>
+      <a href="/media" class="all">All works &rarr;</a>
+    </div>
+
+    <div class="media-grid">
+
+      <a href="/media/track-the-quiet-after" class="m-tile m-music">
+        <figure class="m-art" data-slot="media-music-art" data-slot-purpose="Music — LP rings">
+          <span class="kind">Music</span>
+          <span class="runtime">4:18</span>
+        </figure>
+        <h4>The Quiet After</h4>
+        <p class="by">Original composition by <b>R.&nbsp;Patel</b></p>
+      </a>
+
+      <a href="/media/in-conversation" class="m-tile m-video">
+        <figure class="m-art" data-slot="media-video-art" data-slot-purpose="Video — play frame">
+          <span class="kind">Video</span>
+          <span class="runtime">22:04</span>
+          <span class="play" aria-hidden="true"></span>
+        </figure>
+        <h4>In conversation: what the records left out</h4>
+        <p class="by">With <b>D.&nbsp;Okonkwo</b> and a former records officer</p>
+      </a>
+
+      <a href="/media/courtroom-hallway" class="m-tile m-audio">
+        <figure class="m-art" data-slot="media-audio-art" data-slot-purpose="Audio — waveform">
+          <span class="kind">Audio</span>
+          <span class="runtime">14:11</span>
+          <span class="bar" style="height: 22%"></span>
+          <span class="bar" style="height: 54%"></span>
+          <span class="bar" style="height: 38%"></span>
+          <span class="bar" style="height: 82%"></span>
+          <span class="bar" style="height: 64%"></span>
+          <span class="bar" style="height: 30%"></span>
+          <span class="bar" style="height: 70%"></span>
+          <span class="bar" style="height: 46%"></span>
+          <span class="bar" style="height: 88%"></span>
+          <span class="bar" style="height: 52%"></span>
+          <span class="bar" style="height: 26%"></span>
+          <span class="bar" style="height: 68%"></span>
+          <span class="bar" style="height: 40%"></span>
+          <span class="bar" style="height: 18%"></span>
+        </figure>
+        <h4>Field recording: courtroom hallway, 09 May</h4>
+        <p class="by">Recorded by <b>K.&nbsp;Mortensen</b></p>
+      </a>
+
+      <a href="/media/portraits-in-absence" class="m-tile m-visual">
+        <figure class="m-art" data-slot="media-visual-art" data-slot-purpose="Visual — photo plates">
+          <span class="kind">Visual</span>
+          <span class="runtime">12 plates</span>
+        </figure>
+        <h4>Portraits in the absence of</h4>
+        <p class="by">A photo series by <b>K.&nbsp;Mortensen</b></p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============================== PAPERS + MIND MAP ============================== -->
+  <section data-section="bibliography-mindmap" data-section-label="Bibliography & Mind Map"
+           style="--sec: var(--c-6); --sec-heading: var(--c-6); --sec-bg-alpha: 0.00; --sec-box-alpha: 0.00;"
+           class="wrap duo-2">
+
+    <div>
+      <div class="sec-head h-green">
+        <h2>Academic &amp; Cited</h2>
+        <span class="count">working bibliography</span>
+        <span class="grow"></span>
+        <a href="/articles/cited" class="all">Full bibliography &rarr;</a>
+      </div>
+
+      <div class="papers">
+        <div class="paper">
+          <span class="yr">2024</span>
+          <span class="cite"><span class="au">Freyd, J.&nbsp;J., &amp; Birrell, P.&nbsp;J.</span> <span class="ti">Institutional betrayal: the second-order harm of organizational silence.</span> <span class="src">Journal of Trauma &amp; Dissociation, 25(2), 134&ndash;158.</span></span>
+          <span class="fmt pdf">PDF</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2023</span>
+          <span class="cite"><span class="au">Smith, C.&nbsp;P.</span> <span class="ti">Why power apologises in the passive voice.</span> <span class="src">Discourse &amp; Society, 34(6), 712&ndash;731.</span></span>
+          <span class="fmt html">HTML</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2022</span>
+          <span class="cite"><span class="au">Herman, J.&nbsp;L.</span> <span class="ti">Truth and repair: how trauma survivors envision justice.</span> <span class="src">Basic Books.</span></span>
+          <span class="fmt book">Book</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2021</span>
+          <span class="cite"><span class="au">Tuerkheimer, D.</span> <span class="ti">Credible: why we doubt accusers and protect abusers.</span> <span class="src">Harper Wave.</span></span>
+          <span class="fmt book">Book</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2020</span>
+          <span class="cite"><span class="au">Bekiempis, V.</span> <span class="ti">How public records requests can break an open secret.</span> <span class="src">Columbia Journalism Review, July.</span></span>
+          <span class="fmt html">HTML</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head h-blue">
+        <h2>Mind Map</h2>
+        <span class="count">case 014 graph</span>
+        <span class="grow"></span>
+        <a href="/mindmap" class="all">Open the full map &rarr;</a>
+      </div>
+
+      <div class="mindmap">
+        <div class="mm-viz" data-slot="mindmap-graph" data-slot-purpose="Mind map — case 014">
+
+          <!-- edges first so nodes draw on top -->
+          <span class="mm-line" style="left: 22%; top: 30%; width: 32%;  transform: rotate(22deg);"></span>
+          <span class="mm-line" style="left: 22%; top: 30%; width: 40%;  transform: rotate(58deg);"></span>
+          <span class="mm-line" style="left: 50%; top: 50%; width: 28%;  transform: rotate(-20deg);"></span>
+          <span class="mm-line" style="left: 50%; top: 50%; width: 26%;  transform: rotate(40deg);"></span>
+          <span class="mm-line" style="left: 50%; top: 50%; width: 22%;  transform: rotate(160deg);"></span>
+          <span class="mm-line" style="left: 78%; top: 32%; width: 18%;  transform: rotate(110deg);"></span>
+          <span class="mm-line" style="left: 28%; top: 78%; width: 26%;  transform: rotate(-32deg);"></span>
+
+          <span class="mm-node x" style="left: 50%; top: 50%;">Case&nbsp;014</span>
+          <span class="mm-node r" style="left: 22%; top: 30%;">Records</span>
+          <span class="mm-node p" style="left: 78%; top: 32%;">Witnesses</span>
+          <span class="mm-node g" style="left: 28%; top: 78%;">Agencies</span>
+          <span class="mm-node t" style="left: 75%; top: 76%;">Press</span>
+          <span class="mm-node o" style="left: 90%; top: 50%;">Funders</span>
+        </div>
+        <p class="mm-cap">
+          Each node opens its underlying documents. The full map links <b>3,114 entities</b> across <b>23 case files</b>. <a href="/mindmap">Open the full map &rarr;</a>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="/" class="wordmark">
+          <span class="name">mudlark<span class="stop">.</span></span>
+          <span class="sub">Media <em>&middot;</em> Network</span>
+        </a>
+        <p>A volunteer network. We make hidden institutional failures visible, and we hold space for survivors to tell their own stories on their own terms.</p>
+        <div class="principles">
+          <b class="g">Volunteer</b><span>&middot;</span>
+          <b class="r">Zero-fund</b><span>&middot;</span>
+          <b class="t">No hierarchy</b><span>&middot;</span>
+          <b class="p">Entirely public</b>
+        </div>
+      </div>
+
+      <div class="foot-col a">
+        <h4>Read &amp; Watch</h4>
+        <ul>
+          <li><a href="/articles">Articles</a></li>
+          <li><a href="/psych">Psychological Warfare</a></li>
+          <li><a href="/media">Media &amp; Music</a></li>
+          <li><a href="/mindmap">Mind Map</a></li>
+          <li><a href="/articles/cited">Bibliography</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col b">
+        <h4>Take Care</h4>
+        <ul>
+          <li><a href="/opsec">Digital OpSec</a></li>
+          <li><a href="/opsec/threat-model">Threat Models</a></li>
+          <li><a href="/opsec/signal">Signal &amp; Encrypted Chat</a></li>
+          <li><a href="/opsec/identity">Identity Hygiene</a></li>
+          <li><a href="/opsec/pgp">PGP for Survivors</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col c">
+        <h4>Join In</h4>
+        <ul>
+          <li><a href="/ethos">Network Ethos</a></li>
+          <li><a href="/contact">Reach Out</a></li>
+          <li><a href="/contact#submit">Submit a Story</a></li>
+          <li><a href="/contact#projects">Suggest a Project</a></li>
+          <li><a href="https://github.com/mudlark-media">GitHub Repo &nearr;</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span class="left">A public work &mdash; <em>use anything here</em>. No rights reserved.</span>
+      <span class="right">
+        <a href="/ethos">Read the ethos</a>
+        <span class="pip">&middot;</span>
+        <a href="/contact">Reach out</a>
+        <span class="pip">&middot;</span>
+        2026
+      </span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============================== EDITOR POPUP ============================== -->
+<div class="editor-overlay" id="editor-overlay"></div>
+<div class="editor-panel" id="editor-panel" role="dialog" aria-label="Page editor">
+  <div class="editor-header">
+    <div class="editor-header-title">Editor &mdash; Mudlark</div>
+    <button class="editor-close" id="editor-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="editor-body">
+
+    <div class="editor-section">
+      <h3>Palette</h3>
+      <div class="editor-grid-palette" id="editor-palette"></div>
+      <button class="editor-button" id="editor-randomize" type="button">Randomize</button>
+    </div>
+
+    <div class="editor-section">
+      <h3>Sections</h3>
+      <div id="editor-sections"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Slots</h3>
+      <div id="editor-slots"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Fonts</h3>
+      <div id="editor-fonts"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Rhythm</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Vertical</span>
+        <input type="range" min="0.7" max="1.5" step="0.05" value="1" class="editor-slider" id="editor-rhythm-v">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Padding</span>
+        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Headline</span>
+        <input type="range" min="0.85" max="1.2" step="0.01" value="1" class="editor-slider" id="editor-rhythm-h">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Effects</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Shadow</span>
+        <input type="range" min="0" max="80" step="2" value="40" class="editor-slider" id="editor-shadow-alpha">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Blur</span>
+        <input type="range" min="0" max="80" step="2" value="30" class="editor-slider" id="editor-shadow-blur">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Shine</span>
+        <input type="range" min="0" max="30" step="1" value="0" class="editor-slider" id="editor-shine">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Picture</span>
+        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Background pattern</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Shape</span>
+        <select class="editor-select" id="editor-bgp-shape">
+          <option value="dot">Dot</option>
+          <option value="ring">Ring</option>
+          <option value="square">Square</option>
+          <option value="cross">Cross</option>
+          <option value="diag">Diagonal</option>
+        </select>
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Colour</span>
+        <select class="editor-select" id="editor-bgp-color"></select>
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Size</span>
+        <input type="range" min="8" max="80" step="2" value="24" class="editor-slider" id="editor-bgp-size">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Alpha</span>
+        <input type="range" min="0" max="60" step="1" value="0" class="editor-slider" id="editor-bgp-alpha">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Actions</h3>
+      <div class="editor-actions">
+        <button class="editor-button" id="editor-export" type="button">Export HTML</button>
+        <button class="editor-button" id="editor-copy"   type="button">Copy CSS</button>
+        <button class="editor-button" id="editor-reset"  type="button">Reset</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="application/json" id="builder-state">
+{
+  "schema": 4,
+  "page": {
+    "id": "mudlark-home",
+    "title": "Mudlark Media Network",
+    "filename": "Mudlark Media Network.html",
+    "siblings": [],
+    "repo": "https://github.com/Mudlark-Media-Network/mudlarkmedia.github.io"
+  },
+  "palette": {
+    "c1":  { "value": "#E8B23A", "locked": false, "label": "Gold" },
+    "c2":  { "value": "#DD5E2C", "locked": false, "label": "Rust" },
+    "c3":  { "value": "#2EA39C", "locked": false, "label": "Teal" },
+    "c4":  { "value": "#4F95CC", "locked": false, "label": "Blue" },
+    "c5":  { "value": "#CC6094", "locked": false, "label": "Pink" },
+    "c6":  { "value": "#6CB855", "locked": false, "label": "Green" },
+    "c7":  { "value": "#131210", "locked": true,  "label": "Background" },
+    "c8":  { "value": "#1F1D19", "locked": true,  "label": "Surface" },
+    "c9":  { "value": "#ECE5D2", "locked": true,  "label": "Main text" },
+    "c10": { "value": "#9C9583", "locked": true,  "label": "Soft text" }
+  },
+  "effects": {
+    "shadowAlpha": 0.40,
+    "shadowBlur":  "30px",
+    "shineAlpha":  0.00,
+    "slotAlpha":   0.00
+  },
+  "bgPattern": {
+    "shape": "dot",
+    "color": "c10",
+    "size":  24,
+    "alpha": 0.00
+  },
+  "fonts": {
+    "display": { "family": "Fraunces",        "source": "repo" },
+    "body":    { "family": "Fraunces",        "source": "repo" },
+    "sans":    { "family": "IBM Plex Sans",   "source": "repo" },
+    "mono":    { "family": "Spline Sans Mono","source": "repo" },
+    "available": {
+      "display": [
+        { "name": "Fraunces",       "files": [{ "weight": "100 1000", "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf" }] },
+        { "name": "Bebas Neue",     "files": [{ "weight": "400",      "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Bebas_Neue/BebasNeue-Regular.ttf" }] },
+        { "name": "Orbitron",       "files": [{ "weight": "400 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/Orbitron-VariableFont_wght.ttf" }] },
+        { "name": "Goldman",        "files": [{ "weight": "400",      "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Goldman/Goldman-Regular.ttf" }] }
+      ],
+      "body": [
+        { "name": "Fraunces",       "files": [{ "weight": "100 1000", "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf" }] },
+        { "name": "Onest",          "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Onest/Onest-VariableFont_wght.ttf" }] },
+        { "name": "Lato",           "files": [{ "weight": "400",      "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Regular.ttf" }] },
+        { "name": "Public Sans",    "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-VariableFont_wght.ttf" }] }
+      ],
+      "sans": [
+        { "name": "IBM Plex Sans",  "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf" }] },
+        { "name": "Geist",          "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-VariableFont_wght.ttf" }] },
+        { "name": "Inter Tight",    "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-VariableFont_wght.ttf" }] }
+      ],
+      "mono": [
+        { "name": "Spline Sans Mono","files":[{ "weight": "300 700",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf" }] },
+        { "name": "Azeret Mono",    "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Azeret_Mono/AzeretMono-VariableFont_wght.ttf" }] },
+        { "name": "Victor Mono",    "files": [{ "weight": "100 700",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Victor_Mono/VictorMono-VariableFont_wght.ttf" }] }
+      ]
+    }
+  },
+  "rhythm": {
+    "padX": "clamp(20px, 4vw, 56px)",
+    "vertical": 1,
+    "headlineScale": 1
+  },
+  "sections": [
+    { "id": "lead",                  "label": "Lead",                "bgAlpha": 0.06, "boxAlpha": 0.00,
+      "colors": { "accent":  { "paletteKey": "c5" }, "heading": { "paletteKey": "c5" } } },
+    { "id": "articles",              "label": "Articles",            "bgAlpha": 0.00, "boxAlpha": 0.00,
+      "colors": { "accent":  { "paletteKey": "c2" }, "heading": { "paletteKey": "c2" } } },
+    { "id": "psych",                 "label": "Psych. Warfare",      "bgAlpha": 0.05, "boxAlpha": 0.00,
+      "colors": { "accent":  { "paletteKey": "c5" }, "heading": { "paletteKey": "c5" } } },
+    { "id": "opsec-network",         "label": "OpSec & Network",     "bgAlpha": 0.00, "boxAlpha": 0.00,
+      "colors": { "accent":  { "paletteKey": "c3" }, "heading": { "paletteKey": "c3" } } },
+    { "id": "media",                 "label": "Media",               "bgAlpha": 0.05, "boxAlpha": 0.00,
+      "colors": { "accent":  { "paletteKey": "c4" }, "heading": { "paletteKey": "c4" } } },
+    { "id": "bibliography-mindmap",  "label": "Bibliography & Map",  "bgAlpha": 0.00, "boxAlpha": 0.00,
+      "colors": { "accent":  { "paletteKey": "c6" }, "heading": { "paletteKey": "c6" } } }
+  ],
+  "slots": [
+    { "id": "lead-figure",       "purpose": "Lead figure" },
+    { "id": "psych-feature-fig", "purpose": "Psych feature figure" },
+    { "id": "media-music-art",   "purpose": "Music tile" },
+    { "id": "media-video-art",   "purpose": "Video tile" },
+    { "id": "media-audio-art",   "purpose": "Audio tile" },
+    { "id": "media-visual-art",  "purpose": "Visual tile" },
+    { "id": "mindmap-graph",     "purpose": "Mind map graph" }
+  ]
+}
+</script>
+
+<script>
+(function () {
+
+  const FONT_ROLES = [
+    { key: 'display', label: 'Display', cssVar: '--serif-d', fallback: 'Georgia, serif' },
+    { key: 'body',    label: 'Body',    cssVar: '--serif-b', fallback: 'Georgia, serif' },
+    { key: 'sans',    label: 'Sans',    cssVar: '--sans',    fallback: 'system-ui, sans-serif' },
+    { key: 'mono',    label: 'Mono',    cssVar: '--mono',    fallback: 'ui-monospace, monospace' }
+  ];
+
+  const SLOT_PRESETS = [
+    { label: 'Square',           value: '1/1',   type: 'ratio'  },
+    { label: 'Photo (4:3)',      value: '4/3',   type: 'ratio'  },
+    { label: 'Widescreen (16:9)',value: '16/9',  type: 'ratio'  },
+    { label: 'Cinema (21:9)',    value: '21/9',  type: 'ratio'  },
+    { label: 'Tile (5:4)',       value: '5/4',   type: 'ratio'  },
+    { label: 'Portrait (3:4)',   value: '3/4',   type: 'ratio'  },
+    { label: 'Tower (2:3)',      value: '2/3',   type: 'ratio'  },
+    { label: 'Tall (9:16)',      value: '9/16',  type: 'ratio'  },
+    { label: 'Banner (5:1)',     value: '5/1',   type: 'ratio'  },
+    { label: 'Hero (3:1)',       value: '3/1',   type: 'ratio'  },
+    { label: 'Short (120px)',    value: '120px', type: 'height' },
+    { label: 'Card (240px)',     value: '240px', type: 'height' },
+    { label: 'Tall card (480px)',value: '480px', type: 'height' }
+  ];
+
+  const SECTION_SPOT_VARS = {
+    accent:  '--sec',
+    heading: '--sec-heading'
+  };
+
+  const PATTERN_SHAPES = {
+    dot:    (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="0.9" fill="currentColor"/>`,
+    ring:   (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="2" fill="none" stroke="currentColor" stroke-width="0.6"/>`,
+    square: (cx, cy) => `<rect x="${cx-1.5}" y="${cy-1.5}" width="3" height="3" fill="currentColor"/>`,
+    cross:  (cx, cy) => `<path d="M${cx-2.2},${cy} L${cx+2.2},${cy} M${cx},${cy-2.2} L${cx},${cy+2.2}" stroke="currentColor" stroke-width="0.6" fill="none"/>`,
+    diag:   (cx, cy) => `<path d="M${cx-3},${cy-3} L${cx+3},${cy+3}" stroke="currentColor" stroke-width="0.6" fill="none"/>`
+  };
+
+  const STATE_EL = document.getElementById('builder-state');
+  let state, DEFAULTS;
+  try {
+    state = JSON.parse(STATE_EL.textContent);
+    DEFAULTS = JSON.parse(JSON.stringify(state));
+  } catch (e) {
+    console.error('builder-state JSON is invalid:', e);
+    return;
+  }
+
+  function normHex(v) {
+    if (!v) return null;
+    v = v.trim().replace(/^#/, '');
+    if (/^[0-9a-f]{3}$/i.test(v)) v = v.split('').map(c => c + c).join('');
+    if (/^[0-9a-f]{6}$/i.test(v)) return '#' + v.toLowerCase();
+    return null;
+  }
+  function randomHex() {
+    return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+  }
+  function paletteCssVar(key)  { return '--c-' + key.slice(1); }
+  function paletteVarRef(key)  { return 'var(' + paletteCssVar(key) + ')'; }
+  function updateSliderFill(slider) {
+    const min = parseFloat(slider.min);
+    const max = parseFloat(slider.max);
+    const pct = ((parseFloat(slider.value) - min) / (max - min)) * 100;
+    slider.style.setProperty('--fill', pct + '%');
+  }
+
+  function makeLockBtn(isLocked, onToggle) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'editor-lock' + (isLocked ? ' is-locked' : '');
+    btn.title = 'Lock this color (skip during Randomize)';
+    btn.setAttribute('aria-label', 'Lock');
+    btn.addEventListener('click', () => {
+      const next = !btn.classList.contains('is-locked');
+      btn.classList.toggle('is-locked', next);
+      onToggle(next);
+    });
+    return btn;
+  }
+
+  function paletteOptionList() {
+    return Object.entries(state.palette).map(([key, slot]) => ({
+      key, label: slot.label || key, value: slot.value
+    }));
+  }
+
+  function buildPaletteInputs() {
+    const container = document.getElementById('editor-palette');
+    container.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const key = 'c' + i;
+      const slot = state.palette[key];
+      const cell = document.createElement('div');
+      cell.className = 'editor-palette-cell';
+
+      const swatch = document.createElement('div');
+      swatch.className = 'swatch';
+      cell.appendChild(swatch);
+
+      if (!slot) {
+        cell.classList.add('is-empty');
+        container.appendChild(cell);
+        continue;
+      }
+
+      swatch.style.setProperty('--swatch', slot.value);
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = slot.label || key;
+      cell.appendChild(label);
+
+      const controls = document.createElement('div');
+      controls.className = 'controls';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'editor-input';
+      input.value = slot.value;
+      input.title = key;
+      input.addEventListener('input', () => {
+        const h = normHex(input.value);
+        if (h) {
+          applyPaletteColor(key, h);
+          swatch.style.setProperty('--swatch', h);
+          refreshSectionSpotSwatches();
+        }
+      });
+      input.addEventListener('blur', () => { input.value = slot.value; });
+      controls.appendChild(input);
+
+      controls.appendChild(makeLockBtn(slot.locked, locked => { slot.locked = locked; }));
+      cell.appendChild(controls);
+      container.appendChild(cell);
+    }
+  }
+
+  function buildSectionsPanel() {
+    const wrap = document.getElementById('editor-sections');
+    wrap.innerHTML = '';
+    const opts = paletteOptionList();
+    state.sections.forEach(sec => {
+      const group = document.createElement('div');
+      group.className = 'editor-section-group';
+      const title = document.createElement('div');
+      title.className = 'editor-section-group-title';
+      title.textContent = sec.label;
+      group.appendChild(title);
+
+      Object.entries(sec.colors).forEach(([spotKey, spot]) => {
+        const row = document.createElement('div');
+        row.className = 'editor-section-spot';
+
+        const swatch = document.createElement('div');
+        swatch.className = 'swatch';
+        swatch.dataset.sectionId = sec.id;
+        swatch.dataset.spotKey = spotKey;
+        const slot = state.palette[spot.paletteKey];
+        swatch.style.setProperty('--swatch', slot ? slot.value : '#000');
+        row.appendChild(swatch);
+
+        const lbl = document.createElement('span');
+        lbl.className = 'spot-label';
+        lbl.textContent = spotKey;
+        row.appendChild(lbl);
+
+        const sel = document.createElement('select');
+        sel.className = 'editor-select';
+        opts.forEach(o => {
+          const opt = document.createElement('option');
+          opt.value = o.key;
+          opt.textContent = o.label;
+          if (o.key === spot.paletteKey) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', () => {
+          applySectionSpot(sec, spotKey, sel.value);
+          const slot = state.palette[sel.value];
+          swatch.style.setProperty('--swatch', slot ? slot.value : '#000');
+        });
+        row.appendChild(sel);
+
+        group.appendChild(row);
+      });
+
+      group.appendChild(makeAlphaRow('Background', sec.bgAlpha, 40, v => applySectionBgAlpha(sec, v)));
+      group.appendChild(makeAlphaRow('Box',        sec.boxAlpha, 60, v => applySectionBoxAlpha(sec, v)));
+
+      wrap.appendChild(group);
+    });
+  }
+
+  function makeAlphaRow(label, initialValue, max, onChange) {
+    const row = document.createElement('div');
+    row.className = 'editor-label-row';
+    const lbl = document.createElement('span');
+    lbl.className = 'editor-label';
+    lbl.textContent = label;
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = '0';
+    slider.max = String(max);
+    slider.step = '1';
+    slider.value = Math.round((initialValue || 0) * 100);
+    slider.className = 'editor-slider';
+    slider.addEventListener('input', () => {
+      onChange(parseFloat(slider.value) / 100);
+      updateSliderFill(slider);
+    });
+    updateSliderFill(slider);
+    row.appendChild(lbl);
+    row.appendChild(slider);
+    return row;
+  }
+
+  function refreshSectionSpotSwatches() {
+    document.querySelectorAll('#editor-sections .swatch').forEach(sw => {
+      const sec = state.sections.find(s => s.id === sw.dataset.sectionId);
+      if (!sec) return;
+      const spot = sec.colors[sw.dataset.spotKey];
+      if (!spot) return;
+      const slot = state.palette[spot.paletteKey];
+      sw.style.setProperty('--swatch', slot ? slot.value : '#000');
+    });
+  }
+
+  function buildSlots() {
+    const wrap = document.getElementById('editor-slots');
+    wrap.innerHTML = '';
+    state.slots.forEach(slot => {
+      const row = document.createElement('div');
+      row.className = 'editor-slot-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'label';
+      lbl.textContent = slot.purpose;
+      lbl.title = slot.purpose;
+      const sel = document.createElement('select');
+      sel.className = 'editor-select';
+      const el = document.querySelector(`[data-slot="${slot.id}"]`);
+      const currentAR = el ? el.style.aspectRatio : '';
+      const currentMH = el ? el.style.minHeight : '';
+      SLOT_PRESETS.forEach((preset, idx) => {
+        const opt = document.createElement('option');
+        opt.value = String(idx);
+        opt.textContent = preset.label;
+        if (preset.type === 'ratio'  && preset.value === currentAR) opt.selected = true;
+        if (preset.type === 'height' && preset.value === currentMH) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      sel.addEventListener('change', () => {
+        applySlotPreset(slot.id, SLOT_PRESETS[parseInt(sel.value, 10)]);
+      });
+      row.appendChild(lbl);
+      row.appendChild(sel);
+      wrap.appendChild(row);
+    });
+  }
+
+  function buildFontPickers() {
+    const wrap = document.getElementById('editor-fonts');
+    wrap.innerHTML = '';
+    FONT_ROLES.forEach(role => {
+      const row = document.createElement('div');
+      row.className = 'editor-label-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'editor-label';
+      lbl.textContent = role.label;
+      const sel = document.createElement('select');
+      sel.className = 'editor-select';
+      sel.dataset.role = role.key;
+      const current = state.fonts[role.key].family;
+      const list = (state.fonts.available && state.fonts.available[role.key]) || [];
+      if (!list.find(f => f.name === current)) {
+        const o = document.createElement('option');
+        o.value = current; o.textContent = current; o.selected = true;
+        sel.appendChild(o);
+      }
+      list.forEach(f => {
+        const o = document.createElement('option');
+        o.value = f.name; o.textContent = f.name;
+        if (f.name === current) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', () => {
+        const entry = list.find(f => f.name === sel.value);
+        if (entry) applyFont(role, entry);
+      });
+      row.appendChild(lbl);
+      row.appendChild(sel);
+      wrap.appendChild(row);
+    });
+  }
+
+  function buildBgPatternColorOptions() {
+    const sel = document.getElementById('editor-bgp-color');
+    sel.innerHTML = '';
+    paletteOptionList().forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.key;
+      opt.textContent = o.label;
+      if (o.key === state.bgPattern.color) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function applyPaletteColor(key, hex) {
+    document.documentElement.style.setProperty(paletteCssVar(key), hex);
+    state.palette[key].value = hex;
+  }
+
+  function applySectionSpot(sec, spotKey, paletteKey) {
+    sec.colors[spotKey].paletteKey = paletteKey;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty(SECTION_SPOT_VARS[spotKey], paletteVarRef(paletteKey));
+  }
+
+  function applySectionBgAlpha(sec, alpha) {
+    sec.bgAlpha = alpha;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty('--sec-bg-alpha', alpha);
+  }
+
+  function applySectionBoxAlpha(sec, alpha) {
+    sec.boxAlpha = alpha;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty('--sec-box-alpha', alpha);
+  }
+
+  function applySlotPreset(id, preset) {
+    const el = document.querySelector(`[data-slot="${id}"]`);
+    if (!el) return;
+    if (preset.type === 'ratio') {
+      el.style.aspectRatio = preset.value;
+      el.style.minHeight = '';
+    } else {
+      el.style.minHeight = preset.value;
+      el.style.aspectRatio = '';
+    }
+  }
+
+  function applyFont(role, entry) {
+    let styleEl = document.getElementById('editor-font-' + role.key);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'editor-font-' + role.key;
+      document.head.appendChild(styleEl);
+    }
+    const faces = (entry.files || []).map(f => `
+      @font-face {
+        font-family: '${entry.name}';
+        src: url('${f.url}') format('truetype');
+        font-weight: ${f.weight || 400};
+        font-style: ${f.style || 'normal'};
+        font-display: swap;
+      }
+    `).join('\n');
+    styleEl.textContent = faces;
+    document.documentElement.style.setProperty(role.cssVar, `'${entry.name}', ${role.fallback}`);
+    state.fonts[role.key] = { family: entry.name, source: 'repo' };
+  }
+
+  function applyBgPatternShape(shape) {
+    state.bgPattern.shape = shape;
+    const tile = document.querySelector('#bg-pattern-tile');
+    const size = parseFloat(tile.getAttribute('width')) || 24;
+    const inner = PATTERN_SHAPES[shape] || PATTERN_SHAPES.dot;
+    document.querySelector('#bg-pattern-shape').innerHTML = inner(size / 2, size / 2);
+  }
+  function applyBgPatternColor(paletteKey) {
+    state.bgPattern.color = paletteKey;
+    document.documentElement.style.setProperty('--bg-pattern-color', paletteVarRef(paletteKey));
+  }
+  function applyBgPatternSize(size) {
+    state.bgPattern.size = size;
+    const tile = document.querySelector('#bg-pattern-tile');
+    tile.setAttribute('width', size);
+    tile.setAttribute('height', size);
+    applyBgPatternShape(state.bgPattern.shape);
+  }
+  function applyBgPatternAlpha(alpha) {
+    state.bgPattern.alpha = alpha;
+    document.documentElement.style.setProperty('--bg-pattern-alpha', alpha);
+  }
+
+  function bindRhythm() {
+    const v = document.getElementById('editor-rhythm-v');
+    const p = document.getElementById('editor-rhythm-p');
+    const h = document.getElementById('editor-rhythm-h');
+
+    v.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--rhythm', v.value);
+      state.rhythm.vertical = parseFloat(v.value);
+      updateSliderFill(v);
+    });
+    p.addEventListener('input', () => {
+      const flipped = (parseFloat(p.min) + parseFloat(p.max)) - parseFloat(p.value);
+      document.documentElement.style.setProperty('--pad-x', flipped + 'px');
+      state.rhythm.padX = flipped + 'px';
+      updateSliderFill(p);
+    });
+    h.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--headline-scale', h.value);
+      state.rhythm.headlineScale = parseFloat(h.value);
+      updateSliderFill(h);
+    });
+
+    [v, p, h].forEach(updateSliderFill);
+  }
+
+  function bindEffects() {
+    const sa = document.getElementById('editor-shadow-alpha');
+    const sb = document.getElementById('editor-shadow-blur');
+    const sh = document.getElementById('editor-shine');
+    const pa = document.getElementById('editor-slot-alpha');
+
+    sa.addEventListener('input', () => {
+      const v = parseFloat(sa.value) / 100;
+      document.documentElement.style.setProperty('--shadow-alpha', v);
+      state.effects.shadowAlpha = v;
+      updateSliderFill(sa);
+    });
+    sb.addEventListener('input', () => {
+      const v = sb.value + 'px';
+      document.documentElement.style.setProperty('--shadow-blur', v);
+      state.effects.shadowBlur = v;
+      updateSliderFill(sb);
+    });
+    sh.addEventListener('input', () => {
+      const v = parseFloat(sh.value) / 100;
+      document.documentElement.style.setProperty('--shine-alpha', v);
+      state.effects.shineAlpha = v;
+      updateSliderFill(sh);
+    });
+    pa.addEventListener('input', () => {
+      const v = parseFloat(pa.value) / 100;
+      document.documentElement.style.setProperty('--slot-alpha', v);
+      state.effects.slotAlpha = v;
+      updateSliderFill(pa);
+    });
+
+    [sa, sb, sh, pa].forEach(updateSliderFill);
+  }
+
+  function bindBgPattern() {
+    const sh = document.getElementById('editor-bgp-shape');
+    const co = document.getElementById('editor-bgp-color');
+    const sz = document.getElementById('editor-bgp-size');
+    const al = document.getElementById('editor-bgp-alpha');
+
+    sh.value = state.bgPattern.shape;
+    sz.value = state.bgPattern.size;
+    al.value = Math.round(state.bgPattern.alpha * 100);
+
+    sh.addEventListener('change', () => applyBgPatternShape(sh.value));
+    co.addEventListener('change', () => applyBgPatternColor(co.value));
+    sz.addEventListener('input',  () => { applyBgPatternSize(parseInt(sz.value, 10)); updateSliderFill(sz); });
+    al.addEventListener('input',  () => { applyBgPatternAlpha(parseFloat(al.value) / 100); updateSliderFill(al); });
+
+    updateSliderFill(sz);
+    updateSliderFill(al);
+
+    applyBgPatternShape(state.bgPattern.shape);
+    applyBgPatternColor(state.bgPattern.color);
+    applyBgPatternSize(state.bgPattern.size);
+    applyBgPatternAlpha(state.bgPattern.alpha);
+  }
+
+  function randomizeAll() {
+    Object.entries(state.palette).forEach(([key, slot]) => {
+      if (!slot.locked) applyPaletteColor(key, randomHex());
+    });
+    buildPaletteInputs();
+    refreshSectionSpotSwatches();
+  }
+
+  function exportHtml() {
+    const doc = document.documentElement.cloneNode(true);
+    doc.querySelector('#editor-overlay')?.classList.remove('open');
+    doc.querySelector('#editor-panel')?.classList.remove('open');
+
+    const styleBlock = doc.querySelector('style');
+    if (styleBlock) {
+      let css = styleBlock.textContent;
+      Object.entries(state.palette).forEach(([key, slot]) => {
+        const cVar = paletteCssVar(key);
+        css = css.replace(new RegExp('(' + cVar + ':\\s*)#[0-9a-fA-F]{3,6}', 'g'), '$1' + slot.value);
+      });
+      styleBlock.textContent = css;
+    }
+
+    state.sections.forEach(sec => {
+      const el = doc.querySelector(`[data-section="${sec.id}"]`);
+      if (!el) return;
+      Object.entries(sec.colors).forEach(([spotKey, spot]) => {
+        el.style.setProperty(SECTION_SPOT_VARS[spotKey], paletteVarRef(spot.paletteKey));
+      });
+      el.style.setProperty('--sec-bg-alpha',  sec.bgAlpha);
+      el.style.setProperty('--sec-box-alpha', sec.boxAlpha);
+    });
+
+    const stateScript = doc.querySelector('#builder-state');
+    if (stateScript) stateScript.textContent = JSON.stringify(state, null, 2);
+
+    const blob = new Blob(['<!DOCTYPE html>\n' + doc.outerHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = state.page.filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function copyCss() {
+    const lines = [':root {'];
+    Object.entries(state.palette).forEach(([k, slot]) => {
+      lines.push(`  ${paletteCssVar(k)}: ${slot.value};`);
+    });
+    lines.push(`  --pad-x: ${state.rhythm.padX};`);
+    lines.push(`  --rhythm: ${state.rhythm.vertical};`);
+    lines.push(`  --headline-scale: ${state.rhythm.headlineScale};`);
+    lines.push(`  --shadow-alpha: ${state.effects.shadowAlpha};`);
+    lines.push(`  --shadow-blur: ${state.effects.shadowBlur};`);
+    lines.push(`  --shine-alpha: ${state.effects.shineAlpha};`);
+    lines.push(`  --slot-alpha: ${state.effects.slotAlpha};`);
+    lines.push(`  --bg-pattern-color: ${paletteVarRef(state.bgPattern.color)};`);
+    lines.push(`  --bg-pattern-alpha: ${state.bgPattern.alpha};`);
+    lines.push('}');
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+  }
+
+  function resetAll() {
+    Object.entries(DEFAULTS.palette).forEach(([k, slot]) => {
+      state.palette[k] = JSON.parse(JSON.stringify(slot));
+      document.documentElement.style.setProperty(paletteCssVar(k), slot.value);
+    });
+
+    state.effects = JSON.parse(JSON.stringify(DEFAULTS.effects));
+    document.documentElement.style.setProperty('--shadow-alpha', state.effects.shadowAlpha);
+    document.documentElement.style.setProperty('--shadow-blur',  state.effects.shadowBlur);
+    document.documentElement.style.setProperty('--shine-alpha',  state.effects.shineAlpha);
+    document.documentElement.style.setProperty('--slot-alpha',   state.effects.slotAlpha);
+    document.getElementById('editor-shadow-alpha').value = Math.round(state.effects.shadowAlpha * 100);
+    document.getElementById('editor-shadow-blur').value  = parseFloat(state.effects.shadowBlur);
+    document.getElementById('editor-shine').value        = Math.round(state.effects.shineAlpha * 100);
+    document.getElementById('editor-slot-alpha').value   = Math.round(state.effects.slotAlpha * 100);
+
+    state.bgPattern = JSON.parse(JSON.stringify(DEFAULTS.bgPattern));
+    applyBgPatternShape(state.bgPattern.shape);
+    applyBgPatternColor(state.bgPattern.color);
+    applyBgPatternSize(state.bgPattern.size);
+    applyBgPatternAlpha(state.bgPattern.alpha);
+    document.getElementById('editor-bgp-shape').value = state.bgPattern.shape;
+    document.getElementById('editor-bgp-size').value  = state.bgPattern.size;
+    document.getElementById('editor-bgp-alpha').value = Math.round(state.bgPattern.alpha * 100);
+
+    Object.assign(state.rhythm, DEFAULTS.rhythm);
+    document.documentElement.style.setProperty('--rhythm', state.rhythm.vertical);
+    document.documentElement.style.setProperty('--pad-x', state.rhythm.padX);
+    document.documentElement.style.setProperty('--headline-scale', state.rhythm.headlineScale);
+
+    state.sections.forEach((sec, i) => {
+      const defSec = DEFAULTS.sections[i];
+      Object.entries(defSec.colors).forEach(([spotKey, defSpot]) => {
+        sec.colors[spotKey] = { paletteKey: defSpot.paletteKey };
+        applySectionSpot(sec, spotKey, defSpot.paletteKey);
+      });
+      applySectionBgAlpha(sec,  defSec.bgAlpha  || 0);
+      applySectionBoxAlpha(sec, defSec.boxAlpha || 0);
+    });
+
+    state.fonts = JSON.parse(JSON.stringify(DEFAULTS.fonts));
+    FONT_ROLES.forEach(role => {
+      document.documentElement.style.setProperty(role.cssVar,
+        `'${state.fonts[role.key].family}', ${role.fallback}`);
+      const injected = document.getElementById('editor-font-' + role.key);
+      if (injected) injected.remove();
+    });
+
+    state.slots.forEach(slot => {
+      const el = document.querySelector(`[data-slot="${slot.id}"]`);
+      if (el) { el.style.aspectRatio = ''; el.style.minHeight = ''; }
+    });
+
+    buildPaletteInputs();
+    buildSectionsPanel();
+    buildSlots();
+    buildFontPickers();
+    buildBgPatternColorOptions();
+    document.querySelectorAll('.editor-slider').forEach(updateSliderFill);
+  }
+
+  const trigger  = document.querySelector('.editor-trigger');
+  const panel    = document.getElementById('editor-panel');
+  const overlay  = document.getElementById('editor-overlay');
+  const closeBtn = document.getElementById('editor-close');
+
+  function openPanel()  { panel.classList.add('open');    overlay.classList.add('open'); }
+  function closePanel() { panel.classList.remove('open'); overlay.classList.remove('open'); }
+
+  trigger.addEventListener('click', openPanel);
+  closeBtn.addEventListener('click', closePanel);
+  overlay.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+  buildPaletteInputs();
+  buildSectionsPanel();
+  buildSlots();
+  buildFontPickers();
+  buildBgPatternColorOptions();
+  bindRhythm();
+  bindEffects();
+  bindBgPattern();
+
+  document.getElementById('editor-randomize').addEventListener('click', randomizeAll);
+  document.getElementById('editor-export').addEventListener('click', exportHtml);
+  document.getElementById('editor-copy').addEventListener('click', copyCss);
+  document.getElementById('editor-reset').addEventListener('click', resetAll);
+
+})();
+</script>
+
+</body>
+</html>
