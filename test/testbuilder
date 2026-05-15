@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mudlark Media Network</title>
+<meta name="description" content="A volunteer network for survivor voices and the information institutions would rather bury. Zero-fund. Entirely public.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23131210'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23DD5E2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,400i&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root {
+  /* palette — 10 working colors, hex */
+  --c-1:  #E8B23A;  --c-2:  #DD5E2C;  --c-3:  #2EA39C;  --c-4:  #4F95CC;  --c-5:  #CC6094;
+  --c-6:  #6CB855;  --c-7:  #B788D9;  --c-8:  #E89A6B;  --c-9:  #8FB94A;  --c-10: #D94865;
+
+  /* palette tints — rgba, ~7% opacity of the matching --c-N */
+  --t-1:  rgba(232, 178, 58, 0.07);  --t-2:  rgba(221, 94, 44, 0.07);  --t-3:  rgba(46, 163, 156, 0.07);  --t-4:  rgba(79, 149, 204, 0.07);  --t-5:  rgba(204, 96, 148, 0.07);
+  --t-6:  rgba(108, 184, 85, 0.07);  --t-7:  rgba(183, 136, 217, 0.07); --t-8:  rgba(232, 154, 107, 0.07); --t-9:  rgba(143, 185, 74, 0.07); --t-10: rgba(217, 72, 101, 0.07);
+
+  /* surfaces — near-neutral dark, very low saturation */
+  --bg:      #131210;
+  --bg-up:   #1A1916;
+  --bg-surf: #1F1D19;
+  --bg-elev: #26241E;
+  --rule:    #2A2823;
+  --rule-on: #3F3C33;
+
+  /* ink */
+  --ink:      #ECE5D2;
+  --ink-soft: #9C9583;
+  --ink-mute: #6A6353;
+
+  /* fonts — four roles, with fallbacks */
+  --serif-d: 'Fraunces', 'Georgia', serif;
+  --serif-b: 'Source Serif 4', 'Georgia', serif;
+  --sans:    'IBM Plex Sans', system-ui, sans-serif;
+  --mono:    'IBM Plex Mono', ui-monospace, monospace;
+
+  /* rhythm */
+  --pad-x:          clamp(20px, 4vw, 56px);
+  --rhythm:         1;
+  --headline-scale: 1;
+  --max-w:          1360px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif-b);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern', 'liga';
+}
+body { min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--c-1); color: var(--bg); }
+
+/* ============================== SLOT (CONTRACT 3) ============================== */
+.slot {
+  position: relative;
+  background: var(--bg-surf);
+  border: 1px dashed var(--rule-on);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slot::before {
+  content: attr(data-slot-purpose);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  padding: 0 12px;
+  text-align: center;
+}
+
+/* ============================== TOP STRIP ============================== */
+.topstrip {
+  padding: 10px var(--pad-x);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+.topstrip a {
+  color: var(--ink-soft);
+  border-bottom: 1px dotted var(--rule-on);
+  padding-bottom: 1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.topstrip a:hover { color: var(--c-1); border-bottom-color: var(--c-1); }
+.topstrip .dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--c-6);
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: 1px;
+  box-shadow: 0 0 10px rgba(108, 184, 85, 0.5);
+  animation: pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 0.55 } 50% { opacity: 1 } }
+
+/* ============================== MASTHEAD ============================== */
+.masthead-row {
+  padding: 14px var(--pad-x) 36px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 56px;
+  align-items: end;
+}
+.wordmark { display: inline-block; line-height: 1; color: var(--ink); }
+.wordmark .name {
+  font-family: var(--serif-d);
+  font-weight: 600;
+  font-size: calc(56px * var(--headline-scale));
+  letter-spacing: -0.018em;
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  display: block;
+}
+.wordmark .name .stop { color: var(--c-2); }
+.wordmark .sub {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.wordmark .sub em { color: var(--c-1); font-style: normal; }
+.strapline {
+  font-family: var(--serif-b);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 44ch;
+  padding-bottom: 8px;
+}
+.strapline em { color: var(--c-1); font-style: italic; }
+.util {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding-bottom: 8px;
+}
+.util .search {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px solid var(--rule-on);
+  padding: 4px 2px;
+  color: var(--ink-soft);
+  transition: border-color 0.15s;
+  min-width: 220px;
+}
+.util .search:focus-within { border-bottom-color: var(--c-1); }
+.util .search .g { font-family: var(--serif-b); color: var(--ink-mute); font-size: 14px; }
+.util .search input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: var(--ink); font: 13px var(--sans); min-width: 0;
+}
+.util .search input::placeholder { color: var(--ink-mute); }
+.util .gh {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--c-2);
+  padding-bottom: 3px;
+  transition: color 0.15s;
+}
+.util .gh:hover { color: var(--c-2); }
+.util .gh .arr { color: var(--c-2); margin-left: 4px; }
+
+/* ============================== PRIMARY NAV ============================== */
+.nav {
+  padding: 18px var(--pad-x);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 30px;
+  font-family: var(--sans);
+  font-size: 14.5px;
+}
+.nav a {
+  display: inline-flex; align-items: baseline; gap: 9px;
+  padding: 6px 0; color: var(--ink); transition: color 0.15s;
+}
+.nav a::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  transform: translateY(-2px);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.nav a:hover::before { transform: translateY(-2px) scale(1.4); }
+.nav a.n-1::before { background: var(--c-1); }
+.nav a.n-2::before { background: var(--c-2); }
+.nav a.n-3::before { background: var(--c-3); }
+.nav a.n-4::before { background: var(--c-5); }
+.nav a.n-5::before { background: var(--c-4); }
+.nav a.n-6::before { background: var(--c-6); }
+.nav a.n-7::before { background: var(--ink-soft); }
+.nav a.n-1:hover { text-decoration: underline; text-decoration-color: var(--c-1); text-underline-offset: 5px; }
+.nav a.n-2:hover { text-decoration: underline; text-decoration-color: var(--c-2); text-underline-offset: 5px; }
+.nav a.n-3:hover { text-decoration: underline; text-decoration-color: var(--c-3); text-underline-offset: 5px; }
+.nav a.n-4:hover { text-decoration: underline; text-decoration-color: var(--c-5); text-underline-offset: 5px; }
+.nav a.n-5:hover { text-decoration: underline; text-decoration-color: var(--c-4); text-underline-offset: 5px; }
+.nav a.n-6:hover { text-decoration: underline; text-decoration-color: var(--c-6); text-underline-offset: 5px; }
+.nav a.n-7:hover { text-decoration: underline; text-decoration-color: var(--ink-soft); text-underline-offset: 5px; }
+
+/* ============================== SHARED RHYTHM ============================== */
+main { flex: 1; padding: 0 var(--pad-x) 96px; }
+.wrap { max-width: var(--max-w); margin: 0 auto; }
+
+.sec-head {
+  display: flex; align-items: baseline;
+  gap: 18px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+  margin: calc(64px * var(--rhythm)) 0 calc(32px * var(--rhythm));
+}
+.sec-head h2 {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 60, 'SOFT' 50;
+  font-size: calc(clamp(28px, 3.2vw, 40px) * var(--headline-scale));
+  letter-spacing: -0.018em;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--sec);
+}
+.sec-head .count {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.sec-head .grow { flex: 1; }
+.sec-head .all {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule-on);
+  padding-bottom: 2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.sec-head .all:hover { color: var(--sec); border-bottom-color: var(--sec); }
+
+/* ============================== LEAD ============================== */
+section[data-section="lead"] { padding-top: 48px; }
+.lead-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.lead-fig-wrap { position: relative; }
+.lead-fig-wrap .slot { aspect-ratio: 5/4; }
+.lead-fig-wrap .stamp {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sec);
+  padding: 4px 8px;
+  background: rgba(19, 18, 16, 0.7);
+}
+.lead-fig-wrap .cap {
+  position: absolute; bottom: 12px; left: 12px; right: 12px; z-index: 2;
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-soft); letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(19, 18, 16, 0.7);
+  padding: 4px 8px;
+}
+.lead-text { padding-top: 6px; }
+.lead-kicker {
+  font-family: var(--mono); font-size: 11.5px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sec);
+  margin-bottom: 20px;
+}
+.lead-kicker .sep { color: var(--ink-mute); margin: 0 10px; }
+.lead-kicker .id { color: var(--ink-soft); }
+.lead-head {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  font-size: calc(clamp(36px, 4.6vw, 64px) * var(--headline-scale));
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  margin-bottom: 22px;
+  max-width: 16ch;
+}
+.lead-head em {
+  font-style: italic;
+  color: var(--c-2);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+.lead-deck {
+  font-family: var(--serif-b);
+  font-size: 17.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  max-width: 50ch;
+  margin-bottom: 22px;
+}
+.lead-meta {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+.lead-meta .who { color: var(--ink); }
+.lead-meta .sep { color: var(--ink-mute); margin: 0 8px; }
+.lead-tags {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 24px;
+}
+.lead-tags span::before { content: '['; margin-right: 2px; color: var(--sec); }
+.lead-tags span::after  { content: ']'; margin-left: 2px; color: var(--sec); }
+.lead-go {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  padding: 12px 22px; background: var(--ink); color: var(--bg);
+  transition: background 0.15s;
+}
+.lead-go:hover { background: var(--sec); }
+.lead-go .arr { font-family: var(--mono); font-size: 15px; }
+
+/* ============================== INVESTIGATION LEDGER (distinctive move) ============================== */
+/* Vertical numbered case-file ledger on the left, one expanded case on the right.
+   Right side has one small figure slot embedded mid-prose. */
+.ledger-grid {
+  display: grid;
+  grid-template-columns: 0.55fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.ledger-list { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.ledger-item {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+  transition: padding-left 0.18s;
+  cursor: pointer;
+}
+.ledger-item:hover { padding-left: 6px; }
+.ledger-item.is-open { padding-left: 6px; background: linear-gradient(90deg, var(--lt), transparent 40%); }
+.ledger-item .ln {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--lc); font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.ledger-item .body h4 {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 16px; line-height: 1.25;
+  font-variation-settings: 'opsz' 30;
+  color: var(--ink); margin-bottom: 4px;
+  transition: color 0.15s;
+}
+.ledger-item:hover .body h4,
+.ledger-item.is-open .body h4 { color: var(--lc); }
+.ledger-item .body p {
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+}
+.ledger-item .dt {
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* expanded case — right column */
+.case-expand .kicker {
+  font-family: var(--mono); font-size: 11.5px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sec);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.case-expand .kicker .id { color: var(--ink-soft); }
+.case-expand .kicker .sep { color: var(--ink-mute); }
+.case-expand h3 {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: clamp(32px, 3.6vw, 48px); line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 22px;
+  font-variation-settings: 'opsz' 96, 'SOFT' 30;
+}
+.case-expand h3 em { font-style: italic; color: var(--sec); }
+.case-expand .deck {
+  font-family: var(--serif-b);
+  font-size: 16.5px; line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+  max-width: 60ch;
+}
+/* embedded mid-prose slot — small, inline, not a hero */
+.case-expand .inline-fig {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 22px;
+  margin: 22px 0;
+  align-items: start;
+}
+.case-expand .inline-fig .slot { aspect-ratio: 4/3; }
+.case-expand .inline-fig .stamp {
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sec);
+  margin-bottom: 8px;
+  display: block;
+}
+.case-expand .inline-fig p {
+  font-family: var(--serif-b); font-size: 14.5px;
+  line-height: 1.55; color: var(--ink-soft);
+  padding-top: 4px;
+}
+.case-expand .meta {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+  margin-bottom: 18px;
+}
+.case-expand .meta b { color: var(--ink-soft); font-weight: 400; }
+.case-expand .read {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  padding: 10px 18px; background: transparent; color: var(--ink);
+  border: 1px solid var(--rule-on);
+  transition: border-color 0.15s, color 0.15s;
+}
+.case-expand .read:hover { border-color: var(--sec); color: var(--sec); }
+
+/* ============================== ARTICLES (1 slot in row) ============================== */
+.articles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.a-card {
+  display: flex; flex-direction: column; gap: 12px;
+  padding-top: 14px; position: relative;
+}
+.a-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--sec);
+}
+.a-kicker {
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sec);
+}
+.a-card .a-fig { aspect-ratio: 4/5; margin-bottom: 4px; }
+.a-card .a-fig .slot { width: 100%; height: 100%; }
+.a-head {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 22px; line-height: 1.12; letter-spacing: -0.012em;
+  font-variation-settings: 'opsz' 36;
+  color: var(--ink);
+  transition: color 0.15s;
+}
+.a-card:hover .a-head { color: var(--sec); }
+.a-deck {
+  font-family: var(--serif-b); font-size: 14.5px; line-height: 1.5;
+  color: var(--ink-soft);
+}
+.a-meta {
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+  margin-top: auto; padding-top: 10px;
+}
+.a-meta b { color: var(--ink-soft); font-weight: 400; }
+.a-card.is-quote::before { background: var(--c-1); }
+.a-card.is-quote .a-kicker { color: var(--c-1); }
+.a-card.is-quote blockquote {
+  font-family: var(--serif-d); font-style: italic; font-weight: 400;
+  font-size: 20px; line-height: 1.28; color: var(--ink);
+  font-variation-settings: 'opsz' 60, 'SOFT' 100;
+}
+.a-card.is-quote blockquote em { color: var(--c-1); }
+
+/* ============================== PSYCH (1 feature slot + 4 text items) ============================== */
+.psych-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+}
+.pw-feature { display: flex; flex-direction: column; gap: 14px; }
+.pw-feature .pw-fig-wrap { position: relative; }
+.pw-feature .pw-fig-wrap .slot { aspect-ratio: 16/10; }
+.pw-feature .pw-fig-wrap .stamp {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sec);
+  padding: 4px 8px;
+  background: rgba(19, 18, 16, 0.7);
+}
+.pw-feature .kicker {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sec);
+}
+.pw-feature .head {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: clamp(28px, 2.6vw, 36px); line-height: 1.05;
+  letter-spacing: -0.018em;
+}
+.pw-feature .head em { color: var(--sec); font-style: italic; }
+.pw-feature .deck {
+  font-family: var(--serif-b); font-size: 15.5px;
+  line-height: 1.5; color: var(--ink-soft);
+}
+.pw-feature .meta {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+  letter-spacing: 0.04em;
+}
+.pw-feature .meta b { color: var(--ink-soft); font-weight: 400; }
+.pw-list { display: flex; flex-direction: column; }
+.pw-item {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+.pw-item:first-child { padding-top: 0; }
+.pw-item:last-child { border-bottom: none; }
+.pw-item .n {
+  font-family: var(--mono); font-size: 13px;
+  color: var(--sec); font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.pw-item .body h4 {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 17px; line-height: 1.25;
+  font-variation-settings: 'opsz' 30;
+  margin-bottom: 6px;
+  color: var(--ink); transition: color 0.15s;
+}
+.pw-item:hover .body h4 { color: var(--sec); }
+.pw-item .body p {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute);
+  letter-spacing: 0.04em;
+}
+.pw-item .body p b { color: var(--ink-soft); font-weight: 400; }
+
+/* ============================== OPSEC + CONTRIBUTORS (text-only row, 0 slots) ============================== */
+.duo {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 64px;
+}
+.opsec-list { display: flex; flex-direction: column; }
+.op-item {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 22px;
+  align-items: baseline;
+  transition: padding-left 0.18s;
+}
+.op-item:first-child { padding-top: 4px; }
+.op-item:hover { padding-left: 8px; }
+.op-item .num {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 36px; line-height: 1;
+  color: var(--sec);
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'opsz' 60;
+}
+.op-item h4 {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 18px; line-height: 1.25;
+  color: var(--ink); margin-bottom: 4px;
+  transition: color 0.15s;
+}
+.op-item:hover h4 { color: var(--sec); }
+.op-item p {
+  font-family: var(--serif-b); font-size: 13.5px;
+  color: var(--ink-soft); line-height: 1.45;
+}
+.op-item .level {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-mute);
+  align-self: center;
+  white-space: nowrap;
+}
+.op-item .level.intro    { color: var(--c-6); }
+.op-item .level.field    { color: var(--c-1); }
+.op-item .level.advanced { color: var(--c-2); }
+
+.members-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+}
+.mem {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.mem .ini {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--t-1);
+  color: var(--c-1);
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 16px;
+  border: 1px solid rgba(232, 178, 58, 0.35);
+}
+.mem .info { line-height: 1.2; }
+.mem .nm { font-family: var(--sans); font-size: 14px; color: var(--ink); }
+.mem .rl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-mute); }
+.mem .rl b { color: var(--ink-soft); font-weight: 400; }
+.mem.r .ini { background: var(--t-2); color: var(--c-2); border-color: rgba(221, 94, 44, 0.35); }
+.mem.t .ini { background: var(--t-3); color: var(--c-3); border-color: rgba(46, 163, 156, 0.35); }
+.mem.b .ini { background: var(--t-4); color: var(--c-4); border-color: rgba(79, 149, 204, 0.35); }
+.mem.p .ini { background: var(--t-5); color: var(--c-5); border-color: rgba(204, 96, 148, 0.35); }
+.mem.g .ini { background: var(--t-6); color: var(--c-6); border-color: rgba(108, 184, 85, 0.35); }
+.members-note {
+  margin-top: 14px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+}
+.members-note a { color: var(--c-1); border-bottom: 1px solid var(--c-1); padding-bottom: 1px; }
+
+/* ============================== MEDIA (4 small slots — graphics ARE the content) ============================== */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.m-tile {
+  position: relative;
+  display: flex; flex-direction: column;
+  gap: 12px;
+}
+.m-tile .m-art-wrap { position: relative; }
+.m-tile .m-art-wrap .slot { aspect-ratio: 1/1; }
+.m-tile .kind {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 8px;
+  background: rgba(19, 18, 16, 0.7);
+  color: var(--sec);
+}
+.m-tile .runtime {
+  position: absolute; bottom: 12px; right: 12px; z-index: 2;
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-soft);
+  padding: 3px 7px;
+  background: rgba(19, 18, 16, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+.m-tile h4 {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: 17px; line-height: 1.2;
+  transition: color 0.15s;
+}
+.m-tile:hover h4 { color: var(--sec); }
+.m-tile .by {
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+}
+.m-tile .by b { color: var(--ink-soft); font-weight: 400; }
+
+/* ============================== PAPERS + MIND MAP (text list + 1 slot) ============================== */
+.duo-2 {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 64px;
+}
+.papers { display: flex; flex-direction: column; }
+.paper {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+.paper:first-child { padding-top: 4px; }
+.paper .yr {
+  font-family: var(--mono); font-size: 14px;
+  color: var(--sec); font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.paper .cite {
+  font-family: var(--serif-b); font-size: 14.5px;
+  line-height: 1.45; color: var(--ink);
+}
+.paper .cite .au { font-style: italic; color: var(--ink-soft); }
+.paper .cite .src { color: var(--ink-mute); font-style: italic; }
+.paper .fmt {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-mute);
+  padding: 3px 7px;
+  border: 1px solid var(--rule-on);
+  white-space: nowrap;
+  align-self: center;
+}
+.paper .fmt.pdf  { color: var(--c-2); border-color: rgba(221,94,44,0.35); }
+.paper .fmt.html { color: var(--c-4); border-color: rgba(79,149,204,0.35); }
+.paper .fmt.book { color: var(--c-1); border-color: rgba(232,178,58,0.35); }
+
+.mindmap-wrap { position: relative; }
+.mindmap-wrap .slot { aspect-ratio: 5/4; }
+.mindmap-wrap .stamp {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sec);
+  padding: 4px 8px;
+  background: rgba(19, 18, 16, 0.7);
+}
+.mm-cap {
+  margin-top: 16px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+}
+.mm-cap b { color: var(--ink-soft); font-weight: 400; }
+.mm-cap a { color: var(--sec); border-bottom: 1px solid var(--sec); padding-bottom: 1px; }
+
+/* ============================== CONTACT (text-only, 0 slots) ============================== */
+.contact-shell {
+  background: var(--bg-up);
+  border: 1px solid var(--rule-on);
+  padding: 56px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  position: relative;
+  margin-top: 32px;
+}
+.contact-shell::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sec);
+}
+.contact-shell::after {
+  content: 'mudlark.network — open channel';
+  position: absolute;
+  top: 12px;
+  left: 36px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.06em;
+}
+.contact-headline h3 {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  margin-top: 28px;
+  font-variation-settings: 'opsz' 60;
+}
+.contact-headline h3 em { font-style: italic; color: var(--sec); }
+.contact-headline p {
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 15px;
+}
+.contact-terminal {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  padding-top: 28px;
+}
+.contact-terminal .prompt { color: var(--sec); }
+.contact-terminal .field { color: var(--ink); }
+.contact-terminal .note { color: var(--ink-mute); font-size: 11px; margin-top: 16px; line-height: 1.5; }
+
+/* ============================== FOOTER ============================== */
+footer { border-top: 1px solid var(--rule); padding: 60px var(--pad-x) 32px; margin-top: 80px; }
+.foot-inner { max-width: var(--max-w); margin: 0 auto; }
+.foot-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+.foot-brand .wordmark .name { font-size: 38px; }
+.foot-brand p {
+  margin-top: 18px;
+  font-family: var(--serif-b); font-style: italic;
+  font-size: 14.5px; line-height: 1.5;
+  color: var(--ink-soft); max-width: 38ch;
+}
+.foot-brand .principles {
+  margin-top: 20px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-mute);
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+}
+.foot-brand .principles b { font-weight: 400; }
+.foot-brand .principles b.g { color: var(--c-1); }
+.foot-brand .principles b.r { color: var(--c-2); }
+.foot-brand .principles b.t { color: var(--c-3); }
+.foot-brand .principles b.p { color: var(--c-5); }
+.foot-col h4 {
+  font-family: var(--sans); font-size: 13px;
+  letter-spacing: 0.04em; margin-bottom: 16px; font-weight: 500;
+}
+.foot-col.a h4 { color: var(--c-2); }
+.foot-col.b h4 { color: var(--c-3); }
+.foot-col.c h4 { color: var(--c-4); }
+.foot-col ul { list-style: none; }
+.foot-col li { margin-bottom: 9px; }
+.foot-col a {
+  font-family: var(--serif-b); font-size: 14.5px;
+  color: var(--ink); transition: color 0.15s;
+}
+.foot-col a:hover { color: var(--c-1); }
+.foot-bottom {
+  padding-top: 24px; border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between;
+  align-items: baseline; flex-wrap: wrap; gap: 18px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-mute); letter-spacing: 0.04em;
+}
+.foot-bottom .left em { color: var(--c-1); font-style: normal; }
+.foot-bottom .right a {
+  color: var(--ink-soft); border-bottom: 1px dotted var(--rule-on);
+  padding-bottom: 1px;
+}
+.foot-bottom .right a:hover { color: var(--c-1); border-bottom-color: var(--c-1); }
+.foot-bottom .pip { color: var(--c-2); margin: 0 6px; }
+
+/* ============================== EDITOR POPUP (CONTRACT 5) ============================== */
+.editor-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid var(--rule-on);
+  padding: 8px 14px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.editor-trigger:hover { border-color: var(--c-1); color: var(--ink); }
+.editor-trigger-glyph {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.editor-trigger-glyph::before,
+.editor-trigger-glyph::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--ink-soft);
+  transition: background 0.2s;
+}
+.editor-trigger-glyph::before { top: 0; left: 0; }
+.editor-trigger-glyph::after { top: 3px; left: 3px; opacity: 0.6; }
+.editor-trigger:hover .editor-trigger-glyph::before,
+.editor-trigger:hover .editor-trigger-glyph::after { background: var(--c-1); }
+
+.editor-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 998;
+  display: none;
+}
+.editor-overlay.open { display: block; }
+.editor-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 340px;
+  max-height: 80vh;
+  background: var(--bg-up);
+  border: 1px solid var(--rule-on);
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  font-family: var(--sans);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.editor-panel.open { display: flex; }
+.editor-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.editor-header-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.editor-close {
+  background: transparent;
+  border: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  line-height: 1;
+}
+.editor-close:hover { color: var(--ink); }
+.editor-body {
+  overflow-y: auto;
+  padding: 18px;
+  flex: 1;
+}
+.editor-section { margin-bottom: 24px; }
+.editor-section h3 {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.editor-grid-palette {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.editor-grid-surf {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.editor-input {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 6px 4px;
+  width: 100%;
+  text-align: center;
+}
+.editor-input:focus { outline: none; border-color: var(--c-1); }
+.editor-label-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.editor-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.04em;
+}
+.editor-select {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 8px;
+  width: 100%;
+  cursor: pointer;
+}
+.editor-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: var(--rule-on);
+  outline: none;
+}
+.editor-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--c-1);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.editor-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--c-1);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.editor-button {
+  background: transparent;
+  border: 1px solid var(--rule-on);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.editor-button:hover { border-color: var(--c-1); color: var(--ink); }
+.editor-actions { display: flex; flex-direction: column; gap: 6px; }
+
+/* ============================== RESPONSIVE ============================== */
+@media (max-width: 1100px) {
+  .masthead-row { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+  .util { padding-bottom: 0; }
+  .util .search { min-width: 0; flex: 1; max-width: 320px; }
+  .lead-inner { grid-template-columns: 1fr; gap: 36px; }
+  .ledger-grid { grid-template-columns: 1fr; gap: 48px; }
+  .case-expand .inline-fig { grid-template-columns: 1fr; }
+  .articles { grid-template-columns: repeat(2, 1fr); }
+  .psych-grid { grid-template-columns: 1fr; }
+  .duo, .duo-2 { grid-template-columns: 1fr; gap: 48px; }
+  .media-grid { grid-template-columns: repeat(2, 1fr); }
+  .contact-shell { grid-template-columns: 1fr; padding: 56px 28px 32px; }
+  .foot-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+@media (max-width: 640px) {
+  .articles { grid-template-columns: 1fr; }
+  .media-grid { grid-template-columns: 1fr 1fr; }
+  .members-list { grid-template-columns: 1fr; }
+  .foot-top { grid-template-columns: 1fr; }
+  .nav { gap: 4px 22px; font-size: 13.5px; }
+  .sec-head { flex-wrap: wrap; }
+  .op-item { grid-template-columns: 44px 1fr; }
+  .op-item .level { grid-column: 1 / -1; grid-row: 2; margin-left: 56px; }
+  .paper { grid-template-columns: 50px 1fr; }
+  .paper .fmt { grid-column: 2; justify-self: start; margin-top: 6px; }
+  .ledger-item { grid-template-columns: 32px 1fr; }
+  .ledger-item .dt { grid-column: 2; }
+}
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  <span><span class="dot"></span>The network is live</span>
+  <span>Updated 13 May 2026</span>
+  <a href="https://github.com/mudlark-media">All work is public &mdash; source on GitHub &nearr;</a>
+</div>
+
+<header>
+  <div class="masthead-row">
+    <a href="index.html" class="wordmark">
+      <span class="name">mudlark<span class="stop">.</span></span>
+      <span class="sub">Media <em>&middot;</em> Network</span>
+    </a>
+    <p class="strapline">A volunteer network for survivor voices and the information institutions would rather <em>bury</em>. Zero-fund. Entirely public.</p>
+    <div class="util">
+      <label class="search">
+        <span class="g">&#9906;</span>
+        <input type="text" placeholder="Find an article, a name, an idea&hellip;" aria-label="Search">
+      </label>
+      <a href="https://github.com/mudlark-media" class="gh">GitHub<span class="arr">&nearr;</span></a>
+    </div>
+  </div>
+
+  <nav class="nav" aria-label="Primary">
+    <a href="ethos.html"    class="n-1">Network Ethos</a>
+    <a href="articles.html" class="n-2">Articles</a>
+    <a href="opsec.html"    class="n-3">Digital OpSec</a>
+    <a href="psych.html"    class="n-4">Psychological Warfare</a>
+    <a href="media.html"    class="n-5">Media</a>
+    <a href="mindmap.html"  class="n-6">Mind Map</a>
+    <a href="contact.html"  class="n-7">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================== LEAD ============================== -->
+  <section data-section="lead" data-section-label="Lead" style="--sec: var(--c-5);" class="wrap">
+    <div class="lead-inner">
+
+      <div class="lead-fig-wrap">
+        <span class="stamp">Figure A &mdash; document map</span>
+        <div class="slot"
+             data-slot="lead-figure"
+             data-slot-purpose="Lead figure — document map composite">
+        </div>
+        <span class="cap">
+          <span>Composite of 47 source documents</span>
+          <span>2021&ndash;2026</span>
+        </span>
+      </div>
+
+      <div class="lead-text">
+        <p class="lead-kicker">
+          <span>Psychological Warfare</span>
+          <span class="sep">&middot;</span>
+          <span class="id">Case file 014</span>
+          <span class="sep">&middot;</span>
+          <span class="id">Five-year investigation</span>
+        </p>
+        <h1 class="lead-head">How an <em>open secret</em> kept itself.</h1>
+        <p class="lead-deck">
+          For two decades the complaints went to the right people. The right people did nothing. This is a record of who knew, when they knew, and what they were rewarded with after &mdash; assembled from 47 public-records requests, four interviews, and one box of letters that survived a shredder.
+        </p>
+        <p class="lead-meta">
+          <span class="who">By M.&nbsp;Halverson</span>
+          <span class="sep">&middot;</span>
+          18 min read
+          <span class="sep">&middot;</span>
+          posted 11 May 2026
+        </p>
+        <p class="lead-tags">
+          <span>Investigation</span>
+          <span>Public Records</span>
+          <span>Long Read</span>
+        </p>
+        <a href="psych.html#014" class="lead-go">Read the case file <span class="arr">&rarr;</span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== INVESTIGATION LEDGER (distinctive move) ============================== -->
+  <section data-section="ledger" data-section-label="Investigation Ledger" style="--sec: var(--c-2); --lc: var(--c-2); --lt: var(--t-2);" class="wrap">
+    <div class="sec-head">
+      <h2>Current investigations</h2>
+      <span class="count">07 open / 23 archived</span>
+      <span class="grow"></span>
+      <a href="articles.html" class="all">Full ledger &rarr;</a>
+    </div>
+
+    <div class="ledger-grid">
+
+      <div class="ledger-list">
+        <article class="ledger-item is-open" style="--lc: var(--c-5); --lt: var(--t-5);">
+          <span class="ln">014</span>
+          <div class="body">
+            <h4>How an open secret kept itself</h4>
+            <p>Psych. warfare &middot; five-year reconstruction</p>
+          </div>
+          <span class="dt">11 May</span>
+        </article>
+        <article class="ledger-item" style="--lc: var(--c-2);">
+          <span class="ln">013</span>
+          <div class="body">
+            <h4>The witnesses who chose silence</h4>
+            <p>Field report &middot; three former staff</p>
+          </div>
+          <span class="dt">09 May</span>
+        </article>
+        <article class="ledger-item" style="--lc: var(--c-1);">
+          <span class="ln">012</span>
+          <div class="body">
+            <h4>Two decades of complaints, no action</h4>
+            <p>Records &middot; timeline across four agencies</p>
+          </div>
+          <span class="dt">04 May</span>
+        </article>
+        <article class="ledger-item" style="--lc: var(--c-3);">
+          <span class="ln">011</span>
+          <div class="body">
+            <h4>The architecture of plausible deniability</h4>
+            <p>Pattern analysis &middot; annotated transcripts</p>
+          </div>
+          <span class="dt">28 Apr</span>
+        </article>
+        <article class="ledger-item" style="--lc: var(--c-4);">
+          <span class="ln">010</span>
+          <div class="body">
+            <h4>How we verify without naming the survivor</h4>
+            <p>Method &middot; corroboration notes</p>
+          </div>
+          <span class="dt">01 May</span>
+        </article>
+        <article class="ledger-item" style="--lc: var(--c-6);">
+          <span class="ln">009</span>
+          <div class="body">
+            <h4>Smear-by-procedure</h4>
+            <p>Guide &middot; when the complaint is the retaliation</p>
+          </div>
+          <span class="dt">22 Apr</span>
+        </article>
+        <article class="ledger-item" style="--lc: var(--c-2);">
+          <span class="ln">008</span>
+          <div class="body">
+            <h4>The grooming curve in elite networks</h4>
+            <p>Research note &middot; nine documented cases</p>
+          </div>
+          <span class="dt">14 Apr</span>
+        </article>
+      </div>
+
+      <div class="case-expand">
+        <p class="kicker">
+          <span>Case 013</span>
+          <span class="sep">&middot;</span>
+          <span class="id">Field report</span>
+          <span class="sep">&middot;</span>
+          <span class="id">09 May 2026</span>
+        </p>
+        <h3>The witnesses who chose <em>silence</em>, and the language they used to do it.</h3>
+        <p class="deck">
+          Three former staff describe a culture of euphemism that hollowed out a quarter-century of reporting policy. The interviews were conducted across four months, two countries, and one pseudonym agreement. The language they describe is documented in the figure below &mdash; a frequency map of evasive phrases across 412 internal memos.
+        </p>
+
+        <div class="inline-fig">
+          <div>
+            <span class="stamp">Figure B &mdash; phrase frequency</span>
+            <div class="slot"
+                 data-slot="case-013-fig"
+                 data-slot-purpose="Phrase frequency map — case 013">
+            </div>
+          </div>
+          <p>
+            &ldquo;Concerns were raised&rdquo; appears 184 times. &ldquo;A decision was made&rdquo; appears 97 times. No active subject is named in either construction. The pattern is consistent across four reporting administrations and three reorganizations.
+          </p>
+        </div>
+
+        <p class="meta">By <b>D.&nbsp;Okonkwo</b> &middot; <b>11 min read</b> &middot; with annotated transcripts</p>
+        <a href="psych.html#013" class="read">Read the full report <span>&rarr;</span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== ARTICLES (only 1 figure slot in 4-up row) ============================== -->
+  <section data-section="articles" data-section-label="Articles" style="--sec: var(--c-2);" class="wrap">
+    <div class="sec-head">
+      <h2>From the archive</h2>
+      <span class="count">62 in archive</span>
+      <span class="grow"></span>
+      <a href="articles.html" class="all">See the archive &rarr;</a>
+    </div>
+
+    <div class="articles">
+
+      <article class="a-card">
+        <span class="a-kicker">Method &middot; 01 May</span>
+        <div class="a-fig">
+          <div class="slot"
+               data-slot="article-feature-fig"
+               data-slot-purpose="Featured article figure">
+          </div>
+        </div>
+        <h3 class="a-head">How we verify a story without naming the survivor.</h3>
+        <p class="a-deck">Notes on corroboration, source protection, and the kind of evidence we accept and reject.</p>
+        <p class="a-meta">By <b>S.&nbsp;Lin</b> &middot; <b>7&nbsp;min</b></p>
+      </article>
+
+      <article class="a-card is-quote">
+        <span class="a-kicker">Editor&rsquo;s Note &middot; 07 May</span>
+        <blockquote>
+          &ldquo;The institution survives because <em>nobody</em> ever has to be the one to say the name.&rdquo;
+        </blockquote>
+        <p class="a-meta">From the introduction to <b>Volume&nbsp;II</b></p>
+      </article>
+
+      <article class="a-card">
+        <span class="a-kicker">Records &middot; 04 May</span>
+        <h3 class="a-head">Two decades of complaints, eighteen warnings, no action.</h3>
+        <p class="a-deck">Timeline reconstruction of an oversight failure across four agencies and three administrations.</p>
+        <p class="a-meta">By <b>A.&nbsp;Vasquez</b> &middot; <b>14&nbsp;min</b></p>
+      </article>
+
+      <article class="a-card">
+        <span class="a-kicker">Field Report &middot; 28 Apr</span>
+        <h3 class="a-head">The shredder that didn&rsquo;t finish the job.</h3>
+        <p class="a-deck">One contractor, one box of letters, twenty-three names that were supposed to disappear.</p>
+        <p class="a-meta">By <b>M.&nbsp;Halverson</b> &middot; <b>9&nbsp;min</b></p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================== PSYCH (1 feature slot + 4 text items) ============================== -->
+  <section data-section="psych" data-section-label="Psychological Warfare" style="--sec: var(--c-5);" class="wrap">
+    <div class="sec-head">
+      <h2>Psychological Warfare</h2>
+      <span class="count">23 case files</span>
+      <span class="grow"></span>
+      <a href="psych.html" class="all">All case files &rarr;</a>
+    </div>
+
+    <div class="psych-grid">
+
+      <div class="pw-feature">
+        <div class="pw-fig-wrap">
+          <span class="stamp">Case 011 &mdash; pattern map</span>
+          <div class="slot"
+               data-slot="psych-feature-fig"
+               data-slot-purpose="Psych feature figure — pattern map">
+          </div>
+        </div>
+        <p class="kicker">Case study &middot; pattern analysis</p>
+        <h3 class="head">The architecture of <em>plausible deniability</em>.</h3>
+        <p class="deck">A taxonomy of the linguistic moves powerful people use to admit nothing while appearing to admit everything: passive constructions, third-person displacement, the &ldquo;some say&rdquo; pivot, and other recurring tells.</p>
+        <p class="meta">By <b>J.&nbsp;Brennan</b> &middot; <b>9 min</b> &middot; with annotated transcripts</p>
+      </div>
+
+      <div class="pw-list">
+        <article class="pw-item">
+          <span class="n">01</span>
+          <div class="body">
+            <h4>DARVO in the public record</h4>
+            <p>Deny, attack, reverse victim and offender &middot; <b>case set of 12</b></p>
+          </div>
+        </article>
+        <article class="pw-item">
+          <span class="n">02</span>
+          <div class="body">
+            <h4>How abusers borrow the language of healing</h4>
+            <p>Therapeutic vocabulary as cover &middot; <b>essay, 6 min</b></p>
+          </div>
+        </article>
+        <article class="pw-item">
+          <span class="n">03</span>
+          <div class="body">
+            <h4>The grooming curve in elite networks</h4>
+            <p>Patterns across nine documented cases &middot; <b>research note</b></p>
+          </div>
+        </article>
+        <article class="pw-item">
+          <span class="n">04</span>
+          <div class="body">
+            <h4>Smear-by-procedure</h4>
+            <p>When the complaint process is the retaliation &middot; <b>guide, 8 min</b></p>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== OPSEC + CONTRIBUTORS (0 slots — fully text) ============================== -->
+  <section data-section="duo-opsec-network" data-section-label="OpSec & Network" style="--sec: var(--c-3);" class="wrap duo">
+
+    <div>
+      <div class="sec-head">
+        <h2>Digital OpSec</h2>
+        <span class="count">11 guides</span>
+        <span class="grow"></span>
+        <a href="opsec.html" class="all">All guides &rarr;</a>
+      </div>
+
+      <div class="opsec-list">
+        <article class="op-item">
+          <span class="num">01</span>
+          <div>
+            <h4>Threat modeling for survivors going public</h4>
+            <p>Who needs to know what, and what they can do with it. Worksheet included.</p>
+          </div>
+          <span class="level intro">Start here</span>
+        </article>
+        <article class="op-item">
+          <span class="num">02</span>
+          <div>
+            <h4>Signal &amp; encrypted chat without performing security</h4>
+            <p>Real-world setup that survives the first stressful week, not a textbook checklist.</p>
+          </div>
+          <span class="level intro">Beginner</span>
+        </article>
+        <article class="op-item">
+          <span class="num">03</span>
+          <div>
+            <h4>Identity hygiene before a name goes public</h4>
+            <p>Data broker removal, account separation, the photo audit nobody wants to do.</p>
+          </div>
+          <span class="level field">Field</span>
+        </article>
+        <article class="op-item">
+          <span class="num">04</span>
+          <div>
+            <h4>PGP for survivors, not cypherpunks</h4>
+            <p>The minimum useful version, with the parts that always break called out.</p>
+          </div>
+          <span class="level field">Field</span>
+        </article>
+        <article class="op-item">
+          <span class="num">05</span>
+          <div>
+            <h4>Adversarial OSINT: assume they&rsquo;re looking</h4>
+            <p>What an investigator with $200 can find about you in an afternoon. And what to do about it.</p>
+          </div>
+          <span class="level advanced">Advanced</span>
+        </article>
+      </div>
+    </div>
+
+    <div style="--sec: var(--c-1);">
+      <div class="sec-head">
+        <h2>The Network</h2>
+        <span class="count">38 contributors</span>
+        <span class="grow"></span>
+        <a href="contact.html" class="all">Join in &rarr;</a>
+      </div>
+
+      <div class="members-list">
+        <div class="mem"><span class="ini">MH</span><div class="info"><div class="nm">M.&nbsp;Halverson</div><div class="rl">Writer &middot; <b>Portland,&nbsp;OR</b></div></div></div>
+        <div class="mem r"><span class="ini">DO</span><div class="info"><div class="nm">D.&nbsp;Okonkwo</div><div class="rl">Researcher &middot; <b>Atlanta,&nbsp;GA</b></div></div></div>
+        <div class="mem t"><span class="ini">AV</span><div class="info"><div class="nm">A.&nbsp;Vasquez</div><div class="rl">Records &middot; <b>El Paso,&nbsp;TX</b></div></div></div>
+        <div class="mem p"><span class="ini">SL</span><div class="info"><div class="nm">S.&nbsp;Lin</div><div class="rl">Editor &middot; <b>Oakland,&nbsp;CA</b></div></div></div>
+        <div class="mem b"><span class="ini">JB</span><div class="info"><div class="nm">J.&nbsp;Brennan</div><div class="rl">Legal observer &middot; <b>Chicago,&nbsp;IL</b></div></div></div>
+        <div class="mem g"><span class="ini">RP</span><div class="info"><div class="nm">R.&nbsp;Patel</div><div class="rl">Audio &middot; <b>Brooklyn,&nbsp;NY</b></div></div></div>
+        <div class="mem"><span class="ini">KM</span><div class="info"><div class="nm">K.&nbsp;Mortensen</div><div class="rl">Visual archive &middot; <b>Minneapolis</b></div></div></div>
+        <div class="mem r"><span class="ini">EF</span><div class="info"><div class="nm">E.&nbsp;Ferreira</div><div class="rl">Web infrastructure &middot; <b>Lisbon</b></div></div></div>
+        <div class="mem t"><span class="ini">NK</span><div class="info"><div class="nm">N.&nbsp;Kowalski</div><div class="rl">Translation &middot; <b>Kraków</b></div></div></div>
+        <div class="mem b"><span class="ini">TJ</span><div class="info"><div class="nm">T.&nbsp;Jian</div><div class="rl">Researcher &middot; <b>Vancouver,&nbsp;BC</b></div></div></div>
+      </div>
+      <p class="members-note">
+        We do not solicit qualifications. <a href="contact.html">Reach out</a> with what motivates you and we will find a place for it.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ============================== MEDIA (4 small slots) ============================== -->
+  <section data-section="media" data-section-label="Media" style="--sec: var(--c-4);" class="wrap">
+    <div class="sec-head">
+      <h2>Media</h2>
+      <span class="count">music &middot; video &middot; audio &middot; art</span>
+      <span class="grow"></span>
+      <a href="media.html" class="all">All works &rarr;</a>
+    </div>
+
+    <div class="media-grid">
+
+      <a href="media.html#track-quiet-after" class="m-tile" style="--sec: var(--c-4);">
+        <div class="m-art-wrap">
+          <span class="kind">Music</span>
+          <span class="runtime">4:18</span>
+          <div class="slot"
+               data-slot="media-music-art"
+               data-slot-purpose="Music tile — LP rings graphic">
+          </div>
+        </div>
+        <h4>The Quiet After</h4>
+        <p class="by">Original composition by <b>R.&nbsp;Patel</b></p>
+      </a>
+
+      <a href="media.html#in-conversation" class="m-tile" style="--sec: var(--c-1);">
+        <div class="m-art-wrap">
+          <span class="kind">Video</span>
+          <span class="runtime">22:04</span>
+          <div class="slot"
+               data-slot="media-video-art"
+               data-slot-purpose="Video tile — play graphic">
+          </div>
+        </div>
+        <h4>In conversation: what the records left out</h4>
+        <p class="by">With <b>D.&nbsp;Okonkwo</b> and a former records officer</p>
+      </a>
+
+      <a href="media.html#courtroom-hallway" class="m-tile" style="--sec: var(--c-3);">
+        <div class="m-art-wrap">
+          <span class="kind">Audio</span>
+          <span class="runtime">14:11</span>
+          <div class="slot"
+               data-slot="media-audio-art"
+               data-slot-purpose="Audio tile — waveform graphic">
+          </div>
+        </div>
+        <h4>Field recording: courtroom hallway, 09 May</h4>
+        <p class="by">Recorded by <b>K.&nbsp;Mortensen</b></p>
+      </a>
+
+      <a href="media.html#portraits" class="m-tile" style="--sec: var(--c-5);">
+        <div class="m-art-wrap">
+          <span class="kind">Visual</span>
+          <span class="runtime">12 plates</span>
+          <div class="slot"
+               data-slot="media-visual-art"
+               data-slot-purpose="Visual tile — color block composition">
+          </div>
+        </div>
+        <h4>Portraits in the absence of</h4>
+        <p class="by">A photo series by <b>K.&nbsp;Mortensen</b></p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============================== PAPERS + MIND MAP (text list + 1 slot) ============================== -->
+  <section data-section="duo-cited-map" data-section-label="Bibliography & Mind Map" style="--sec: var(--c-6);" class="wrap duo-2">
+
+    <div>
+      <div class="sec-head">
+        <h2>Academic &amp; Cited</h2>
+        <span class="count">working bibliography</span>
+        <span class="grow"></span>
+        <a href="articles.html#cited" class="all">Full bibliography &rarr;</a>
+      </div>
+
+      <div class="papers">
+        <div class="paper">
+          <span class="yr">2024</span>
+          <span class="cite"><span class="au">Freyd, J.&nbsp;J., &amp; Birrell, P.&nbsp;J.</span> Institutional betrayal: the second-order harm of organizational silence. <span class="src">Journal of Trauma &amp; Dissociation, 25(2), 134&ndash;158.</span></span>
+          <span class="fmt pdf">PDF</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2023</span>
+          <span class="cite"><span class="au">Smith, C.&nbsp;P.</span> Why power apologises in the passive voice. <span class="src">Discourse &amp; Society, 34(6), 712&ndash;731.</span></span>
+          <span class="fmt html">HTML</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2022</span>
+          <span class="cite"><span class="au">Herman, J.&nbsp;L.</span> Truth and repair: how trauma survivors envision justice. <span class="src">Basic Books.</span></span>
+          <span class="fmt book">Book</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2021</span>
+          <span class="cite"><span class="au">Tuerkheimer, D.</span> Credible: why we doubt accusers and protect abusers. <span class="src">Harper Wave.</span></span>
+          <span class="fmt book">Book</span>
+        </div>
+        <div class="paper">
+          <span class="yr">2020</span>
+          <span class="cite"><span class="au">Bekiempis, V.</span> How public records requests can break an open secret. <span class="src">Columbia Journalism Review, July.</span></span>
+          <span class="fmt html">HTML</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="--sec: var(--c-4);">
+      <div class="sec-head">
+        <h2>Mind Map</h2>
+        <span class="count">case 014 graph</span>
+        <span class="grow"></span>
+        <a href="mindmap.html" class="all">Open the full map &rarr;</a>
+      </div>
+
+      <div class="mindmap-wrap">
+        <span class="stamp">Case 014 &mdash; entity graph</span>
+        <div class="slot"
+             data-slot="mindmap-graph"
+             data-slot-purpose="Mind map — case 014 entity graph">
+        </div>
+      </div>
+      <p class="mm-cap">
+        Each node opens its underlying documents. The full map links <b>3,114 entities</b> across <b>23 case files</b>. <a href="mindmap.html">Open the full map &rarr;</a>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ============================== CONTACT (0 slots — fully text) ============================== -->
+  <section data-section="contact" data-section-label="Contact" style="--sec: var(--c-3);" class="wrap">
+    <div class="sec-head">
+      <h2>Reach out</h2>
+      <span class="count">no qualifications required</span>
+      <span class="grow"></span>
+      <a href="contact.html" class="all">Contact page &rarr;</a>
+    </div>
+
+    <div class="contact-shell">
+      <div class="contact-headline">
+        <h3>Describe the work you would be motivated <em>to contribute toward</em>.</h3>
+        <p>Collaboration is open to anyone aligned with the network&rsquo;s commitments. Verification is optional. A voice and an opinion are sufficient.</p>
+      </div>
+      <div class="contact-terminal">
+        <div><span class="prompt">channel &rsaquo;</span> <span class="field">open</span></div>
+        <div><span class="prompt">verification &rsaquo;</span> <span class="field">optional</span></div>
+        <div><span class="prompt">required &rsaquo;</span> <span class="field">a voice, an opinion</span></div>
+        <div><span class="prompt">declined &rsaquo;</span> <span class="field">capital, hierarchy, NDAs</span></div>
+        <div class="note">All identifying information given within the network becomes public. The single exception is the identity of victims, which is always protected.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="index.html" class="wordmark">
+          <span class="name">mudlark<span class="stop">.</span></span>
+          <span class="sub">Media <em>&middot;</em> Network</span>
+        </a>
+        <p>A volunteer network. We make hidden institutional failures visible, and we hold space for survivors to tell their own stories on their own terms.</p>
+        <div class="principles">
+          <b class="g">Volunteer</b><span>&middot;</span>
+          <b class="r">Zero-fund</b><span>&middot;</span>
+          <b class="t">No hierarchy</b><span>&middot;</span>
+          <b class="p">Entirely public</b>
+        </div>
+      </div>
+
+      <div class="foot-col a">
+        <h4>Read &amp; Watch</h4>
+        <ul>
+          <li><a href="articles.html">Articles</a></li>
+          <li><a href="psych.html">Psychological Warfare</a></li>
+          <li><a href="media.html">Media &amp; Music</a></li>
+          <li><a href="mindmap.html">Mind Map</a></li>
+          <li><a href="articles.html#cited">Bibliography</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col b">
+        <h4>Take Care</h4>
+        <ul>
+          <li><a href="opsec.html">Digital OpSec</a></li>
+          <li><a href="opsec.html#threat-model">Threat Models</a></li>
+          <li><a href="opsec.html#signal">Signal &amp; Encrypted Chat</a></li>
+          <li><a href="opsec.html#identity">Identity Hygiene</a></li>
+          <li><a href="opsec.html#pgp">PGP for Survivors</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col c">
+        <h4>Join In</h4>
+        <ul>
+          <li><a href="ethos.html">Network Ethos</a></li>
+          <li><a href="contact.html">Reach Out</a></li>
+          <li><a href="contact.html#submit">Submit a Story</a></li>
+          <li><a href="contact.html#projects">Suggest a Project</a></li>
+          <li><a href="https://github.com/mudlark-media">GitHub Repo &nearr;</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span class="left">A public work &mdash; <em>use anything here</em>. No rights reserved.</span>
+      <span class="right">
+        <a href="ethos.html">Read the ethos</a>
+        <span class="pip">&middot;</span>
+        <a href="contact.html">Reach out</a>
+        <span class="pip">&middot;</span>
+        2026
+        <span class="pip">&middot;</span>
+        <button class="editor-trigger" type="button" aria-label="Open editor">
+          <span class="editor-trigger-glyph" aria-hidden="true"></span>
+          <span>Editor</span>
+        </button>
+      </span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============================== EDITOR POPUP (CONTRACT 5) ============================== -->
+<div class="editor-overlay" id="editor-overlay"></div>
+<div class="editor-panel" id="editor-panel" role="dialog" aria-label="Page editor">
+  <div class="editor-header">
+    <div class="editor-header-title">Editor — index.html</div>
+    <button class="editor-close" id="editor-close" aria-label="Close">×</button>
+  </div>
+  <div class="editor-body">
+
+    <div class="editor-section">
+      <h3>Palette</h3>
+      <div class="editor-grid-palette" id="editor-palette"></div>
+      <button class="editor-button" id="editor-randomize">Randomize</button>
+    </div>
+
+    <div class="editor-section">
+      <h3>Surfaces</h3>
+      <div class="editor-grid-surf" id="editor-surfaces"></div>
+      <div class="editor-grid-surf" id="editor-inks" style="margin-top:6px;"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Sections</h3>
+      <div id="editor-sections"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Fonts</h3>
+      <div id="editor-fonts"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Rhythm</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Vertical</span>
+        <input type="range" min="0.7" max="1.5" step="0.05" value="1" class="editor-slider" id="editor-rhythm-v">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Padding</span>
+        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Headline</span>
+        <input type="range" min="0.85" max="1.2" step="0.01" value="1" class="editor-slider" id="editor-rhythm-h">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Actions</h3>
+      <div class="editor-actions">
+        <button class="editor-button" id="editor-export">Export HTML</button>
+        <button class="editor-button" id="editor-copy">Copy CSS</button>
+        <button class="editor-button" id="editor-reset">Reset</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="application/json" id="builder-state">
+{
+  "schema": 1,
+  "page": {
+    "id": "index",
+    "title": "Mudlark Media Network",
+    "filename": "index.html",
+    "siblings": ["index.html", "ethos.html", "articles.html", "opsec.html", "psych.html", "media.html", "mindmap.html", "contact.html"],
+    "repo": "https://github.com/mudlark-media/mudlark-media"
+  },
+  "palette": {
+    "c1": "#E8B23A", "c2": "#DD5E2C", "c3": "#2EA39C", "c4": "#4F95CC", "c5": "#CC6094",
+    "c6": "#6CB855", "c7": "#B788D9", "c8": "#E89A6B", "c9": "#8FB94A", "c10": "#D94865",
+    "bg": "#131210", "bgUp": "#1A1916", "bgSurf": "#1F1D19", "bgElev": "#26241E",
+    "rule": "#2A2823", "ruleOn": "#3F3C33",
+    "ink": "#ECE5D2", "inkSoft": "#9C9583", "inkMute": "#6A6353"
+  },
+  "fonts": {
+    "display": { "family": "Fraunces", "source": "google" },
+    "body":    { "family": "Source Serif 4", "source": "google" },
+    "sans":    { "family": "IBM Plex Sans", "source": "google" },
+    "mono":    { "family": "IBM Plex Mono", "source": "google" }
+  },
+  "rhythm": {
+    "padX": "clamp(20px, 4vw, 56px)",
+    "vertical": 1,
+    "headlineScale": 1
+  },
+  "sections": [
+    { "id": "lead",               "label": "Lead",                  "accent": "c5" },
+    { "id": "ledger",             "label": "Investigation Ledger",  "accent": "c2" },
+    { "id": "articles",           "label": "Articles",              "accent": "c2" },
+    { "id": "psych",              "label": "Psychological Warfare", "accent": "c5" },
+    { "id": "duo-opsec-network",  "label": "OpSec & Network",       "accent": "c3" },
+    { "id": "media",              "label": "Media",                 "accent": "c4" },
+    { "id": "duo-cited-map",      "label": "Bibliography & Mind Map", "accent": "c6" },
+    { "id": "contact",            "label": "Contact",               "accent": "c3" }
+  ],
+  "slots": [
+    { "id": "lead-figure",        "purpose": "Lead figure — document map composite" },
+    { "id": "case-013-fig",       "purpose": "Phrase frequency map — case 013" },
+    { "id": "article-feature-fig","purpose": "Featured article figure" },
+    { "id": "psych-feature-fig",  "purpose": "Psych feature figure — pattern map" },
+    { "id": "media-music-art",    "purpose": "Music tile — LP rings graphic" },
+    { "id": "media-video-art",    "purpose": "Video tile — play graphic" },
+    { "id": "media-audio-art",    "purpose": "Audio tile — waveform graphic" },
+    { "id": "media-visual-art",   "purpose": "Visual tile — color block composition" },
+    { "id": "mindmap-graph",      "purpose": "Mind map — case 014 entity graph" }
+  ]
+}
+</script>
+
+<script>
+(function() {
+  const STATE_EL = document.getElementById('builder-state');
+  const state = JSON.parse(STATE_EL.textContent);
+  const DEFAULTS = JSON.parse(JSON.stringify(state));
+
+  const PALETTE_KEYS = ['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10'];
+  const SURFACE_KEYS = ['bg','bgUp','bgSurf','bgElev','rule','ruleOn'];
+  const INK_KEYS = ['ink','inkSoft','inkMute'];
+  const FONT_ROLES = [
+    { key: 'display', label: 'Display', cssVar: '--serif-d', fallback: "'Georgia', serif" },
+    { key: 'body',    label: 'Body',    cssVar: '--serif-b', fallback: "'Georgia', serif" },
+    { key: 'sans',    label: 'Sans',    cssVar: '--sans',    fallback: 'system-ui, sans-serif' },
+    { key: 'mono',    label: 'Mono',    cssVar: '--mono',    fallback: 'ui-monospace, monospace' }
+  ];
+
+  const KEY_TO_VAR = {
+    c1: '--c-1', c2: '--c-2', c3: '--c-3', c4: '--c-4', c5: '--c-5',
+    c6: '--c-6', c7: '--c-7', c8: '--c-8', c9: '--c-9', c10: '--c-10',
+    bg: '--bg', bgUp: '--bg-up', bgSurf: '--bg-surf', bgElev: '--bg-elev',
+    rule: '--rule', ruleOn: '--rule-on',
+    ink: '--ink', inkSoft: '--ink-soft', inkMute: '--ink-mute'
+  };
+  const TINT_VARS = {
+    c1: '--t-1', c2: '--t-2', c3: '--t-3', c4: '--t-4', c5: '--t-5',
+    c6: '--t-6', c7: '--t-7', c8: '--t-8', c9: '--t-9', c10: '--t-10'
+  };
+
+  let manifestCache = null;
+  let manifestStatus = 'idle';
+
+  function normHex(v) {
+    if (!v) return null;
+    v = v.trim().replace(/^#/, '');
+    if (/^[0-9a-f]{3}$/i.test(v)) v = v.split('').map(c => c+c).join('');
+    if (/^[0-9a-f]{6}$/i.test(v)) return '#' + v.toLowerCase();
+    return null;
+  }
+  function hexToRgba(hex, a) {
+    const v = hex.replace('#','');
+    const r = parseInt(v.substring(0,2), 16);
+    const g = parseInt(v.substring(2,4), 16);
+    const b = parseInt(v.substring(4,6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  }
+  function randomHex() {
+    return '#' + Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0');
+  }
+
+  function applyColor(key, hex) {
+    const cssVar = KEY_TO_VAR[key];
+    if (cssVar) document.documentElement.style.setProperty(cssVar, hex);
+    if (TINT_VARS[key]) document.documentElement.style.setProperty(TINT_VARS[key], hexToRgba(hex, 0.07));
+    state.palette[key] = hex;
+    saveState();
+  }
+  function saveState() { STATE_EL.textContent = JSON.stringify(state, null, 2); }
+
+  function buildHexInputs(container, keys) {
+    container.innerHTML = '';
+    keys.forEach(k => {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'editor-input';
+      input.value = state.palette[k];
+      input.title = k;
+      input.addEventListener('input', () => {
+        const h = normHex(input.value);
+        if (h) applyColor(k, h);
+      });
+      input.addEventListener('blur', () => { input.value = state.palette[k]; });
+      container.appendChild(input);
+    });
+  }
+
+  function buildSectionAssign() {
+    const wrap = document.getElementById('editor-sections');
+    wrap.innerHTML = '';
+    state.sections.forEach(sec => {
+      const row = document.createElement('div');
+      row.className = 'editor-label-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'editor-label';
+      lbl.textContent = sec.label;
+      const sel = document.createElement('select');
+      sel.className = 'editor-select';
+      PALETTE_KEYS.forEach((k, i) => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = 'Color ' + String(i+1).padStart(2,'0');
+        if (k === sec.accent) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      sel.addEventListener('change', () => {
+        sec.accent = sel.value;
+        const el = document.querySelector(`[data-section="${sec.id}"]`);
+        if (el) el.style.setProperty('--sec', `var(${KEY_TO_VAR[sel.value]})`);
+        saveState();
+      });
+      row.appendChild(lbl);
+      row.appendChild(sel);
+      wrap.appendChild(row);
+    });
+  }
+
+  function buildFontPickers() {
+    const wrap = document.getElementById('editor-fonts');
+    wrap.innerHTML = '';
+    FONT_ROLES.forEach(role => {
+      const row = document.createElement('div');
+      row.className = 'editor-label-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'editor-label';
+      lbl.textContent = role.label;
+      const sel = document.createElement('select');
+      sel.className = 'editor-select';
+      sel.dataset.role = role.key;
+      const opt = document.createElement('option');
+      opt.textContent = state.fonts[role.key].family + (manifestStatus !== 'loaded' ? ' (loading…)' : '');
+      sel.appendChild(opt);
+      sel.addEventListener('mousedown', loadManifest);
+      sel.addEventListener('change', () => {
+        const fontName = sel.value;
+        if (!manifestCache) return;
+        const entry = (manifestCache[role.key] || []).find(f => f.name === fontName);
+        if (!entry) return;
+        applyFont(role, entry);
+      });
+      row.appendChild(lbl);
+      row.appendChild(sel);
+      wrap.appendChild(row);
+    });
+  }
+
+  function refreshFontDropdowns() {
+    const wrap = document.getElementById('editor-fonts');
+    if (!wrap || !manifestCache) return;
+    wrap.querySelectorAll('select').forEach(sel => {
+      const role = sel.dataset.role;
+      const current = state.fonts[role].family;
+      sel.innerHTML = '';
+      const list = manifestCache[role] || [];
+      const seen = new Set();
+      if (!list.find(f => f.name === current)) {
+        const o = document.createElement('option');
+        o.value = current; o.textContent = current; o.selected = true;
+        sel.appendChild(o); seen.add(current);
+      }
+      list.forEach(f => {
+        if (seen.has(f.name)) return;
+        const o = document.createElement('option');
+        o.value = f.name; o.textContent = f.name;
+        if (f.name === current) o.selected = true;
+        sel.appendChild(o);
+      });
+    });
+  }
+
+  function applyFont(role, entry) {
+    let styleEl = document.getElementById('editor-font-' + role.key);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'editor-font-' + role.key;
+      document.head.appendChild(styleEl);
+    }
+    const faces = (entry.files || []).map(f => `
+      @font-face {
+        font-family: '${entry.name}';
+        src: url('${f.url}') format('woff2');
+        font-weight: ${f.weight || 400};
+        font-style: ${f.style || 'normal'};
+        font-display: swap;
+      }
+    `).join('\n');
+    styleEl.textContent = faces;
+    document.documentElement.style.setProperty(role.cssVar, `'${entry.name}', ${role.fallback}`);
+    state.fonts[role.key] = { family: entry.name, source: 'github' };
+    saveState();
+  }
+
+  function loadManifest() {
+    if (manifestStatus !== 'idle') return;
+    manifestStatus = 'loading';
+    const url = state.page.repo.replace(/\/$/, '') + '/raw/main/editor/fonts.json';
+    fetch(url)
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(json => {
+        manifestCache = json;
+        manifestStatus = 'loaded';
+        refreshFontDropdowns();
+      })
+      .catch(() => { manifestStatus = 'failed'; });
+  }
+
+  function bindRhythm() {
+    const v = document.getElementById('editor-rhythm-v');
+    const p = document.getElementById('editor-rhythm-p');
+    const h = document.getElementById('editor-rhythm-h');
+    v.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--rhythm', v.value);
+      state.rhythm.vertical = parseFloat(v.value); saveState();
+    });
+    p.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--pad-x', p.value + 'px');
+      state.rhythm.padX = p.value + 'px'; saveState();
+    });
+    h.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--headline-scale', h.value);
+      state.rhythm.headlineScale = parseFloat(h.value); saveState();
+    });
+  }
+
+  function exportHtml() {
+    const doc = document.documentElement.cloneNode(true);
+    const overlay = doc.querySelector('#editor-overlay');
+    const panel = doc.querySelector('#editor-panel');
+    if (overlay) overlay.classList.remove('open');
+    if (panel) panel.classList.remove('open');
+    const styleBlock = doc.querySelector('style');
+    if (styleBlock) {
+      let css = styleBlock.textContent;
+      Object.entries(KEY_TO_VAR).forEach(([k, cssVar]) => {
+        const re = new RegExp('(' + cssVar + ':\\s*)#[0-9a-fA-F]{3,6}', 'g');
+        css = css.replace(re, '$1' + state.palette[k]);
+      });
+      Object.entries(TINT_VARS).forEach(([k, cssVar]) => {
+        const re = new RegExp('(' + cssVar + ':\\s*)rgba\\([^)]*\\)', 'g');
+        css = css.replace(re, '$1' + hexToRgba(state.palette[k], 0.07));
+      });
+      styleBlock.textContent = css;
+    }
+    const stateScript = doc.querySelector('#builder-state');
+    if (stateScript) stateScript.textContent = JSON.stringify(state, null, 2);
+    const blob = new Blob(['<!DOCTYPE html>\n' + doc.outerHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = state.page.filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function copyCss() {
+    const lines = [':root {'];
+    PALETTE_KEYS.forEach(k => lines.push(`  ${KEY_TO_VAR[k]}: ${state.palette[k]};`));
+    PALETTE_KEYS.forEach(k => lines.push(`  ${TINT_VARS[k]}: ${hexToRgba(state.palette[k], 0.07)};`));
+    [...SURFACE_KEYS, ...INK_KEYS].forEach(k => lines.push(`  ${KEY_TO_VAR[k]}: ${state.palette[k]};`));
+    lines.push(`  --pad-x: ${state.rhythm.padX};`);
+    lines.push(`  --rhythm: ${state.rhythm.vertical};`);
+    lines.push(`  --headline-scale: ${state.rhythm.headlineScale};`);
+    lines.push('}');
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+  }
+
+  function resetAll() {
+    Object.assign(state.palette, DEFAULTS.palette);
+    Object.assign(state.rhythm, DEFAULTS.rhythm);
+    state.sections.forEach((s, i) => s.accent = DEFAULTS.sections[i].accent);
+    state.fonts = JSON.parse(JSON.stringify(DEFAULTS.fonts));
+    PALETTE_KEYS.forEach(k => applyColor(k, state.palette[k]));
+    [...SURFACE_KEYS, ...INK_KEYS].forEach(k => {
+      document.documentElement.style.setProperty(KEY_TO_VAR[k], state.palette[k]);
+    });
+    state.sections.forEach(sec => {
+      const el = document.querySelector(`[data-section="${sec.id}"]`);
+      if (el) el.style.setProperty('--sec', `var(${KEY_TO_VAR[sec.accent]})`);
+    });
+    document.documentElement.style.setProperty('--rhythm', state.rhythm.vertical);
+    document.documentElement.style.setProperty('--pad-x', state.rhythm.padX);
+    document.documentElement.style.setProperty('--headline-scale', state.rhythm.headlineScale);
+    buildHexInputs(document.getElementById('editor-palette'), PALETTE_KEYS);
+    buildHexInputs(document.getElementById('editor-surfaces'), SURFACE_KEYS);
+    buildHexInputs(document.getElementById('editor-inks'), INK_KEYS);
+    buildSectionAssign();
+    saveState();
+  }
+
+  const trigger = document.querySelector('.editor-trigger');
+  const panel = document.getElementById('editor-panel');
+  const overlay = document.getElementById('editor-overlay');
+  const closeBtn = document.getElementById('editor-close');
+
+  function openPanel() { panel.classList.add('open'); overlay.classList.add('open'); loadManifest(); }
+  function closePanel() { panel.classList.remove('open'); overlay.classList.remove('open'); }
+  trigger.addEventListener('click', openPanel);
+  closeBtn.addEventListener('click', closePanel);
+  overlay.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+  buildHexInputs(document.getElementById('editor-palette'), PALETTE_KEYS);
+  buildHexInputs(document.getElementById('editor-surfaces'), SURFACE_KEYS);
+  buildHexInputs(document.getElementById('editor-inks'), INK_KEYS);
+  buildSectionAssign();
+  buildFontPickers();
+  bindRhythm();
+
+  document.getElementById('editor-randomize').addEventListener('click', () => {
+    PALETTE_KEYS.forEach(k => applyColor(k, randomHex()));
+    buildHexInputs(document.getElementById('editor-palette'), PALETTE_KEYS);
+  });
+  document.getElementById('editor-export').addEventListener('click', exportHtml);
+  document.getElementById('editor-copy').addEventListener('click', copyCss);
+  document.getElementById('editor-reset').addEventListener('click', resetAll);
+})();
+</script>
+
+</body>
+</html>
