@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="--bg-pattern-color: var(--c-10); --bg-pattern-alpha: 0.14; --c-1: #c0835e; --c-2: #9e5c34; --c-3: #8d6e5b; --c-4: #d2b3a1; --c-5: #875a3f; --c-6: #74665e; --c-7: #211d1b; --c-8: #4d4540; --c-9: #ece5d2; --c-10: #9c9583; --rhythm: 0.7; --pad-x: 80px; --headline-scale: 1.2; --shadow-alpha: 0.8; --shadow-blur: 80px; --shine-alpha: 0.12; --slot-alpha: 0;"><head>
+<html lang="en" style="--bg-pattern-color: var(--c-2); --bg-pattern-alpha: 0.11; --c-1: #c0835e; --c-2: #9e5c34; --c-3: #8d6e5b; --c-4: #d2b3a1; --c-5: #875a3f; --c-6: #74665e; --c-7: #211d1b; --c-8: #4d4540; --c-9: #ece5d2; --c-10: #9c9583; --rhythm: 0.95; --pad-x: 30px; --headline-scale: 0.85; --shadow-alpha: 0.8; --shadow-blur: 80px; --shine-alpha: 0.16; --slot-alpha: 0.12;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mudlark Media Network</title>
@@ -1365,8 +1365,8 @@
 
 <svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <pattern id="bg-pattern-tile" width="68" height="68" patternUnits="userSpaceOnUse">
-      <g id="bg-pattern-shape"><rect x="32.5" y="32.5" width="3" height="3" fill="currentColor"></rect></g>
+    <pattern id="bg-pattern-tile" width="44" height="44" patternUnits="userSpaceOnUse">
+      <g id="bg-pattern-shape"><rect x="20.5" y="20.5" width="3" height="3" fill="currentColor"></rect></g>
     </pattern>
   </defs>
   <rect width="100%" height="100%" fill="url(#bg-pattern-tile)"></rect>
@@ -1813,15 +1813,15 @@
       <h3>Rhythm</h3>
       <div class="editor-label-row">
         <span class="editor-label">Vertical</span>
-        <input type="range" min="0.7" max="1.5" step="0.05" value="1" class="editor-slider" id="editor-rhythm-v" style="--fill: 0%;">
+        <input type="range" min="0.7" max="1.5" step="0.05" value="1" class="editor-slider" id="editor-rhythm-v" style="--fill: 31.25%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Padding</span>
-        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p" style="--fill: 0%;">
+        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p" style="--fill: 73.52941176470588%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Headline</span>
-        <input type="range" min="0.85" max="1.2" step="0.01" value="1" class="editor-slider" id="editor-rhythm-h" style="--fill: 100%;">
+        <input type="range" min="0.85" max="1.2" step="0.01" value="1" class="editor-slider" id="editor-rhythm-h" style="--fill: 0%;">
       </div>
     </div>
 
@@ -1837,11 +1837,11 @@
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Shine</span>
-        <input type="range" min="0" max="30" step="1" value="0" class="editor-slider" id="editor-shine" style="--fill: 40%;">
+        <input type="range" min="0" max="30" step="1" value="0" class="editor-slider" id="editor-shine" style="--fill: 53.333333333333336%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Picture</span>
-        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha" style="--fill: 0%;">
+        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha" style="--fill: 12%;">
       </div>
     </div>
 
@@ -1863,11 +1863,11 @@
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Size</span>
-        <input type="range" min="8" max="80" step="2" value="24" class="editor-slider" id="editor-bgp-size" style="--fill: 83.33333333333334%;">
+        <input type="range" min="8" max="80" step="2" value="24" class="editor-slider" id="editor-bgp-size" style="--fill: 50%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Alpha</span>
-        <input type="range" min="0" max="60" step="1" value="0" class="editor-slider" id="editor-bgp-alpha" style="--fill: 23.333333333333332%;">
+        <input type="range" min="0" max="60" step="1" value="0" class="editor-slider" id="editor-bgp-alpha" style="--fill: 18.333333333333332%;">
       </div>
     </div>
 
@@ -1947,14 +1947,14 @@
   "effects": {
     "shadowAlpha": 0.8,
     "shadowBlur": "80px",
-    "shineAlpha": 0.12,
-    "slotAlpha": 0
+    "shineAlpha": 0.16,
+    "slotAlpha": 0.12
   },
   "bgPattern": {
     "shape": "square",
-    "color": "c10",
-    "size": 68,
-    "alpha": 0.14
+    "color": "c2",
+    "size": 44,
+    "alpha": 0.11
   },
   "fonts": {
     "display": {
@@ -2915,9 +2915,9 @@
     }
   },
   "rhythm": {
-    "padX": "80px",
-    "vertical": 0.7,
-    "headlineScale": 1.2
+    "padX": "30px",
+    "vertical": 0.95,
+    "headlineScale": 0.85
   },
   "sections": [
     {
@@ -3826,6 +3826,7 @@
 
 })();
 </script>
+
 
 
 
