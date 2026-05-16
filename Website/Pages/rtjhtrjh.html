@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="--c-1: #c0835e; --c-2: #9e5c34; --c-3: #8d6e5b; --c-4: #d2b3a1; --c-5: #875a3f; --c-6: #74665e; --c-7: #211d1b; --c-8: #4d4540; --c-9: #ece5d2; --c-10: #9c9583; --bg-pattern-color: var(--c-2); --bg-pattern-alpha: 0.08; --rhythm: 0.95; --pad-x: 30px; --headline-scale: 0.85; --shadow-alpha: 0.8; --shadow-blur: 80px; --shine-alpha: 0.16; --slot-alpha: 0;">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,1028 +7,1406 @@
 <meta name="description" content="Academic fraud and weaponized trust: how an investigative journalist used fabricated authority to threaten lives and silence truth. Merged with the timeline and evidence appendix.">
 
 <style>
-  /* ============================================================
-     1. FONTS — pulled from the Mudlark repo, identical to home.html
-     ============================================================ */
-  @font-face {
-    font-family: 'Fraunces';
-    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
-    font-weight: 100 1000; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: 'Fraunces';
-    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
-    font-weight: 100 1000; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: 'IBM Plex Sans';
-    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf') format('truetype');
-    font-weight: 100 900; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: 'Spline Sans Mono';
-    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf') format('truetype');
-    font-weight: 300 700; font-style: normal; font-display: swap;
-  }
+/* ============================== FONTS (from the Mudlark repo) ============================== */
+@font-face {
+  font-family: 'Michroma';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Michroma/Michroma-Regular.ttf') format('truetype');
+  font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Public Sans';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf') format('truetype');
+  font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Public Sans';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Public_Sans/static/PublicSans-Italic.ttf') format('truetype');
+  font-weight: 100 1000; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf') format('truetype');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Azeret Mono';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Azeret_Mono/static/AzeretMono-Regular.ttf') format('truetype');
+  font-weight: 300 700; font-style: normal; font-display: swap;
+}
 
-  /* ============================================================
-     2. PALETTE + ROOT — exact mirror of home.html so the page
-        responds the same way to any future palette edits.
-     ============================================================ */
-  :root {
-    --c-1:  #E8B23A; --c-2:  #DD5E2C; --c-3:  #2EA39C;
-    --c-4:  #4F95CC; --c-5:  #CC6094; --c-6:  #6CB855;
-    --c-7:  #131210; --c-8:  #1F1D19; --c-9:  #ECE5D2; --c-10: #9C9583;
+/* ============================== PALETTE + ROOT ============================== */
+:root {
+  --c-1:  #c0835e; --c-2:  #9e5c34; --c-3:  #8d6e5b; --c-4:  #d2b3a1;
+  --c-5:  #875a3f; --c-6:  #74665e; --c-7:  #211d1b; --c-8:  #4d4540;
+  --c-9:  #ece5d2; --c-10: #9c9583;
 
-    --gold: var(--c-1); --rust: var(--c-2); --teal: var(--c-3);
-    --blue: var(--c-4); --pink: var(--c-5); --green: var(--c-6);
+  --gold: var(--c-1); --rust: var(--c-2); --teal: var(--c-3);
+  --blue: var(--c-4); --pink: var(--c-5); --green: var(--c-6);
 
-    --bg:       var(--c-7);
-    --bg-surf:  var(--c-8);
-    --bg-elev:  color-mix(in srgb, var(--c-8) 80%, var(--c-9) 20%);
-    --rule:     color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
-    --rule-on:  color-mix(in srgb, var(--c-7) 78%, var(--c-9) 22%);
+  --bg:        var(--c-7);
+  --bg-surf:   var(--c-8);
+  --bg-elev:   color-mix(in srgb, var(--c-8) 80%, var(--c-9) 20%);
+  --rule:      color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
+  --rule-on:   color-mix(in srgb, var(--c-7) 78%, var(--c-9) 22%);
 
-    --ink:      var(--c-9);
-    --ink-soft: var(--c-10);
-    --ink-mute: color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
+  --ink:       var(--c-9);
+  --ink-soft:  var(--c-10);
+  --ink-mute:  color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
 
-    --serif-d:  'Fraunces', 'Georgia', serif;
-    --serif-b:  'Source Serif 4', 'Fraunces', 'Georgia', serif;
-    --sans:     'IBM Plex Sans', system-ui, sans-serif;
-    --mono:     'Spline Sans Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --tint-gold: color-mix(in srgb, transparent 93%, var(--c-1));
+  --tint-rust: color-mix(in srgb, transparent 93%, var(--c-2));
+  --tint-teal: color-mix(in srgb, transparent 93%, var(--c-3));
+  --tint-blue: color-mix(in srgb, transparent 93%, var(--c-4));
+  --tint-pink: color-mix(in srgb, transparent 93%, var(--c-5));
+  --tint-green:color-mix(in srgb, transparent 93%, var(--c-6));
 
-    --pad-x:    clamp(20px, 4vw, 56px);
-    --max-w:    1360px;
-    --art-max:  1200px;
+  --serif-d: 'Michroma', 'Georgia', serif;
+  --serif-b: 'Public Sans', 'Georgia', serif;
+  --sans:    'Orbitron', system-ui, sans-serif;
+  --mono:    'Azeret Mono', ui-monospace, monospace;
 
-    --shadow-alpha: 0.40;
-    --shadow-blur:  30px;
-  }
+  --pad-x: clamp(20px, 4vw, 56px);
+  --max-w: 1360px;
+  --art-max: 1180px;
 
-  /* ============================================================
-     3. RESET / BASE
-     ============================================================ */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--serif-b);
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    font-feature-settings: 'kern', 'liga';
-    scroll-behavior: smooth;
-  }
-  body { min-height: 100vh; display: flex; flex-direction: column; }
-  a { color: inherit; text-decoration: none; }
-  ::selection { background: var(--gold); color: var(--bg); }
+  --rhythm: 0.95;
+  --headline-scale: 0.85;
+  --shadow-alpha: 0.8;
+  --shadow-blur: 80px;
+  --shine-alpha: 0.16;
+  --slot-alpha: 0;
+  --bg-pattern-color: var(--c-2);
+  --bg-pattern-alpha: 0.08;
 
-  /* ============================================================
-     4. HEADER + NAV — mirror of home.html masthead and primary nav
-     ============================================================ */
-  .masthead-row { padding: 36px var(--pad-x) 36px; }
-  .brand {
-    display: inline-flex; align-items: center; gap: 16px;
-    color: var(--ink); line-height: 1;
-  }
-  .brand-name {
-    font-family: var(--serif-d);
-    font-weight: 500;
-    font-size: clamp(48px, 7vw, 88px);
-    letter-spacing: -0.022em;
-    color: var(--ink);
-    font-variation-settings: 'opsz' 144, 'SOFT' 40;
-    line-height: 0.95;
-  }
-  .nav {
-    padding: 18px var(--pad-x);
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    display: flex; flex-wrap: wrap; gap: 4px 30px;
-    font-family: var(--sans); font-size: 14.5px;
-  }
-  .nav a {
-    display: inline-flex; align-items: baseline; gap: 9px;
-    padding: 6px 0; color: var(--ink); transition: color 0.15s;
-  }
-  .nav a::before {
-    content: ''; width: 7px; height: 7px; border-radius: 50%;
-    transform: translateY(-2px); transition: transform 0.15s; flex-shrink: 0;
-  }
-  .nav a:hover { text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
-  .nav a:hover::before { transform: translateY(-2px) scale(1.4); }
-  .nav a.c-gold::before  { background: var(--gold); }
-  .nav a.c-rust::before  { background: var(--rust); }
-  .nav a.c-teal::before  { background: var(--teal); }
-  .nav a.c-pink::before  { background: var(--pink); }
-  .nav a.c-blue::before  { background: var(--blue); }
-  .nav a.c-green::before { background: var(--green); }
-  .nav a.c-cream::before { background: var(--ink-soft); }
-  .nav a.c-gold:hover  { text-decoration: underline var(--gold); }
-  .nav a.c-rust:hover  { text-decoration: underline var(--rust); }
-  .nav a.c-teal:hover  { text-decoration: underline var(--teal); }
-  .nav a.c-pink:hover  { text-decoration: underline var(--pink); }
-  .nav a.c-blue:hover  { text-decoration: underline var(--blue); }
-  .nav a.c-green:hover { text-decoration: underline var(--green); }
-  .nav a.c-cream:hover { text-decoration: underline var(--ink-soft); }
-  .nav a.is-current::before { transform: translateY(-2px) scale(1.4); }
-  .nav a.is-current { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1.5px; }
+  /* editor */
+  --e-bg: #1A1916; --e-input-bg: #131210; --e-fg: #ECE5D2;
+  --e-fg-soft: #9C9583; --e-rule: #3F3C33; --e-accent: #E8B23A;
+  --e-mono: 'Azeret Mono', ui-monospace, monospace;
+  --e-display: 'Public Sans', Georgia, serif;
+}
 
-  /* ============================================================
-     5. FOOTER — mirror of home.html
-     ============================================================ */
-  footer { border-top: 1px solid var(--rule); padding: 60px var(--pad-x) 32px; margin-top: 80px; }
-  .foot-inner { max-width: var(--max-w); margin: 0 auto; }
-  .foot-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
-  .foot-brand .brand .brand-name { font-family: var(--sans); font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.018em; }
-  .foot-tag {
-    margin-top: 16px;
-    font-family: var(--mono); font-size: 11px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--ink-soft);
-  }
-  .foot-col h4 {
-    font-family: var(--sans); font-size: 13px;
-    letter-spacing: 0.04em; margin-bottom: 16px; font-weight: 500;
-  }
-  .foot-col.a h4 { color: var(--rust); }
-  .foot-col.b h4 { color: var(--teal); }
-  .foot-col.c h4 { color: var(--blue); }
-  .foot-col ul { list-style: none; }
-  .foot-col li { margin-bottom: 9px; }
-  .foot-col a {
-    font-family: var(--serif-b); font-size: 14.5px;
-    color: var(--ink); transition: color 0.15s;
-  }
-  .foot-col a:hover { color: var(--gold); }
+/* ============================== RESET / BASE ============================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--serif-b); font-size: 16px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern', 'liga';
+}
+body { min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--gold); color: var(--bg); }
+img { max-width: 100%; display: block; }
+b, strong { font-weight: 600; }
 
-  /* ============================================================
-     6. AR-*  ARTICLE PAGE COMPONENTS
-        Hero, drop cap, section breaks, paragraphs, lists.
-     ============================================================ */
-  main { flex: 1; padding: 0 var(--pad-x) 96px; }
-  .wrap { max-width: var(--max-w); margin: 0 auto; }
+/* ============================== BG PATTERN ============================== */
+.bg-pattern {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+  color: var(--bg-pattern-color);
+  opacity: var(--bg-pattern-alpha);
+}
+body > * { position: relative; z-index: 1; }
+body > .bg-pattern { z-index: 0; }
 
-  /* ---- Hero band ---- */
-  .ar-hero {
-    max-width: var(--art-max);
-    margin: 0 auto;
-    padding: 56px 0 24px;
-  }
-  .ar-kicker {
-    font-family: var(--mono); font-size: 11.5px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--pink);
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-  .ar-kicker .sep { color: var(--ink-mute); }
-  .ar-kicker .id  { color: var(--ink-soft); }
-  .ar-kicker .doc-no { font-variant-numeric: tabular-nums; }
+/* ============================== MASTHEAD + NAV (match home) ============================== */
+.masthead-row { padding: 36px var(--pad-x) 36px; }
+.brand { display: inline-flex; align-items: center; gap: 16px; color: var(--ink); line-height: 1; }
+.brand-name {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: clamp(48px, 7vw, 88px);
+  letter-spacing: -0.022em; color: var(--ink);
+  font-variation-settings: 'opsz' 144, 'SOFT' 40; line-height: 0.95;
+}
+.foot-brand .brand { gap: 0; }
+.foot-brand .brand-name { font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.018em; font-family: var(--sans); }
 
-  .ar-headline {
-    font-family: var(--serif-d);
-    font-weight: 500;
-    font-variation-settings: 'opsz' 144, 'SOFT' 30;
-    font-size: clamp(40px, 6.2vw, 88px);
-    line-height: 0.96;
-    letter-spacing: -0.024em;
-    margin-bottom: 28px;
-    max-width: 18ch;
-  }
-  .ar-headline em {
-    font-style: italic;
-    color: var(--rust);
-    font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
-  }
-  .ar-deck {
-    font-family: var(--serif-b);
-    font-size: clamp(18px, 1.5vw, 22px);
-    line-height: 1.45;
-    color: var(--ink);
-    max-width: 58ch;
-    margin-bottom: 32px;
-  }
-  .ar-deck b { color: var(--pink); font-weight: 500; }
+.nav {
+  padding: 18px var(--pad-x);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; gap: 4px 30px;
+  font-family: var(--sans); font-size: 14.5px;
+}
+.nav a { display: inline-flex; align-items: baseline; gap: 9px; padding: 6px 0; color: var(--ink); transition: color 0.15s; }
+.nav a::before { content: ''; width: 7px; height: 7px; border-radius: 50%; transform: translateY(-2px); transition: transform 0.15s; flex-shrink: 0; }
+.nav a:hover { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+.nav a:hover::before { transform: translateY(-2px) scale(1.4); }
+.nav a.c-gold::before  { background: var(--gold); }
+.nav a.c-rust::before  { background: var(--rust); }
+.nav a.c-teal::before  { background: var(--teal); }
+.nav a.c-pink::before  { background: var(--pink); }
+.nav a.c-blue::before  { background: var(--blue); }
+.nav a.c-green::before { background: var(--green); }
+.nav a.c-cream::before { background: var(--ink-soft); }
+.nav a.c-gold:hover  { text-decoration-color: var(--gold); }
+.nav a.c-rust:hover  { text-decoration-color: var(--rust); }
+.nav a.c-teal:hover  { text-decoration-color: var(--teal); }
+.nav a.c-pink:hover  { text-decoration-color: var(--pink); }
+.nav a.c-blue:hover  { text-decoration-color: var(--blue); }
+.nav a.c-green:hover { text-decoration-color: var(--green); }
+.nav a.c-cream:hover { text-decoration-color: var(--ink-soft); }
 
-  .ar-byline {
-    display: flex; align-items: baseline; flex-wrap: wrap;
-    gap: 14px;
-    font-family: var(--sans); font-size: 13.5px;
-    color: var(--ink-soft);
-    padding: 18px 0;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
-  .ar-byline .who { color: var(--ink); font-weight: 500; }
-  .ar-byline .sep { color: var(--ink-mute); }
-  .ar-byline .tags {
-    margin-left: auto;
-    display: flex; gap: 14px;
-    font-family: var(--mono); font-size: 11px;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--ink-soft);
-  }
-  .ar-byline .tags span::before { content: '['; margin-right: 2px; color: var(--pink); }
-  .ar-byline .tags span::after  { content: ']'; margin-left: 2px; color: var(--pink); }
-  .ar-byline .tags .t-r::before, .ar-byline .tags .t-r::after { color: var(--rust); }
-  .ar-byline .tags .t-g::before, .ar-byline .tags .t-g::after { color: var(--gold); }
+main { flex: 1; padding: 0 var(--pad-x) 64px; }
+.wrap { max-width: var(--max-w); margin: 0 auto; }
 
-  /* ---- Lead figure (the document map) ---- */
-  .ar-lead-fig {
-    max-width: var(--art-max);
-    margin: 32px auto 0;
-    position: relative;
-    aspect-ratio: 16 / 7;
-    background: var(--bg-surf);
-    box-shadow:
-      0 8px var(--shadow-blur) rgba(0, 0, 0, var(--shadow-alpha)),
-      inset 0 80px 60px -40px rgba(255, 255, 255, 0);
-    overflow: hidden;
-  }
-  .ar-lead-fig::after {
-    /* the ripple art from home.html, scoped here */
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 35% 80% at 22% 50%, transparent 22%, color-mix(in srgb, transparent 78%, var(--c-5)) 23%, transparent 24.5%),
-      radial-gradient(ellipse 26% 60% at 22% 50%, transparent 35%, color-mix(in srgb, transparent 82%, var(--c-5)) 36%, transparent 37.5%),
-      radial-gradient(ellipse 16% 40% at 22% 50%, transparent 48%, color-mix(in srgb, transparent 84%, var(--c-5)) 49%, transparent 50.5%),
-      radial-gradient(ellipse 30% 70% at 76% 50%, transparent 30%, color-mix(in srgb, transparent 84%, var(--c-2)) 31%, transparent 32.5%),
-      radial-gradient(ellipse 20% 50% at 76% 50%, transparent 45%, color-mix(in srgb, transparent 86%, var(--c-2)) 46%, transparent 47.5%),
-      repeating-linear-gradient(0deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
-      repeating-linear-gradient(90deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
-      var(--bg-surf);
-    pointer-events: none;
-  }
-  .ar-lead-fig .stamp {
-    position: absolute; top: 18px; left: 18px;
-    font-family: var(--mono); font-size: 10.5px;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--pink);
-    padding: 4px 10px;
-    background: rgba(19, 18, 16, 0.7);
-    backdrop-filter: blur(2px);
-    z-index: 2;
-  }
-  .ar-lead-fig .cap {
-    position: absolute; bottom: 18px; left: 18px; right: 18px;
-    display: flex; justify-content: space-between; gap: 16px;
-    font-family: var(--mono); font-size: 10.5px;
-    color: var(--ink-soft); letter-spacing: 0.05em;
-    text-transform: uppercase;
-    z-index: 2;
-  }
+/* ============================== LEAD (article hero) ============================== */
+.lead { padding-top: calc(48px * var(--rhythm)); }
+.lead-inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; }
+.lead-fig { position: relative; aspect-ratio: 16/9; background: var(--bg-surf); }
+.lead-fig .stamp {
+  position: absolute; top: 16px; left: 16px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--pink);
+  padding: 4px 8px; background: rgba(19,18,16,0.7); backdrop-filter: blur(2px);
+}
+.lead-fig .cap {
+  position: absolute; bottom: 16px; left: 16px; right: 16px;
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--ink-soft); letter-spacing: 0.05em; text-transform: uppercase;
+}
+.lead-text { padding-top: 6px; }
+.lead-kicker {
+  font-family: var(--mono); font-size: 11.5px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--pink); margin-bottom: 20px;
+}
+.lead-kicker .sep { color: var(--ink-mute); margin: 0 10px; }
+.lead-kicker .id { color: var(--ink-soft); }
+.lead-head {
+  font-family: var(--serif-d); font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  font-size: calc(clamp(36px, 4.6vw, 64px) * var(--headline-scale));
+  line-height: 0.98; letter-spacing: -0.022em;
+  margin-bottom: 22px; max-width: 16ch;
+}
+.lead-head em { font-style: italic; color: var(--rust); font-variation-settings: 'opsz' 144, 'SOFT' 100; }
+.lead-deck { font-family: var(--serif-b); font-size: 17.5px; line-height: 1.5; color: var(--ink); max-width: 50ch; margin-bottom: 22px; }
+.lead-meta { font-family: var(--sans); font-size: 13px; color: var(--ink-soft); margin-bottom: 22px; }
+.lead-meta .who { color: var(--ink); }
+.lead-meta .sep { color: var(--ink-mute); margin: 0 8px; }
+.lead-tags {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 24px;
+}
+.lead-tags span::before { content: '['; margin-right: 2px; }
+.lead-tags span::after  { content: ']'; margin-left: 2px; }
+.lead-tags .t1::before, .lead-tags .t1::after { color: var(--pink); }
+.lead-tags .t2::before, .lead-tags .t2::after { color: var(--rust); }
+.lead-tags .t3::before, .lead-tags .t3::after { color: var(--gold); }
+.lead-go {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  padding: 12px 22px; background: var(--c-2); color: var(--c-9);
+  transition: background 0.15s;
+}
+.lead-go:hover { background: var(--pink); }
+.lead-go .arr { font-family: var(--mono); font-size: 15px; }
 
-  /* ---- Two-column body grid: timeline | content ---- */
-  .ar-grid {
-    max-width: var(--art-max);
-    margin: 64px auto 0;
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 56px;
-    align-items: start;
-  }
-  .ar-body {
-    max-width: 68ch;
-  }
+/* shadow + shine on figures (match home) */
+.lead-fig {
+  box-shadow:
+    0 8px var(--shadow-blur) rgba(0,0,0, var(--shadow-alpha)),
+    inset 0 80px 60px -40px rgba(255,255,255, var(--shine-alpha));
+}
 
-  /* ---- Section break (centered italic with rules) ---- */
-  .ar-break {
-    margin: 56px 0 36px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 24px;
-  }
-  .ar-break::before, .ar-break::after {
-    content: ''; height: 1px; background: var(--rule);
-  }
-  .ar-break em {
-    font-family: var(--serif-d); font-style: italic; font-weight: 400;
-    font-size: 18px; color: var(--ink-soft);
-    font-variation-settings: 'opsz' 60, 'SOFT' 100;
-    letter-spacing: 0.005em;
-  }
+/* artwork preset used on lead figure */
+[data-slot] { position: relative; overflow: hidden; }
+[data-slot].art-hatch {
+  background:
+    repeating-linear-gradient( 45deg, transparent 0 7px, color-mix(in srgb, transparent 94%, var(--c-9)) 7px 8px),
+    repeating-linear-gradient(-45deg, transparent 0 7px, color-mix(in srgb, transparent 94%, var(--c-9)) 7px 8px),
+    var(--bg-surf);
+}
+[data-slot].art-redact {
+  background:
+    linear-gradient(90deg, var(--c-7) 0 60%, transparent 60% 65%, var(--c-7) 65% 95%, transparent 95%) 0 22% / 100% 14px no-repeat,
+    linear-gradient(90deg, transparent 0 8%, var(--c-7) 8% 72%, transparent 72%) 0 44% / 100% 14px no-repeat,
+    linear-gradient(90deg, var(--c-7) 0 45%, transparent 45% 50%, var(--c-7) 50% 88%, transparent 88%) 0 66% / 100% 14px no-repeat,
+    linear-gradient(90deg, transparent 0 12%, var(--c-7) 12% 55%, transparent 55%) 0 84% / 100% 14px no-repeat,
+    repeating-linear-gradient(0deg, transparent 0 18px, color-mix(in srgb, transparent 93%, var(--c-9)) 18px 19px),
+    var(--bg-surf);
+}
+[data-slot].art-graph {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, color-mix(in srgb, transparent 92%, var(--c-9)) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, color-mix(in srgb, transparent 92%, var(--c-9)) 23px 24px),
+    var(--bg-surf);
+}
+[data-slot].art-confetti {
+  background:
+    radial-gradient(circle at 15% 25%, var(--c-1) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 78% 12%, var(--c-2) 0 5px, transparent 5.5px),
+    radial-gradient(circle at 45% 80%, var(--c-5) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 88% 55%, var(--c-3) 0 5px, transparent 5.5px),
+    radial-gradient(circle at 25% 65%, var(--c-4) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 60% 30%, var(--c-6) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 92% 88%, var(--c-1) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 8% 88%, var(--c-2) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 38% 18%, var(--c-3) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 68% 64%, var(--c-5) 0 3px, transparent 3.5px),
+    var(--bg-surf);
+}
+[data-slot].art-blueprint {
+  background:
+    linear-gradient(transparent 49.5%, color-mix(in srgb, transparent 70%, var(--c-4)) 49.5% 50.5%, transparent 50.5%),
+    linear-gradient(90deg, transparent 49.5%, color-mix(in srgb, transparent 70%, var(--c-4)) 49.5% 50.5%, transparent 50.5%),
+    repeating-linear-gradient(0deg, transparent 0 11px, color-mix(in srgb, transparent 95%, var(--c-4)) 11px 12px),
+    repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, transparent 95%, var(--c-4)) 11px 12px),
+    var(--bg-surf);
+}
+[data-slot].art-ripple {
+  background:
+    radial-gradient(ellipse 55% 45% at 30% 35%, transparent 22%, color-mix(in srgb, transparent 78%, var(--c-5)) 23%, transparent 24.5%),
+    radial-gradient(ellipse 42% 35% at 30% 35%, transparent 35%, color-mix(in srgb, transparent 82%, var(--c-5)) 36%, transparent 37.5%),
+    radial-gradient(ellipse 28% 23% at 30% 35%, transparent 48%, color-mix(in srgb, transparent 84%, var(--c-5)) 49%, transparent 50.5%),
+    radial-gradient(ellipse 50% 42% at 72% 70%, transparent 30%, color-mix(in srgb, transparent 84%, var(--c-2)) 31%, transparent 32.5%),
+    repeating-linear-gradient(0deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
+    repeating-linear-gradient(90deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
+    var(--bg-surf);
+}
+[data-slot].art-topo {
+  background:
+    repeating-radial-gradient(ellipse 80% 60% at 30% 40%, transparent 0 16px, color-mix(in srgb, transparent 93%, var(--c-3)) 16px 17px),
+    repeating-radial-gradient(ellipse 60% 70% at 75% 65%, transparent 0 14px, color-mix(in srgb, transparent 94%, var(--c-2)) 14px 15px),
+    var(--bg-surf);
+}
+[data-slot].art-dotgrid {
+  background:
+    radial-gradient(circle, color-mix(in srgb, transparent 75%, var(--c-9)) 0 1.5px, transparent 1.5px) 0 0 / 22px 22px,
+    var(--bg-surf);
+}
+[data-slot].art-bursts {
+  background:
+    linear-gradient(120deg, color-mix(in srgb, transparent 82%, var(--c-5)), transparent 60%),
+    linear-gradient(330deg, color-mix(in srgb, transparent 86%, var(--c-4)), transparent 60%),
+    radial-gradient(circle at 28% 65%, color-mix(in srgb, transparent 75%, var(--c-5)), transparent 35%),
+    radial-gradient(circle at 80% 30%, color-mix(in srgb, transparent 88%, var(--c-1)), transparent 40%),
+    repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, transparent 96%, var(--c-9)) 11px 12px),
+    var(--bg-surf);
+}
+[data-slot].art-rings {
+  background:
+    radial-gradient(circle at 50% 50%, var(--c-7) 0 8%, transparent 8.5%),
+    repeating-radial-gradient(circle at 50% 50%, var(--c-4) 0 1px, transparent 1px 5px),
+    var(--bg-surf);
+}
+[data-slot].art-radial {
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, transparent 95%, var(--c-4)), transparent 70%),
+    var(--bg-surf);
+}
+[data-slot].art-blocks {
+  background:
+    linear-gradient(45deg, color-mix(in srgb, transparent 65%, var(--c-5)), transparent 60%),
+    linear-gradient(135deg, transparent 50%, color-mix(in srgb, transparent 82%, var(--c-1))),
+    linear-gradient(180deg, color-mix(in srgb, transparent 90%, var(--c-6)), transparent 50%),
+    var(--bg-surf);
+}
+[data-slot].art-stripes-warm {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, transparent 82%, var(--c-1)), transparent 70%),
+    repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, transparent 97%, var(--c-9)) 11px 12px),
+    var(--bg-surf);
+}
+[data-slot].art-bands {
+  background: linear-gradient(180deg,
+    var(--bg-surf) 0 14%,
+    color-mix(in srgb, transparent 80%, var(--c-2)) 14% 28%,
+    var(--bg-surf) 28% 42%,
+    color-mix(in srgb, transparent 80%, var(--c-1)) 42% 56%,
+    var(--bg-surf) 56% 70%,
+    color-mix(in srgb, transparent 80%, var(--c-5)) 70% 84%,
+    var(--bg-surf) 84% 100%);
+}
+[data-slot].art-static {
+  background:
+    repeating-radial-gradient(circle at 0% 0%, color-mix(in srgb, transparent 92%, var(--c-9)) 0 1px, transparent 1px 4px),
+    repeating-radial-gradient(circle at 100% 100%, color-mix(in srgb, transparent 92%, var(--c-9)) 0 1px, transparent 1px 5px),
+    var(--bg-surf);
+}
+[data-slot].art-halftone {
+  background:
+    radial-gradient(circle, var(--c-2) 18%, transparent 19%) 0 0 / 16px 16px,
+    radial-gradient(circle, var(--c-2) 12%, transparent 13%) 8px 8px / 16px 16px,
+    linear-gradient(135deg, color-mix(in srgb, transparent 80%, var(--c-7)) 30%, transparent 70%),
+    var(--bg-surf);
+}
 
-  /* ---- Article paragraphs ---- */
-  .ar-body p {
-    font-family: var(--serif-b);
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--ink);
-    margin-bottom: 22px;
-  }
-  .ar-body p b, .ar-body p strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-  .ar-body p em, .ar-body p i {
-    color: color-mix(in srgb, var(--ink) 90%, var(--pink) 10%);
-  }
-  .ar-body p u {
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--gold) 70%, transparent);
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 3px;
-  }
-  .ar-body h2 {
-    font-family: var(--serif-d);
-    font-weight: 500;
-    font-variation-settings: 'opsz' 60, 'SOFT' 50;
-    font-size: clamp(26px, 2.6vw, 34px);
-    letter-spacing: -0.018em;
-    line-height: 1.1;
-    color: var(--ink);
-    margin: 48px 0 18px;
-  }
-  .ar-body h2 .sec-no {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    color: var(--pink);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    font-weight: 400;
-  }
-  .ar-body h3 {
-    font-family: var(--serif-d); font-weight: 500;
-    font-size: 22px; line-height: 1.2;
-    color: var(--ink);
-    margin: 32px 0 14px;
-  }
+/* ============================================================
+   AR-GRID  —  [timeline | body] two column layout
+   ============================================================ */
+.ar-grid {
+  max-width: var(--art-max);
+  margin: 0 auto;
+  padding: 56px 0 32px;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 56px;
+  align-items: start;
+}
 
-  /* ---- Drop cap on the opening paragraph ---- */
-  .ar-body .ar-lead-p::first-letter {
-    font-family: var(--serif-d);
-    font-weight: 500;
-    font-variation-settings: 'opsz' 144, 'SOFT' 50;
-    font-size: 5.2em;
-    line-height: 0.85;
-    float: left;
-    margin: 6px 12px -6px 0;
-    color: var(--rust);
-  }
+/* ============================================================
+   TIMELINE (left rail, sticky on desktop)
+   ============================================================ */
+.tl {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 4px 14px 24px 0;
+  font-family: var(--serif-b);
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-on) transparent;
+}
+.tl::-webkit-scrollbar { width: 6px; }
+.tl::-webkit-scrollbar-track { background: transparent; }
+.tl::-webkit-scrollbar-thumb { background: var(--rule-on); border-radius: 3px; }
 
-  /* ---- Inline emphasis spans ---- */
-  .ink-pink  { color: var(--pink); }
-  .ink-rust  { color: var(--rust); }
-  .ink-gold  { color: var(--gold); }
-  .ink-teal  { color: var(--teal); }
-  .ink-green { color: var(--green); }
-  .ink-blue  { color: var(--blue); }
+.tl-head {
+  padding: 16px 14px 18px;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bg-surf) 60%, var(--rust) 40%) 0%, var(--bg-surf) 100%);
+  border: 1px solid var(--rule-on);
+  border-left: 3px solid var(--rust);
+}
+.tl-head .label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+.tl-head h3 {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 30, 'SOFT' 80;
+  font-size: 15px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.tl-head .note {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
 
-  /* ---- Numbered claim block (the "I can prove that..." opener) ---- */
-  .ar-claims {
-    margin: 28px 0 36px;
-    display: flex; flex-direction: column;
-  }
-  .ar-claim {
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 18px;
-    padding: 18px 0;
-    border-top: 1px solid var(--rule);
-    align-items: baseline;
-  }
-  .ar-claim:last-child { border-bottom: 1px solid var(--rule); }
-  .ar-claim .n {
-    font-family: var(--serif-d); font-weight: 500;
-    font-size: 30px; line-height: 1;
-    color: var(--pink);
-    font-variant-numeric: tabular-nums;
-    font-variation-settings: 'opsz' 60;
-  }
-  .ar-claim .body {
-    font-family: var(--serif-b); font-size: 16px;
-    line-height: 1.5; color: var(--ink);
-  }
-  .ar-claim .body b { color: var(--ink); font-weight: 600; }
+.tl-month {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 28px 0 8px;
+  padding: 5px 8px;
+  background: color-mix(in srgb, transparent 88%, var(--gold));
+  border-left: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tl-month::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
 
-  /* ---- Pull quote (large italic break) ---- */
-  .ar-pull {
-    margin: 40px 0;
-    padding: 24px 0 24px 28px;
-    border-left: 3px solid var(--gold);
-    font-family: var(--serif-d);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(20px, 2vw, 26px);
-    line-height: 1.32;
-    color: var(--ink);
-    font-variation-settings: 'opsz' 60, 'SOFT' 100;
-  }
-  .ar-pull.is-rust { border-left-color: var(--rust); }
-  .ar-pull.is-pink { border-left-color: var(--pink); }
-  .ar-pull.is-teal { border-left-color: var(--teal); }
-  .ar-pull cite {
-    display: block;
-    margin-top: 12px;
-    font-family: var(--mono); font-style: normal;
-    font-size: 11px; letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-mute);
-  }
+.tl-entry {
+  position: relative;
+  padding: 9px 10px 12px 18px;
+  border-left: 2px solid var(--rule-on);
+  margin-bottom: 2px;
+  transition: border-color 0.15s, background 0.15s;
+  border-radius: 0 3px 3px 0;
+}
+.tl-entry:hover {
+  background: color-mix(in srgb, transparent 94%, var(--ink));
+}
+.tl-entry::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-1);
+  border: 2px solid var(--bg);
+  box-sizing: content-box;
+  transition: transform 0.15s;
+}
+.tl-entry:hover::before { transform: scale(1.3); }
+.tl-entry.tl-p1::before { background: var(--gold); }
+.tl-entry.tl-p2::before { background: var(--rust); }
+.tl-entry.tl-p3::before { background: var(--teal); }
+.tl-entry.tl-p4::before { background: var(--pink); }
+.tl-entry.tl-p5::before { background: #B33A2C; }
+.tl-entry.tl-p6::before { background: var(--blue); }
+.tl-entry.tl-p1:hover { border-color: var(--gold); }
+.tl-entry.tl-p2:hover { border-color: var(--rust); }
+.tl-entry.tl-p3:hover { border-color: var(--teal); }
+.tl-entry.tl-p4:hover { border-color: var(--pink); }
+.tl-entry.tl-p5:hover { border-color: #B33A2C; }
+.tl-entry.tl-p6:hover { border-color: var(--blue); }
 
-  /* ---- Receipt box (mono, for the "Sascha's position" callouts) ---- */
-  .ar-receipt {
-    margin: 32px 0;
-    padding: 22px 24px;
-    background:
-      repeating-linear-gradient(0deg, transparent 0 28px, color-mix(in srgb, transparent 96%, var(--c-9)) 28px 29px),
-      var(--bg-surf);
-    border-left: 2px solid var(--ink-soft);
-    position: relative;
-  }
-  .ar-receipt::before {
-    content: 'EXHIBIT';
-    position: absolute; top: -10px; left: 22px;
-    background: var(--bg);
-    padding: 2px 8px;
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.15em; color: var(--ink-soft);
-  }
-  .ar-receipt p {
-    font-family: var(--mono);
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--ink);
-    margin-bottom: 14px;
-  }
-  .ar-receipt p:last-child { margin-bottom: 0; }
-  .ar-receipt .who {
-    color: var(--gold);
-    font-size: 10.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
-  }
+.tl-entry .d {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
+  font-variant-numeric: tabular-nums;
+}
+.tl-entry .d::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+.tl-entry .d .t {
+  color: var(--ink-mute);
+  margin-left: 0;
+}
+.tl-entry .e {
+  font-family: var(--serif-b);
+  font-size: 12.5px;
+  line-height: 1.48;
+  color: var(--ink);
+}
+.tl-entry .e i { color: var(--ink-soft); }
+.tl-entry .e b { color: var(--ink); font-weight: 600; }
 
-  /* ---- Chat exchange block (Me / Troy) ---- */
-  .ar-chat {
-    margin: 32px 0;
-    display: flex; flex-direction: column;
-    gap: 8px;
-    padding: 22px 0;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
-  .ar-chat .msg {
-    max-width: 88%;
-    padding: 12px 16px;
-    font-family: var(--serif-b);
-    font-size: 14.5px; line-height: 1.45;
-    background: var(--bg-surf);
-    position: relative;
-  }
-  .ar-chat .msg::before {
-    content: attr(data-who);
-    position: absolute;
-    top: -16px;
-    font-family: var(--mono); font-size: 9.5px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--ink-mute);
-  }
-  .ar-chat .msg.me {
-    align-self: flex-start;
-    border-left: 2px solid var(--teal);
-  }
-  .ar-chat .msg.me::before { left: 0; color: var(--teal); }
-  .ar-chat .msg.troy {
-    align-self: flex-end;
-    border-right: 2px solid var(--rust);
-    text-align: left;
-  }
-  .ar-chat .msg.troy::before { right: 0; color: var(--rust); }
-  .ar-chat .msg.med {
-    align-self: center;
-    border-top: 1px solid var(--ink-soft);
-    border-bottom: 1px solid var(--ink-soft);
-    background: transparent;
-    font-style: italic;
-    color: var(--ink-soft);
-  }
-  .ar-chat .msg.med::before { left: 50%; transform: translateX(-50%); }
-  .ar-chat .skip {
-    align-self: center;
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--ink-mute);
-    padding: 4px 0;
-  }
+.tl-img {
+  display: block;
+  width: 230px;
+  height: auto;
+  margin-top: 8px;
+  border: 1px solid var(--rule-on);
+  cursor: zoom-in;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.tl-img:hover {
+  border-color: var(--gold);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
 
-  /* ---- Numbered logic chain (the 10 steps to Troy) ---- */
-  .ar-chain {
-    margin: 32px 0;
-    padding: 28px 0;
-    border-top: 1px dashed var(--rule-on);
-    border-bottom: 1px dashed var(--rule-on);
-    display: flex; flex-direction: column;
-    counter-reset: chain;
-  }
-  .ar-chain h4 {
-    font-family: var(--mono); font-size: 11px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 18px;
-  }
-  .ar-chain ol { list-style: none; padding: 0; }
-  .ar-chain li {
-    counter-increment: chain;
-    display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 14px;
-    padding: 10px 0;
-    align-items: baseline;
-    border-bottom: 1px solid color-mix(in srgb, transparent 80%, var(--ink-mute));
-  }
-  .ar-chain li:last-child { border-bottom: none; }
-  .ar-chain li::before {
-    content: counter(chain, decimal-leading-zero);
-    font-family: var(--mono); font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 0.04em;
-    font-variant-numeric: tabular-nums;
-  }
-  .ar-chain li span {
-    font-family: var(--serif-b);
-    font-size: 14.5px; line-height: 1.45;
-    color: var(--ink);
-    font-style: italic;
-  }
+.tl-img-clone {
+  position: fixed;
+  margin: 0;
+  border: 1px solid var(--gold);
+  background: var(--bg-surf);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  transform-origin: left top;
+  transition: transform 0.18s ease-out;
+  z-index: 99999;
+  cursor: zoom-out;
+  pointer-events: auto;
+}
 
-  /* ---- Bordered warning box (lethal stakes / sound event) ---- */
-  .ar-warn {
-    margin: 36px 0;
-    padding: 24px 26px;
-    border: 1px solid var(--rust);
-    background: color-mix(in srgb, var(--rust) 6%, transparent);
-  }
-  .ar-warn p {
-    font-family: var(--serif-d); font-style: italic;
-    font-size: 17px; line-height: 1.4;
-    color: var(--ink);
-    margin-bottom: 12px;
-  }
-  .ar-warn p:last-child { margin-bottom: 0; }
-  .ar-warn .label {
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--rust);
-    margin-bottom: 10px;
-    display: block;
-  }
+.tl-legend {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.tl-legend .row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.tl-legend .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
 
-  /* ---- Crimes list ---- */
-  .ar-crimes {
-    margin: 32px 0;
-    display: flex; flex-direction: column;
-    border-top: 1px solid var(--rule);
-  }
-  .ar-crime {
-    padding: 20px 0;
-    border-bottom: 1px solid var(--rule);
-    display: grid;
-    grid-template-columns: 48px 1fr;
-    gap: 18px;
-    align-items: baseline;
-  }
-  .ar-crime .n {
-    font-family: var(--mono); font-size: 11px;
-    color: var(--rust);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
-  }
-  .ar-crime h4 {
-    font-family: var(--serif-d); font-weight: 500;
-    font-size: 18px; line-height: 1.2;
-    color: var(--ink);
-    margin-bottom: 6px;
-    font-variation-settings: 'opsz' 30, 'SOFT' 50;
-  }
-  .ar-crime p {
-    font-family: var(--serif-b);
-    font-size: 14.5px; line-height: 1.5;
-    color: var(--ink-soft);
-  }
+/* ============================================================
+   AR-BODY (right column, the article itself)
+   ============================================================ */
+.ar-body {
+  font-family: var(--serif-b);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  max-width: 68ch;
+}
+.ar-body p { margin: 0 0 20px; }
+.ar-body p i, .ar-body p em { color: var(--ink-soft); font-style: italic; }
+.ar-body p b, .ar-body p strong { color: var(--ink); font-weight: 600; }
 
-  /* ---- Domain stamp row (the 3 websites) ---- */
-  .ar-domains {
-    margin: 28px 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  .ar-domain {
-    padding: 14px 16px;
-    border: 1px solid var(--rule-on);
-    background: var(--bg-surf);
-  }
-  .ar-domain .nm {
-    font-family: var(--serif-d); font-weight: 500;
-    font-size: 16px; color: var(--ink);
-    margin-bottom: 6px;
-  }
-  .ar-domain .dt {
-    font-family: var(--mono); font-size: 10.5px;
-    letter-spacing: 0.08em;
-    color: var(--ink-mute);
-    font-variant-numeric: tabular-nums;
-  }
+.ar-body .ar-lead-p {
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.ar-body .ar-lead-p::first-letter {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 60;
+  font-size: 56px;
+  line-height: 0.9;
+  float: left;
+  padding: 6px 12px 0 0;
+  color: var(--rust);
+}
 
-  /* ---- Closing band (final "He should be ashamed.") ---- */
-  .ar-close {
-    max-width: var(--art-max);
-    margin: 80px auto 0;
-    padding: 64px 0 24px;
-    border-top: 2px solid var(--rust);
-    text-align: center;
-  }
-  .ar-close p {
-    font-family: var(--serif-d);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(26px, 3.5vw, 44px);
-    line-height: 1.18;
-    letter-spacing: -0.01em;
-    margin-bottom: 18px;
-    color: var(--ink);
-    font-variation-settings: 'opsz' 144, 'SOFT' 100;
-  }
-  .ar-close p.is-final {
-    color: var(--rust);
-    margin-top: 28px;
-  }
+.ar-body h2 {
+  margin: 56px 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 60, 'SOFT' 40;
+  font-size: calc(clamp(24px, 2.6vw, 32px) * var(--headline-scale));
+  letter-spacing: -0.014em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.ar-body h2 .sec-no {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+.ar-body h3 {
+  margin: 32px 0 14px;
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 1.25;
+  font-variation-settings: 'opsz' 36, 'SOFT' 40;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
 
-  /* ============================================================
-     7. TL-*  TIMELINE SIDEBAR  (the merged evidence appendix)
-        Sticky on desktop. Collapses above the article on mobile.
-     ============================================================ */
+.ar-break {
+  margin: 56px 0 24px;
+  text-align: center;
+  font-family: var(--serif-d);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--rust);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  position: relative;
+}
+.ar-break em { font-style: italic; }
+.ar-break::before, .ar-break::after {
+  content: '';
+  display: inline-block;
+  width: 60px; height: 1px;
+  background: var(--rule-on);
+  vertical-align: middle;
+  margin: 0 18px;
+}
+
+/* color helpers */
+.ink-pink  { color: var(--pink); }
+.ink-rust  { color: var(--rust); }
+.ink-gold  { color: var(--gold); }
+.ink-teal  { color: var(--teal); }
+.ink-blue  { color: var(--blue); }
+.ink-green { color: var(--green); }
+.ink-soft  { color: var(--ink-soft); }
+
+/* ============================================================
+   AR-CLAIMS  —  numbered intro statements
+   ============================================================ */
+.ar-claims {
+  margin: 32px 0 40px;
+  border-top: 1px solid var(--rule);
+}
+.ar-claim {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 22px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+  transition: padding-left 0.2s;
+}
+.ar-claim:hover { padding-left: 8px; }
+.ar-claim .n {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'opsz' 60;
+}
+.ar-claim .body {
+  font-family: var(--serif-b);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.ar-claim .body b { color: var(--ink); }
+.ar-claim .body i, .ar-claim .body em { color: var(--ink); font-style: italic; }
+
+/* ============================================================
+   AR-PULL  —  pull quote
+   ============================================================ */
+.ar-pull {
+  margin: 36px 0;
+  padding: 28px 32px;
+  background: var(--tint-gold);
+  border-left: 3px solid var(--gold);
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--ink);
+  font-variation-settings: 'opsz' 60, 'SOFT' 100;
+  letter-spacing: -0.008em;
+}
+.ar-pull em { color: var(--gold); font-style: italic; }
+.ar-pull cite {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.ar-pull.is-rust  { background: var(--tint-rust); border-color: var(--rust); }
+.ar-pull.is-rust em { color: var(--rust); }
+.ar-pull.is-pink  { background: var(--tint-pink); border-color: var(--pink); }
+.ar-pull.is-pink em { color: var(--pink); }
+.ar-pull.is-teal  { background: var(--tint-teal); border-color: var(--teal); }
+.ar-pull.is-teal em { color: var(--teal); }
+.ar-pull.is-gold  { background: var(--tint-gold); border-color: var(--gold); }
+.ar-pull.is-gold em { color: var(--gold); }
+.ar-pull.is-blue  { background: var(--tint-blue); border-color: var(--blue); }
+.ar-pull.is-blue em { color: var(--blue); }
+
+/* ============================================================
+   AR-RECEIPT  —  direct quoted message
+   ============================================================ */
+.ar-receipt {
+  margin: 28px 0;
+  padding: 22px 26px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  position: relative;
+  font-family: var(--serif-b);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+.ar-receipt::before {
+  display: none;
+}
+.ar-receipt .who {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 10px;
+}
+.ar-receipt p { margin-bottom: 10px; color: var(--ink); }
+.ar-receipt p:last-child { margin-bottom: 0; }
+.ar-receipt p b { color: var(--ink); font-weight: 600; }
+.ar-receipt p i, .ar-receipt p em { color: var(--ink-soft); font-style: italic; }
+
+/* ============================================================
+   AR-DOMAINS  —  three website cards
+   ============================================================ */
+.ar-domains {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 22px 0 28px;
+}
+.ar-domain {
+  padding: 16px 18px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  border-top: 2px solid var(--rust);
+  transition: border-top-color 0.15s;
+}
+.ar-domain:hover { border-top-color: var(--gold); }
+.ar-domain .nm {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 6px;
+  font-variation-settings: 'opsz' 30;
+}
+.ar-domain .dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   AR-WARN  —  warning / aside box
+   ============================================================ */
+.ar-warn {
+  margin: 32px 0;
+  padding: 22px 26px;
+  background: color-mix(in srgb, transparent 92%, #B33A2C);
+  border-left: 3px solid #B33A2C;
+}
+.ar-warn .label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B33A2C;
+  margin-bottom: 12px;
+}
+.ar-warn p {
+  font-family: var(--serif-b);
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.ar-warn p:last-child { margin-bottom: 0; }
+.ar-warn p b { color: var(--ink); font-weight: 600; }
+.ar-warn p i, .ar-warn p em { color: var(--ink-soft); font-style: italic; }
+
+/* ============================================================
+   AR-CHAT  —  Troy vs Me message thread
+   ============================================================ */
+.ar-chat {
+  margin: 28px 0;
+  padding: 22px 22px 14px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ar-chat .msg {
+  position: relative;
+  padding: 10px 14px 10px 16px;
+  max-width: 80%;
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  line-height: 1.45;
+  border-left: 2px solid var(--rule-on);
+}
+.ar-chat .msg::before {
+  content: attr(data-who);
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  opacity: 0.9;
+}
+.ar-chat .msg.me {
+  align-self: flex-start;
+  background: color-mix(in srgb, transparent 88%, var(--c-4));
+  border-left-color: var(--blue);
+  color: var(--ink);
+}
+.ar-chat .msg.me::before { color: var(--blue); }
+.ar-chat .msg.troy {
+  align-self: flex-end;
+  background: color-mix(in srgb, transparent 88%, var(--c-2));
+  border-left: 0;
+  border-right: 2px solid var(--rust);
+  padding-left: 14px;
+  padding-right: 16px;
+  text-align: left;
+  color: var(--ink);
+}
+.ar-chat .msg.troy::before { color: var(--rust); }
+.ar-chat .msg.med {
+  align-self: center;
+  background: color-mix(in srgb, transparent 88%, var(--c-3));
+  border-left-color: var(--teal);
+  color: var(--ink);
+  max-width: 70%;
+}
+.ar-chat .msg.med::before { color: var(--teal); }
+.ar-chat .msg b { font-weight: 600; }
+.ar-chat .msg i, .ar-chat .msg em { color: var(--ink-soft); font-style: italic; }
+.ar-chat .skip {
+  align-self: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+  padding: 4px 12px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============================================================
+   AR-CHAIN  —  numbered logic chain
+   ============================================================ */
+.ar-chain {
+  margin: 28px 0;
+  padding: 22px 26px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  border-top: 2px solid var(--teal);
+}
+.ar-chain h4 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+.ar-chain ol {
+  list-style: none;
+  counter-reset: chain;
+  padding: 0;
+}
+.ar-chain ol li {
+  counter-increment: chain;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.ar-chain ol li::before {
+  content: counter(chain, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+.ar-chain ol li b { color: var(--ink); font-weight: 600; }
+.ar-chain ol li i, .ar-chain ol li em { color: var(--ink-soft); font-style: italic; }
+
+/* ============================================================
+   AR-CRIMES  —  list of potential offenses
+   ============================================================ */
+.ar-crimes {
+  margin: 28px 0;
+  border-top: 1px solid var(--rule);
+}
+.ar-crime {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 22px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+  transition: padding-left 0.2s, background 0.2s;
+}
+.ar-crime:hover {
+  padding-left: 8px;
+  background: color-mix(in srgb, transparent 96%, #B33A2C);
+}
+.ar-crime .n {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1;
+  color: #B33A2C;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'opsz' 60;
+}
+.ar-crime h4 {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.25;
+  font-variation-settings: 'opsz' 30, 'SOFT' 40;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.ar-crime p {
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ============================================================
+   EVIDENCE STRIP
+   ============================================================ */
+.evidence {
+  margin: 26px 0;
+  display: grid;
+  gap: 14px;
+}
+.evidence.is-2 { grid-template-columns: 1fr 1fr; }
+.evidence.is-3 { grid-template-columns: repeat(3, 1fr); }
+.ev-fig {
+  margin: 0;
+  padding: 0;
+}
+.ev-fig:hover {
+  box-shadow: none;
+}
+.ev-fig { display: none; }
+.ev-fig img {
+  width: 100%; height: auto;
+  display: block;
+  cursor: zoom-in;
+  transition: transform 0.25s;
+}
+.ev-fig:hover img { transform: scale(1.02); }
+.ev-cap {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+.ev-cap b { color: var(--ink); font-weight: 600; }
+
+/* ============================================================
+   AR-CLOSE  —  final two lines, large
+   ============================================================ */
+.ar-close {
+  max-width: var(--art-max);
+  margin: 56px auto 14px;
+  padding: 48px var(--pad-x) 28px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+}
+.ar-close p {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+.ar-close p em { color: var(--rust); font-style: italic; }
+.ar-close p.is-final {
+  margin-top: 14px;
+  color: var(--rust);
+}
+
+/* ============================================================
+   AR-END-META  —  bottom credits / file info
+   ============================================================ */
+.ar-end-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.ar-end-meta b { color: var(--ink); font-weight: 400; }
+.ar-end-meta i { color: var(--ink-soft); font-style: italic; }
+
+/* ============================================================
+   FOOTER (match home)
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 60px var(--pad-x) 32px;
+  margin-top: 80px;
+}
+.foot-inner { max-width: var(--max-w); margin: 0 auto; }
+.foot-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 56px;
+  margin-bottom: 56px;
+}
+.foot-tag {
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.foot-col h4 {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.foot-col.a h4 { color: var(--rust); }
+.foot-col.b h4 { color: var(--teal); }
+.foot-col.c h4 { color: var(--blue); }
+.foot-col ul { list-style: none; }
+.foot-col li { margin-bottom: 9px; }
+.foot-col a {
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  color: var(--ink);
+  transition: color 0.15s;
+}
+.foot-col a:hover { color: var(--gold); }
+
+.foot-editor {
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   EDITOR POPUP CHROME
+   ============================================================ */
+.editor-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid var(--e-rule);
+  padding: 6px 12px;
+  color: var(--e-fg-soft);
+  font-family: var(--e-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.editor-trigger:hover { border-color: var(--e-accent); color: var(--e-fg); }
+.editor-trigger-glyph {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.editor-trigger-glyph::before,
+.editor-trigger-glyph::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--e-fg-soft);
+  transition: background 0.2s;
+}
+.editor-trigger-glyph::before { top: 0; left: 0; }
+.editor-trigger-glyph::after  { top: 3px; left: 3px; opacity: 0.6; }
+.editor-trigger:hover .editor-trigger-glyph::before,
+.editor-trigger:hover .editor-trigger-glyph::after { background: var(--e-accent); }
+
+.editor-overlay {
+  position: fixed; inset: 0;
+  background: transparent;
+  z-index: 998;
+  display: none;
+}
+.editor-overlay.open { display: block; }
+.editor-panel {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 380px; max-height: 80vh;
+  background: var(--e-bg);
+  border: 1px solid var(--e-rule);
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  font-family: var(--e-mono);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.editor-panel.open { display: flex; }
+.editor-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--e-rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.editor-header-title {
+  font-family: var(--e-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--e-fg-soft);
+}
+.editor-close {
+  background: transparent;
+  border: none;
+  color: var(--e-fg-soft);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  line-height: 1;
+}
+.editor-close:hover { color: var(--e-fg); }
+.editor-body {
+  overflow-y: auto;
+  padding: 18px;
+  flex: 1;
+}
+.editor-section { margin-bottom: 24px; }
+.editor-section h3 {
+  font-family: var(--e-display);
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--e-fg);
+}
+
+.editor-lock {
+  width: 14px; height: 14px;
+  background: transparent;
+  border: 1px solid var(--e-fg-soft);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.editor-lock:hover { border-color: var(--e-fg); }
+.editor-lock.is-locked {
+  background: var(--e-fg-soft);
+  border-color: var(--e-fg-soft);
+}
+.editor-lock.is-locked:hover { background: var(--e-fg); border-color: var(--e-fg); }
+
+.editor-grid-palette {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.editor-palette-cell {
+  background: var(--e-input-bg);
+  border: 1px solid var(--e-rule);
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  grid-template-rows: auto auto;
+  gap: 4px 8px;
+  align-items: center;
+  min-width: 0;
+}
+.editor-palette-cell .swatch {
+  grid-row: 1 / 3;
+  width: 26px; height: 26px;
+  background: var(--swatch, transparent);
+}
+.editor-palette-cell .label {
+  grid-column: 2; grid-row: 1;
+  font-family: var(--e-mono);
+  font-size: 9.5px;
+  color: var(--e-fg-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.editor-palette-cell .controls {
+  grid-column: 2; grid-row: 2;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+}
+.editor-palette-cell .controls .editor-input { flex: 1; min-width: 0; }
+
+.editor-input {
+  background: var(--e-input-bg);
+  border: 1px solid var(--e-rule);
+  color: var(--e-fg);
+  font-family: var(--e-mono);
+  font-size: 10px;
+  padding: 6px 4px;
+  width: 100%;
+  text-align: center;
+}
+.editor-input:focus { outline: none; border-color: var(--e-accent); }
+
+.editor-label-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.editor-label {
+  font-family: var(--e-mono);
+  font-size: 10px;
+  color: var(--e-fg-soft);
+  letter-spacing: 0.04em;
+}
+
+.editor-section-group { margin-bottom: 14px; }
+.editor-section-group-title {
+  font-family: var(--e-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--e-fg);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--e-rule);
+}
+.editor-section-spot {
+  display: grid;
+  grid-template-columns: 16px 60px 1fr;
+  gap: 6px;
+  margin-bottom: 4px;
+  align-items: center;
+}
+.editor-section-spot .swatch {
+  width: 16px; height: 16px;
+  background: var(--swatch, transparent);
+}
+.editor-section-spot .spot-label {
+  font-family: var(--e-mono);
+  font-size: 10px;
+  color: var(--e-fg-soft);
+  letter-spacing: 0.04em;
+}
+
+.editor-select {
+  background: var(--e-input-bg);
+  border: 1px solid var(--e-rule);
+  color: var(--e-fg);
+  font-family: var(--e-mono);
+  font-size: 11px;
+  padding: 6px 8px;
+  width: 100%;
+  cursor: pointer;
+}
+.editor-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--e-accent) 0%,
+    var(--e-accent) var(--fill, 50%),
+    var(--e-rule) var(--fill, 50%),
+    var(--e-rule) 100%
+  );
+  outline: none;
+}
+.editor-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  background: var(--e-accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.editor-slider::-moz-range-thumb {
+  width: 12px; height: 12px;
+  background: var(--e-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.editor-button {
+  background: transparent;
+  border: 1px solid var(--e-rule);
+  color: var(--e-fg-soft);
+  font-family: var(--e-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.editor-button:hover { border-color: var(--e-accent); color: var(--e-fg); }
+.editor-actions { display: flex; flex-direction: column; gap: 6px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .lead-inner { grid-template-columns: 1fr; gap: 36px; }
+  .ar-grid { grid-template-columns: 1fr; gap: 32px; }
   .tl {
-    position: sticky;
-    top: 24px;
-    max-height: calc(100vh - 48px);
-    overflow-y: auto;
-    padding: 0 4px 24px 0;
-
-    /* invisible scrollbar that still works */
-    scrollbar-width: thin;
-    scrollbar-color: var(--rule-on) transparent;
-  }
-  .tl::-webkit-scrollbar { width: 4px; }
-  .tl::-webkit-scrollbar-track { background: transparent; }
-  .tl::-webkit-scrollbar-thumb { background: var(--rule-on); border-radius: 2px; }
-
-  .tl-head {
-    padding: 0 0 14px;
+    position: relative;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
     border-bottom: 1px solid var(--rule);
-    margin-bottom: 18px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
   }
-  .tl-head .label {
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 8px;
-  }
-  .tl-head h3 {
-    font-family: var(--serif-d); font-weight: 500;
-    font-size: 22px; line-height: 1.1;
-    color: var(--ink);
-    letter-spacing: -0.014em;
-  }
-  .tl-head .note {
-    margin-top: 10px;
-    font-family: var(--mono); font-size: 10.5px;
-    color: var(--ink-mute); letter-spacing: 0.04em;
-    line-height: 1.5;
-  }
-
-  .tl-month {
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--ink-soft);
-    margin: 22px 0 8px;
-    padding-bottom: 4px;
-    border-bottom: 1px dashed var(--rule-on);
-  }
-  .tl-month:first-of-type { margin-top: 0; }
-
-  .tl-entry {
-    position: relative;
-    padding: 10px 0 10px 22px;
-    border-left: 1px solid var(--rule);
-    margin-left: 6px;
-    transition: border-color 0.15s, padding-left 0.15s;
-  }
-  .tl-entry::before {
-    content: '';
-    position: absolute;
-    left: -5px; top: 14px;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--tl-c, var(--ink-mute));
-    box-shadow: 0 0 0 3px var(--bg);
-    transition: transform 0.15s;
-  }
-  .tl-entry:hover { border-left-color: var(--tl-c, var(--ink-soft)); padding-left: 26px; }
-  .tl-entry:hover::before { transform: scale(1.3); }
-
-  .tl-entry .d {
-    font-family: var(--mono); font-size: 10.5px;
-    letter-spacing: 0.04em;
-    color: var(--ink-soft);
-    font-variant-numeric: tabular-nums;
-    display: block;
-    margin-bottom: 3px;
-  }
-  .tl-entry .d .t {
-    color: var(--ink-mute);
-    margin-left: 6px;
-  }
-  .tl-entry .e {
-    font-family: var(--serif-b);
-    font-size: 12.5px; line-height: 1.42;
-    color: var(--ink);
-  }
-  .tl-entry .e b { color: var(--tl-c, var(--ink)); font-weight: 600; }
-
-  /* Timeline entry images — small, inline document/photo thumbnails */
-  .tl-img {
-    display: block;
-    width: 100%;
-    max-width: 160px;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    margin-top: 8px;
-    margin-bottom: 4px;
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-  }
-
-  /* Phase colors — set on individual .tl-entry tags. Change per entry to
-     re-categorize. Phase legend:
-       p1 gold  — setup / backstory
-       p2 rust  — first articles, first contact
-       p3 teal  — investigation building
-       p4 pink  — Troy's trigger article + my callout
-       p5 red   — escalation + threats (uses --rust deeper)
-       p6 blue  — aftermath / response docs
-  */
-  .tl-entry.tl-p1 { --tl-c: var(--gold); }
-  .tl-entry.tl-p2 { --tl-c: var(--rust); }
-  .tl-entry.tl-p3 { --tl-c: var(--teal); }
-  .tl-entry.tl-p4 { --tl-c: var(--pink); }
-  .tl-entry.tl-p5 { --tl-c: #B33A2C; }
-  .tl-entry.tl-p6 { --tl-c: var(--blue); }
-
-  .tl-legend {
-    margin-top: 22px;
-    padding-top: 14px;
-    border-top: 1px solid var(--rule);
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .tl-legend .row {
-    display: flex; align-items: center; gap: 8px;
-    font-family: var(--mono); font-size: 9.5px;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--ink-mute);
-  }
-  .tl-legend .dot { width: 7px; height: 7px; border-radius: 50%; }
-
-  /* ============================================================
-     8. EV-*  EVIDENCE THUMBNAIL STRIPS — small until hover.
-        Edge-aware transform-origin so they grow INTO the page.
-     ============================================================ */
-  .evidence {
-    margin: 36px 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    position: relative;
-  }
-  .evidence.is-4 { grid-template-columns: repeat(4, 1fr); }
-  .evidence.is-2 { grid-template-columns: repeat(2, 1fr); }
-
-  .ev {
-    position: relative;
-    z-index: 1;
-    cursor: zoom-in;
-  }
-  .ev-thumb {
-    aspect-ratio: 4 / 3;
-    background: var(--bg-surf);
-    position: relative;
-    overflow: hidden;
-    transition:
-      transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
-      box-shadow 0.4s ease;
-    transform-origin: center center;
-    z-index: 1;
-    border: 1px solid var(--rule-on);
-  }
-  /* default thumbnail art — a faint grid so the slot reads as a document */
-  .ev-thumb::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      repeating-linear-gradient(0deg,  transparent 0 12px, color-mix(in srgb, transparent 95%, var(--c-9)) 12px 13px),
-      repeating-linear-gradient(90deg, transparent 0 12px, color-mix(in srgb, transparent 95%, var(--c-9)) 12px 13px);
-  }
-  .ev-thumb .stamp {
-    position: absolute; top: 6px; left: 6px;
-    padding: 2px 6px;
-    font-family: var(--mono); font-size: 9px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--ink-soft);
-    background: rgba(19, 18, 16, 0.7);
-    z-index: 2;
-  }
-  .ev-thumb .stamp.is-evid { color: var(--gold); }
-  .ev-thumb .stamp.is-chat { color: var(--rust); }
-  .ev-thumb .stamp.is-doc  { color: var(--teal); }
-
-  .ev:hover { z-index: 100; }
-  .ev:hover .ev-thumb {
-    transform: scale(2.4);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--rule-on);
-    z-index: 50;
-  }
-  /* Edge-aware origins, so edge images don't grow off-page */
-  .evidence .ev:nth-child(3n+1) .ev-thumb { transform-origin: center left; }
-  .evidence .ev:nth-child(3n+2) .ev-thumb { transform-origin: center center; }
-  .evidence .ev:nth-child(3n)   .ev-thumb { transform-origin: center right; }
-  .evidence.is-4 .ev:nth-child(4n+1) .ev-thumb { transform-origin: center left; }
-  .evidence.is-4 .ev:nth-child(4n+2) .ev-thumb { transform-origin: center left; }
-  .evidence.is-4 .ev:nth-child(4n+3) .ev-thumb { transform-origin: center right; }
-  .evidence.is-4 .ev:nth-child(4n)   .ev-thumb { transform-origin: center right; }
-  .evidence.is-2 .ev:nth-child(2n+1) .ev-thumb { transform-origin: center left; }
-  .evidence.is-2 .ev:nth-child(2n)   .ev-thumb { transform-origin: center right; }
-
-  .ev-cap {
-    margin-top: 8px;
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.04em;
-    color: var(--ink-mute);
-    line-height: 1.35;
-  }
-  .ev-cap b { color: var(--ink-soft); font-weight: 400; }
-
-  /* Variant art tiles for thumbnails — for the slots in this article */
-  .ev-art-kickstarter::before {
-    background:
-      linear-gradient(135deg, color-mix(in srgb, transparent 70%, var(--c-1)), transparent 60%),
-      radial-gradient(circle at 30% 40%, color-mix(in srgb, transparent 80%, var(--c-2)), transparent 40%),
-      repeating-linear-gradient(0deg, transparent 0 10px, color-mix(in srgb, transparent 94%, var(--c-9)) 10px 11px);
-  }
-  .ev-art-fundraiser::before {
-    background:
-      linear-gradient(45deg, color-mix(in srgb, transparent 75%, var(--c-5)), transparent 65%),
-      radial-gradient(circle at 70% 70%, color-mix(in srgb, transparent 85%, var(--c-2)), transparent 40%);
-  }
-  .ev-art-linkedin::before {
-    background:
-      linear-gradient(180deg, color-mix(in srgb, transparent 82%, var(--c-4)), transparent 60%),
-      repeating-linear-gradient(0deg, transparent 0 16px, color-mix(in srgb, transparent 92%, var(--c-9)) 16px 17px);
-  }
-  .ev-art-court::before {
-    background:
-      linear-gradient(0deg, var(--c-7) 0 6%, transparent 6% 16%, var(--c-7) 16% 22%, transparent 22% 32%, var(--c-7) 32% 38%, transparent 38% 48%, var(--c-7) 48% 54%, transparent 54% 100%),
-      repeating-linear-gradient(0deg, transparent 0 14px, color-mix(in srgb, transparent 94%, var(--c-9)) 14px 15px);
-  }
-  .ev-art-website::before {
-    background:
-      linear-gradient(135deg, color-mix(in srgb, transparent 78%, var(--c-3)), transparent 60%),
-      linear-gradient(90deg, var(--bg-surf) 0 20%, transparent 20% 100%),
-      repeating-linear-gradient(0deg, transparent 0 8px, color-mix(in srgb, transparent 94%, var(--c-9)) 8px 9px);
-  }
-  .ev-art-chat::before {
-    background:
-      radial-gradient(circle at 30% 40%, color-mix(in srgb, transparent 80%, var(--c-3)) 0 30px, transparent 35px),
-      radial-gradient(circle at 70% 70%, color-mix(in srgb, transparent 80%, var(--c-2)) 0 30px, transparent 35px),
-      var(--bg-surf);
-  }
-  .ev-art-doc::before {
-    background:
-      linear-gradient(180deg, transparent 0 30%, color-mix(in srgb, transparent 88%, var(--c-9)) 30% 32%, transparent 32% 50%, color-mix(in srgb, transparent 88%, var(--c-9)) 50% 52%, transparent 52% 70%, color-mix(in srgb, transparent 88%, var(--c-9)) 70% 72%, transparent 72%),
-      var(--bg-surf);
-  }
-  .ev-art-scene::before {
-    background:
-      radial-gradient(ellipse 40% 30% at 50% 75%, color-mix(in srgb, transparent 60%, var(--c-7)), transparent 70%),
-      linear-gradient(180deg, color-mix(in srgb, transparent 70%, var(--c-4)) 0 60%, transparent 60%),
-      var(--bg-surf);
-  }
-  .ev-art-news::before {
-    background:
-      linear-gradient(180deg, color-mix(in srgb, transparent 70%, var(--c-1)) 0 8%, transparent 8%),
-      repeating-linear-gradient(0deg, transparent 0 11px, color-mix(in srgb, transparent 92%, var(--c-9)) 11px 12px),
-      var(--bg-surf);
-  }
-  .ev-art-riley::before {
-    background:
-      linear-gradient(135deg, color-mix(in srgb, transparent 75%, #B33A2C), transparent 60%),
-      repeating-linear-gradient(90deg, transparent 0 18px, color-mix(in srgb, transparent 92%, var(--c-9)) 18px 19px),
-      var(--bg-surf);
-  }
-
-  /* ============================================================
-     9. MISC: TOC, footnote-style asides, end-of-article meta
-     ============================================================ */
-  .ar-toc {
-    margin: 36px 0 0;
-    padding: 20px 22px;
-    border: 1px solid var(--rule-on);
-    background: var(--bg-surf);
-  }
-  .ar-toc .label {
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 12px;
-    display: block;
-  }
-  .ar-toc ol {
-    list-style: none;
-    column-count: 2;
-    column-gap: 30px;
-  }
-  .ar-toc li {
-    font-family: var(--mono); font-size: 11.5px;
-    color: var(--ink-soft);
-    padding: 5px 0;
-    counter-increment: toc;
-    line-height: 1.35;
-    break-inside: avoid;
-  }
-  .ar-toc ol { counter-reset: toc; }
-  .ar-toc li::before {
-    content: counter(toc, decimal-leading-zero) "  ";
-    color: var(--ink-mute);
-  }
-  .ar-toc li a:hover { color: var(--gold); }
-
-  .ar-end-meta {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px solid var(--rule);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    font-family: var(--mono); font-size: 11px;
-    color: var(--ink-mute);
-    letter-spacing: 0.06em;
-  }
-  .ar-end-meta b { color: var(--ink-soft); font-weight: 400; }
-
-  /* ============================================================
-     10. RESPONSIVE
-     ============================================================ */
-  @media (max-width: 1100px) {
-    .ar-grid {
-      grid-template-columns: 1fr;
-      gap: 36px;
-    }
-    .tl {
-      position: relative;
-      top: auto;
-      max-height: none;
-      padding-bottom: 0;
-      border-bottom: 1px solid var(--rule);
-      padding-bottom: 24px;
-    }
-    .ar-body { max-width: 70ch; margin: 0 auto; }
-    .foot-top { grid-template-columns: 1fr 1fr; gap: 40px; }
-  }
-  @media (max-width: 640px) {
-    .ar-headline { font-size: 38px; }
-    .ar-deck     { font-size: 17px; }
-    .ar-byline   { flex-direction: column; align-items: flex-start; gap: 6px; }
-    .ar-byline .tags { margin-left: 0; }
-    .ar-lead-fig { aspect-ratio: 4 / 3; }
-    .evidence, .evidence.is-4, .evidence.is-2 { grid-template-columns: 1fr 1fr; }
-    .evidence .ev:nth-child(odd)  .ev-thumb { transform-origin: center left; }
-    .evidence .ev:nth-child(even) .ev-thumb { transform-origin: center right; }
-    .ev:hover .ev-thumb { transform: scale(1.8); }
-    .ar-domains { grid-template-columns: 1fr; }
-    .ar-toc ol { column-count: 1; }
-    .ar-end-meta { grid-template-columns: 1fr; }
-    .nav { gap: 4px 22px; font-size: 13.5px; }
-    .foot-top { grid-template-columns: 1fr; }
-  }
+  .foot-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .ar-domains { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .foot-top { grid-template-columns: 1fr; }
+  .nav { gap: 4px 22px; font-size: 13.5px; }
+  .ar-claim, .ar-crime { grid-template-columns: 44px 1fr; gap: 14px; }
+  .ar-claim .n, .ar-crime .n { font-size: 28px; }
+  .ar-end-meta { grid-template-columns: 1fr; }
+  .ar-pull { padding: 20px 22px; font-size: 19px; }
+  .ar-receipt { padding: 18px 20px; }
+  .ar-chat .msg { max-width: 92%; }
+  .evidence.is-2, .evidence.is-3 { grid-template-columns: 1fr; }
+  .lead-fig { aspect-ratio: 4 / 3; }
+  .editor-panel { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
+}
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     HEADER  —  must stay identical to home.html so the brand and
-                navigation match across the site.
-     ============================================================ -->
+<svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="bg-pattern-tile" width="44" height="44" patternUnits="userSpaceOnUse">
+      <g id="bg-pattern-shape"><rect x="20.5" y="20.5" width="3" height="3" fill="currentColor"></rect></g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg-pattern-tile)"></rect>
+</svg>
+
 <header>
   <div class="masthead-row">
     <a href="/" class="brand" aria-label="Mudlark Media">
@@ -1037,92 +1415,64 @@
   </div>
 
   <nav class="nav" aria-label="Primary">
-    <a href="/ethos"    class="c-gold">Network Ethos</a>
-    <a href="/articles" class="c-rust is-current">Articles</a>
-    <a href="/opsec"    class="c-teal">Digital OpSec</a>
-    <a href="/psych"    class="c-pink">Psychological Warfare</a>
-    <a href="/media"    class="c-blue">Media</a>
-    <a href="/mindmap"  class="c-green">Mind Map</a>
-    <a href="/contact"  class="c-cream">Contact</a>
+    <a href="/ethos" class="c-gold">Network Ethos</a>
+    <a href="/articles" class="c-rust">Articles</a>
+    <a href="/opsec" class="c-teal">Digital OpSec</a>
+    <a href="/psych" class="c-pink">Psychological Warfare</a>
+    <a href="/media" class="c-blue">Media</a>
+    <a href="/mindmap" class="c-green">Mind Map</a>
+    <a href="/contact" class="c-cream">Contact</a>
   </nav>
 </header>
 
 <main>
 
   <!-- ============================================================
-       ARTICLE HERO  —  kicker, headline, deck, byline.
+       ARTICLE HERO  —  matches home's lead style
        ============================================================ -->
-  <section class="ar-hero">
-    <p class="ar-kicker">
-      <span class="doc-no">Case File &mdash; 042</span>
-      <span class="sep">/</span>
-      <span>Investigations</span>
-      <span class="sep">/</span>
-      <span>Filed 04 May 2026</span>
-      <span class="sep">/</span>
-      <span class="id">v.2.0 &mdash; merged with appendix</span>
-    </p>
+  <section data-section="lead" class="lead wrap" style="--sec: var(--c-2); --sec-heading: var(--c-5);">
+    <div class="lead-inner">
 
-    <h1 class="ar-headline">My <em>fallout</em> with Troy Barile-Simleness.</h1>
+      <figure class="lead-fig art-redact" data-slot="lead-figure" data-slot-purpose="Lead figure" aria-label="Figure A &mdash; document map" style="aspect-ratio: 16 / 9;">
+        <span class="stamp">Figure A &mdash; document map</span>
+        <span class="cap">
+          <span>Composite of source documents</span>
+          <span>Dec 2025 &ndash; May 2026</span>
+        </span>
+      </figure>
 
-    <p class="ar-deck">
-      Academic fraud and weaponized trust &mdash; how an <b>&ldquo;investigative journalist&rdquo;</b> used fabricated authority to threaten lives and silence truth. Combined with the timeline and evidence appendix.
-    </p>
+      <div class="lead-text">
+        <p class="lead-kicker">
+          <span>The Fallout Report</span>
+          <span class="sep">/</span>
+          Case File
+          <span class="sep">/</span>
+          <span class="id">M&minus;001</span>
+        </p>
+        <h1 class="lead-head">My <em>Fallout</em> with Troy Barile-Simleness.</h1>
+        <p class="lead-deck">
+          Academic fraud and weaponized trust &mdash; how an &ldquo;investigative journalist&rdquo; used fabricated authority to threaten lives and silence truth. <i>Merged with the timeline and evidence appendix.</i>
+        </p>
+        <p class="lead-meta">
+          <span class="who">By L.&nbsp;V.&nbsp;Maestri</span>
+          <span class="sep">&middot;</span>
+          ~50 min read
+          <span class="sep">&middot;</span>
+          posted 04 May 2026
+        </p>
+        <p class="lead-tags">
+          <span class="t1">academic fraud</span>
+          <span class="t2">survivor advocacy</span>
+          <span class="t3">criminal threats</span>
+        </p>
+        <a href="#sec-who" class="lead-go">Read the article <span class="arr">&rarr;</span></a>
+      </div>
 
-    <div class="ar-byline">
-      <span>By <span class="who">L.&nbsp;V.&nbsp;Maestri</span></span>
-      <span class="sep">&middot;</span>
-      <span>~50 min read</span>
-      <span class="sep">&middot;</span>
-      <span>Posted 04 May 2026</span>
-      <span class="tags">
-        <span>Fraud</span>
-        <span class="t-r">Survivor advocacy</span>
-        <span class="t-g">Methodology</span>
-      </span>
     </div>
   </section>
 
   <!-- ============================================================
-       LEAD FIGURE  —  document-map style banner.
-       Replace the gradient art with the real image when ready;
-       the .stamp and .cap will remain in place.
-       ============================================================ -->
-  <figure class="ar-lead-fig" aria-label="Document map banner">
-    <span class="stamp">Figure A &mdash; document map</span>
-    <span class="cap">
-      <span>Composite of 47 source documents &middot; 4 days of direct messaging</span>
-      <span>2025&ndash;2026</span>
-    </span>
-  </figure>
-
-  <!-- ============================================================
-       TABLE OF CONTENTS  —  optional jump targets.
-       Sections IDs match the ar-body h2 ids below.
-       ============================================================ -->
-  <div class="wrap" style="max-width: var(--art-max); margin: 0 auto;">
-    <div class="ar-toc">
-      <span class="label">Inside this file</span>
-      <ol>
-        <li><a href="#sec-who">Who? What? Why?</a></li>
-        <li><a href="#sec-fundraiser">Fundraiser?</a></li>
-        <li><a href="#sec-domains">Three domains, three months.</a></li>
-        <li><a href="#sec-real">Who is he, really?</a></li>
-        <li><a href="#sec-gov">What is on government databases.</a></li>
-        <li><a href="#sec-agg">What appears in aggregator databases.</a></li>
-        <li><a href="#sec-problem">So what&rsquo;s the problem, then?</a></li>
-        <li><a href="#sec-architect">&ldquo;I am not the architect&hellip;&rdquo;</a></li>
-        <li><a href="#sec-real-life">The events that occurred in real life.</a></li>
-        <li><a href="#sec-riley">The Riley Protocol.</a></li>
-        <li><a href="#sec-crimes">What he actually did.</a></li>
-        <li><a href="#sec-close">Come back to safety, Troy.</a></li>
-      </ol>
-    </div>
-  </div>
-
-  <!-- ============================================================
        ARTICLE GRID  —  [timeline | body]
-       Timeline is sticky on desktop, collapses on tablet/mobile.
        ============================================================ -->
   <div class="ar-grid">
 
@@ -1142,8 +1492,8 @@
 
       <div class="tl-entry tl-p1">
         <span class="d">Dec 31</span>
-        <div class="e">Troy is reported in <b>local news</b> about his Kickstarter for &ldquo;The Elementlings.&rdquo;</div>
-        <img class="tl-img" src="article-images/002_Jan_16_Troys_first_post_about_Sascha.jpg" alt="Local news interview" />
+        <div class="e">Troy is reported in local news about his Kickstarter.</div>
+        <img class="tl-img" src="article-images/002_Jan_16_Troys_first_post_about_Sascha.jpg" alt="FOX5 Las Vegas: novelist spreads mental health awareness on NYE" />
       </div>
 
       <!--  JAN 2026  -->
@@ -1151,17 +1501,19 @@
 
       <div class="tl-entry tl-p1">
         <span class="d">Jan 16</span>
-        <div class="e">Troy&rsquo;s <b>first documented post</b> about Sascha Barros (Riley) &mdash; a repost of a Forensic Pyschologist.&rsquo;</div>
+        <div class="e">Troy&rsquo;s first documented post about Sascha Barros (Riley).</div>
+        <img class="tl-img" src="article-images/003_Jan_22_Troys_Elementlings_Kickstarter_fails.jpg" alt="Troy's Jan 16 FB share of Dr. forensic psychologist's 'I believe Sasha Riley' post" />
       </div>
       <div class="tl-entry tl-p1">
         <span class="d">Jan 22</span>
-        <div class="e">The Elementlings Kickstarter <b>fails</b>.</div>
-        <img class="tl-img" src="article-images/003_Jan_22_Troys_Elementlings_Kickstarter_fails.jpg" alt="Kickstarter campaign" />
+        <div class="e">Troy&rsquo;s Elementlings Kickstarter fails.</div>
+        <img class="tl-img" src="article-images/_(1_of_1).jpg" alt="Elementlings Kickstarter — Funding Unsuccessful Jan 22, 2026" />
       </div>
       <div class="tl-entry tl-p1">
         <span class="d">Jan 29</span>
-        <div class="e"><b>Fundraiser for Sascha</b> appears under user &ldquo;K2 Gives,&rdquo; Las Vegas. Obfuscated to avoid traffic.</div>
-        <img class="tl-img" src="article-images/_(1_of_2).jpg" alt="K2 Gives fundraiser" />
+        <div class="e">Fundraiser for Sascha appears under K2 Gives. Obfuscated to avoid traffic.</div>
+        <img class="tl-img" src="article-images/_(1_of_2).jpg" alt="K2 Gives — Organizer card, created Jan 29, 2026" />
+        <img class="tl-img" src="article-images/_(2_of_2).jpg" alt="Sascha Riley Awareness Fund banner" />
       </div>
 
       <!--  FEB 2026  -->
@@ -1170,20 +1522,20 @@
       <div class="tl-entry tl-p2">
         <span class="d">Feb 9</span>
         <div class="e">Troy&rsquo;s first Substack post: <i>&ldquo;The World is Changing &mdash; And It Starts Now.&rdquo;</i></div>
+        <img class="tl-img" src="article-images/007_Feb_10_Troy_first_messages_Sascha.webp" alt="Troy's first Substack post" />
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 10</span>
-        <div class="e">Troy <b>first messages Sascha</b> directly.</div>
-        <img class="tl-img" src="article-images/007_Feb_10_Troy_first_messages_Sascha.webp" alt="First message" />
+        <div class="e">Troy first messages Sascha.</div>
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 18</span>
         <div class="e">Lisa Voldeng publishes her first article on George Tonks.</div>
+        <img class="tl-img" src="article-images/006_Feb_09_Troys_first_Substack_post.jpg" alt="Lisa Voldeng's article on George Tonks" />
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 18</span>
-        <div class="e"><b>Troy unloads 5 rounds of premade articles</b> over ~24 hours, naming Sascha before its end. Series begins with &ldquo;The Architecture Was Built After 1945.&rdquo;</div>
-        <img class="tl-img" src="article-images/008_Feb_18_Architecture_Was_Built_After.jpg" alt="Architecture articles" />
+        <div class="e"><b>Troy unloads &ldquo;The Architecture Was Built After 1945&rdquo;.</b> Part one of a series naming that builds up to reveal Sascha Barros. The series was posted over about 24 hours.</div>
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 19</span>
@@ -1191,12 +1543,13 @@
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 22</span>
-        <div class="e">Astra is calling on a public official to gain attention for Sascha.</div>
+        <div class="e">Astra is calling on a public official to get attention for Sascha.</div>
+        <img class="tl-img" src="article-images/008_Feb_18_Architecture_Was_Built_After.jpg" alt="Astra calling on a public official" />
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 26</span>
-        <div class="e">Earliest evidence of <b>Astra Crosby</b> seeking to charm Sascha.</div>
-        <img class="tl-img" src="article-images/009_Feb_26_Earliest_evidence_Astra_Crosby.jpg" alt="Astra Crosby" />
+        <div class="e">Earliest evidence of Astra Crosby seeking to charm Sascha.</div>
+        <img class="tl-img" src="article-images/009_Feb_26_Earliest_evidence_Astra_Crosby.jpg" alt="Sascha + Astra 02/26/26 dog post exchange" />
       </div>
 
       <!--  MAR 2026  -->
@@ -1204,38 +1557,52 @@
 
       <div class="tl-entry tl-p3">
         <span class="d">Mar 02</span>
-        <div class="e"><b>Grifter Nation</b> domain registered.</div>
-        <img class="tl-img" src="article-images/010_Mar_02_Grifter_Nation_domain_registered.jpg" alt="Grifter Nation" />
+        <div class="e">Grifter Nation domain registered.</div>
+        <img class="tl-img" src="article-images/010_Mar_02_Grifter_Nation_domain_registered.jpg" alt="grifter-nation.com WHOIS, registered 2026-03-02" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 10</span>
-        <div class="e">Lisa Voldeng announces resignation of support for Sascha. Troy releases Part I of <i>The Machine: &ldquo;The Woman in the Middle.&rdquo;</i></div>
+        <div class="e">Lisa Voldeng announces resignation of support for Sascha.</div>
+        <img class="tl-img" src="article-images/011_Mar_10_Lisa_Voldeng_announced_resignation.jpg" alt="LNV statement regarding Sascha Riley, March 10, 2026" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 10</span>
+        <div class="e">First part of <i>The Machine: &ldquo;The Woman in the Middle.&rdquo;</i></div>
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 11</span>
         <div class="e">Astra Crosby messages Sascha directly for the first time.</div>
       </div>
       <div class="tl-entry tl-p3">
-        <span class="d">Mar 13</span>
-        <div class="e">Troy&rsquo;s <b>first contribution to WhoWhatWhy</b>.</div>
+        <span class="d">Mar 14</span>
+        <div class="e">Troy makes his first contribution to WhoWhatWhy.</div>
+        <img class="tl-img" src="article-images/012_Mar_10_First_part_of_The_Machine.jpg" alt="Troy's first WhoWhatWhy contribution" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 17</span>
-        <div class="e">Sascha returns from interview with Brandy Zadrozny. Astra is overjoyed.</div>
-        <img class="tl-img" src="article-images/017_Mar_29_Astra_Crosby_lends_her_phone.jpg" alt="Interview coverage" />
+        <div class="e">Sascha returned from their interview with Brandy Zadrozny. Astra was overjoyed.</div>
+        <img class="tl-img" src="article-images/ACrosby_2026-04-14_194130.png" alt="Astra Crosby — screenshot 1" />
+        <img class="tl-img" src="article-images/ACrosby_2026-04-14_194207.png" alt="Astra Crosby — screenshot 2" />
+        <img class="tl-img" src="article-images/ACrosby_2026-04-14_194216.png" alt="Astra Crosby — screenshot 3" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 27</span>
         <div class="e">Troy releases the interview and surrounding documents Voldeng had paywalled. He said she had no right. <b>Since deleted.</b></div>
+        <img class="tl-img" src="article-images/017_Mar_29_Astra_Crosby_lends_her_phone.jpg" alt="Troy releases Voldeng's interview and documents" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 29</span>
-        <div class="e">Astra lends her phone to Sascha for a live TikTok interview Troy arranged. She replies to Kathy Griffin for visibility, then goes nearly silent.</div>
-        <img class="tl-img" src="article-images/018_Mar_29_gallery.jpg" alt="TikTok interview" />
+        <div class="e">Astra Crosby lends her phone to Sascha for a live interview arranged by Troy on TikTok. She replies to Kathy Griffin to help gain visibility for Sascha. Astra then goes nearly silent, making only one post on her profile for almost two weeks.</div>
+        <img class="tl-img" src="article-images/013_Mar_17_Sascha_returned_from_interview.jpg" alt="Astra entry — Sascha context" />
+        <img class="tl-img" src="article-images/019_Mar_30_Saschas_ex-wife_weapons-grade_damage.jpg" alt="Astra replying to Kathy Griffin" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 30</span>
-        <div class="e">Sascha&rsquo;s ex-wife goes into <b>&ldquo;weapons-grade&rdquo; damage control</b> &mdash; before the MSNOW article had even released.</div>
+        <div class="e">Sascha&rsquo;s ex-wife goes into &ldquo;weapons-grade&rdquo; damage control. The MSNOW article on Sascha had not yet been released. She knew what it was going to say before it released because she was likely told directly when interviewed by Brandy Zadrozny.</div>
+        <img class="tl-img" src="article-images/_(1_of_4).jpg" alt="Ex-wife damage control 1 of 4" />
+        <img class="tl-img" src="article-images/_(2_of_4).jpg" alt="Ex-wife damage control 2 of 4" />
+        <img class="tl-img" src="article-images/_(3_of_4).jpg" alt="Ex-wife damage control 3 of 4" />
+        <img class="tl-img" src="article-images/_(4_of_4).jpg" alt="Ex-wife damage control 4 of 4" />
       </div>
 
       <!--  APR 2026  -->
@@ -1243,138 +1610,254 @@
 
       <div class="tl-entry tl-p3">
         <span class="d">Apr 03</span>
-        <div class="e">Lisa Voldeng gives further statements retracting support.</div>
+        <div class="e">Lisa gives further statements retracting support for Sascha.</div>
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 05</span>
-        <div class="e"><b>Follow The Files</b> domain registered.</div>
-        <img class="tl-img" src="article-images/image (43).jpg" alt="Follow The Files" />
+        <div class="e">Follow The Files domain registered.</div>
+        <img class="tl-img" src="article-images/018_Mar_29_gallery.jpg" alt="Follow The Files domain registration" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 06</span>
-        <div class="e"><b>Amalgamated Army</b> domain registered. Name chosen by Sascha; site made for Sascha; Troy is the registrant.</div>
-        <img class="tl-img" src="article-images/024_Apr_06_Amalgamated_Army_domain_registered.jpg" alt="Amalgamated Army" />
+        <div class="e">Amalgamated Army domain registered. Note: This name was chosen by Sascha. Troy owns the website but contact information on the website listed Sue Selle until &ldquo;The Riley Protocol&rdquo;. Sascha also claims Troy made these websites himself.</div>
+        <img class="tl-img" src="article-images/024_Apr_06_Amalgamated_Army_domain_registered.jpg" alt="Amalgamated Army domain registration" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 09</span>
-        <div class="e">Brandy Zadrozny releases her article on Sascha for MSNOW. Troy releases a special edition of <i>The Machine</i> in response.</div>
+        <div class="e">Brandy Zadrozny releases her article on Sascha for MSNOW. It is not a &ldquo;debunk&rdquo;.</div>
+        <img class="tl-img" src="article-images/031_Apr_15_standalone.jpg" alt="Brandy Zadrozny's MSNOW article" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Apr 09</span>
+        <div class="e">Troy releases a <i>special edition of The Machine</i> about Brandy Zadrozny and her article on Sascha Barros.</div>
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 13</span>
-        <div class="e">Astra <b>publicly retracts support</b> for Sascha. Begins misidentifying and deadnaming them; starts deleting earlier comments.</div>
+        <div class="e">Astra publicly retracts their support for Sascha. She immediately begins intentionally misidentifying and deadnaming them. She also began deleting every previous comment I screenshotted for this article.</div>
+        <img class="tl-img" src="article-images/028_Apr_13_gallery_a.jpg" alt="Astra retraction gallery a" />
+        <img class="tl-img" src="article-images/029_Apr_13_gallery_b.png" alt="Astra retraction gallery b" />
+        <img class="tl-img" src="article-images/030_Apr_15_Troy_publishes_withdrawing_support.jpg" alt="Astra retraction — third image" />
       </div>
 
       <div class="tl-entry tl-p4">
         <span class="d">Apr 15</span>
-        <div class="e"><b>Troy publishes the article withdrawing support for Sascha.</b> Calls them a liar and dangerous. Weaponizes a vulnerable candid photo.</div>
+        <div class="e">Troy publishes article withdrawing support for Sascha. He calls them a liar and dangerous. He weaponizes a vulnerable candid photo to do this.</div>
+        <img class="tl-img" src="article-images/027_Apr_13_Astra_publicly_retracts_support.jpg" alt="Special edition of The Machine about Brandy" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 16 <span class="t">8:00 PM</span></span>
-        <div class="e">I post a <b>public callout</b> of Troy on social media. He responds with mockery, calls me &ldquo;little boy,&rdquo; deletes his comments, then blocks me.</div>
+        <div class="e">I post public callout of Troy on social media. He calls me little boy, clown, mocking my words and belittling me for my lack of education. He deleted all his comments. I didn&rsquo;t take many screenshots. He blocked me.</div>
+        <img class="tl-img" src="article-images/037_Apr_16_position_from_beginning_public.jpg" alt="Public callout Threads thread (1/3, 2/3, 3/3)" />
+        <img class="tl-img" src="article-images/038_Apr_16_gallery_a.jpg" alt="DM after callout — Troy refuses to engage in public view" />
+        <img class="tl-img" src="article-images/039_Apr_16_caption_wanted_all_public.jpg" alt="snowmason: Public statement, public response" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_114750.png" alt="Callout — 11:47 AM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_203342.png" alt="Callout — 8:33 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_203351.png" alt="Callout — 8:33 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_205725.png" alt="Callout — 8:57 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_210648.png" alt="Callout — 9:06 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_210759.png" alt="Callout — 9:07 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_214350.png" alt="Callout — 9:43 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_220106.png" alt="Callout — 10:01 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_220137.png" alt="Callout — 10:01 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_221142.png" alt="Callout — 10:11 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_221432.png" alt="Callout — 10:14 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_221500.png" alt="Callout — 10:15 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_222653.png" alt="Callout — 10:26 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_222723.png" alt="Callout — 10:27 PM" />
+        <img class="tl-img" src="article-images/callout_2026-04-16_222854.png" alt="Callout — 10:28 PM" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">5:00 AM</span></span>
-        <div class="e">Troy claims the Apr 15 article wasn&rsquo;t his idea &mdash; it was a covert operation to get close to Astra. Implies Part II will be something I&rsquo;ll like.</div>
+        <div class="e">He says the Apr 15 article wasn&rsquo;t his idea. That it was covert operation, actually, in order to get close to Astra. That there are dangerous people involved and he was putting his life on the line. He says Sascha will tell me.</div>
+        <img class="tl-img" src="article-images/040_Apr_17_5am_Troy_says_Part_II.jpg" alt="Third-party DM: 'putting our lives on the line to protect Sascha'" />
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">5:30 AM</span></span>
+        <div class="e">Troy says &ldquo;Part II&rdquo; drops tomorrow. It is implied Part II would be something I would like.</div>
+        <img class="tl-img" src="article-images/043_Apr_17_8am_Sascha_responds_It_has_gotten.jpg" alt="Troy says Part II drops tomorrow" />
+        <img class="tl-img" src="article-images/Apr17_183657.png" alt="Part II drops tomorrow — built and ready" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">6:00 AM</span></span>
-        <div class="e">Troy claims to be a therapist. Then immediately walks it back: &ldquo;more on the research side.&rdquo;</div>
+        <div class="e">Troy claims to be a therapist. Then immediately says he is &ldquo;more on the research side&rdquo;.</div>
+        <img class="tl-img" src="article-images/041_Apr_17_6am_Troy_claims_to_be.jpg" alt="Troy: I'm a therapist / Cognitive Neuroscientist / more on the research side" />
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">6:30 AM</span></span>
+        <div class="e">I went to bed waiting for Sascha to respond to my questions about Troy.</div>
+        <img class="tl-img" src="article-images/042_Apr_17_630am_went_to_bed_waiting.jpg" alt="Both going to bed — I haven't slept in 48 hours" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">8:00 AM</span></span>
-        <div class="e">Sascha responds: <i>&ldquo;It has gotten a conversation started&hellip; for my own sanity I need to take a break from this.&rdquo;</i></div>
+        <div class="e">Sascha responds: &ldquo;It has gotten a conversation started and maybe that&rsquo;s what my role in all this is but for my own sanity I need to take a break from this. I think the timing works out perfectly, the people throwing stones can enjoy the limelight, it&rsquo;s what they seem to want but I&rsquo;m betting they won&rsquo;t want it for very long.&rdquo;</div>
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">10:30 AM</span></span>
-        <div class="e">When pressed, Sascha says: <i>&ldquo;I really don&rsquo;t know.&rdquo;</i></div>
+        <div class="e">When pressed, Sascha says: &ldquo;I really don&rsquo;t know.&rdquo;</div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">4:00 PM</span></span>
+        <div class="e">Troy unblocks me on threads.</div>
+        <img class="tl-img" src="article-images/045_Apr_17_4pm_Troy_unblocks_me_threads.jpg" alt="Troy DM at 4:05 PM — Hey / mental health day" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">4:30 PM</span></span>
         <div class="e">Mediator contacts me.</div>
+        <img class="tl-img" src="article-images/044_Apr_17_1030am_when_pressed_Sascha_says.jpg" alt="Mediator contacts me" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">5:00 PM</span></span>
-        <div class="e"><b>&ldquo;I am not the architect.&rdquo;</b> Troy calls me a liar for not having Sascha&rsquo;s confirmation he claimed existed.</div>
+        <div class="e">&ldquo;I am not the architect.&rdquo; He then calls me a liar because he didn&rsquo;t believe I never got the confirmation he claimed.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">5:00 PM</span></span>
-        <div class="e">Troy tells me he <b>has the power to have me committed</b>. I block him for the first time.</div>
+        <div class="e">He tells me he has the power to have me committed. I block him this time.</div>
+        <img class="tl-img" src="article-images/046_Apr_17_5pm_I_am_not_the.jpg" alt="Power to have me committed" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">5:30 PM</span></span>
-        <div class="e">Unmarked white <b>work truck</b> seen where the abandoned car had been for years.</div>
-        <img class="tl-img" src="article-images/048_Apr_17_530pm_Work_truck_seen.jpg" alt="Work truck" />
+        <div class="e">Work truck seen. Abandoned car is gone.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">6:30 PM</span></span>
+        <div class="e">I say Sascha never told me not to publish.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">11:00 PM</span></span>
-        <div class="e">First breakthrough in mediation chat.</div>
+        <div class="e">We have our first breakthrough.</div>
+        <img class="tl-img" src="article-images/047_Apr_17_5pm_He_tells_me_he_has.jpg" alt="Long mediator chat closing at 11:06 PM" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">11:30 PM</span></span>
-        <div class="e">I send the unedited apology and 10-step logic chain through the mediator.</div>
+        <div class="e">I send apology and logic chain through mediator.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">night</span></span>
-        <div class="e"><b>Grocery store incident.</b> Older white car with blacked-out windshield speeds the center of two lanes, pins us at the edge of the road.</div>
-        <img class="tl-img" src="article-images/_(3_of_4).jpg" alt="Grocery store lane diagram" />
+        <div class="e">Grocery store incident. Debit card app does not give exact time.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">11:43 PM</span></span>
+        <div class="e">I am added to a group chat by the mediator.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">2:00 AM</span></span>
         <div class="e">I send my article to Troy.</div>
-        <img class="tl-img" src="article-images/062_Apr_18_7am_Sascha_confirms_op.jpg" alt="Riley Protocol" />
+        <img class="tl-img" src="article-images/070_Apr_18_gallery_b.jpg" alt="Article draft in text editor (110,574 characters)" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">3:00 AM</span></span>
-        <div class="e">Troy: <i>&ldquo;There is no denying what happened to Sascha.&rdquo;</i></div>
+        <div class="e">Troy reads my article and says &ldquo;There is no denying what happened to Sascha.&rdquo;</div>
+        <img class="tl-img" src="article-images/056_Apr_18_2am_send_article_to.jpg" alt="Troy reads my article — redacted chat" />
+        <img class="tl-img" src="article-images/048_Apr_17_530pm_Work_truck_seen.jpg" alt="Troy reads my article — chat continuation" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_first_breakthrough.jpg" alt="Troy reads my article — chat continuation" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">3:30 AM</span></span>
-        <div class="e">Troy claims a PsyD: <i>&ldquo;no one needs to know that.&rdquo;</i></div>
+        <div class="e">Claims a PsyD, says &ldquo;no one needs to know that.&rdquo;</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">4:30 AM</span></span>
+        <div class="e">I explain the danger if these threats and claims are real.</div>
+        <img class="tl-img" src="article-images/060_Apr_18_430am_explain_danger_if.jpg" alt="Explain danger" />
+        <img class="tl-img" src="article-images/061_Apr_18_gallery_a.jpg" alt="Apr 18 gallery a" />
+        <img class="tl-img" src="article-images/057_Apr_18_3am_Troy_reads_article.jpg" alt="Explain danger — chat" />
+        <img class="tl-img" src="article-images/058_Apr_18_330am_claims_PsyD_says_no.jpg" alt="Explain danger — chat" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">7:00 AM</span></span>
+        <div class="e">Sascha confirms the op was Troy&rsquo;s idea.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">11:00 AM</span></span>
+        <div class="e">I go to sleep.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">12:30 PM</span></span>
+        <div class="e">Responds affirmatively, but ignores the point entirely.</div>
+        <img class="tl-img" src="article-images/059_Apr_18_4pm_two_options.jpg" alt="Signal group chat 12:28 PM — confirms Troy NV/PST" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">1:30 PM</span></span>
-        <div class="e">Says he&rsquo;s <b>not a therapist</b>, has no National Provider Identifier number.</div>
+        <div class="e">Says he&rsquo;s not a therapist or has a National Provider Identifier number.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">4:00 PM</span></span>
+        <div class="e">I give Troy two options: be called out or come clean. I offered to write a positive article instead.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">6:30 PM</span></span>
+        <div class="e">Patience waiting for him to address my point.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">10:30 PM</span></span>
+        <div class="e">I ask directly where Troy is. He responds within a minute.</div>
+        <img class="tl-img" src="article-images/062_Apr_18_7am_Sascha_confirms_op.jpg" alt="Chat 10:46–10:50 PM — Troy: 'I BROKE MY FOOT'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">10:52 PM</span></span>
-        <div class="e">Sascha messages me directly with their own suspicions: <i>&ldquo;Something&rsquo;s off.&rdquo;</i></div>
+        <div class="e">Sascha messages me directly with their own suspicions: &ldquo;Something&rsquo;s off.&rdquo;</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">11:00 PM</span></span>
-        <div class="e">Troy continues to divert and refuses to engage. I leave the chat.</div>
+        <div class="e">Continues to divert and refuses to engage. I had stopped being rude nearly 24 hours before this, but I was losing my patience. I left the chat after this.</div>
+        <img class="tl-img" src="article-images/063_Apr_18_1230pm_responds_affirmatively.jpg" alt="Chat 11:02–11:04 PM — calling out Troy's diversion" />
+        <img class="tl-img" src="article-images/069_Apr_18_1052pm_Sascha_messages_me_directly.jpg" alt="Troy diverts: 'About what operation?'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">11:30 PM</span></span>
-        <div class="e">Troy threatens to <b>release chats</b>. <i>&ldquo;Putting thousands of people in danger. Not because I tell them to but because that is protocol.&rdquo;</i></div>
+        <div class="e">Threatens to release chats. &ldquo;Putting thousands of people in danger. Not because I tell them to but because that is protocol.&rdquo;</div>
+        <img class="tl-img" src="article-images/066_Apr_18_630pm_patience_waiting.jpg" alt="Troy threatens to release chats — 'that is protocol'" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">12:00 AM</span></span>
+        <div class="e">I suggest directly Troy may be an operative or asset. The first time I suggested it he understood and agreed. Troy responds this time by implying I am on drugs.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">12:30 AM</span></span>
+        <div class="e">I show him an addition to my article about his threats without mentioning him directly.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">12:30 AM</span></span>
         <div class="e">Troy says my addition has to go. <b>Threatens to pull my Deadman&rsquo;s Switches</b> for the first time. Says he knows where I live and about my childhood.</div>
+        <img class="tl-img" src="article-images/image (38).jpg" alt="Troy: 'That whole thing needs to go'" />
+        <img class="tl-img" src="article-images/image (39).jpg" alt="Troy: 'I will pull the dead mans switch' / 'I know where you live'" />
+        <img class="tl-img" src="article-images/image (41).jpg" alt="Troy: 'If you post that paragraph it's over for you'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">1:00 AM</span></span>
-        <div class="e">Says he knows <b>Sascha&rsquo;s address, who they live with, and about their kids</b>. <i>&ldquo;I have the power. Don&rsquo;t make me use it.&rdquo;</i></div>
+        <div class="e">Says he knows Sascha&rsquo;s address, who they live with, and about their kids. &ldquo;I have the power. Don&rsquo;t make me use it.&rdquo;</div>
+        <img class="tl-img" src="article-images/image (42).jpg" alt="Troy: 'I even have their address / Information on their children / I have the power'" />
+        <img class="tl-img" src="article-images/image (40).jpg" alt="Troy: 'And so will Sascha. This is much bigger than just one person'" />
+        <img class="tl-img" src="article-images/image (44).jpg" alt="Troy: 'I warned you about me'" />
+        <img class="tl-img" src="article-images/image (45).jpg" alt="Troy: 'everything is officially ready to deploy if need be'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">1:30 AM</span></span>
-        <div class="e">Roommate <b>evacuates</b>. Troy: <i>&ldquo;It doesn&rsquo;t matter where she goes.&rdquo;</i> Roommate sees a <b>dark vehicle with windowless white trailer</b> at the spot the work truck had been.</div>
+        <div class="e">After direct threats to my roommate, she evacuates. Troy says it doesn&rsquo;t matter where she goes. She sees the dark vehicle with trailer.</div>
+        <img class="tl-img" src="article-images/image (43).jpg" alt="Troy: you can't hide, even focusing on roommate's safety" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">2:00 AM</span></span>
-        <div class="e">Sascha agrees to delay because of the threats.</div>
+        <div class="e">Sascha agreed to delay because of the threats.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">6:19 AM</span></span>
-        <div class="e"><b>Sound event.</b> I text my roommate and Sascha.</div>
+        <div class="e">Sound event. I text my roommate and Sascha.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">9:00 AM</span></span>
-        <div class="e"><b>I flee my home.</b> Gone for days.</div>
+        <div class="e">I flee my home. I am gone for days.</div>
       </div>
 
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">2:00 AM</span></span>
-        <div class="e">Troy claims the clinician is being monitored. He had already claimed he was working with thousands of others. <b>Releases my article to Laura Robinson.</b></div>
+        <div class="e">Troy claims the clinician is being monitored. He had already claimed he was working with thousands of others.</div>
+        <img class="tl-img" src="article-images/image (47).jpg" alt="Troy: 'Others are now keeping an eye on her as well. Shall I release it all?'" />
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">2:00 AM</span></span>
+        <div class="e">He releases my article to Laura Robinson.</div>
+        <img class="tl-img" src="article-images/image (48).jpg" alt="Troy shows screenshots of his DM thread with Dr. Laura Robinson at 2:17–2:18 AM" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">3:14 AM</span></span>
@@ -1382,15 +1865,17 @@
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">4:00 AM</span></span>
-        <div class="e">I publish a <b>&ldquo;cold&rdquo; version</b> of the article that strips everything he threatened over.</div>
+        <div class="e">Cold article released. This version removed everything he had a problem with. Note: Due to his actions I released early with the support of Sascha Barros.</div>
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">10:00 AM</span></span>
-        <div class="e">Clinician: <i>&ldquo;Your work reads like someone in their right mind.&rdquo;</i></div>
+        <div class="e">Clinician: &ldquo;Your work reads like someone in their right mind.&rdquo;</div>
+        <img class="tl-img" src="article-images/image (49).jpg" alt="Clinician: 'Your work reads like a person in their right mind'" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">11:00 AM</span></span>
-        <div class="e">Troy&rsquo;s fake PhD is <b>called out</b> by others in the field. He assumes it&rsquo;s because of a plot I orchestrated.</div>
+        <div class="e">His fake PhD was called out by others in the field. He then assumed it was because of a plot I orchestrated.</div>
+        <img class="tl-img" src="article-images/image (46).jpg" alt="Neurology peer publicly questioning Troy's claimed PhD" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 22</span>
@@ -1399,6 +1884,7 @@
       <div class="tl-entry tl-p6">
         <span class="d">Apr 24 <span class="t">2:00 PM</span></span>
         <div class="e">More formal video evaluation and signed letter from clinician.</div>
+        <img class="tl-img" src="article-images/image (50).jpg" alt="LMFT signed letter dated April 24, 2026 — mental status normal" />
       </div>
 
       <!--  MAY 2026  -->
@@ -1467,7 +1953,7 @@
       <!-- ================= FUNDRAISER ================= -->
       <div class="ar-break"><em>Fundraiser?</em></div>
 
-      <h2 id="sec-fundraiser"><span class="sec-no">&sect; 01 &mdash; Money before tragedy</span>A page seeded with influencers, sitting at zero.</h2>
+      <h2 id="sec-fundraiser"><span class="sec-no">&sect; 01 &mdash; Money before tragedy</span></h2>
 
       <p>
         On <b>January 16th, 2026</b>, Troy posted his first documented acknowledgement of Sascha Barros (Riley) by sharing a post from a professional clinician. Troy has specifically stated he did not know Sascha Barros in January. He says he didn&rsquo;t know of Lisa Voldeng or Sascha until Voldeng platformed George Tonks &mdash; someone Troy has known since they were both young. Voldeng platformed Tonks on <b>February 18th</b>. This is the same day Troy unloaded <b>five rounds of premade articles</b> that named Sascha before its end. <b>He first messaged Sascha on the 10th</b> of that month &mdash; more than a week before the article released.
@@ -1481,19 +1967,14 @@
         A week after that failure, a new funding page was created.
       </p>
 
-      <!-- EVIDENCE STRIP — fundraiser / kickstarter -->
-      <div class="evidence">
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">003_Jan_22_Troys_Elementlings_Kickstarter_fails.jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Ev. K1</span></div>
+      <div class="evidence is-2">
+        <figure class="ev-fig">
+          <div data-slot="ev-kickstarter" data-slot-purpose="Kickstarter snapshot" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
           <figcaption class="ev-cap"><b>Kickstarter</b> &mdash; The Elementlings campaign page, closed unfunded 22 Jan 2026.</figcaption>
         </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">002_Jan_16_Troys_first_post_about_Sascha.jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Ev. K2</span></div>
-          <figcaption class="ev-cap"><b>Local news</b> &mdash; on-camera interview describing the project as his &ldquo;life&rsquo;s work.&rdquo;</figcaption>
-        </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_2).jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Ev. K3</span></div>
-          <figcaption class="ev-cap"><b>K2 Gives</b> &mdash; the new fundraiser, created in Sascha&rsquo;s name. Las Vegas. Zero donations, high-profile follower seeding.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-k2gives" data-slot-purpose="K2 Gives snapshot" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>K2 Gives</b> &mdash; new fundraising page using Sascha&rsquo;s childhood photo, 29 Jan 2026.</figcaption>
         </figure>
       </div>
 
@@ -1528,7 +2009,7 @@
       </p>
 
       <!-- ================= THREE DOMAINS ================= -->
-      <h2 id="sec-domains"><span class="sec-no">&sect; 02 &mdash; The three websites</span>Three domains, in three months.</h2>
+      <h2 id="sec-domains"><span class="sec-no">&sect; 02 &mdash; The three websites</span></h2>
 
       <p>
         Troy has at least three websites:
@@ -1563,19 +2044,14 @@
         It does not fit with someone whose primary identity is a research neuroscientist who spent the better part of a decade in a doctoral program.
       </p>
 
-      <!-- EVIDENCE STRIP — the three websites -->
-      <div class="evidence">
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">010_Mar_02_Grifter_Nation_domain_registered.jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Web 01</span></div>
+      <div class="evidence is-2">
+        <figure class="ev-fig">
+          <div data-slot="ev-grifter" data-slot-purpose="Grifter Nation snapshot" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
           <figcaption class="ev-cap"><b>Grifter Nation</b> &mdash; landing page snapshot, registered 02 Mar 2026.</figcaption>
         </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">image (43).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Web 02</span></div>
-          <figcaption class="ev-cap"><b>Follow The Files</b> &mdash; landing page snapshot, registered 05 Apr 2026.</figcaption>
-        </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">024_Apr_06_Amalgamated_Army_domain_registered.jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Web 03</span></div>
-          <figcaption class="ev-cap"><b>Amalgamated Army</b> &mdash; name chosen by Sascha, owned by Troy. Registered 06 Apr 2026.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-army" data-slot-purpose="Amalgamated Army snapshot" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>Amalgamated Army</b> &mdash; built for Sascha, owned by Troy, 06 Apr 2026.</figcaption>
         </figure>
       </div>
 
@@ -1595,7 +2071,7 @@
       <!-- ================= WHO IS HE REALLY ================= -->
       <div class="ar-break"><em>Who is he really, though?</em></div>
 
-      <h2 id="sec-real"><span class="sec-no">&sect; 03 &mdash; The documented record</span>Model scout, dog walker, cannapreneur.</h2>
+      <h2 id="sec-real"><span class="sec-no">&sect; 03 &mdash; The documented record</span></h2>
 
       <p>
         Troy&rsquo;s documented professional background, confirmed on his own LinkedIn, has nothing to do with journalism, investigation, or even neuroscience. He spent <b>two and a half years as a Senior Model Scout</b> at Aesthetics PPD in the Greater Tampa Bay Area, scouting and booking individuals of all ages for fashion and editorial productions. He then moved to New York, where from 2009 to 2011 he co-owned and operated a <b>dog walking company</b>. His education is in marketing and business.
@@ -1609,15 +2085,14 @@
         That is the most honest sentence in his entire public record. To be clear, <b>he has been doing this for 3 months</b>.
       </p>
 
-      <!-- EVIDENCE STRIP — LinkedIn -->
       <div class="evidence is-2">
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">LI&nbsp;01</span></div>
-          <figcaption class="ev-cap"><b>LinkedIn header</b> &mdash; &ldquo;Entrepreneur &middot; Cannapreneur &middot; Therapist &middot; Educator &middot; Philanthropist.&rdquo;</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-linkedin1" data-slot-purpose="LinkedIn snapshot" class="art-redact" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>LinkedIn</b> &mdash; Troy&rsquo;s self-described professional history.</figcaption>
         </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(2_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">LI&nbsp;02</span></div>
-          <figcaption class="ev-cap"><b>Education section</b> &mdash; the degrees claimed and the overlap that gives the timeline away.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-linkedin2" data-slot-purpose="LinkedIn education" class="art-redact" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>LinkedIn &mdash; Education</b> &mdash; no doctorate. MS in Leadership. MBA in Marketing.</figcaption>
         </figure>
       </div>
 
@@ -1684,7 +2159,7 @@
       <!-- ================= GOVERNMENT DATABASES ================= -->
       <div class="ar-break"><em>What is on government databases.</em></div>
 
-      <h2 id="sec-gov"><span class="sec-no">&sect; 04 &mdash; Primary court records</span>A long record, documented, and real.</h2>
+      <h2 id="sec-gov"><span class="sec-no">&sect; 04 &mdash; Primary court records</span></h2>
 
       <p>
         In <b>2007</b>, Troy was charged in Pasco County, Florida with fraud &mdash; an insufficient funds check, Florida statute 832.05. It is confirmed on the Pasco County clerk&rsquo;s primary court database. The judge declined to enter a formal conviction, instead placing him on probation and ordering restitution; a disposition that keeps the charge off a standard background check. But it is not an acquittal. <b>Wachovia Bank</b> appears as a bondsman, implying arrest. <b>Wells Fargo</b> appears as an expert witness. This is not a background aggregator entry. <b>This is a primary court record.</b>
@@ -1698,24 +2173,19 @@
         It is worth noting that Medford is also where, around the same period, Troy was reported as being found in a <b>stolen or unauthorized vehicle</b>. He has denied this, but the report includes his full name.
       </p>
 
-      <!-- EVIDENCE STRIP — court records -->
-      <div class="evidence">
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_3).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Ct&nbsp;01</span></div>
+      <div class="evidence is-2">
+        <figure class="ev-fig">
+          <div data-slot="ev-pasco" data-slot-purpose="Pasco County record" class="art-redact" style="aspect-ratio: 4 / 3;"></div>
           <figcaption class="ev-cap"><b>Pasco County, FL</b> &mdash; 2007 fraud charge (Fla. Stat. 832.05), Wachovia as bondsman.</figcaption>
         </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(2_of_3).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Ct&nbsp;02</span></div>
-          <figcaption class="ev-cap"><b>Jackson County, OR</b> &mdash; 2022 small claims, defendants jointly named.</figcaption>
-        </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(3_of_3).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Ct&nbsp;03</span></div>
-          <figcaption class="ev-cap"><b>Medford, OR</b> &mdash; report of being found in a stolen or unauthorized vehicle. Same period.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-jackson" data-slot-purpose="Jackson County record" class="art-redact" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>Jackson County, OR</b> &mdash; 2022 United Finance CO small claims, dismissed.</figcaption>
         </figure>
       </div>
 
       <!-- ================= AGGREGATOR DATABASES ================= -->
-      <h2 id="sec-agg"><span class="sec-no">&sect; 05 &mdash; Aggregator entries</span>What pulls and what stays. <i>Read this section with caution.</i></h2>
+      <h2 id="sec-agg"><span class="sec-no">&sect; 05 &mdash; Aggregator entries</span></h2>
 
       <p>
         These websites pull data regularly, allowing them to obtain and retain information that other databases delete. This cuts two ways: <b>these sites can also be unreliable</b>. It&rsquo;s important to remember exactly how unreliable this section is when reading it.
@@ -1740,7 +2210,7 @@
       <!-- ================= SO WHAT'S THE PROBLEM ================= -->
       <div class="ar-break"><em>So what&rsquo;s the problem, then?</em></div>
 
-      <h2 id="sec-problem"><span class="sec-no">&sect; 06 &mdash; How I got involved</span>I was not a believer. I pushed in to test a framework.</h2>
+      <h2 id="sec-problem"><span class="sec-no">&sect; 06 &mdash; How I got involved</span></h2>
 
       <p>
         When I began my own personal investigation into Sascha Barros, <b>I was not doing it as a &ldquo;believer&rdquo;</b>. I thought it was a set of good opportunities to test the skills in investigative journalism I had been learning for nearly a year. Eventually, after joining the discourse around the story, I began to feel <b>the level of organized hatred directed at Sascha was disproportionate</b> to what any ordinary person, even a liar, actually deserved. That disproportionality felt like a signal worth investigating.
@@ -1866,7 +2336,7 @@
       <!-- ================= I AM NOT THE ARCHITECT ================= -->
       <div class="ar-break"><em>&ldquo;I am not the architect&hellip;&rdquo;</em></div>
 
-      <h2 id="sec-architect"><span class="sec-no">&sect; 07 &mdash; The threats become direct</span>He found my personal Facebook.</h2>
+      <h2 id="sec-architect"><span class="sec-no">&sect; 07 &mdash; The threats become direct</span></h2>
 
       <p>
         That section title quote came from before I was invited into the group chat, when the threats were minor, and I was not scared for my life. It is extremely important that this context be understood for what followed. <b>He found my personal Facebook and messaged me there</b> after I left that group chat.
@@ -1966,7 +2436,7 @@
       <!-- ================= REAL LIFE EVENTS ================= -->
       <div class="ar-break"><em>At exactly 6:16, 3 hours later, something occurred in my own home.</em></div>
 
-      <h2 id="sec-real-life"><span class="sec-no">&sect; 08 &mdash; The events that occurred in real life</span>A white car. A work truck. A sound I cannot explain.</h2>
+      <h2 id="sec-real-life"><span class="sec-no">&sect; 08 &mdash; The events that occurred in real life</span></h2>
 
       <p>
         I became more scared than I had ever been in my life. I suddenly believed everything Troy had said. <b>I fled my home to a hotel. I checked my car for GPS trackers.</b> I may have been posting about the threats I was receiving for the previous 24 hours, but this is the first moment I actually believed them.
@@ -1988,19 +2458,14 @@
         The car stopped directly in front of us, blocking our path, then turned perpendicular to the lanes in front of us, and too slowly began pulling away. It stopped diagonal in the road, cutting us off from the store, <b>effectively pinning us against the edge of the road</b>. As we quickly walked away, it turned back toward us as we entered the store. It only occurred to me once we were inside what it could have meant. I was still not yet paranoid.
       </p>
 
-      <!-- EVIDENCE STRIP — scene -->
-      <div class="evidence">
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">048_Apr_17_530pm_Work_truck_seen.jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Sc&nbsp;01</span></div>
+      <div class="evidence is-2">
+        <figure class="ev-fig">
+          <div data-slot="ev-duplex" data-slot-purpose="Duplex front" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
           <figcaption class="ev-cap"><b>Front of the duplex</b> &mdash; abandoned car gone, work truck in its place, 17 Apr.</figcaption>
         </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(3_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Sc&nbsp;02</span></div>
-          <figcaption class="ev-cap"><b>Grocery store lane</b> &mdash; the diagonal path of the blacked-out car relative to the entrance.</figcaption>
-        </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(4_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Sc&nbsp;03</span></div>
-          <figcaption class="ev-cap"><b>Empty patch</b> &mdash; concrete and years-old leaves where the trailer had been. Returned to.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-grocery" data-slot-purpose="Grocery lane diagram" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>Grocery store lane diagram</b> &mdash; car&rsquo;s path, blocking + pinning, 17 Apr night.</figcaption>
         </figure>
       </div>
 
@@ -2049,21 +2514,20 @@
       </p>
 
       <!-- ================= THE RILEY PROTOCOL ================= -->
-      <h2 id="sec-riley"><span class="sec-no">&sect; 09 &mdash; His response document</span>The Riley Protocol &mdash; a checklist in a lab coat.</h2>
+      <h2 id="sec-riley"><span class="sec-no">&sect; 09 &mdash; His response document</span></h2>
 
       <p>
         Troy dropped his next article about Sascha, called <b>The Riley Protocol</b>, about 48 hours later. Formatted as a <b>congressional reference document</b> on Sascha&rsquo;s own website, filled with academic citations, evidentiary tiers, and a forensic matrix that goes far beyond anything in his previous career. <i>Seven of nine narrative dimensions score below 30%</i> on a <b>&ldquo;credibility chart&rdquo; he built himself</b>.
       </p>
 
-      <!-- EVIDENCE STRIP — the Riley Protocol -->
       <div class="evidence is-2">
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_1).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">RP&nbsp;01</span></div>
-          <figcaption class="ev-cap"><b>The Riley Protocol</b> &mdash; cover page, formatted as a congressional reference document.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-riley1" data-slot-purpose="Riley Protocol cover" class="art-graph" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>The Riley Protocol</b> &mdash; the &ldquo;congressional reference document&rdquo; cover.</figcaption>
         </figure>
-        <figure class="ev">
-          <div class="ev-thumb" style="background-color: var(--bg-surf);">image (50).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">RP&nbsp;02</span></div>
-          <figcaption class="ev-cap"><b>Credibility chart</b> &mdash; the scoring matrix Troy chose, applied, and validated himself.</figcaption>
+        <figure class="ev-fig">
+          <div data-slot="ev-riley2" data-slot-purpose="Riley Protocol chart" class="art-graph" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>Riley Protocol</b> &mdash; the self-built &ldquo;credibility chart&rdquo; with self-chosen scoring.</figcaption>
         </figure>
       </div>
 
@@ -2147,7 +2611,7 @@
       <!-- ================= WHAT HE ACTUALLY DID ================= -->
       <div class="ar-break"><em>What he actually did, given direct definitions.</em></div>
 
-      <h2 id="sec-crimes"><span class="sec-no">&sect; 10 &mdash; The legal framing</span>I am not a lawyer. Whether any of these constitute prosecutable offenses is for the legal system to decide.</h2>
+      <h2 id="sec-crimes"><span class="sec-no">&sect; 10 &mdash; The legal framing</span></h2>
 
       <p>
         The following potential offenses are drawn from the documented record in this article and the screenshots available on request.
@@ -2249,7 +2713,7 @@
       </p>
 
       <!-- ================= CLOSING / COME BACK ================= -->
-      <h2 id="sec-close"><span class="sec-no">&sect; 11 &mdash; The thing I wanted, in the end</span>I wanted him to come back to the light.</h2>
+      <h2 id="sec-close"><span class="sec-no">&sect; 11 &mdash; The thing I wanted, in the end</span></h2>
 
       <p>
         I respected Troy before all of this happened. I complimented one of his articles in the past. I was excited when he responded. I told my roommate, <i>&ldquo;that guy I told you about actually responded to me!&rdquo;</i>. I offered my services as an unpaid, volunteer &ldquo;intern&rdquo;. I was filled with respect for their fight for Sascha. He projected a high-profile visibility I chose not to double-check, and as such, I held him on a pedestal.
@@ -2299,35 +2763,35 @@
         The severity of Troy&rsquo;s conduct lies in his willingness to transition from an ally to an aggressor the moment his narrative was challenged. His documented threats against a journalist, a clinician, a survivor, and even children, reveal <b>a pattern of behavior designed to induce terror</b> &mdash; and does not require credibility to be used as a weapon of fear.
       </p>
 
-      <!-- end-of-article meta -->
-      <div class="ar-end-meta">
-        <div>
-          <b>Filed</b> &middot; 04 May 2026 <br>
-          <b>Author</b> &middot; L. V. Maestri <br>
-          <b>Edition</b> &middot; v.2.0 (merged with appendix)
-        </div>
-        <div>
-          <b>Receipts</b> &middot; available on request <br>
-          <b>Excluded</b> &middot; private Signal chats involving Sascha <br>
-          <b>Next</b> &middot; a dedicated response to <i>The Riley Protocol</i>
-        </div>
-      </div>
-
     </article>
   </div>
 
   <!-- ============================================================
-       CLOSING BAND  —  the final two lines, large.
+       CLOSING BAND  —  the final two lines, large
        ============================================================ -->
   <div class="ar-close">
     <p><em>He should be ashamed.</em></p>
     <p class="is-final"><em>And he should leave.</em></p>
   </div>
 
+  <!-- end-of-article meta — filed/author/edition, below the closing -->
+  <div class="ar-end-meta" style="max-width: var(--art-max); margin: 0 auto; padding: 0 var(--pad-x) 64px;">
+    <div>
+      <b>Filed</b> &middot; 04 May 2026 <br>
+      <b>Author</b> &middot; L. V. Maestri <br>
+      <b>Edition</b> &middot; v.2.0 (merged with appendix)
+    </div>
+    <div>
+      <b>Receipts</b> &middot; available on request <br>
+      <b>Excluded</b> &middot; private Signal chats involving Sascha <br>
+      <b>Next</b> &middot; a dedicated response to <i>The Riley Protocol</i>
+    </div>
+  </div>
+
 </main>
 
 <!-- ============================================================
-     FOOTER  —  must stay identical to home.html.
+     FOOTER  —  matches home.html
      ============================================================ -->
 <footer>
   <div class="foot-inner">
@@ -2371,8 +2835,951 @@
       </div>
     </div>
 
+    <div class="foot-editor">
+      <button class="editor-trigger" type="button" aria-label="Open editor">
+        <span class="editor-trigger-glyph" aria-hidden="true"></span>
+        <span class="editor-trigger-label">Editor</span>
+      </button>
+    </div>
+
   </div>
 </footer>
 
+<!-- ============================== EDITOR POPUP ============================== -->
+<div class="editor-overlay" id="editor-overlay"></div>
+<div class="editor-panel" id="editor-panel" role="dialog" aria-label="Page editor">
+  <div class="editor-header">
+    <div class="editor-header-title">Editor &mdash; Mudlark</div>
+    <button class="editor-close" id="editor-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="editor-body">
+
+    <div class="editor-section">
+      <h3>Palette</h3>
+      <div class="editor-grid-palette" id="editor-palette"></div>
+      <button class="editor-button" id="editor-randomize" type="button">Randomize</button>
+    </div>
+
+    <div class="editor-section">
+      <h3>Sections</h3>
+      <div id="editor-sections"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Slots</h3>
+      <div id="editor-slots"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Fonts</h3>
+      <div id="editor-fonts"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Rhythm</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Vertical</span>
+        <input type="range" min="0.7" max="1.5" step="0.05" value="0.95" class="editor-slider" id="editor-rhythm-v" style="--fill: 31.25%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Padding</span>
+        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p" style="--fill: 73.5%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Headline</span>
+        <input type="range" min="0.85" max="1.2" step="0.01" value="0.85" class="editor-slider" id="editor-rhythm-h" style="--fill: 0%;">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Effects</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Shadow</span>
+        <input type="range" min="0" max="80" step="2" value="40" class="editor-slider" id="editor-shadow-alpha" style="--fill: 100%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Blur</span>
+        <input type="range" min="0" max="80" step="2" value="80" class="editor-slider" id="editor-shadow-blur" style="--fill: 100%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Shine</span>
+        <input type="range" min="0" max="30" step="1" value="16" class="editor-slider" id="editor-shine" style="--fill: 53.3%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Picture</span>
+        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha" style="--fill: 0%;">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Background pattern</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Shape</span>
+        <select class="editor-select" id="editor-bgp-shape">
+          <option value="dot">Dot</option>
+          <option value="ring">Ring</option>
+          <option value="square" selected>Square</option>
+          <option value="cross">Cross</option>
+          <option value="diag">Diagonal</option>
+        </select>
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Colour</span>
+        <select class="editor-select" id="editor-bgp-color"></select>
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Size</span>
+        <input type="range" min="8" max="80" step="2" value="44" class="editor-slider" id="editor-bgp-size" style="--fill: 50%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Alpha</span>
+        <input type="range" min="0" max="60" step="1" value="8" class="editor-slider" id="editor-bgp-alpha" style="--fill: 13.3%;">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Actions</h3>
+      <div class="editor-actions">
+        <button class="editor-button" id="editor-export" type="button">Export HTML</button>
+        <button class="editor-button" id="editor-copy" type="button">Copy CSS</button>
+        <button class="editor-button" id="editor-reset" type="button">Reset</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="application/json" id="builder-state">{
+  "schema": 4,
+  "page": {
+    "id": "mudlark-fallout",
+    "title": "My Fallout With Troy Barile-Simleness",
+    "filename": "My Fallout With Troy Barile-Simleness.html",
+    "siblings": [],
+    "repo": "https://github.com/Mudlark-Media-Network/mudlarkmedia.github.io"
+  },
+  "palette": {
+    "c1":  { "value": "#c0835e", "locked": true, "label": "Highlight & hover" },
+    "c2":  { "value": "#9e5c34", "locked": true, "label": "Lead action" },
+    "c3":  { "value": "#8d6e5b", "locked": true, "label": "Numbers & OpSec" },
+    "c4":  { "value": "#d2b3a1", "locked": true, "label": "Links & nav" },
+    "c5":  { "value": "#875a3f", "locked": true, "label": "Italic emphasis" },
+    "c6":  { "value": "#74665e", "locked": true, "label": "Dates & status" },
+    "c7":  { "value": "#211d1b", "locked": true, "label": "Background" },
+    "c8":  { "value": "#4d4540", "locked": true, "label": "Surface" },
+    "c9":  { "value": "#ece5d2", "locked": true, "label": "Main text" },
+    "c10": { "value": "#9c9583", "locked": true, "label": "Soft text" }
+  },
+  "effects": {
+    "shadowAlpha": 0.8,
+    "shadowBlur": "80px",
+    "shineAlpha": 0.16,
+    "slotAlpha": 0
+  },
+  "bgPattern": {
+    "shape": "square",
+    "color": "c2",
+    "size": 44,
+    "alpha": 0.08
+  },
+  "rhythm": {
+    "padX": "30px",
+    "vertical": 0.95,
+    "headlineScale": 0.85
+  },
+  "fonts": {
+    "display": { "family": "Michroma",    "source": "repo" },
+    "body":    { "family": "Public Sans", "source": "repo" },
+    "sans":    { "family": "Orbitron",    "source": "repo" },
+    "mono":    { "family": "Azeret Mono", "source": "repo" },
+    "available": {
+      "display": [
+        { "name": "Michroma",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf" }] },
+        { "name": "Orbitron",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf" }] },
+        { "name": "Public Sans", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf" }] }
+      ],
+      "body": [
+        { "name": "Public Sans", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf" }] },
+        { "name": "Michroma",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf" }] },
+        { "name": "Orbitron",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf" }] }
+      ],
+      "sans": [
+        { "name": "Orbitron",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf" }] },
+        { "name": "Public Sans", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf" }] }
+      ],
+      "mono": [
+        { "name": "Azeret Mono", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Azeret_Mono/static/AzeretMono-Regular.ttf" }] }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "lead",
+      "label": "Lead",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent":  { "paletteKey": "c2" },
+        "heading": { "paletteKey": "c5" }
+      }
+    }
+  ],
+  "slots": [
+    { "id": "lead-figure",   "purpose": "Lead figure",       "art": "art-redact" },
+    { "id": "ev-kickstarter","purpose": "Kickstarter",       "art": "art-blueprint" },
+    { "id": "ev-k2gives",    "purpose": "K2 Gives",          "art": "art-blueprint" },
+    { "id": "ev-grifter",    "purpose": "Grifter Nation",    "art": "art-blueprint" },
+    { "id": "ev-army",       "purpose": "Amalgamated Army",  "art": "art-blueprint" },
+    { "id": "ev-linkedin1",  "purpose": "LinkedIn profile",  "art": "art-redact" },
+    { "id": "ev-linkedin2",  "purpose": "LinkedIn education","art": "art-redact" },
+    { "id": "ev-pasco",      "purpose": "Pasco County",      "art": "art-redact" },
+    { "id": "ev-jackson",    "purpose": "Jackson County",    "art": "art-redact" },
+    { "id": "ev-duplex",     "purpose": "Duplex front",      "art": "art-blueprint" },
+    { "id": "ev-grocery",    "purpose": "Grocery lane",      "art": "art-blueprint" },
+    { "id": "ev-riley1",     "purpose": "Riley Protocol cover","art": "art-graph" },
+    { "id": "ev-riley2",     "purpose": "Riley Protocol chart","art": "art-graph" }
+  ]
+}</script>
+
+<script>
+(function () {
+  const FONT_ROLES = [
+    { key: 'display', label: 'Display', cssVar: '--serif-d', fallback: 'Georgia, serif' },
+    { key: 'body',    label: 'Body',    cssVar: '--serif-b', fallback: 'Georgia, serif' },
+    { key: 'sans',    label: 'Sans',    cssVar: '--sans',    fallback: 'system-ui, sans-serif' },
+    { key: 'mono',    label: 'Mono',    cssVar: '--mono',    fallback: 'ui-monospace, monospace' }
+  ];
+
+  const SLOT_PRESETS = [
+    { label: 'Square',            value: '1/1',   type: 'ratio'  },
+    { label: 'Photo (4:3)',       value: '4/3',   type: 'ratio'  },
+    { label: 'Widescreen (16:9)', value: '16/9',  type: 'ratio'  },
+    { label: 'Cinema (21:9)',     value: '21/9',  type: 'ratio'  },
+    { label: 'Tile (5:4)',        value: '5/4',   type: 'ratio'  },
+    { label: 'Portrait (3:4)',    value: '3/4',   type: 'ratio'  },
+    { label: 'Tower (2:3)',       value: '2/3',   type: 'ratio'  },
+    { label: 'Tall (9:16)',       value: '9/16',  type: 'ratio'  },
+    { label: 'Banner (5:1)',      value: '5/1',   type: 'ratio'  },
+    { label: 'Hero (3:1)',        value: '3/1',   type: 'ratio'  },
+    { label: 'Short (120px)',     value: '120px', type: 'height' },
+    { label: 'Card (240px)',      value: '240px', type: 'height' },
+    { label: 'Tall card (480px)', value: '480px', type: 'height' }
+  ];
+
+  const ARTWORK_PRESETS = [
+    { value: 'art-ripple',       label: 'Ripples'      },
+    { value: 'art-bursts',       label: 'Bursts'       },
+    { value: 'art-rings',        label: 'LP rings'     },
+    { value: 'art-stripes-warm', label: 'Warm stripes' },
+    { value: 'art-radial',       label: 'Soft glow'    },
+    { value: 'art-blocks',       label: 'Color blocks' },
+    { value: 'art-graph',        label: 'Graph paper'  },
+    { value: 'art-blueprint',    label: 'Blueprint'    },
+    { value: 'art-redact',       label: 'Redaction'    },
+    { value: 'art-confetti',     label: 'Confetti'     },
+    { value: 'art-bands',        label: 'Color bands'  },
+    { value: 'art-static',       label: 'Soft static'  },
+    { value: 'art-topo',         label: 'Topo lines'   },
+    { value: 'art-halftone',     label: 'Halftone'     },
+    { value: 'art-dotgrid',      label: 'Dot grid'     },
+    { value: 'art-hatch',        label: 'Crosshatch'   }
+  ];
+
+  const SECTION_SPOT_VARS = { accent: '--sec', heading: '--sec-heading' };
+
+  const PATTERN_SHAPES = {
+    dot:    (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="0.9" fill="currentColor"/>`,
+    ring:   (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="2" fill="none" stroke="currentColor" stroke-width="0.6"/>`,
+    square: (cx, cy) => `<rect x="${cx-1.5}" y="${cy-1.5}" width="3" height="3" fill="currentColor"/>`,
+    cross:  (cx, cy) => `<path d="M${cx-2.2},${cy} L${cx+2.2},${cy} M${cx},${cy-2.2} L${cx},${cy+2.2}" stroke="currentColor" stroke-width="0.6" fill="none"/>`,
+    diag:   (cx, cy) => `<path d="M${cx-3},${cy-3} L${cx+3},${cy+3}" stroke="currentColor" stroke-width="0.6" fill="none"/>`
+  };
+
+  const STATE_EL = document.getElementById('builder-state');
+  let state, DEFAULTS;
+  try {
+    state = JSON.parse(STATE_EL.textContent);
+    DEFAULTS = JSON.parse(JSON.stringify(state));
+  } catch (e) {
+    console.error('builder-state JSON is invalid:', e);
+    return;
+  }
+
+  function normHex(v) {
+    if (!v) return null;
+    v = v.trim().replace(/^#/, '');
+    if (/^[0-9a-f]{3}$/i.test(v)) v = v.split('').map(c => c + c).join('');
+    if (/^[0-9a-f]{6}$/i.test(v)) return '#' + v.toLowerCase();
+    return null;
+  }
+  function randomHex() {
+    return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+  }
+  function paletteCssVar(key) { return '--c-' + key.slice(1); }
+  function paletteVarRef(key) { return 'var(' + paletteCssVar(key) + ')'; }
+  function updateSliderFill(slider) {
+    const min = parseFloat(slider.min);
+    const max = parseFloat(slider.max);
+    const pct = ((parseFloat(slider.value) - min) / (max - min)) * 100;
+    slider.style.setProperty('--fill', pct + '%');
+  }
+
+  function makeLockBtn(isLocked, onToggle) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'editor-lock' + (isLocked ? ' is-locked' : '');
+    btn.title = 'Lock this color (skip during Randomize)';
+    btn.setAttribute('aria-label', 'Lock');
+    btn.addEventListener('click', () => {
+      const next = !btn.classList.contains('is-locked');
+      btn.classList.toggle('is-locked', next);
+      onToggle(next);
+    });
+    return btn;
+  }
+
+  function paletteOptionList() {
+    return Object.entries(state.palette).map(([key, slot]) => ({
+      key, label: slot.label || key, value: slot.value
+    }));
+  }
+
+  function buildPaletteInputs() {
+    const container = document.getElementById('editor-palette');
+    container.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const key = 'c' + i;
+      const slot = state.palette[key];
+      const cell = document.createElement('div');
+      cell.className = 'editor-palette-cell';
+
+      const swatch = document.createElement('div');
+      swatch.className = 'swatch';
+      cell.appendChild(swatch);
+
+      if (!slot) { cell.classList.add('is-empty'); container.appendChild(cell); continue; }
+
+      swatch.style.setProperty('--swatch', slot.value);
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = slot.label || key;
+      cell.appendChild(label);
+
+      const controls = document.createElement('div');
+      controls.className = 'controls';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'editor-input';
+      input.value = slot.value;
+      input.title = key;
+      input.addEventListener('input', () => {
+        const h = normHex(input.value);
+        if (h) {
+          applyPaletteColor(key, h);
+          swatch.style.setProperty('--swatch', h);
+          refreshSectionSpotSwatches();
+        }
+      });
+      input.addEventListener('blur', () => { input.value = slot.value; });
+      controls.appendChild(input);
+
+      controls.appendChild(makeLockBtn(slot.locked, locked => { slot.locked = locked; }));
+      cell.appendChild(controls);
+      container.appendChild(cell);
+    }
+  }
+
+  function buildSectionsPanel() {
+    const wrap = document.getElementById('editor-sections');
+    wrap.innerHTML = '';
+    const opts = paletteOptionList();
+    state.sections.forEach(sec => {
+      const group = document.createElement('div');
+      group.className = 'editor-section-group';
+      const title = document.createElement('div');
+      title.className = 'editor-section-group-title';
+      title.textContent = sec.label;
+      group.appendChild(title);
+
+      Object.entries(sec.colors).forEach(([spotKey, spot]) => {
+        const row = document.createElement('div');
+        row.className = 'editor-section-spot';
+        const swatch = document.createElement('div');
+        swatch.className = 'swatch';
+        swatch.dataset.sectionId = sec.id;
+        swatch.dataset.spotKey = spotKey;
+        const slot = state.palette[spot.paletteKey];
+        swatch.style.setProperty('--swatch', slot ? slot.value : '#000');
+        row.appendChild(swatch);
+
+        const lbl = document.createElement('span');
+        lbl.className = 'spot-label';
+        lbl.textContent = spotKey;
+        row.appendChild(lbl);
+
+        const sel = document.createElement('select');
+        sel.className = 'editor-select';
+        opts.forEach(o => {
+          const opt = document.createElement('option');
+          opt.value = o.key;
+          opt.textContent = o.label;
+          if (o.key === spot.paletteKey) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', () => {
+          applySectionSpot(sec, spotKey, sel.value);
+          const slot = state.palette[sel.value];
+          swatch.style.setProperty('--swatch', slot ? slot.value : '#000');
+        });
+        row.appendChild(sel);
+
+        group.appendChild(row);
+      });
+
+      group.appendChild(makeAlphaRow('Background', sec.bgAlpha, 40, v => applySectionBgAlpha(sec, v)));
+      group.appendChild(makeAlphaRow('Box',        sec.boxAlpha, 60, v => applySectionBoxAlpha(sec, v)));
+      wrap.appendChild(group);
+    });
+  }
+
+  function makeAlphaRow(label, initialValue, max, onChange) {
+    const row = document.createElement('div');
+    row.className = 'editor-label-row';
+    const lbl = document.createElement('span');
+    lbl.className = 'editor-label';
+    lbl.textContent = label;
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = '0'; slider.max = String(max); slider.step = '1';
+    slider.value = Math.round((initialValue || 0) * 100);
+    slider.className = 'editor-slider';
+    slider.addEventListener('input', () => {
+      onChange(parseFloat(slider.value) / 100);
+      updateSliderFill(slider);
+    });
+    updateSliderFill(slider);
+    row.appendChild(lbl); row.appendChild(slider);
+    return row;
+  }
+
+  function refreshSectionSpotSwatches() {
+    document.querySelectorAll('#editor-sections .swatch').forEach(sw => {
+      const sec = state.sections.find(s => s.id === sw.dataset.sectionId);
+      if (!sec) return;
+      const spot = sec.colors[sw.dataset.spotKey];
+      if (!spot) return;
+      const slot = state.palette[spot.paletteKey];
+      sw.style.setProperty('--swatch', slot ? slot.value : '#000');
+    });
+  }
+
+  function buildSlots() {
+    const wrap = document.getElementById('editor-slots');
+    wrap.innerHTML = '';
+    state.slots.forEach(slot => {
+      const group = document.createElement('div');
+      group.className = 'editor-section-group';
+      const title = document.createElement('div');
+      title.className = 'editor-section-group-title';
+      title.textContent = slot.purpose;
+      group.appendChild(title);
+
+      const artRow = document.createElement('div');
+      artRow.className = 'editor-label-row';
+      const artLbl = document.createElement('span');
+      artLbl.className = 'editor-label'; artLbl.textContent = 'Artwork';
+      const artSel = document.createElement('select');
+      artSel.className = 'editor-select';
+      ARTWORK_PRESETS.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.value; opt.textContent = p.label;
+        if (p.value === slot.art) opt.selected = true;
+        artSel.appendChild(opt);
+      });
+      artSel.addEventListener('change', () => applySlotArt(slot, artSel.value));
+      artRow.appendChild(artLbl); artRow.appendChild(artSel);
+      group.appendChild(artRow);
+
+      const sizeRow = document.createElement('div');
+      sizeRow.className = 'editor-label-row';
+      const sizeLbl = document.createElement('span');
+      sizeLbl.className = 'editor-label'; sizeLbl.textContent = 'Size';
+      const sizeSel = document.createElement('select');
+      sizeSel.className = 'editor-select';
+      const el = document.querySelector(`[data-slot="${slot.id}"]`);
+      const currentAR = el ? el.style.aspectRatio : '';
+      const currentMH = el ? el.style.minHeight : '';
+      SLOT_PRESETS.forEach((preset, idx) => {
+        const opt = document.createElement('option');
+        opt.value = String(idx); opt.textContent = preset.label;
+        if (preset.type === 'ratio'  && preset.value === currentAR) opt.selected = true;
+        if (preset.type === 'height' && preset.value === currentMH) opt.selected = true;
+        sizeSel.appendChild(opt);
+      });
+      sizeSel.addEventListener('change', () => {
+        applySlotPreset(slot.id, SLOT_PRESETS[parseInt(sizeSel.value, 10)]);
+      });
+      sizeRow.appendChild(sizeLbl); sizeRow.appendChild(sizeSel);
+      group.appendChild(sizeRow);
+
+      wrap.appendChild(group);
+    });
+  }
+
+  function applySlotArt(slot, artClass) {
+    const el = document.querySelector(`[data-slot="${slot.id}"]`);
+    if (!el) return;
+    Array.from(el.classList).forEach(c => { if (c.startsWith('art-')) el.classList.remove(c); });
+    el.classList.add(artClass);
+    slot.art = artClass;
+  }
+
+  function buildFontPickers() {
+    const wrap = document.getElementById('editor-fonts');
+    wrap.innerHTML = '';
+    FONT_ROLES.forEach(role => {
+      const row = document.createElement('div');
+      row.className = 'editor-label-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'editor-label'; lbl.textContent = role.label;
+      const sel = document.createElement('select');
+      sel.className = 'editor-select'; sel.dataset.role = role.key;
+      const current = state.fonts[role.key].family;
+      const list = (state.fonts.available && state.fonts.available[role.key]) || [];
+      if (!list.find(f => f.name === current)) {
+        const o = document.createElement('option');
+        o.value = current; o.textContent = current; o.selected = true;
+        sel.appendChild(o);
+      }
+      list.forEach(f => {
+        const o = document.createElement('option');
+        o.value = f.name; o.textContent = f.name;
+        if (f.name === current) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', () => {
+        const entry = list.find(f => f.name === sel.value);
+        if (entry) applyFont(role, entry);
+      });
+      row.appendChild(lbl); row.appendChild(sel);
+      wrap.appendChild(row);
+    });
+  }
+
+  function buildBgPatternColorOptions() {
+    const sel = document.getElementById('editor-bgp-color');
+    sel.innerHTML = '';
+    paletteOptionList().forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.key; opt.textContent = o.label;
+      if (o.key === state.bgPattern.color) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function applyPaletteColor(key, hex) {
+    document.documentElement.style.setProperty(paletteCssVar(key), hex);
+    state.palette[key].value = hex;
+  }
+
+  function applySectionSpot(sec, spotKey, paletteKey) {
+    sec.colors[spotKey].paletteKey = paletteKey;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty(SECTION_SPOT_VARS[spotKey], paletteVarRef(paletteKey));
+  }
+
+  function applySectionBgAlpha(sec, alpha) {
+    sec.bgAlpha = alpha;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty('--sec-bg-alpha', alpha);
+  }
+
+  function applySectionBoxAlpha(sec, alpha) {
+    sec.boxAlpha = alpha;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty('--sec-box-alpha', alpha);
+  }
+
+  function applySlotPreset(id, preset) {
+    const el = document.querySelector(`[data-slot="${id}"]`);
+    if (!el) return;
+    if (preset.type === 'ratio') { el.style.aspectRatio = preset.value; el.style.minHeight = ''; }
+    else { el.style.minHeight = preset.value; el.style.aspectRatio = ''; }
+  }
+
+  function applyFont(role, entry) {
+    let styleEl = document.getElementById('editor-font-' + role.key);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'editor-font-' + role.key;
+      document.head.appendChild(styleEl);
+    }
+    const faces = (entry.files || []).map(f => {
+      const fmt = /\.otf$/i.test(f.url) ? 'opentype' : 'truetype';
+      return `@font-face { font-family: '${entry.name}'; src: url('${f.url}') format('${fmt}'); font-weight: ${f.weight || 400}; font-style: ${f.style || 'normal'}; font-display: swap; }`;
+    }).join('\n');
+    styleEl.textContent = faces;
+    document.documentElement.style.setProperty(role.cssVar, `'${entry.name}', ${role.fallback}`);
+    state.fonts[role.key] = { family: entry.name, source: 'repo' };
+  }
+
+  async function loadFontsFromRepo() {
+    const treeUrl = 'https://api.github.com/repos/Mudlark-Media-Network/mudlarkmedia.github.io/git/trees/main?recursive=1';
+    const rawBase = 'https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/';
+    const prefix  = 'Website/Style Guide/Fonts/';
+    try {
+      const res = await fetch(treeUrl, { headers: { 'Accept': 'application/vnd.github+json' } });
+      if (!res.ok) throw new Error('GitHub API ' + res.status);
+      const data = await res.json();
+      if (!data.tree) throw new Error('No tree in response');
+
+      const families = new Map();
+      data.tree.forEach(item => {
+        if (item.type !== 'blob') return;
+        if (!item.path.startsWith(prefix)) return;
+        if (!/\.(ttf|otf)$/i.test(item.path)) return;
+        const rel = item.path.slice(prefix.length);
+        const parts = rel.split('/');
+        if (parts.length < 2) return;
+        const folder = parts[0];
+        const fileName = parts.slice(1).join('/');
+        const url = rawBase + encodeURI(item.path);
+        if (!families.has(folder)) families.set(folder, []);
+        families.get(folder).push({ name: fileName, url });
+      });
+
+      const entries = [];
+      families.forEach((files, folder) => {
+        const variable       = files.find(f => /VariableFont/i.test(f.name) && !/Italic/i.test(f.name));
+        const variableItalic = files.find(f => /VariableFont/i.test(f.name) &&  /Italic/i.test(f.name));
+        const regular        = files.find(f => /Regular\.(ttf|otf)$/i.test(f.name));
+        const italic         = files.find(f => /-Italic\.(ttf|otf)$/i.test(f.name));
+        const faces = [];
+        if (variable)             faces.push({ weight: '100 1000', style: 'normal', url: variable.url });
+        else if (regular)         faces.push({ weight: '400',      style: 'normal', url: regular.url });
+        else if (files[0])        faces.push({ weight: '400',      style: 'normal', url: files[0].url });
+        if (variableItalic)       faces.push({ weight: '100 1000', style: 'italic', url: variableItalic.url });
+        else if (italic)          faces.push({ weight: '400',      style: 'italic', url: italic.url });
+        if (faces.length) entries.push({ name: folder.replace(/_/g, ' '), files: faces });
+      });
+
+      if (!entries.length) throw new Error('No font files matched in tree');
+      entries.sort((a, b) => a.name.localeCompare(b.name));
+
+      const isMono = f => /\bmono\b/i.test(f.name);
+      const monos  = entries.filter(isMono);
+      const others = entries.filter(f => !isMono(f));
+      state.fonts.available = {
+        display: others,
+        body:    others,
+        sans:    others,
+        mono:    monos.length ? monos : entries
+      };
+      buildFontPickers();
+    } catch (err) {
+      console.warn('Could not load fonts from repo, keeping bundled list:', err && err.message);
+    }
+  }
+
+  function applyBgPatternShape(shape) {
+    state.bgPattern.shape = shape;
+    const tile = document.querySelector('#bg-pattern-tile');
+    const size = parseFloat(tile.getAttribute('width')) || 24;
+    const inner = PATTERN_SHAPES[shape] || PATTERN_SHAPES.dot;
+    document.querySelector('#bg-pattern-shape').innerHTML = inner(size / 2, size / 2);
+  }
+  function applyBgPatternColor(paletteKey) {
+    state.bgPattern.color = paletteKey;
+    document.documentElement.style.setProperty('--bg-pattern-color', paletteVarRef(paletteKey));
+  }
+  function applyBgPatternSize(size) {
+    state.bgPattern.size = size;
+    const tile = document.querySelector('#bg-pattern-tile');
+    tile.setAttribute('width', size); tile.setAttribute('height', size);
+    applyBgPatternShape(state.bgPattern.shape);
+  }
+  function applyBgPatternAlpha(alpha) {
+    state.bgPattern.alpha = alpha;
+    document.documentElement.style.setProperty('--bg-pattern-alpha', alpha);
+  }
+
+  function bindRhythm() {
+    const v = document.getElementById('editor-rhythm-v');
+    const p = document.getElementById('editor-rhythm-p');
+    const h = document.getElementById('editor-rhythm-h');
+    v.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--rhythm', v.value);
+      state.rhythm.vertical = parseFloat(v.value);
+      updateSliderFill(v);
+    });
+    p.addEventListener('input', () => {
+      const flipped = (parseFloat(p.min) + parseFloat(p.max)) - parseFloat(p.value);
+      document.documentElement.style.setProperty('--pad-x', flipped + 'px');
+      state.rhythm.padX = flipped + 'px';
+      updateSliderFill(p);
+    });
+    h.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--headline-scale', h.value);
+      state.rhythm.headlineScale = parseFloat(h.value);
+      updateSliderFill(h);
+    });
+    [v, p, h].forEach(updateSliderFill);
+  }
+
+  function bindEffects() {
+    const sa = document.getElementById('editor-shadow-alpha');
+    const sb = document.getElementById('editor-shadow-blur');
+    const sh = document.getElementById('editor-shine');
+    const pa = document.getElementById('editor-slot-alpha');
+    sa.addEventListener('input', () => {
+      const v = parseFloat(sa.value) / 100;
+      document.documentElement.style.setProperty('--shadow-alpha', v);
+      state.effects.shadowAlpha = v;
+      updateSliderFill(sa);
+    });
+    sb.addEventListener('input', () => {
+      const v = sb.value + 'px';
+      document.documentElement.style.setProperty('--shadow-blur', v);
+      state.effects.shadowBlur = v;
+      updateSliderFill(sb);
+    });
+    sh.addEventListener('input', () => {
+      const v = parseFloat(sh.value) / 100;
+      document.documentElement.style.setProperty('--shine-alpha', v);
+      state.effects.shineAlpha = v;
+      updateSliderFill(sh);
+    });
+    pa.addEventListener('input', () => {
+      const v = parseFloat(pa.value) / 100;
+      document.documentElement.style.setProperty('--slot-alpha', v);
+      state.effects.slotAlpha = v;
+      updateSliderFill(pa);
+    });
+    [sa, sb, sh, pa].forEach(updateSliderFill);
+  }
+
+  function bindBgPattern() {
+    const sh = document.getElementById('editor-bgp-shape');
+    const co = document.getElementById('editor-bgp-color');
+    const sz = document.getElementById('editor-bgp-size');
+    const al = document.getElementById('editor-bgp-alpha');
+    sh.value = state.bgPattern.shape;
+    sz.value = state.bgPattern.size;
+    al.value = Math.round(state.bgPattern.alpha * 100);
+    sh.addEventListener('change', () => applyBgPatternShape(sh.value));
+    co.addEventListener('change', () => applyBgPatternColor(co.value));
+    sz.addEventListener('input',  () => { applyBgPatternSize(parseInt(sz.value, 10)); updateSliderFill(sz); });
+    al.addEventListener('input',  () => { applyBgPatternAlpha(parseFloat(al.value) / 100); updateSliderFill(al); });
+    updateSliderFill(sz); updateSliderFill(al);
+    applyBgPatternShape(state.bgPattern.shape);
+    applyBgPatternColor(state.bgPattern.color);
+    applyBgPatternSize(state.bgPattern.size);
+    applyBgPatternAlpha(state.bgPattern.alpha);
+  }
+
+  function randomizeAll() {
+    Object.entries(state.palette).forEach(([key, slot]) => {
+      if (!slot.locked) applyPaletteColor(key, randomHex());
+    });
+    buildPaletteInputs();
+    refreshSectionSpotSwatches();
+  }
+
+  function exportHtml() {
+    const doc = document.documentElement.cloneNode(true);
+    doc.querySelector('#editor-overlay')?.classList.remove('open');
+    doc.querySelector('#editor-panel')?.classList.remove('open');
+    const styleBlock = doc.querySelector('style');
+    if (styleBlock) {
+      let css = styleBlock.textContent;
+      Object.entries(state.palette).forEach(([key, slot]) => {
+        const cVar = paletteCssVar(key);
+        css = css.replace(new RegExp('(' + cVar + ':\\s*)#[0-9a-fA-F]{3,6}', 'g'), '$1' + slot.value);
+      });
+      styleBlock.textContent = css;
+    }
+    state.sections.forEach(sec => {
+      const el = doc.querySelector(`[data-section="${sec.id}"]`);
+      if (!el) return;
+      Object.entries(sec.colors).forEach(([spotKey, spot]) => {
+        el.style.setProperty(SECTION_SPOT_VARS[spotKey], paletteVarRef(spot.paletteKey));
+      });
+      el.style.setProperty('--sec-bg-alpha',  sec.bgAlpha);
+      el.style.setProperty('--sec-box-alpha', sec.boxAlpha);
+    });
+    const stateScript = doc.querySelector('#builder-state');
+    if (stateScript) stateScript.textContent = JSON.stringify(state, null, 2);
+    const blob = new Blob(['<!DOCTYPE html>\n' + doc.outerHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = state.page.filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function copyCss() {
+    const lines = [':root {'];
+    Object.entries(state.palette).forEach(([k, slot]) => { lines.push(`  ${paletteCssVar(k)}: ${slot.value};`); });
+    lines.push(`  --pad-x: ${state.rhythm.padX};`);
+    lines.push(`  --rhythm: ${state.rhythm.vertical};`);
+    lines.push(`  --headline-scale: ${state.rhythm.headlineScale};`);
+    lines.push(`  --shadow-alpha: ${state.effects.shadowAlpha};`);
+    lines.push(`  --shadow-blur: ${state.effects.shadowBlur};`);
+    lines.push(`  --shine-alpha: ${state.effects.shineAlpha};`);
+    lines.push(`  --slot-alpha: ${state.effects.slotAlpha};`);
+    lines.push(`  --bg-pattern-color: ${paletteVarRef(state.bgPattern.color)};`);
+    lines.push(`  --bg-pattern-alpha: ${state.bgPattern.alpha};`);
+    lines.push('}');
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+  }
+
+  function resetAll() {
+    Object.entries(DEFAULTS.palette).forEach(([k, slot]) => {
+      state.palette[k] = JSON.parse(JSON.stringify(slot));
+      document.documentElement.style.setProperty(paletteCssVar(k), slot.value);
+    });
+    state.effects = JSON.parse(JSON.stringify(DEFAULTS.effects));
+    document.documentElement.style.setProperty('--shadow-alpha', state.effects.shadowAlpha);
+    document.documentElement.style.setProperty('--shadow-blur',  state.effects.shadowBlur);
+    document.documentElement.style.setProperty('--shine-alpha',  state.effects.shineAlpha);
+    document.documentElement.style.setProperty('--slot-alpha',   state.effects.slotAlpha);
+    document.getElementById('editor-shadow-alpha').value = Math.round(state.effects.shadowAlpha * 100);
+    document.getElementById('editor-shadow-blur').value  = parseFloat(state.effects.shadowBlur);
+    document.getElementById('editor-shine').value        = Math.round(state.effects.shineAlpha * 100);
+    document.getElementById('editor-slot-alpha').value   = Math.round(state.effects.slotAlpha * 100);
+    state.bgPattern = JSON.parse(JSON.stringify(DEFAULTS.bgPattern));
+    applyBgPatternShape(state.bgPattern.shape);
+    applyBgPatternColor(state.bgPattern.color);
+    applyBgPatternSize(state.bgPattern.size);
+    applyBgPatternAlpha(state.bgPattern.alpha);
+    document.getElementById('editor-bgp-shape').value = state.bgPattern.shape;
+    document.getElementById('editor-bgp-size').value  = state.bgPattern.size;
+    document.getElementById('editor-bgp-alpha').value = Math.round(state.bgPattern.alpha * 100);
+    Object.assign(state.rhythm, DEFAULTS.rhythm);
+    document.documentElement.style.setProperty('--rhythm', state.rhythm.vertical);
+    document.documentElement.style.setProperty('--pad-x', state.rhythm.padX);
+    document.documentElement.style.setProperty('--headline-scale', state.rhythm.headlineScale);
+    state.sections.forEach((sec, i) => {
+      const defSec = DEFAULTS.sections[i];
+      Object.entries(defSec.colors).forEach(([spotKey, defSpot]) => {
+        sec.colors[spotKey] = { paletteKey: defSpot.paletteKey };
+        applySectionSpot(sec, spotKey, defSpot.paletteKey);
+      });
+      applySectionBgAlpha(sec,  defSec.bgAlpha  || 0);
+      applySectionBoxAlpha(sec, defSec.boxAlpha || 0);
+    });
+    state.fonts = JSON.parse(JSON.stringify(DEFAULTS.fonts));
+    FONT_ROLES.forEach(role => {
+      document.documentElement.style.setProperty(role.cssVar, `'${state.fonts[role.key].family}', ${role.fallback}`);
+      const injected = document.getElementById('editor-font-' + role.key);
+      if (injected) injected.remove();
+    });
+    state.slots.forEach((slot, i) => {
+      const el = document.querySelector(`[data-slot="${slot.id}"]`);
+      if (el) { el.style.aspectRatio = ''; el.style.minHeight = ''; }
+      const defaultArt = DEFAULTS.slots[i] && DEFAULTS.slots[i].art;
+      if (defaultArt && el) {
+        Array.from(el.classList).forEach(c => { if (c.startsWith('art-')) el.classList.remove(c); });
+        el.classList.add(defaultArt);
+        slot.art = defaultArt;
+      }
+    });
+    buildPaletteInputs();
+    buildSectionsPanel();
+    buildSlots();
+    buildFontPickers();
+    buildBgPatternColorOptions();
+    document.querySelectorAll('.editor-slider').forEach(updateSliderFill);
+  }
+
+  const trigger  = document.querySelector('.editor-trigger');
+  const panel    = document.getElementById('editor-panel');
+  const overlay  = document.getElementById('editor-overlay');
+  const closeBtn = document.getElementById('editor-close');
+
+  function openPanel()  { panel.classList.add('open');    overlay.classList.add('open'); }
+  function closePanel() { panel.classList.remove('open'); overlay.classList.remove('open'); }
+
+  trigger.addEventListener('click', openPanel);
+  closeBtn.addEventListener('click', closePanel);
+  overlay.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('.editor-trigger')) openPanel();
+  });
+
+  buildPaletteInputs();
+  buildSectionsPanel();
+  buildSlots();
+  buildFontPickers();
+  buildBgPatternColorOptions();
+  bindRhythm();
+  bindEffects();
+  bindBgPattern();
+
+  document.getElementById('editor-randomize').addEventListener('click', randomizeAll);
+  document.getElementById('editor-export').addEventListener('click', exportHtml);
+  document.getElementById('editor-copy').addEventListener('click', copyCss);
+  document.getElementById('editor-reset').addEventListener('click', resetAll);
+
+  loadFontsFromRepo();
+})();
+</script>
+
+<script>
+(function () {
+  let activeClone = null;
+  let activeOriginal = null;
+  const MAX_WIDTH = 680;
+  const MAX_HEIGHT = 520;
+
+  function destroyClone() {
+    if (!activeClone) return;
+    activeClone.remove();
+    if (activeOriginal) activeOriginal.style.visibility = '';
+    activeClone = null;
+    activeOriginal = null;
+  }
+
+  document.addEventListener('mouseover', (e) => {
+    const img = e.target;
+    if (!(img instanceof HTMLImageElement)) return;
+    if (!img.classList.contains('tl-img')) return;
+    if (activeClone) return;
+
+    const rect = img.getBoundingClientRect();
+    const clone = img.cloneNode();
+    clone.className = 'tl-img-clone';
+    clone.style.left = rect.left + 'px';
+    clone.style.top = rect.top + 'px';
+    clone.style.width = rect.width + 'px';
+    clone.style.height = rect.height + 'px';
+    document.body.appendChild(clone);
+
+    img.style.visibility = 'hidden';
+    activeClone = clone;
+    activeOriginal = img;
+
+    requestAnimationFrame(() => {
+      const scaledW = rect.width * 3;
+      const scaledH = rect.height * 3;
+      const scale = Math.min(3, MAX_WIDTH / rect.width, MAX_HEIGHT / rect.height);
+      clone.style.transform = `scale(${scale})`;
+      clone.classList.add('is-open');
+    });
+
+    clone.addEventListener('mouseleave', destroyClone);
+  });
+
+  window.addEventListener('scroll', destroyClone, { passive: true });
+  window.addEventListener('resize', destroyClone);
+})();
+</script>
+
 </body>
 </html>
+</content>
+</invoke>
