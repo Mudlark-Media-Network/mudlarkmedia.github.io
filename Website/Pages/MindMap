@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aegis NetShield // Topology Canvas</title>
+  <style>
+    :root {
+      /* Deeply refined core background */
+      --bg-color: #0d0b0a;
+      --grid-color: rgba(224, 130, 78, 0.03);
+      --grid-accent: rgba(224, 130, 78, 0.07);
+      
+      /* Theme Surface Palette (Enriched & Layered) */
+      --surface-bg: rgba(36, 31, 28, 0.45);
+      --surface-bg-hover: rgba(48, 41, 37, 0.65);
+      --surface-border: rgba(133, 115, 105, 0.25);
+      --surface-border-focus: rgba(255, 123, 0, 0.45);
+      
+      --text-main: #f4efe2;
+      --text-muted: #9c9282;
+      --text-dim: #615a4f;
+      
+      /* Accent Colors (Enriched Saturation Orange/Yellow) */
+      --accent-orange: #ff7b00;      /* Sharp focal points */
+      --accent-lead: #b56230;        /* Structured brand orange */
+      --accent-highlight: #cca085;   /* Secondary active hardware */
+      --alert-warn: #cf3c3c;
+      --alert-safe: #5e9175;
+      
+      /* Smooth global animation physics */
+      --cb-physics: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      font-family: 'SF Mono', 'Fira Code', Monaco, Consolas, monospace;
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      letter-spacing: -0.2px;
+    }
+
+    /* CUSTOM INTEGRATED SCROLLBAR MECHANICS (WEBKIT) */
+    .card-front::-webkit-scrollbar,
+    .card-back::-webkit-scrollbar,
+    .modal-content::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    .card-front::-webkit-scrollbar-track,
+    .card-back::-webkit-scrollbar-track,
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(97, 90, 79, 0.1); 
+      border-radius: 2px;
+    }
+
+    .card-front::-webkit-scrollbar-thumb,
+    .card-back::-webkit-scrollbar-thumb,
+    .modal-content::-webkit-scrollbar-thumb {
+      background: var(--surface-border);
+      border-radius: 2px;
+      transition: background 0.2s var(--cb-physics);
+    }
+
+    .node:hover .card-front::-webkit-scrollbar-thumb {
+      background: var(--accent-lead);
+    }
+
+    .card-back::-webkit-scrollbar-thumb {
+      background: rgba(204, 160, 133, 0.3); 
+    }
+
+    /* FIREFOX SCROLLBAR COMPATIBILITY STRUCTS */
+    .modal-content {
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface-border) rgba(97, 90, 79, 0.1);
+    }
+    .card-front, .card-back {
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface-border) rgba(97, 90, 79, 0.1);
+    }
+
+    /* Controls Toolbar - Floating Glass Dock */
+    #toolbar {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      background: rgba(18, 15, 13, 0.7);
+      backdrop-filter: blur(24px) saturate(120%);
+      -webkit-backdrop-filter: blur(24px) saturate(120%);
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 
+        inset 0 1px 1px rgba(255,255,255,0.05),
+        0 24px 48px rgba(0,0,0,0.8);
+    }
+
+    button {
+      background: rgba(181, 98, 48, 0.08);
+      color: var(--text-main);
+      border: 1px solid rgba(181, 98, 48, 0.3);
+      padding: 8px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.7rem;
+      transition: all 0.25s var(--cb-physics);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    button:hover {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #050404;
+      box-shadow: 0 0 20px rgba(255, 123, 0, 0.4);
+      transform: translateY(-1px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* Specialized Danger Action Styling */
+    button.btn-danger {
+      background: rgba(207, 60, 60, 0.08);
+      color: #ff9494;
+      border: 1px solid rgba(207, 60, 60, 0.4);
+    }
+
+    button.btn-danger:hover {
+      background: var(--alert-warn);
+      border-color: var(--alert-warn);
+      color: #050404;
+      box-shadow: 0 0 20px rgba(207, 60, 60, 0.4);
+    }
+
+    /* Pan/Zoom Viewport Canvas Matrix */
+    #viewport {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      cursor: default;
+      background-image: 
+        linear-gradient(to right, var(--grid-accent) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-accent) 1px, transparent 1px),
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+      background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+      background-position: 0 0;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+      pointer-events: none;
+    }
+
+    .node {
+      position: absolute;
+      perspective: 1200px;
+      cursor: grab;
+      z-index: 10;
+      pointer-events: auto;
+      transition: transform 0.3s var(--cb-physics), height 0.4s var(--cb-physics);
+    }
+    .node:active {
+      cursor: grabbing;
+    }
+
+    /* Premium Flip Architecture & Card Aesthetics */
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.15, 0.85, 0.15, 1);
+    }
+
+    .node.flipped .card {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: auto;
+      min-height: 100%;
+      backface-visibility: hidden;
+      padding: 18px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface-bg);
+      box-shadow: 
+        inset 0 1px 0px rgba(255, 255, 255, 0.05),
+        0 16px 36px rgba(0, 0, 0, 0.5);
+      transition: 
+        border-color 0.25s var(--cb-physics), 
+        box-shadow 0.25s var(--cb-physics),
+        background-color 0.25s var(--cb-physics);
+    }
+
+    .card-front {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-left: 3px solid var(--accent-lead);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* State-driven Reactive Node Hovers - Dynamic Context Preservation */
+    .node:not(.flipped):hover .card-front {
+      background: var(--surface-bg-hover);
+      border-color: var(--surface-border-focus);
+      border-left-color: var(--accent-orange);
+      box-shadow: 
+        inset 0 1px 0px rgba(255, 255, 255, 0.08),
+        0 30px 60px rgba(0, 0, 0, 0.7), 
+        0 0 30px rgba(255, 123, 0, 0.12);
+      z-index: 50;
+      transform: translateY(-2px);
+    }
+
+    /* Node Internals Typography */
+    .node-title {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    /* Asymmetric UI Rule: Only line-break and pad titles when viewing metadata expanded state */
+    .node.flipped .node-title {
+      border-bottom: 1px solid rgba(156, 149, 131, 0.12);
+      padding-bottom: 10px;
+      margin-bottom: 0;
+    }
+
+    .node-indicator {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+    }
+    
+    .node-indicator::after {
+      content: '';
+      position: absolute;
+      top: -3px; left: -3px; right: -3px; bottom: -3px;
+      border-radius: 50%;
+      border: 1px solid inherit;
+      opacity: 0.4;
+    }
+
+    .card-back {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-left: 3px solid var(--accent-highlight);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .metadata-header {
+      font-weight: 700;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent-highlight);
+      border-bottom: 1px solid rgba(204, 160, 133, 0.15);
+      padding-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    .node-metadata-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .metadata-item {
+      background: rgba(204, 160, 133, 0.04);
+      padding: 6px 10px;
+      font-size: 0.65rem;
+      border-radius: 3px;
+      border: 1px solid rgba(204, 160, 133, 0.1);
+      color: var(--text-main);
+      white-space: pre-wrap;
+      display: flex;
+      align-items: center;
+    }
+    
+    .metadata-item::before {
+      content: "▶";
+      font-size: 0.5rem;
+      color: var(--accent-highlight);
+      margin-right: 8px;
+      opacity: 0.7;
+    }
+
+    /* Target Snapping Crosshair Overlay */
+    .snap-crosshair {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 1px dashed var(--accent-orange);
+      pointer-events: none;
+      z-index: 99;
+      display: none;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      animation: spinCrosshair 8s linear infinite;
+    }
+    
+    @keyframes spinCrosshair {
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* SVG Network Routing Infrastructure */
+    #svg-layer {
+      position: absolute;
+      top: -100000px;
+      left: -100000px;
+      width: 200000px;
+      height: 200000px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .edge-click-catcher {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 20px;
+      cursor: pointer;
+      pointer-events: stroke;
+    }
+
+    .edge-path {
+      fill: none;
+      pointer-events: none;
+      opacity: 0.85;
+      transition: opacity 0.25s var(--cb-physics), stroke-width 0.25s var(--cb-physics);
+    }
+
+    .edge-group:hover .edge-path, .edge-group.selected-line .edge-path {
+      stroke-width: 2.5px !important;
+      opacity: 1;
+    }
+    
+    /* Hardware Tuning Handles */
+    .line-drag-handle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      z-index: 200;
+      cursor: move;
+      box-shadow: 0 0 10px rgba(0,0,0,1);
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+      transition: transform 0.2s var(--cb-physics);
+    }
+    
+    .line-drag-handle:hover {
+      transform: translate(-50%, -50%) scale(1.3);
+    }
+
+    /* Sleek Context Control Docking Sliders (Sidebars) */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; 
+      right: 0; 
+      width: 440px; 
+      height: 100%;
+      background: transparent;
+      z-index: 2000;
+      justify-content: flex-end;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .modal-content {
+      background: rgba(15, 13, 11, 0.88);
+      backdrop-filter: blur(32px) saturate(130%);
+      -webkit-backdrop-filter: blur(32px) saturate(130%);
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 40px 32px;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      box-shadow: -30px 0 70px rgba(0,0,0,0.85);
+      overflow-y: auto;
+      pointer-events: auto;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .modal-content h3 {
+      margin: 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-orange);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      background: rgba(5, 4, 3, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      color: #fff;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      transition: border-color 0.2s var(--cb-physics), background-color 0.2s var(--cb-physics);
+    }
+
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--accent-orange);
+      background: rgba(5, 4, 3, 0.8);
+    }
+    
+    /* Specialized Color Picker Layout override */
+    .form-group input[type="color"] {
+      padding: 4px;
+      height: 40px;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    /* Slider specific styling */
+    .form-group input[type="range"] {
+      padding: 0;
+      height: 8px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .form-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-orange);
+      cursor: pointer;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 14px;
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toolbar">
+    <button onclick="createNewNode()">+ Deploy Node</button>
+  </div>
+
+  <div id="viewport">
+    <div id="canvas">
+      <svg id="svg-layer">
+        <defs>
+          <marker id="arrow-start" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 10 2 L 4 5 L 10 8 L 8 5 z" fill="context-stroke"/>
+          </marker>
+          <marker id="arrow-end" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 2 L 6 5 L 0 8 L 2 5 z" fill="context-stroke"/>
+          </marker>
+          </defs>
+      </svg>
+      <div id="hud-crosshair" class="snap-crosshair"></div>
+    </div>
+  </div>
+
+  <div id="node-modal" class="modal">
+    <div class="modal-content">
+      <h3>SYS // Node Configuration</h3>
+      <div class="form-group">
+        <label>Node ID / Title</label>
+        <input type="text" id="edit-node-title">
+      </div>
+      <div class="form-group">
+        <label>Node Metadata (Back Panel — One entry per line)</label>
+        <textarea id="edit-node-meta" rows="6" placeholder="SEC_STATUS: SECURE&#10;LOC_VECTOR: DMZ_POOL_B"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Width (px)</label>
+          <input type="number" id="edit-node-w">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Background</label>
+          <input type="text" id="edit-node-bg" placeholder="#241f1c or rgba(...)">
+        </div>
+        <div class="form-group">
+          <label>Text Color</label>
+          <input type="color" id="edit-node-text">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Border Color</label>
+          <input type="color" id="edit-node-border">
+        </div>
+        <div class="form-group">
+          <label>Border Width</label>
+          <input type="number" id="edit-node-border-w">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Indicator Light Color</label>
+          <input type="color" id="edit-node-indicator-color">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button onclick="deleteActiveNode()" class="btn-danger" style="margin-right: auto;">Decommission Node</button>
+        <button onclick="closeModal('node-modal')" style="background:transparent; color:var(--text-muted); border-color:rgba(255,255,255,0.15);">Cancel</button>
+        <button onclick="saveNodeSettings()">Apply Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="line-modal" class="modal">
+    <div class="modal-content">
+      <h3>NET // Connection Vector Alignment</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Signal Path Hue</label>
+          <input type="color" id="edit-line-color">
+        </div>
+        <div class="form-group">
+          <label>Emissive Brightness</label>
+          <input type="range" id="edit-line-glow" min="0" max="3" step="0.1" value="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Path Width (px)</label>
+        <input type="number" id="edit-line-weight">
+      </div>
+      <div class="form-group">
+        <label>Directional Flow Arrow</label>
+        <select id="edit-line-arrows">
+          <option value="none">Undirected Circuit</option>
+          <option value="start">Source Terminal Only</option>
+          <option value="end">Target Sink Only</option>
+          <option value="both">Full Duplex Connection</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button onclick="deleteActiveLine()" class="btn-danger" style="margin-right: auto;">Sever Circuit</button>
+        <button onclick="closeModal('line-modal')" style="background:transparent; color:var(--text-muted); border-color:rgba(255,255,255,0.15);">Cancel</button>
+        <button onclick="saveLineSettings()">Apply Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const viewport = document.getElementById('viewport');
+    const canvas = document.getElementById('canvas');
+    const svgLayer = document.getElementById('svg-layer');
+    const svgDefs = svgLayer.querySelector('defs');
+    const hudCrosshair = document.getElementById('hud-crosshair');
+    
+    let nodes = [];
+    let lines = [];
+    let activeNodeId = null;
+    let activeLineId = null;
+    let linkDragState = null;
+    let currentHoverDock = null;
+
+    let panX = 0;
+    let panY = 0;
+    let zoomScale = 1;
+    let isPanningCanvas = false;
+    let panStartMouseX = 0;
+    let panStartMouseY = 0;
+
+    const BORDER_SNAP_THRESHOLD = 45; 
+    const HEADER_ZONE_HEIGHT = 36;    
+    const SVG_OFFSET = 100000;         
+    const FRONT_FACE_HEIGHT = 42;
+
+    const defaultNodeProps = {
+      w: 240,
+      bg: 'rgba(36, 31, 28, 0.45)',
+      text: '#f4efe2',
+      borderColor: 'rgba(133, 115, 105, 0.25)',
+      borderWidth: 1,
+      metadata: "STATUS: ACTIVE",
+      indicatorColor: '#ff7b00'
+    };
+
+    function init() {
+      updateTransform();
+      setupGlobalTracking();
+      setupViewportNavigation();
+    }
+
+    function updateTransform() {
+      canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
+      viewport.style.backgroundPosition = `${panX}px ${panY}px`;
+      viewport.style.backgroundSize = `${200 * zoomScale}px ${200 * zoomScale}px, ${200 * zoomScale}px ${200 * zoomScale}px, ${40 * zoomScale}px ${40 * zoomScale}px, ${40 * zoomScale}px ${40 * zoomScale}px`;
+    }
+
+    function setupViewportNavigation() {
+      window.addEventListener('contextmenu', e => e.preventDefault());
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.button !== 2) return; 
+        isPanningCanvas = true;
+        panStartMouseX = e.clientX - panX;
+        panStartMouseY = e.clientY - panY;
+        viewport.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isPanningCanvas) return;
+        panX = e.clientX - panStartMouseX;
+        panY = e.clientY - panStartMouseY;
+        updateTransform();
+      });
+
+      document.addEventListener('mouseup', (e) => {
+        if (e.button === 2 && isPanningCanvas) {
+          isPanningCanvas = false;
+          viewport.style.cursor = 'default';
+        }
+      });
+
+      viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomIntensity = 0.08;
+        const rect = viewport.getBoundingClientRect();
+        const mouseWorkspaceX = e.clientX - rect.left;
+        const mouseWorkspaceY = e.clientY - rect.top;
+
+        const canvasTargetX = (mouseWorkspaceX - panX) / zoomScale;
+        const canvasTargetY = (mouseWorkspaceY - panY) / zoomScale;
+
+        if (e.deltaY < 0) {
+          zoomScale *= (1 + zoomIntensity);
+        } else {
+          zoomScale /= (1 + zoomIntensity);
+        }
+
+        zoomScale = Math.max(0.15, Math.min(zoomScale, 4));
+        panX = mouseWorkspaceX - canvasTargetX * zoomScale;
+        panY = mouseWorkspaceY - canvasTargetY * zoomScale;
+
+        updateTransform();
+        renderLineHandles();
+      }, { passive: false });
+    }
+
+    function generateMetadataHtml(metaText) {
+      if (!metaText || !metaText.trim()) return '';
+      return metaText.split('\n')
+        .filter(line => line.trim() !== '')
+        .map(line => `<div class="metadata-item">${escapeHtml(line)}</div>`)
+        .join('');
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function createNode(x, y, title, customProps = {}) {
+      let id = 0;
+      while (nodes.some(n => n && n.id === id)) { id++; }
+      
+      const props = { ...defaultNodeProps, ...customProps };
+      const nodeEl = document.createElement('div');
+      nodeEl.className = 'node';
+      
+      nodeEl.id = `node-${id}`;
+      nodeEl.style.left = `${x}px`;
+      nodeEl.style.top = `${y}px`;
+      nodeEl.style.width = `${props.w}px`;
+      nodeEl.style.height = `${FRONT_FACE_HEIGHT}px`;
+
+      nodeEl.innerHTML = `
+        <div class="card">
+          <div class="card-front" style="background:${props.bg}; color:${props.text}; border-color:${props.borderColor}; border-width:${props.borderWidth}px;">
+            <div class="node-title">
+              <span>${escapeHtml(title)}</span>
+              <span class="node-indicator" style="background:${props.indicatorColor}; border-color:${props.indicatorColor}; box-shadow: 0 0 10px ${props.indicatorColor};"></span>
+            </div>
+          </div>
+          <div class="card-back" style="border-color:${props.borderColor}; border-width:${props.borderWidth}px; background:${props.bg};">
+            <div class="metadata-header">// METADATA</div>
+            <div class="node-metadata-container">
+              ${generateMetadataHtml(props.metadata)}
+            </div>
+          </div>
+        </div>
+      `;
+
+      let startX = 0, startY = 0;
+      let totalDelta = 0;
+      let clickTimeout = null;
+
+      nodeEl.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; 
+        if (currentHoverDock || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        startX = e.clientX;
+        startY = e.clientY;
+        totalDelta = 0;
+      });
+
+      nodeEl.addEventListener('click', (e) => {
+        if (e.button !== 0) return;
+        if (currentHoverDock || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (totalDelta > 5) return; 
+
+        if (clickTimeout) {
+          clearTimeout(clickTimeout);
+          clickTimeout = null;
+          return;
+        }
+
+        clickTimeout = setTimeout(() => {
+          const isFlipped = nodeEl.classList.toggle('flipped');
+          const backFace = nodeEl.querySelector('.card-back');
+          
+          if (isFlipped) {
+            nodeEl.style.height = `${backFace.scrollHeight}px`;
+          } else {
+            nodeEl.style.height = `${FRONT_FACE_HEIGHT}px`;
+          }
+          
+          let animationTicks = 0;
+          const trackingInterval = setInterval(() => {
+            renderAllLines();
+            animationTicks++;
+            if (animationTicks > 25) clearInterval(trackingInterval);
+          }, 16);
+
+          clickTimeout = null;
+        }, 220);
+      });
+
+      nodeEl.addEventListener('dblclick', (e) => {
+        if (currentHoverDock) return;
+        e.stopPropagation();
+        if (clickTimeout) {
+          clearTimeout(clickTimeout);
+          clickTimeout = null;
+        }
+        if (window.getSelection) window.getSelection().removeAllRanges();
+        openNodeEditor(id);
+      });
+
+      const nodeObj = { id, el: nodeEl, title, x, y, h: FRONT_FACE_HEIGHT, ...props };
+      nodes.push(nodeObj);
+
+      setupDragging(nodeEl, id, (dx, dy) => {
+        totalDelta += Math.sqrt(dx*dx + dy*dy);
+      });
+
+      canvas.appendChild(nodeEl);
+      renderAllLines();
+      return id;
+    }
+
+    function createNewNode() {
+      const rect = viewport.getBoundingClientRect();
+      const centerX = (rect.width / 2 - panX) / zoomScale - (defaultNodeProps.w / 2);
+      const centerY = (rect.height / 2 - panY) / zoomScale - (FRONT_FACE_HEIGHT / 2); 
+      
+      createNode(centerX, centerY, "Terminal_Node", {
+        w: 210, 
+        bg: 'rgba(36, 31, 28, 0.45)', 
+        borderColor: 'var(--accent-lead)',
+        metadata: "STATUS: ACTIVE\nSEC_ZONE: UNTRUSTED_WAN\nINTEGRITY: OPTIMAL",
+        indicatorColor: 'var(--accent-orange)'
+      });
+    }
+
+    /* Generates real-time custom SVG glow matrixes based on dynamic line states */
+    function updateLineGlowFilter(lineId, hexColor, intensity) {
+      const filterId = `glow-filter-${lineId}`;
+      let filterEl = document.getElementById(filterId);
+      
+      if (!filterEl) {
+        filterEl = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        filterEl.setAttribute('id', filterId);
+        filterEl.setAttribute('x', '-50%');
+        filterEl.setAttribute('y', '-50%');
+        filterEl.setAttribute('width', '200%');
+        filterEl.setAttribute('height', '200%');
+        svgDefs.appendChild(filterEl);
+      }
+
+      // If intensity is 0, bypass filter structure logic to clear operations
+      if (intensity <= 0) {
+        filterEl.innerHTML = `
+          <feGaussianBlur stdDeviation="0" result="coloredBlur"/>
+          <feMerge><feMergeNode in="SourceGraphic"/></feMerge>
+        `;
+        return;
+      }
+
+      const blurRadius = 3 * intensity;
+      const boostValue = intensity * 1.5;
+
+      filterEl.innerHTML = `
+        <feGaussianBlur stdDeviation="${blurRadius}" result="blur1"/>
+        <feGaussianBlur stdDeviation="${blurRadius * 2.5}" result="blur2"/>
+        <feMerge result="glowBlur">
+          <feMergeNode in="blur1"/>
+          <feMergeNode in="blur2"/>
+        </feMerge>
+        <feColorMatrix type="matrix" values="
+          0 0 0 0 ${parseInt(hexColor.slice(1,3), 16)/255}
+          0 0 0 0 ${parseInt(hexColor.slice(3,5), 16)/255}
+          0 0 0 0 ${parseInt(hexColor.slice(5,7), 16)/255}
+          0 0 0 ${boostValue} 0
+        " in="glowBlur" result="coloredGlow"/>
+        <feMerge>
+          <feMergeNode in="coloredGlow"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      `;
+    }
+
+    function createLine(fromId, fromDock, toId, toDock, props = {}) {
+      let id = 0;
+      while (lines.some(l => l && l.id === id)) { id++; }
+
+      const lineConfig = {
+        id, from: fromId, fromDock: fromDock, to: toId, toDock: toDock,
+        color: props.color || '#cca085', weight: props.weight || 1.5, arrows: props.arrows || 'none',
+        glow: props.glow !== undefined ? props.glow : 1.2
+      };
+      
+      lines.push(lineConfig);
+
+      const groupEl = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      groupEl.setAttribute('id', `edge-group-${id}`);
+      groupEl.setAttribute('class', 'edge-group');
+
+      const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      pathEl.setAttribute('id', `edge-path-${id}`);
+      pathEl.setAttribute('class', 'edge-path');
+
+      const catcherEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      catcherEl.setAttribute('id', `edge-catcher-${id}`);
+      catcherEl.setAttribute('class', 'edge-click-catcher');
+      
+      catcherEl.addEventListener('click', (e) => {
+        if (e.button !== 0) return;
+        e.stopPropagation();
+        selectLine(id);
+      });
+
+      catcherEl.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        if (window.getSelection) window.getSelection().removeAllRanges();
+        openLineEditor(id);
+      });
+
+      groupEl.appendChild(pathEl);
+      groupEl.appendChild(catcherEl);
+      svgLayer.appendChild(groupEl);
+      return id;
+    }
+
+    function selectLine(id) {
+      activeLineId = id;
+      document.querySelectorAll('.edge-group').forEach(g => g.classList.remove('selected-line'));
+      const groupEl = document.getElementById(`edge-group-${id}`);
+      if (groupEl) groupEl.classList.add('selected-line');
+      renderLineHandles();
+    }
+
+    function renderLineHandles() {
+      document.querySelectorAll('.line-drag-handle').forEach(h => h.remove());
+      if (activeLineId === null) return;
+
+      const line = lines.find(l => l && l.id === activeLineId);
+      if (!line) return;
+
+      const p1 = getDockCoordinates(line.from, line.fromDock);
+      const p2 = getDockCoordinates(line.to, line.toDock);
+
+      createLineHandle(p1.x, p1.y, 'from');
+      createLineHandle(p2.x, p2.y, 'to');
+    }
+
+    function createLineHandle(x, y, endType) {
+      document.querySelectorAll(`.line-drag-handle[data-end="${endType}"]`).forEach(h => h.remove());
+      
+      const handle = document.createElement('div');
+      handle.className = 'line-drag-handle';
+      handle.setAttribute('data-end', endType);
+      handle.style.left = `${x}px`;
+      handle.style.top = `${y}px`;
+      handle.style.background = endType === 'from' ? 'var(--accent-orange)' : 'var(--accent-highlight)';
+      
+      handle.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        e.stopPropagation(); e.preventDefault();
+        
+        const previewPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        previewPath.setAttribute('id', 'link-preview-line');
+        previewPath.setAttribute('stroke', 'var(--accent-orange)');
+        previewPath.setAttribute('stroke-width', '1.5');
+        previewPath.setAttribute('stroke-dasharray', '4,4');
+        previewPath.setAttribute('fill', 'none');
+        svgLayer.appendChild(previewPath);
+
+        linkDragState = {
+          reconnectLineId: activeLineId,
+          reconnectEnd: endType,
+          startX: x,
+          startY: y,
+          previewEl: previewPath
+        };
+
+        hudCrosshair.style.left = `${x}px`;
+        hudCrosshair.style.top = `${y}px`;
+        hudCrosshair.style.display = 'block';
+      });
+
+      canvas.appendChild(handle);
+    }
+
+    viewport.addEventListener('click', (e) => {
+      if (e.button !== 0) return;
+      if (e.target === viewport || e.target === svgLayer) {
+        activeLineId = null;
+        document.querySelectorAll('.edge-group').forEach(g => g.classList.remove('selected-line'));
+        document.querySelectorAll('.line-drag-handle').forEach(h => h.remove());
+      }
+    });
+
+    function getDockCoordinates(nodeId, dockId) {
+      const node = nodes.find(n => n && n.id === nodeId);
+      if (!node) return {x: 0, y: 0};
+      const el = node.el;
+      
+      const parts = dockId.split('-');
+      const side = parts[0];
+      const fraction = parseFloat(parts[1] || 0.5);
+
+      switch(side) {
+        case 'top':    return { x: el.offsetLeft + node.w * fraction, y: el.offsetTop };
+        case 'bottom': return { x: el.offsetLeft + node.w * fraction, y: el.offsetTop + el.offsetHeight };
+        case 'left':   return { x: el.offsetLeft,                     y: el.offsetTop + el.offsetHeight * fraction };
+        case 'right':  return { x: el.offsetLeft + node.w,             y: el.offsetTop + el.offsetHeight * fraction };
+        default:       return { x: el.offsetLeft + node.w / 2,         y: el.offsetTop + el.offsetHeight / 2 };
+      }
+    }
+
+    function renderAllLines() {
+      lines.forEach(line => {
+        if (!line) return;
+        const pathEl = document.getElementById(`edge-path-${line.id}`);
+        const catcherEl = document.getElementById(`edge-catcher-${line.id}`);
+        if (!pathEl) return;
+
+        const p1 = getDockCoordinates(line.from, line.fromDock);
+        const p2 = getDockCoordinates(line.to, line.toDock);
+
+        const fromSide = line.fromDock.split('-')[0];
+        const toSide = line.toDock.split('-')[0];
+
+        let controlOffset = Math.abs(p2.x - p1.x) * 0.5;
+        if (controlOffset < 40) controlOffset = 40; 
+
+        let cp1x = p1.x;
+        let cp1y = p1.y;
+        let cp2x = p2.x;
+        let cp2y = p2.y;
+
+        if (fromSide === 'right') cp1x += controlOffset;
+        else if (fromSide === 'left') cp1x -= controlOffset;
+        else if (fromSide === 'bottom') cp1y += controlOffset;
+        else if (fromSide === 'top') cp1y -= controlOffset;
+
+        if (toSide === 'right') cp2x += controlOffset;
+        else if (toSide === 'left') cp2x -= controlOffset;
+        else if (toSide === 'bottom') cp2y += controlOffset;
+        else if (toSide === 'top') cp2y -= controlOffset;
+
+        const dPath = `M ${p1.x + SVG_OFFSET} ${p1.y + SVG_OFFSET} C ${cp1x + SVG_OFFSET} ${cp1y + SVG_OFFSET}, ${cp2x + SVG_OFFSET} ${cp2y + SVG_OFFSET}, ${p2.x + SVG_OFFSET} ${p2.y + SVG_OFFSET}`;
+
+        pathEl.setAttribute('d', dPath);
+        if (catcherEl) catcherEl.setAttribute('d', dPath);
+        pathEl.setAttribute('stroke', line.color);
+        pathEl.setAttribute('stroke-width', `${line.weight}px`);
+        
+        // Execute Emissive Render State Update loops
+        updateLineGlowFilter(line.id, rgbToHex(line.color), line.glow);
+        pathEl.setAttribute('filter', `url(#glow-filter-${line.id})`);
+        
+        if(line.arrows === 'start' || line.arrows === 'both') pathEl.setAttribute('marker-start', 'url(#arrow-start)');
+        else pathEl.removeAttribute('marker-start');
+
+        if(line.arrows === 'end' || line.arrows === 'both') pathEl.setAttribute('marker-end', 'url(#arrow-end)');
+        else pathEl.removeAttribute('marker-end');
+      });
+      renderLineHandles();
+    }
+
+    function setupDragging(el, id, onMoveCallback) {
+      let offsetX = 0, offsetY = 0, isDragging = false;
+
+      el.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; 
+        if (el.classList.contains('flipped') || currentHoverDock) return;
+        isDragging = true;
+        
+        offsetX = e.clientX / zoomScale - el.offsetLeft;
+        offsetY = e.clientY / zoomScale - el.offsetTop;
+        el.style.zIndex = 100;
+        e.stopPropagation();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const currentX = el.offsetLeft;
+        const currentY = el.offsetTop;
+        
+        const targetX = e.clientX / zoomScale - offsetX;
+        const targetY = e.clientY / zoomScale - offsetY;
+        
+        el.style.left = `${targetX}px`;
+        el.style.top = `${targetY}px`;
+        
+        const nodeInstance = nodes.find(n => n && n.id === id);
+        if (nodeInstance) {
+          nodeInstance.x = targetX;
+          nodeInstance.y = targetY;
+        }
+
+        if (onMoveCallback) onMoveCallback(targetX - currentX, targetY - currentY);
+        renderAllLines();
+      });
+
+      document.addEventListener('mouseup', (e) => {
+        if (e.button === 0 && isDragging) {
+          isDragging = false;
+          el.style.zIndex = 10;
+        }
+      });
+    }
+
+    function getClosestDockOnNode(node, mx, my) {
+      const el = node.el;
+      const left = node.x;
+      const right = node.x + node.w;
+      const top = node.y;
+      const bottom = node.y + el.offsetHeight;
+
+      const clampedX = Math.max(left, Math.min(mx, right));
+      const clampedY = Math.max(top, Math.min(my, bottom));
+
+      const distTop = Math.abs(my - top);
+      const distBottom = Math.abs(my - bottom);
+      const distLeft = Math.abs(mx - left);
+      const distRight = Math.abs(mx - right);
+
+      const minDist = Math.min(distTop, distBottom, distLeft, distRight);
+
+      if (minDist === distTop) {
+        let pct = (clampedX - left) / node.w;
+        return { dockId: `top-${pct.toFixed(3)}`, x: clampedX, y: top };
+      } else if (minDist === distBottom) {
+        let pct = (clampedX - left) / node.w;
+        return { dockId: `bottom-${pct.toFixed(3)}`, x: clampedX, y: bottom };
+      } else if (minDist === distLeft) {
+        let pct = (clampedY - top) / el.offsetHeight;
+        return { dockId: `left-${pct.toFixed(3)}`, x: left, y: clampedY };
+      } else {
+        let pct = (clampedY - top) / el.offsetHeight;
+        return { dockId: `right-${pct.toFixed(3)}`, x: right, y: clampedY };
+      }
+    }
+
+    function setupGlobalTracking() {
+      document.addEventListener('mousemove', (e) => {
+        const rect = viewport.getBoundingClientRect();
+        const mx = (e.clientX - rect.left - panX) / zoomScale;
+        const my = (e.clientY - rect.top - panY) / zoomScale;
+        
+        let bestDock = null;
+        let minDistance = BORDER_SNAP_THRESHOLD;
+
+        nodes.forEach(node => {
+          if (!node || node.el.classList.contains('flipped')) return;
+
+          const el = node.el;
+          const overNodeHorizontally = mx >= node.x && mx <= (node.x + node.w);
+          const overNodeVertically = my >= node.y && my <= (node.y + el.offsetHeight);
+
+          if (overNodeHorizontally && overNodeVertically) {
+             return; 
+          }
+
+          const left = node.x - BORDER_SNAP_THRESHOLD;
+          const right = node.x + node.w + BORDER_SNAP_THRESHOLD;
+          const top = node.y - BORDER_SNAP_THRESHOLD;
+          const bottom = node.y + el.offsetHeight + BORDER_SNAP_THRESHOLD;
+
+          if (mx >= left && mx <= right && my >= top && my <= bottom) {
+            const dockCandidate = getClosestDockOnNode(node, mx, my);
+            const dist = Math.sqrt(Math.pow(mx - dockCandidate.x, 2) + Math.pow(my - dockCandidate.y, 2));
+
+            if (dist < minDistance) {
+              minDistance = dist;
+              bestDock = { nodeId: node.id, dockId: dockCandidate.dockId, x: dockCandidate.x, y: dockCandidate.y };
+            }
+          }
+        });
+
+        if (bestDock) {
+          currentHoverDock = bestDock;
+          if (!linkDragState && !isPanningCanvas) viewport.style.cursor = 'crosshair';
+          
+          if (linkDragState) {
+            hudCrosshair.style.left = `${bestDock.x}px`;
+            hudCrosshair.style.top = `${bestDock.y}px`;
+            hudCrosshair.style.display = 'block';
+          }
+        } else {
+          currentHoverDock = null;
+          if (!linkDragState && !isPanningCanvas) {
+            viewport.style.cursor = 'default';
+            hudCrosshair.style.display = 'none';
+          }
+        }
+      });
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; 
+        if (!currentHoverDock) return;
+        e.stopPropagation(); e.preventDefault();
+
+        const previewPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        previewPath.setAttribute('id', 'link-preview-line');
+        previewPath.setAttribute('stroke', 'var(--accent-orange)');
+        previewPath.setAttribute('stroke-width', '1.5');
+        previewPath.setAttribute('stroke-dasharray', '4,4');
+        previewPath.setAttribute('fill', 'none');
+        svgLayer.appendChild(previewPath);
+
+        linkDragState = {
+          sourceNodeId: currentHoverDock.nodeId,
+          sourceDock: currentHoverDock.dockId,
+          startX: currentHoverDock.x,
+          startY: currentHoverDock.y,
+          previewEl: previewPath
+        };
+
+        hudCrosshair.style.left = `${currentHoverDock.x}px`;
+        hudCrosshair.style.top = `${currentHoverDock.y}px`;
+        hudCrosshair.style.display = 'block';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!linkDragState) return;
+        const rect = viewport.getBoundingClientRect();
+        const mx = (e.clientX - rect.left - panX) / zoomScale;
+        const my = (e.clientY - rect.top - panY) / zoomScale;
+        
+        let p1;
+        if (linkDragState.reconnectLineId !== undefined) {
+          const line = lines.find(l => l && l.id === linkDragState.reconnectLineId);
+          if (line) {
+            p1 = linkDragState.reconnectEnd === 'from' ? getDockCoordinates(line.to, line.toDock) : getDockCoordinates(line.from, line.fromDock);
+          } else {
+            p1 = { x: linkDragState.startX, y: linkDragState.startY };
+          }
+        } else {
+          p1 = { x: linkDragState.startX, y: linkDragState.startY };
+        }
+        
+        let dx = Math.abs(mx - p1.x) * 0.5;
+        let dPath = `M ${p1.x + SVG_OFFSET} ${p1.y + SVG_OFFSET} C ${p1.x + dx + SVG_OFFSET} ${p1.y + SVG_OFFSET}, ${mx - dx + SVG_OFFSET} ${my + SVG_OFFSET}, ${mx + SVG_OFFSET} ${my + SVG_OFFSET}`;
+        
+        linkDragState.previewEl.setAttribute('d', dPath);
+      });
+
+      document.addEventListener('mouseup', (e) => {
+        if (e.button !== 0 || !linkDragState) return;
+        linkDragState.previewEl.remove();
+        hudCrosshair.style.display = 'none';
+        
+        const rect = viewport.getBoundingClientRect();
+        const mx = (e.clientX - rect.left - panX) / zoomScale;
+        const my = (e.clientY - rect.top - panY) / zoomScale;
+
+        let targetNodeId = currentHoverDock ? currentHoverDock.nodeId : null;
+        let targetDock = currentHoverDock ? currentHoverDock.dockId : null;
+
+        if (!targetNodeId) {
+          for (let node of nodes) {
+            if (!node) continue;
+            const el = node.el;
+            if (mx >= node.x && mx <= node.x + node.w && my >= node.y && my <= node.y + el.offsetHeight) {
+              targetNodeId = node.id;
+              const closest = getClosestDockOnNode(node, mx, my);
+              targetDock = closest.dockId;
+              break;
+            }
+          }
+        }
+        
+        if (targetNodeId !== null && targetDock !== null) {
+          if (linkDragState.reconnectLineId !== undefined) {
+            const line = lines.find(l => l && l.id === linkDragState.reconnectLineId);
+            if (line) {
+              if (linkDragState.reconnectEnd === 'from') {
+                if (targetNodeId !== line.to) { line.from = targetNodeId; line.fromDock = targetDock; }
+              } else {
+                if (targetNodeId !== line.from) { line.to = targetNodeId; line.toDock = targetDock; }
+              }
+            }
+          } else {
+            if (targetNodeId !== linkDragState.sourceNodeId) {
+              createLine(linkDragState.sourceNodeId, linkDragState.sourceDock, targetNodeId, targetDock);
+            }
+          }
+        }
+        linkDragState = null;
+        renderAllLines();
+      });
+    }
+
+    function openNodeEditor(id) {
+      document.getElementById('line-modal').style.display = 'none';
+      activeNodeId = id;
+      const n = nodes.find(node => node && node.id === id);
+      if (!n) return;
+      document.getElementById('edit-node-title').value = n.title;
+      document.getElementById('edit-node-meta').value = n.metadata || '';
+      document.getElementById('edit-node-w').value = n.w;
+      document.getElementById('edit-node-bg').value = n.bg;
+      document.getElementById('edit-node-text').value = rgbToHex(n.text);
+      document.getElementById('edit-node-border').value = rgbToHex(n.borderColor);
+      document.getElementById('edit-node-border-w').value = n.borderWidth;
+      document.getElementById('edit-node-indicator-color').value = rgbToHex(n.indicatorColor || defaultNodeProps.indicatorColor);
+      document.getElementById('node-modal').style.display = 'flex';
+    }
+
+    function saveNodeSettings() {
+      const n = nodes.find(node => node && node.id === activeNodeId);
+      if (!n) return;
+      n.title = document.getElementById('edit-node-title').value;
+      n.metadata = document.getElementById('edit-node-meta').value;
+      n.w = parseInt(document.getElementById('edit-node-w').value);
+      n.bg = document.getElementById('edit-node-bg').value;
+      n.text = document.getElementById('edit-node-text').value;
+      n.borderColor = document.getElementById('edit-node-border').value;
+      n.borderWidth = parseInt(document.getElementById('edit-node-border-w').value);
+      n.indicatorColor = document.getElementById('edit-node-indicator-color').value;
+
+      n.el.style.width = `${n.w}px`;
+      
+      const front = n.el.querySelector('.card-front');
+      const back = n.el.querySelector('.card-back');
+      
+      front.style.background = n.bg;
+      front.style.color = n.text;
+      front.style.borderColor = n.borderColor; front.style.borderWidth = `${n.borderWidth}px`;
+      back.style.borderWidth = `${n.borderWidth}px`;
+      back.style.background = n.bg;
+      
+      front.querySelector('.node-title span:first-child').innerText = n.title;
+
+      const indicatorEl = front.querySelector('.node-indicator');
+      if (indicatorEl) {
+        indicatorEl.style.background = n.indicatorColor;
+        indicatorEl.style.borderColor = n.indicatorColor;
+        indicatorEl.style.boxShadow = `0 0 10px ${n.indicatorColor}`;
+      }
+
+      const metaContainer = back.querySelector('.node-metadata-container');
+      if (metaContainer) {
+        metaContainer.innerHTML = generateMetadataHtml(n.metadata);
+      }
+
+      if (n.el.classList.contains('flipped')) {
+        n.el.style.height = `${back.scrollHeight}px`;
+      }
+
+      renderAllLines();
+      closeModal('node-modal');
+    }
+
+    function openLineEditor(id) {
+      document.getElementById('node-modal').style.display = 'none';
+      activeLineId = id;
+      const l = lines.find(line => line && line.id === id);
+      if (!l) return;
+      document.getElementById('edit-line-color').value = rgbToHex(l.color);
+      document.getElementById('edit-line-glow').value = l.glow !== undefined ? l.glow : 1;
+      document.getElementById('edit-line-weight').value = l.weight;
+      document.getElementById('edit-line-arrows').value = l.arrows;
+      document.getElementById('line-modal').style.display = 'flex';
+    }
+
+    function saveLineSettings() {
+      const l = lines.find(line => line && line.id === activeLineId);
+      if (!l) return;
+      l.color = document.getElementById('edit-line-color').value;
+      l.glow = parseFloat(document.getElementById('edit-line-glow').value);
+      l.weight = parseInt(document.getElementById('edit-line-weight').value);
+      l.arrows = document.getElementById('edit-line-arrows').value;
+      
+      renderAllLines();
+      closeModal('line-modal');
+    }
+
+    /* Core Destructive Lifecycle Execution Engines */
+    function deleteActiveNode() {
+      if (activeNodeId === null) return;
+      
+      const nodeIndex = nodes.findIndex(n => n && n.id === activeNodeId);
+      if (nodeIndex !== -1) {
+        lines = lines.filter(line => {
+          if (!line) return false;
+          if (line.from === activeNodeId || line.to === activeNodeId) {
+            const groupEl = document.getElementById(`edge-group-${line.id}`);
+            if (groupEl) groupEl.remove();
+            const filterEl = document.getElementById(`glow-filter-${line.id}`);
+            if (filterEl) filterEl.remove();
+            return false;
+          }
+          return true;
+        });
+
+        const nodeEl = document.getElementById(`node-${activeNodeId}`);
+        if (nodeEl) nodeEl.remove();
+        
+        nodes.splice(nodeIndex, 1);
+      }
+
+      activeLineId = null;
+      document.querySelectorAll('.line-drag-handle').forEach(h => h.remove());
+      
+      renderAllLines();
+      closeModal('node-modal');
+    }
+
+    function deleteActiveLine() {
+      if (activeLineId === null) return;
+      
+      const lineIndex = lines.findIndex(l => l && l.id === activeLineId);
+      if (lineIndex !== -1) {
+        const groupEl = document.getElementById(`edge-group-${activeLineId}`);
+        if (groupEl) groupEl.remove();
+        const filterEl = document.getElementById(`glow-filter-${activeLineId}`);
+        if (filterEl) filterEl.remove();
+        
+        lines.splice(lineIndex, 1);
+      }
+
+      activeLineId = null;
+      document.querySelectorAll('.line-drag-handle').forEach(h => h.remove());
+
+      renderAllLines();
+      closeModal('line-modal');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function rgbToHex(col) {
+      if(!col || !col.startsWith('#')) return '#cca085';
+      return col;
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
