@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" style="--bg-pattern-color: var(--c-10); --bg-pattern-alpha: 0.14; --c-1: #c0835e; --c-2: #9e5c34; --c-3: #8d6e5b; --c-4: #d2b3a1; --c-5: #875a3f; --c-6: #74665e; --c-7: #211d1b; --c-8: #4d4540; --c-9: #ece5d2; --c-10: #9c9583; --rhythm: 0.7; --pad-x: 80px; --headline-scale: 1.2; --shadow-alpha: 0.8; --shadow-blur: 80px; --shine-alpha: 0.12; --slot-alpha: 0;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mudlark Media Network</title>
@@ -40,16 +39,16 @@
     /* 10-slot palette. c1-c6 are the brand accents, c7-c10 are neutrals.
        All semantic vars below alias into these slots — change c-N, the whole
        page follows. */
-    --c-1:  #E8B23A;  /* gold */
-    --c-2:  #DD5E2C;  /* rust */
-    --c-3:  #2EA39C;  /* teal */
-    --c-4:  #4F95CC;  /* blue */
-    --c-5:  #CC6094;  /* pink */
-    --c-6:  #6CB855;  /* green */
-    --c-7:  #131210;  /* background */
-    --c-8:  #1F1D19;  /* surface */
-    --c-9:  #ECE5D2;  /* ink */
-    --c-10: #9C9583;  /* soft ink */
+    --c-1:  #c0835e;  /* gold */
+    --c-2:  #9e5c34;  /* rust */
+    --c-3:  #8d6e5b;  /* teal */
+    --c-4:  #d2b3a1;  /* blue */
+    --c-5:  #875a3f;  /* pink */
+    --c-6:  #74665e;  /* green */
+    --c-7:  #211d1b;  /* background */
+    --c-8:  #4d4540;  /* surface */
+    --c-9:  #ece5d2;  /* ink */
+    --c-10: #9c9583;  /* soft ink */
 
     /* Semantic aliases — these keep the niiiiiice CSS unchanged. */
     --gold:      var(--c-1);
@@ -1366,10 +1365,8 @@
 
 <svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <pattern id="bg-pattern-tile" width="24" height="24" patternUnits="userSpaceOnUse">
-      <g id="bg-pattern-shape">
-        <circle cx="12" cy="12" r="0.9" fill="currentColor"></circle>
-      </g>
+    <pattern id="bg-pattern-tile" width="68" height="68" patternUnits="userSpaceOnUse">
+      <g id="bg-pattern-shape"><rect x="32.5" y="32.5" width="3" height="3" fill="currentColor"></rect></g>
     </pattern>
   </defs>
   <rect width="100%" height="100%" fill="url(#bg-pattern-tile)"></rect>
@@ -1383,58 +1380,54 @@
   </div>
 
   <nav class="nav" aria-label="Primary">
-    <a href="/ethos"    class="c-gold">Network Ethos</a>
+    <a href="/ethos" class="c-gold">Network Ethos</a>
     <a href="/articles" class="c-rust">Articles</a>
-    <a href="/opsec"    class="c-teal">Digital OpSec</a>
-    <a href="/psych"    class="c-pink">Psychological Warfare</a>
-    <a href="/media"    class="c-blue">Media</a>
-    <a href="/mindmap"  class="c-green">Mind Map</a>
-    <a href="/contact"  class="c-cream">Contact</a>
+    <a href="/opsec" class="c-teal">Digital OpSec</a>
+    <a href="/psych" class="c-pink">Psychological Warfare</a>
+    <a href="/media" class="c-blue">Media</a>
+    <a href="/mindmap" class="c-green">Mind Map</a>
+    <a href="/contact" class="c-cream">Contact</a>
   </nav>
 </header>
 
 <main>
 
   <!-- ============================== LEAD ============================== -->
-  <section data-section="lead" data-section-label="Lead"
-           style="--sec: var(--c-5); --sec-heading: var(--c-5); --sec-bg-alpha: 0.06; --sec-box-alpha: 0.00;"
-           class="lead wrap">
+  <section data-section="lead" data-section-label="Lead" style="--sec: var(--c-2); --sec-heading: var(--c-5); --sec-bg-alpha: 0; --sec-box-alpha: 0.16;" class="lead wrap">
     <div class="lead-inner">
 
-      <figure class="lead-fig art-ripple" data-slot="lead-figure" data-slot-purpose="Lead figure — document map" aria-label="Figure placeholder">
-        <span class="stamp">Figure A &mdash; document map</span>
+      <figure class="lead-fig art-hatch" data-slot="lead-figure" data-slot-purpose="Lead figure — document map" aria-label="Figure placeholder" style="aspect-ratio: 16 / 9;">
+        <span class="stamp">Figure A — document map</span>
         <span class="cap">
           <span>Composite of 47 source documents</span>
-          <span>2021&ndash;2026</span>
+          <span>2021–2026</span>
         </span>
       </figure>
 
       <div class="lead-text">
         <h1 class="lead-head">My <em>Fallout</em> with Troy Barile-Simleness.</h1>
         <p class="lead-deck">
-          Academic Fraud and Weaponized Trust &mdash; How an “investigative journalist” used fabricated authority to threaten lives and silence truth. With timeline and evidence appendix.
+          Academic Fraud and Weaponized Trust — How an “investigative journalist” used fabricated authority to threaten lives and silence truth. With timeline and evidence appendix.
         </p>
         <p class="lead-meta">
           <span class="who">By L.&nbsp;V.&nbsp;Maestri</span>
-          <span class="sep">&middot;</span>
+          <span class="sep">·</span>
           ~50 min read
-          <span class="sep">&middot;</span>
+          <span class="sep">·</span>
           posted 04 May 2026
         </p>
-        <a href="/articles/fallout-troy-barile-simleness" class="lead-go">Read the article <span class="arr">&rarr;</span></a>
+        <a href="/articles/fallout-troy-barile-simleness" class="lead-go">Read the article <span class="arr">→</span></a>
       </div>
 
     </div>
   </section>
 
   <!-- ============================== ARTICLES ============================== -->
-  <section data-section="articles" data-section-label="Articles"
-           style="--sec: var(--c-2); --sec-heading: var(--c-2); --sec-bg-alpha: 0.00; --sec-box-alpha: 0.00;"
-           class="wrap">
+  <section data-section="articles" data-section-label="Articles" style="--sec: var(--c-3); --sec-heading: var(--c-2); --sec-bg-alpha: 0; --sec-box-alpha: 0;" class="wrap">
     <div class="sec-head h-rust">
       <h2>Articles</h2>
       <span class="grow"></span>
-      <a href="/articles" class="all">See the archive &rarr;</a>
+      <a href="/articles" class="all">See the archive →</a>
     </div>
 
     <div class="articles">
@@ -1443,13 +1436,13 @@
         <span class="a-kicker">25 Apr 2026</span>
         <h3 class="a-head">The Horrors Were Always Real.</h3>
         <p class="a-deck">How bad actors have led the world astray about the story of Sascha Barros (THEY/THEM) </p>
-        <p class="a-meta">By <b>L.&nbsp;V.&nbsp;Maestri</b> &middot; <b>~90&nbsp;min</b></p>
+        <p class="a-meta">By <b>L.&nbsp;V.&nbsp;Maestri</b> · <b>~90&nbsp;min</b></p>
       </article>
 
       <article class="a-card is-quote">
-        <span class="a-kicker">Editor&rsquo;s Note &middot; 07 May</span>
+        <span class="a-kicker">Editor’s Note · 07 May</span>
         <blockquote>
-          &ldquo;The institution survives because <em>nobody</em> ever has to be the one to say the name.&rdquo;
+          “The institution survives because <em>nobody</em> ever has to be the one to say the name.”
         </blockquote>
         <p class="a-meta">From the introduction to <b>Volume&nbsp;II</b></p>
       </article>
@@ -1457,39 +1450,37 @@
       <article class="a-card">
         <span class="a-kicker">11 Apr 2026</span>
         <h3 class="a-head">The Conclusion Came First.</h3>
-        <p class="a-deck">How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead &mdash; at the cost of victims.</p>
-        <p class="a-meta">By <b>L.&nbsp;V.&nbsp;Maestri</b> &middot; <b>~30&nbsp;min</b></p>
+        <p class="a-deck">How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead — at the cost of victims.</p>
+        <p class="a-meta">By <b>L.&nbsp;V.&nbsp;Maestri</b> · <b>~30&nbsp;min</b></p>
       </article>
 
       <article class="a-card">
-        <span class="a-kicker">Method &middot; 01 May</span>
+        <span class="a-kicker">Method · 01 May</span>
         <h3 class="a-head">How we tell a story without naming the survivor.</h3>
         <p class="a-deck">Notes on corroboration, source protection, and the kind of evidence we accept and reject.</p>
-        <p class="a-meta">By <b>S.&nbsp;Lin</b> &middot; <b>7&nbsp;min</b></p>
+        <p class="a-meta">By <b>S.&nbsp;Lin</b> · <b>7&nbsp;min</b></p>
       </article>
 
     </div>
   </section>
 
   <!-- ============================== PSYCHOLOGICAL WARFARE ============================== -->
-  <section data-section="psych" data-section-label="Psychological Warfare"
-           style="--sec: var(--c-5); --sec-heading: var(--c-5); --sec-bg-alpha: 0.05; --sec-box-alpha: 0.00;"
-           class="wrap">
+  <section data-section="psych" data-section-label="Psychological Warfare" style="--sec: var(--c-5); --sec-heading: var(--c-5); --sec-bg-alpha: 0; --sec-box-alpha: 0;" class="wrap">
     <div class="sec-head h-pink">
       <h2>Psychological Warfare</h2>
       <span class="grow"></span>
-      <a href="/psych" class="all">All case files &rarr;</a>
+      <a href="/psych" class="all">All case files →</a>
     </div>
 
     <div class="psych-grid">
 
       <div class="pw-feature">
-        <figure class="pw-fig art-bursts" data-slot="psych-feature-fig" data-slot-purpose="Psych feature — pattern map">
-          <span class="stamp">Case 011 &mdash; pattern map</span>
+        <figure class="pw-fig art-bursts" data-slot="psych-feature-fig" data-slot-purpose="Psych feature — pattern map" style="aspect-ratio: 5 / 1;">
+          <span class="stamp">Case 011 — pattern map</span>
         </figure>
         <h3 class="head">The architecture of <em>plausible deniability</em>.</h3>
-        <p class="deck">A taxonomy of the linguistic moves powerful people use to admit nothing while appearing to admit everything: passive constructions, third-person displacement, the &ldquo;some say&rdquo; pivot, and other recurring tells.</p>
-        <p class="meta">By <b>J.&nbsp;Brennan</b> &middot; <b>9 min</b> &middot; with annotated transcripts</p>
+        <p class="deck">A taxonomy of the linguistic moves powerful people use to admit nothing while appearing to admit everything: passive constructions, third-person displacement, the “some say” pivot, and other recurring tells.</p>
+        <p class="meta">By <b>J.&nbsp;Brennan</b> · <b>9 min</b> · with annotated transcripts</p>
       </div>
 
       <div class="pw-list">
@@ -1497,28 +1488,28 @@
           <span class="n">01</span>
           <div class="body">
             <h4>DARVO in the public record</h4>
-            <p>Deny, attack, reverse victim and offender &middot; <b>case set of 12</b></p>
+            <p>Deny, attack, reverse victim and offender · <b>case set of 12</b></p>
           </div>
         </article>
         <article class="pw-item">
           <span class="n">02</span>
           <div class="body">
             <h4>How abusers borrow the language of healing</h4>
-            <p>Therapeutic vocabulary as cover &middot; <b>essay, 6 min</b></p>
+            <p>Therapeutic vocabulary as cover · <b>essay, 6 min</b></p>
           </div>
         </article>
         <article class="pw-item">
           <span class="n">03</span>
           <div class="body">
             <h4>The grooming curve in elite networks</h4>
-            <p>Patterns across nine documented cases &middot; <b>research note</b></p>
+            <p>Patterns across nine documented cases · <b>research note</b></p>
           </div>
         </article>
         <article class="pw-item">
           <span class="n">04</span>
           <div class="body">
             <h4>Smear-by-procedure</h4>
-            <p>When the complaint process is the retaliation &middot; <b>guide, 8 min</b></p>
+            <p>When the complaint process is the retaliation · <b>guide, 8 min</b></p>
           </div>
         </article>
       </div>
@@ -1527,15 +1518,13 @@
   </section>
 
   <!-- ============================== OPSEC + MEMBERS ============================== -->
-  <section data-section="opsec-network" data-section-label="OpSec & Network"
-           style="--sec: var(--c-3); --sec-heading: var(--c-3); --sec-bg-alpha: 0.00; --sec-box-alpha: 0.00;"
-           class="wrap duo">
+  <section data-section="opsec-network" data-section-label="OpSec &amp; Network" style="--sec: var(--c-3); --sec-heading: var(--c-3); --sec-bg-alpha: 0; --sec-box-alpha: 0;" class="wrap duo">
 
     <div>
       <div class="sec-head h-teal">
         <h2>Digital OpSec</h2>
         <span class="grow"></span>
-        <a href="/opsec" class="all">All guides &rarr;</a>
+        <a href="/opsec" class="all">All guides →</a>
       </div>
 
       <div class="opsec-list">
@@ -1574,7 +1563,7 @@
         <article class="op-item">
           <span class="num">05</span>
           <div>
-            <h4>Adversarial OSINT: assume they&rsquo;re looking</h4>
+            <h4>Adversarial OSINT: assume they’re looking</h4>
             <p>What an investigator with $200 can find about you in an afternoon. And what to do about it.</p>
           </div>
           <span class="level advanced">Advanced</span>
@@ -1586,20 +1575,20 @@
       <div class="sec-head h-gold">
         <h2>The Network</h2>
         <span class="grow"></span>
-        <a href="/contact" class="all">Join in &rarr;</a>
+        <a href="/contact" class="all">Join in →</a>
       </div>
 
       <div class="members-list">
-        <div class="mem"><div class="nm">Matt&nbsp;Tranberg</div><div class="rl">Audio Visual Producer &middot; Alberta, Canada</div></div>
-        <div class="mem"><div class="nm">D.&nbsp;Okonkwo</div><div class="rl">Researcher &middot; Atlanta, GA</div></div>
-        <div class="mem"><div class="nm">A.&nbsp;Vasquez</div><div class="rl">Records &middot; El Paso, TX</div></div>
-        <div class="mem"><div class="nm">S.&nbsp;Lin</div><div class="rl">Editor &middot; Oakland, CA</div></div>
-        <div class="mem"><div class="nm">J.&nbsp;Brennan</div><div class="rl">Legal observer &middot; Chicago, IL</div></div>
-        <div class="mem"><div class="nm">R.&nbsp;Patel</div><div class="rl">Audio &middot; Brooklyn, NY</div></div>
-        <div class="mem"><div class="nm">K.&nbsp;Mortensen</div><div class="rl">Visual archive &middot; Minneapolis</div></div>
-        <div class="mem"><div class="nm">E.&nbsp;Ferreira</div><div class="rl">Web infrastructure &middot; Lisbon</div></div>
-        <div class="mem"><div class="nm">N.&nbsp;Kowalski</div><div class="rl">Translation &middot; Kraków</div></div>
-        <div class="mem"><div class="nm">T.&nbsp;Jian</div><div class="rl">Researcher &middot; Vancouver, BC</div></div>
+        <div class="mem"><div class="nm">Matt&nbsp;Tranberg</div><div class="rl">Audio Visual Producer · Alberta, Canada</div></div>
+        <div class="mem"><div class="nm">D.&nbsp;Okonkwo</div><div class="rl">Researcher · Atlanta, GA</div></div>
+        <div class="mem"><div class="nm">A.&nbsp;Vasquez</div><div class="rl">Records · El Paso, TX</div></div>
+        <div class="mem"><div class="nm">S.&nbsp;Lin</div><div class="rl">Editor · Oakland, CA</div></div>
+        <div class="mem"><div class="nm">J.&nbsp;Brennan</div><div class="rl">Legal observer · Chicago, IL</div></div>
+        <div class="mem"><div class="nm">R.&nbsp;Patel</div><div class="rl">Audio · Brooklyn, NY</div></div>
+        <div class="mem"><div class="nm">K.&nbsp;Mortensen</div><div class="rl">Visual archive · Minneapolis</div></div>
+        <div class="mem"><div class="nm">E.&nbsp;Ferreira</div><div class="rl">Web infrastructure · Lisbon</div></div>
+        <div class="mem"><div class="nm">N.&nbsp;Kowalski</div><div class="rl">Translation · Kraków</div></div>
+        <div class="mem"><div class="nm">T.&nbsp;Jian</div><div class="rl">Researcher · Vancouver, BC</div></div>
       </div>
       <p class="members-note">
         We do not solicit qualifications. <a href="/contact">Reach out</a> with what motivates you and we will find a place for it.
@@ -1609,13 +1598,11 @@
   </section>
 
   <!-- ============================== MEDIA ============================== -->
-  <section data-section="media" data-section-label="Media"
-           style="--sec: var(--c-4); --sec-heading: var(--c-4); --sec-bg-alpha: 0.05; --sec-box-alpha: 0.00;"
-           class="wrap">
+  <section data-section="media" data-section-label="Media" style="--sec: var(--c-4); --sec-heading: var(--c-4); --sec-bg-alpha: 0; --sec-box-alpha: 0;" class="wrap">
     <div class="sec-head h-blue">
       <h2>Media</h2>
       <span class="grow"></span>
-      <a href="/media" class="all">All works &rarr;</a>
+      <a href="/media" class="all">All works →</a>
     </div>
 
     <div class="media-grid">
@@ -1671,25 +1658,23 @@
   </section>
 
   <!-- ============================== PAPERS + MIND MAP ============================== -->
-  <section data-section="bibliography-mindmap" data-section-label="Bibliography & Mind Map"
-           style="--sec: var(--c-6); --sec-heading: var(--c-6); --sec-bg-alpha: 0.00; --sec-box-alpha: 0.00;"
-           class="wrap duo-2">
+  <section data-section="bibliography-mindmap" data-section-label="Bibliography &amp; Mind Map" style="--sec: var(--c-6); --sec-heading: var(--c-6); --sec-bg-alpha: 0; --sec-box-alpha: 0;" class="wrap duo-2">
 
     <div>
       <div class="sec-head h-green">
         <h2>Academic &amp; Cited</h2>
         <span class="grow"></span>
-        <a href="/articles/cited" class="all">Full bibliography &rarr;</a>
+        <a href="/articles/cited" class="all">Full bibliography →</a>
       </div>
 
       <div class="papers">
         <div class="paper">
           <span class="yr">2024</span>
-          <span class="cite"><span class="au">Freyd, J.&nbsp;J., &amp; Birrell, P.&nbsp;J.</span> <span class="ti">Institutional betrayal: the second-order harm of organizational silence.</span> <span class="src">Journal of Trauma &amp; Dissociation, 25(2), 134&ndash;158.</span></span>
+          <span class="cite"><span class="au">Freyd, J.&nbsp;J., &amp; Birrell, P.&nbsp;J.</span> <span class="ti">Institutional betrayal: the second-order harm of organizational silence.</span> <span class="src">Journal of Trauma &amp; Dissociation, 25(2), 134–158.</span></span>
         </div>
         <div class="paper">
           <span class="yr">2023</span>
-          <span class="cite"><span class="au">Smith, C.&nbsp;P.</span> <span class="ti">Why power apologises in the passive voice.</span> <span class="src">Discourse &amp; Society, 34(6), 712&ndash;731.</span></span>
+          <span class="cite"><span class="au">Smith, C.&nbsp;P.</span> <span class="ti">Why power apologises in the passive voice.</span> <span class="src">Discourse &amp; Society, 34(6), 712–731.</span></span>
         </div>
         <div class="paper">
           <span class="yr">2022</span>
@@ -1710,11 +1695,11 @@
       <div class="sec-head h-blue">
         <h2>Mind Map</h2>
         <span class="grow"></span>
-        <a href="/mindmap" class="all">Open the full map &rarr;</a>
+        <a href="/mindmap" class="all">Open the full map →</a>
       </div>
 
       <div class="mindmap">
-        <div class="mm-viz art-radial" data-slot="mindmap-graph" data-slot-purpose="Mind map — case 014">
+        <div class="mm-viz art-confetti" data-slot="mindmap-graph" data-slot-purpose="Mind map — case 014" style="aspect-ratio: 21 / 9;">
 
           <!-- edges first so nodes draw on top -->
           <span class="mm-line" style="left: 22%; top: 30%; width: 32%;  transform: rotate(22deg);"></span>
@@ -1733,7 +1718,7 @@
           <span class="mm-node o" style="left: 90%; top: 50%;">Funders</span>
         </div>
         <p class="mm-cap">
-          Each node opens its underlying documents. The full map links <b>3,114 entities</b> across <b>23 case files</b>. <a href="/mindmap">Open the full map &rarr;</a>
+          Each node opens its underlying documents. The full map links <b>3,114 entities</b> across <b>23 case files</b>. <a href="/mindmap">Open the full map →</a>
         </p>
       </div>
     </div>
@@ -1779,7 +1764,7 @@
           <li><a href="/ethos">Network Ethos</a></li>
           <li><a href="/contact#submit">Submit a Story</a></li>
           <li><a href="/contact#projects">Suggest a Project</a></li>
-          <li><a href="https://github.com/mudlark-media">GitHub Repo &nearr;</a></li>
+          <li><a href="https://github.com/mudlark-media">GitHub Repo ↗</a></li>
         </ul>
       </div>
     </div>
@@ -1798,45 +1783,45 @@
 <div class="editor-overlay" id="editor-overlay"></div>
 <div class="editor-panel" id="editor-panel" role="dialog" aria-label="Page editor">
   <div class="editor-header">
-    <div class="editor-header-title">Editor &mdash; Mudlark</div>
-    <button class="editor-close" id="editor-close" type="button" aria-label="Close">&times;</button>
+    <div class="editor-header-title">Editor — Mudlark</div>
+    <button class="editor-close" id="editor-close" type="button" aria-label="Close">×</button>
   </div>
   <div class="editor-body">
 
     <div class="editor-section">
       <h3>Palette</h3>
-      <div class="editor-grid-palette" id="editor-palette"></div>
+      <div class="editor-grid-palette" id="editor-palette"><div class="editor-palette-cell"><div class="swatch" style="--swatch: #c0835e;"></div><div class="label">Highlight &amp; hover</div><div class="controls"><input type="text" class="editor-input" title="c1"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #9e5c34;"></div><div class="label">Lead action</div><div class="controls"><input type="text" class="editor-input" title="c2"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #8d6e5b;"></div><div class="label">Numbers &amp; OpSec</div><div class="controls"><input type="text" class="editor-input" title="c3"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #d2b3a1;"></div><div class="label">Links &amp; nav</div><div class="controls"><input type="text" class="editor-input" title="c4"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #875a3f;"></div><div class="label">Italic emphasis</div><div class="controls"><input type="text" class="editor-input" title="c5"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #74665e;"></div><div class="label">Dates &amp; status</div><div class="controls"><input type="text" class="editor-input" title="c6"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #211d1b;"></div><div class="label">Background</div><div class="controls"><input type="text" class="editor-input" title="c7"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #4d4540;"></div><div class="label">Surface</div><div class="controls"><input type="text" class="editor-input" title="c8"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #ece5d2;"></div><div class="label">Main text</div><div class="controls"><input type="text" class="editor-input" title="c9"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div><div class="editor-palette-cell"><div class="swatch" style="--swatch: #9c9583;"></div><div class="label">Soft text</div><div class="controls"><input type="text" class="editor-input" title="c10"><button type="button" class="editor-lock is-locked" title="Lock this color (skip during Randomize)" aria-label="Lock"></button></div></div></div>
       <button class="editor-button" id="editor-randomize" type="button">Randomize</button>
     </div>
 
     <div class="editor-section">
       <h3>Sections</h3>
-      <div id="editor-sections"></div>
+      <div id="editor-sections"><div class="editor-section-group"><div class="editor-section-group-title">Lead</div><div class="editor-section-spot"><div class="swatch" data-section-id="lead" data-spot-key="accent" style="--swatch: #9e5c34;"></div><span class="spot-label">accent</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-section-spot"><div class="swatch" data-section-id="lead" data-spot-key="heading" style="--swatch: #875a3f;"></div><span class="spot-label">heading</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-label-row"><span class="editor-label">Background</span><input type="range" min="0" max="40" step="1" class="editor-slider" style="--fill: 0%;"></div><div class="editor-label-row"><span class="editor-label">Box</span><input type="range" min="0" max="60" step="1" class="editor-slider" style="--fill: 26.666666666666668%;"></div></div><div class="editor-section-group"><div class="editor-section-group-title">Articles</div><div class="editor-section-spot"><div class="swatch" data-section-id="articles" data-spot-key="accent" style="--swatch: #8d6e5b;"></div><span class="spot-label">accent</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-section-spot"><div class="swatch" data-section-id="articles" data-spot-key="heading" style="--swatch: #9e5c34;"></div><span class="spot-label">heading</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-label-row"><span class="editor-label">Background</span><input type="range" min="0" max="40" step="1" class="editor-slider" style="--fill: 0%;"></div><div class="editor-label-row"><span class="editor-label">Box</span><input type="range" min="0" max="60" step="1" class="editor-slider" style="--fill: 0%;"></div></div><div class="editor-section-group"><div class="editor-section-group-title">Psych. Warfare</div><div class="editor-section-spot"><div class="swatch" data-section-id="psych" data-spot-key="accent" style="--swatch: #875a3f;"></div><span class="spot-label">accent</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-section-spot"><div class="swatch" data-section-id="psych" data-spot-key="heading" style="--swatch: #875a3f;"></div><span class="spot-label">heading</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-label-row"><span class="editor-label">Background</span><input type="range" min="0" max="40" step="1" class="editor-slider" style="--fill: 0%;"></div><div class="editor-label-row"><span class="editor-label">Box</span><input type="range" min="0" max="60" step="1" class="editor-slider" style="--fill: 0%;"></div></div><div class="editor-section-group"><div class="editor-section-group-title">OpSec &amp; Network</div><div class="editor-section-spot"><div class="swatch" data-section-id="opsec-network" data-spot-key="accent" style="--swatch: #8d6e5b;"></div><span class="spot-label">accent</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-section-spot"><div class="swatch" data-section-id="opsec-network" data-spot-key="heading" style="--swatch: #8d6e5b;"></div><span class="spot-label">heading</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-label-row"><span class="editor-label">Background</span><input type="range" min="0" max="40" step="1" class="editor-slider" style="--fill: 0%;"></div><div class="editor-label-row"><span class="editor-label">Box</span><input type="range" min="0" max="60" step="1" class="editor-slider" style="--fill: 0%;"></div></div><div class="editor-section-group"><div class="editor-section-group-title">Media</div><div class="editor-section-spot"><div class="swatch" data-section-id="media" data-spot-key="accent" style="--swatch: #d2b3a1;"></div><span class="spot-label">accent</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-section-spot"><div class="swatch" data-section-id="media" data-spot-key="heading" style="--swatch: #d2b3a1;"></div><span class="spot-label">heading</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-label-row"><span class="editor-label">Background</span><input type="range" min="0" max="40" step="1" class="editor-slider" style="--fill: 0%;"></div><div class="editor-label-row"><span class="editor-label">Box</span><input type="range" min="0" max="60" step="1" class="editor-slider" style="--fill: 0%;"></div></div><div class="editor-section-group"><div class="editor-section-group-title">Bibliography &amp; Map</div><div class="editor-section-spot"><div class="swatch" data-section-id="bibliography-mindmap" data-spot-key="accent" style="--swatch: #74665e;"></div><span class="spot-label">accent</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-section-spot"><div class="swatch" data-section-id="bibliography-mindmap" data-spot-key="heading" style="--swatch: #74665e;"></div><span class="spot-label">heading</span><select class="editor-select"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select></div><div class="editor-label-row"><span class="editor-label">Background</span><input type="range" min="0" max="40" step="1" class="editor-slider" style="--fill: 0%;"></div><div class="editor-label-row"><span class="editor-label">Box</span><input type="range" min="0" max="60" step="1" class="editor-slider" style="--fill: 0%;"></div></div></div>
     </div>
 
     <div class="editor-section">
       <h3>Slots</h3>
-      <div id="editor-slots"></div>
+      <div id="editor-slots"><div class="editor-section-group"><div class="editor-section-group-title">Lead figure</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div><div class="editor-section-group"><div class="editor-section-group-title">Psych feature figure</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div><div class="editor-section-group"><div class="editor-section-group-title">Music tile</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div><div class="editor-section-group"><div class="editor-section-group-title">Video tile</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div><div class="editor-section-group"><div class="editor-section-group-title">Audio tile</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div><div class="editor-section-group"><div class="editor-section-group-title">Visual tile</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div><div class="editor-section-group"><div class="editor-section-group-title">Mind map graph</div><div class="editor-label-row"><span class="editor-label">Artwork</span><select class="editor-select"><option value="art-ripple">Ripples</option><option value="art-bursts">Bursts</option><option value="art-rings">LP rings</option><option value="art-stripes-warm">Warm stripes</option><option value="art-radial">Soft glow</option><option value="art-blocks">Color blocks</option><option value="art-graph">Graph paper</option><option value="art-blueprint">Blueprint</option><option value="art-redact">Redaction</option><option value="art-confetti">Confetti</option><option value="art-bands">Color bands</option><option value="art-static">Soft static</option><option value="art-topo">Topo lines</option><option value="art-halftone">Halftone</option><option value="art-dotgrid">Dot grid</option><option value="art-hatch">Crosshatch</option></select></div><div class="editor-label-row"><span class="editor-label">Size</span><select class="editor-select"><option value="0">Square</option><option value="1">Photo (4:3)</option><option value="2">Widescreen (16:9)</option><option value="3">Cinema (21:9)</option><option value="4">Tile (5:4)</option><option value="5">Portrait (3:4)</option><option value="6">Tower (2:3)</option><option value="7">Tall (9:16)</option><option value="8">Banner (5:1)</option><option value="9">Hero (3:1)</option><option value="10">Short (120px)</option><option value="11">Card (240px)</option><option value="12">Tall card (480px)</option></select></div></div></div>
     </div>
 
     <div class="editor-section">
       <h3>Fonts</h3>
-      <div id="editor-fonts"></div>
+      <div id="editor-fonts"><div class="editor-label-row"><span class="editor-label">Display</span><select class="editor-select" data-role="display"><option value="Antonio">Antonio</option><option value="Archivo Black">Archivo Black</option><option value="Bebas Neue">Bebas Neue</option><option value="Blinker">Blinker</option><option value="DM Sans">DM Sans</option><option value="Fraunces">Fraunces</option><option value="Geist">Geist</option><option value="Goldman">Goldman</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter Tight">Inter Tight</option><option value="Kanit">Kanit</option><option value="Krona One">Krona One</option><option value="Lato">Lato</option><option value="Michroma">Michroma</option><option value="Mona Sans">Mona Sans</option><option value="Onest">Onest</option><option value="Orbitron">Orbitron</option><option value="Public Sans">Public Sans</option><option value="Quantico">Quantico</option><option value="Recursive">Recursive</option><option value="Red Hat Display">Red Hat Display</option><option value="Science Gothic">Science Gothic</option><option value="Space Grotesk">Space Grotesk</option><option value="Syncopate">Syncopate</option></select></div><div class="editor-label-row"><span class="editor-label">Body</span><select class="editor-select" data-role="body"><option value="Antonio">Antonio</option><option value="Archivo Black">Archivo Black</option><option value="Bebas Neue">Bebas Neue</option><option value="Blinker">Blinker</option><option value="DM Sans">DM Sans</option><option value="Fraunces">Fraunces</option><option value="Geist">Geist</option><option value="Goldman">Goldman</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter Tight">Inter Tight</option><option value="Kanit">Kanit</option><option value="Krona One">Krona One</option><option value="Lato">Lato</option><option value="Michroma">Michroma</option><option value="Mona Sans">Mona Sans</option><option value="Onest">Onest</option><option value="Orbitron">Orbitron</option><option value="Public Sans">Public Sans</option><option value="Quantico">Quantico</option><option value="Recursive">Recursive</option><option value="Red Hat Display">Red Hat Display</option><option value="Science Gothic">Science Gothic</option><option value="Space Grotesk">Space Grotesk</option><option value="Syncopate">Syncopate</option></select></div><div class="editor-label-row"><span class="editor-label">Sans</span><select class="editor-select" data-role="sans"><option value="Antonio">Antonio</option><option value="Archivo Black">Archivo Black</option><option value="Bebas Neue">Bebas Neue</option><option value="Blinker">Blinker</option><option value="DM Sans">DM Sans</option><option value="Fraunces">Fraunces</option><option value="Geist">Geist</option><option value="Goldman">Goldman</option><option value="IBM Plex Sans">IBM Plex Sans</option><option value="Inter Tight">Inter Tight</option><option value="Kanit">Kanit</option><option value="Krona One">Krona One</option><option value="Lato">Lato</option><option value="Michroma">Michroma</option><option value="Mona Sans">Mona Sans</option><option value="Onest">Onest</option><option value="Orbitron">Orbitron</option><option value="Public Sans">Public Sans</option><option value="Quantico">Quantico</option><option value="Recursive">Recursive</option><option value="Red Hat Display">Red Hat Display</option><option value="Science Gothic">Science Gothic</option><option value="Space Grotesk">Space Grotesk</option><option value="Syncopate">Syncopate</option></select></div><div class="editor-label-row"><span class="editor-label">Mono</span><select class="editor-select" data-role="mono"><option value="Azeret Mono">Azeret Mono</option><option value="Spline Sans Mono">Spline Sans Mono</option><option value="Victor Mono">Victor Mono</option></select></div></div>
     </div>
 
     <div class="editor-section">
       <h3>Rhythm</h3>
       <div class="editor-label-row">
         <span class="editor-label">Vertical</span>
-        <input type="range" min="0.7" max="1.5" step="0.05" value="1" class="editor-slider" id="editor-rhythm-v">
+        <input type="range" min="0.7" max="1.5" step="0.05" value="1" class="editor-slider" id="editor-rhythm-v" style="--fill: 0%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Padding</span>
-        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p">
+        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p" style="--fill: 0%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Headline</span>
-        <input type="range" min="0.85" max="1.2" step="0.01" value="1" class="editor-slider" id="editor-rhythm-h">
+        <input type="range" min="0.85" max="1.2" step="0.01" value="1" class="editor-slider" id="editor-rhythm-h" style="--fill: 100%;">
       </div>
     </div>
 
@@ -1844,19 +1829,19 @@
       <h3>Effects</h3>
       <div class="editor-label-row">
         <span class="editor-label">Shadow</span>
-        <input type="range" min="0" max="80" step="2" value="40" class="editor-slider" id="editor-shadow-alpha">
+        <input type="range" min="0" max="80" step="2" value="40" class="editor-slider" id="editor-shadow-alpha" style="--fill: 100%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Blur</span>
-        <input type="range" min="0" max="80" step="2" value="30" class="editor-slider" id="editor-shadow-blur">
+        <input type="range" min="0" max="80" step="2" value="30" class="editor-slider" id="editor-shadow-blur" style="--fill: 100%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Shine</span>
-        <input type="range" min="0" max="30" step="1" value="0" class="editor-slider" id="editor-shine">
+        <input type="range" min="0" max="30" step="1" value="0" class="editor-slider" id="editor-shine" style="--fill: 40%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Picture</span>
-        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha">
+        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha" style="--fill: 0%;">
       </div>
     </div>
 
@@ -1874,15 +1859,15 @@
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Colour</span>
-        <select class="editor-select" id="editor-bgp-color"></select>
+        <select class="editor-select" id="editor-bgp-color"><option value="c1">Highlight &amp; hover</option><option value="c2">Lead action</option><option value="c3">Numbers &amp; OpSec</option><option value="c4">Links &amp; nav</option><option value="c5">Italic emphasis</option><option value="c6">Dates &amp; status</option><option value="c7">Background</option><option value="c8">Surface</option><option value="c9">Main text</option><option value="c10">Soft text</option></select>
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Size</span>
-        <input type="range" min="8" max="80" step="2" value="24" class="editor-slider" id="editor-bgp-size">
+        <input type="range" min="8" max="80" step="2" value="24" class="editor-slider" id="editor-bgp-size" style="--fill: 83.33333333333334%;">
       </div>
       <div class="editor-label-row">
         <span class="editor-label">Alpha</span>
-        <input type="range" min="0" max="60" step="1" value="0" class="editor-slider" id="editor-bgp-alpha">
+        <input type="range" min="0" max="60" step="1" value="0" class="editor-slider" id="editor-bgp-alpha" style="--fill: 23.333333333333332%;">
       </div>
     </div>
 
@@ -1890,16 +1875,15 @@
       <h3>Actions</h3>
       <div class="editor-actions">
         <button class="editor-button" id="editor-export" type="button">Export HTML</button>
-        <button class="editor-button" id="editor-copy"   type="button">Copy CSS</button>
-        <button class="editor-button" id="editor-reset"  type="button">Reset</button>
+        <button class="editor-button" id="editor-copy" type="button">Copy CSS</button>
+        <button class="editor-button" id="editor-reset" type="button">Reset</button>
       </div>
     </div>
 
   </div>
 </div>
 
-<script type="application/json" id="builder-state">
-{
+<script type="application/json" id="builder-state">{
   "schema": 4,
   "page": {
     "id": "mudlark-home",
@@ -1909,89 +1893,1156 @@
     "repo": "https://github.com/Mudlark-Media-Network/mudlarkmedia.github.io"
   },
   "palette": {
-    "c1":  { "value": "#E8B23A", "locked": false, "label": "Highlight & hover" },
-    "c2":  { "value": "#DD5E2C", "locked": false, "label": "Lead action" },
-    "c3":  { "value": "#2EA39C", "locked": false, "label": "Numbers & OpSec" },
-    "c4":  { "value": "#4F95CC", "locked": false, "label": "Links & nav" },
-    "c5":  { "value": "#CC6094", "locked": false, "label": "Italic emphasis" },
-    "c6":  { "value": "#6CB855", "locked": false, "label": "Dates & status" },
-    "c7":  { "value": "#131210", "locked": true,  "label": "Background" },
-    "c8":  { "value": "#1F1D19", "locked": true,  "label": "Surface" },
-    "c9":  { "value": "#ECE5D2", "locked": true,  "label": "Main text" },
-    "c10": { "value": "#9C9583", "locked": true,  "label": "Soft text" }
+    "c1": {
+      "value": "#c0835e",
+      "locked": true,
+      "label": "Highlight & hover"
+    },
+    "c2": {
+      "value": "#9e5c34",
+      "locked": true,
+      "label": "Lead action"
+    },
+    "c3": {
+      "value": "#8d6e5b",
+      "locked": true,
+      "label": "Numbers & OpSec"
+    },
+    "c4": {
+      "value": "#d2b3a1",
+      "locked": true,
+      "label": "Links & nav"
+    },
+    "c5": {
+      "value": "#875a3f",
+      "locked": true,
+      "label": "Italic emphasis"
+    },
+    "c6": {
+      "value": "#74665e",
+      "locked": true,
+      "label": "Dates & status"
+    },
+    "c7": {
+      "value": "#211d1b",
+      "locked": true,
+      "label": "Background"
+    },
+    "c8": {
+      "value": "#4d4540",
+      "locked": true,
+      "label": "Surface"
+    },
+    "c9": {
+      "value": "#ece5d2",
+      "locked": true,
+      "label": "Main text"
+    },
+    "c10": {
+      "value": "#9c9583",
+      "locked": true,
+      "label": "Soft text"
+    }
   },
   "effects": {
-    "shadowAlpha": 0.40,
-    "shadowBlur":  "30px",
-    "shineAlpha":  0.00,
-    "slotAlpha":   0.00
+    "shadowAlpha": 0.8,
+    "shadowBlur": "80px",
+    "shineAlpha": 0.12,
+    "slotAlpha": 0
   },
   "bgPattern": {
-    "shape": "dot",
+    "shape": "square",
     "color": "c10",
-    "size":  24,
-    "alpha": 0.00
+    "size": 68,
+    "alpha": 0.14
   },
   "fonts": {
-    "display": { "family": "Fraunces",        "source": "repo" },
-    "body":    { "family": "Fraunces",        "source": "repo" },
-    "sans":    { "family": "IBM Plex Sans",   "source": "repo" },
-    "mono":    { "family": "Spline Sans Mono","source": "repo" },
+    "display": {
+      "family": "Fraunces",
+      "source": "repo"
+    },
+    "body": {
+      "family": "Fraunces",
+      "source": "repo"
+    },
+    "sans": {
+      "family": "IBM Plex Sans",
+      "source": "repo"
+    },
+    "mono": {
+      "family": "Spline Sans Mono",
+      "source": "repo"
+    },
     "available": {
       "display": [
-        { "name": "Fraunces",       "files": [{ "weight": "100 1000", "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf" }] },
-        { "name": "Bebas Neue",     "files": [{ "weight": "400",      "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Bebas_Neue/BebasNeue-Regular.ttf" }] },
-        { "name": "Orbitron",       "files": [{ "weight": "400 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/Orbitron-VariableFont_wght.ttf" }] },
-        { "name": "Goldman",        "files": [{ "weight": "400",      "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Goldman/Goldman-Regular.ttf" }] }
+        {
+          "name": "Antonio",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Antonio/Antonio-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Archivo Black",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Archivo_Black/ArchivoBlack-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Bebas Neue",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Bebas_Neue/BebasNeue-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Blinker",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Blinker/Blinker-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "DM Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Fraunces",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Geist",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Goldman",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Goldman/Goldman-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "IBM Plex Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Inter Tight",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Kanit",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Kanit/Kanit-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Kanit/Kanit-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Krona One",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Krona_One/KronaOne-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Lato",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Michroma",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Mona Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Mona_Sans/MonaSans-VariableFont_wdth,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Mona_Sans/MonaSans-Italic-VariableFont_wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Onest",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Onest/Onest-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Orbitron",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/Orbitron-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Public Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Quantico",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Quantico/Quantico-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Quantico/Quantico-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Recursive",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Recursive/Recursive-VariableFont_CASL,CRSV,MONO,slnt,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Red Hat Display",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Red_Hat_Display/RedHatDisplay-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Science Gothic",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Science_Gothic/ScienceGothic-VariableFont_CTRS,slnt,wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Space Grotesk",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Syncopate",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Syncopate/Syncopate-Bold.ttf"
+            }
+          ]
+        }
       ],
       "body": [
-        { "name": "Fraunces",       "files": [{ "weight": "100 1000", "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf" }] },
-        { "name": "Onest",          "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Onest/Onest-VariableFont_wght.ttf" }] },
-        { "name": "Lato",           "files": [{ "weight": "400",      "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Regular.ttf" }] },
-        { "name": "Public Sans",    "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-VariableFont_wght.ttf" }] }
+        {
+          "name": "Antonio",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Antonio/Antonio-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Archivo Black",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Archivo_Black/ArchivoBlack-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Bebas Neue",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Bebas_Neue/BebasNeue-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Blinker",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Blinker/Blinker-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "DM Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Fraunces",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Geist",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Goldman",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Goldman/Goldman-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "IBM Plex Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Inter Tight",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Kanit",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Kanit/Kanit-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Kanit/Kanit-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Krona One",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Krona_One/KronaOne-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Lato",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Michroma",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Mona Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Mona_Sans/MonaSans-VariableFont_wdth,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Mona_Sans/MonaSans-Italic-VariableFont_wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Onest",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Onest/Onest-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Orbitron",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/Orbitron-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Public Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Quantico",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Quantico/Quantico-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Quantico/Quantico-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Recursive",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Recursive/Recursive-VariableFont_CASL,CRSV,MONO,slnt,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Red Hat Display",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Red_Hat_Display/RedHatDisplay-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Science Gothic",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Science_Gothic/ScienceGothic-VariableFont_CTRS,slnt,wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Space Grotesk",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Syncopate",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Syncopate/Syncopate-Bold.ttf"
+            }
+          ]
+        }
       ],
       "sans": [
-        { "name": "IBM Plex Sans",  "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf" }] },
-        { "name": "Geist",          "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-VariableFont_wght.ttf" }] },
-        { "name": "Inter Tight",    "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-VariableFont_wght.ttf" }] }
+        {
+          "name": "Antonio",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Antonio/Antonio-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Archivo Black",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Archivo_Black/ArchivoBlack-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Bebas Neue",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Bebas_Neue/BebasNeue-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Blinker",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Blinker/Blinker-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "DM Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Fraunces",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Geist",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Geist/Geist-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Goldman",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Goldman/Goldman-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "IBM Plex Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-Italic-VariableFont_wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Inter Tight",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Inter_Tight/InterTight-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Kanit",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Kanit/Kanit-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Kanit/Kanit-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Krona One",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Krona_One/KronaOne-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Lato",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Lato/Lato-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Michroma",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Mona Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Mona_Sans/MonaSans-VariableFont_wdth,wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Mona_Sans/MonaSans-Italic-VariableFont_wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Onest",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Onest/Onest-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Orbitron",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/Orbitron-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Public Sans",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/PublicSans-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Quantico",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Quantico/Quantico-Regular.ttf"
+            },
+            {
+              "weight": "400",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Quantico/Quantico-Italic.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Recursive",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Recursive/Recursive-VariableFont_CASL,CRSV,MONO,slnt,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Red Hat Display",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Red_Hat_Display/RedHatDisplay-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Science Gothic",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Science_Gothic/ScienceGothic-VariableFont_CTRS,slnt,wdth,wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Space Grotesk",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Syncopate",
+          "files": [
+            {
+              "weight": "400",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Syncopate/Syncopate-Bold.ttf"
+            }
+          ]
+        }
       ],
       "mono": [
-        { "name": "Spline Sans Mono","files":[{ "weight": "300 700",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf" }] },
-        { "name": "Azeret Mono",    "files": [{ "weight": "100 900",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Azeret_Mono/AzeretMono-VariableFont_wght.ttf" }] },
-        { "name": "Victor Mono",    "files": [{ "weight": "100 700",  "style": "normal",  "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Victor_Mono/VictorMono-VariableFont_wght.ttf" }] }
+        {
+          "name": "Azeret Mono",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Azeret_Mono/AzeretMono-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Azeret_Mono/AzeretMono-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Spline Sans Mono",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        },
+        {
+          "name": "Victor Mono",
+          "files": [
+            {
+              "weight": "100 1000",
+              "style": "normal",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Victor_Mono/VictorMono-VariableFont_wght.ttf"
+            },
+            {
+              "weight": "100 1000",
+              "style": "italic",
+              "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Victor_Mono/VictorMono-Italic-VariableFont_wght.ttf"
+            }
+          ]
+        }
       ]
     }
   },
   "rhythm": {
-    "padX": "clamp(20px, 4vw, 56px)",
-    "vertical": 1,
-    "headlineScale": 1
+    "padX": "80px",
+    "vertical": 0.7,
+    "headlineScale": 1.2
   },
   "sections": [
-    { "id": "lead",                  "label": "Lead",                "bgAlpha": 0.06, "boxAlpha": 0.00,
-      "colors": { "accent":  { "paletteKey": "c5" }, "heading": { "paletteKey": "c5" } } },
-    { "id": "articles",              "label": "Articles",            "bgAlpha": 0.00, "boxAlpha": 0.00,
-      "colors": { "accent":  { "paletteKey": "c2" }, "heading": { "paletteKey": "c2" } } },
-    { "id": "psych",                 "label": "Psych. Warfare",      "bgAlpha": 0.05, "boxAlpha": 0.00,
-      "colors": { "accent":  { "paletteKey": "c5" }, "heading": { "paletteKey": "c5" } } },
-    { "id": "opsec-network",         "label": "OpSec & Network",     "bgAlpha": 0.00, "boxAlpha": 0.00,
-      "colors": { "accent":  { "paletteKey": "c3" }, "heading": { "paletteKey": "c3" } } },
-    { "id": "media",                 "label": "Media",               "bgAlpha": 0.05, "boxAlpha": 0.00,
-      "colors": { "accent":  { "paletteKey": "c4" }, "heading": { "paletteKey": "c4" } } },
-    { "id": "bibliography-mindmap",  "label": "Bibliography & Map",  "bgAlpha": 0.00, "boxAlpha": 0.00,
-      "colors": { "accent":  { "paletteKey": "c6" }, "heading": { "paletteKey": "c6" } } }
+    {
+      "id": "lead",
+      "label": "Lead",
+      "bgAlpha": 0,
+      "boxAlpha": 0.16,
+      "colors": {
+        "accent": {
+          "paletteKey": "c2"
+        },
+        "heading": {
+          "paletteKey": "c5"
+        }
+      }
+    },
+    {
+      "id": "articles",
+      "label": "Articles",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent": {
+          "paletteKey": "c3"
+        },
+        "heading": {
+          "paletteKey": "c2"
+        }
+      }
+    },
+    {
+      "id": "psych",
+      "label": "Psych. Warfare",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent": {
+          "paletteKey": "c5"
+        },
+        "heading": {
+          "paletteKey": "c5"
+        }
+      }
+    },
+    {
+      "id": "opsec-network",
+      "label": "OpSec & Network",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent": {
+          "paletteKey": "c3"
+        },
+        "heading": {
+          "paletteKey": "c3"
+        }
+      }
+    },
+    {
+      "id": "media",
+      "label": "Media",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent": {
+          "paletteKey": "c4"
+        },
+        "heading": {
+          "paletteKey": "c4"
+        }
+      }
+    },
+    {
+      "id": "bibliography-mindmap",
+      "label": "Bibliography & Map",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent": {
+          "paletteKey": "c6"
+        },
+        "heading": {
+          "paletteKey": "c6"
+        }
+      }
+    }
   ],
   "slots": [
-    { "id": "lead-figure",       "purpose": "Lead figure",        "art": "art-ripple" },
-    { "id": "psych-feature-fig", "purpose": "Psych feature figure","art": "art-bursts" },
-    { "id": "media-music-art",   "purpose": "Music tile",         "art": "art-rings" },
-    { "id": "media-video-art",   "purpose": "Video tile",         "art": "art-stripes-warm" },
-    { "id": "media-audio-art",   "purpose": "Audio tile",         "art": "art-radial" },
-    { "id": "media-visual-art",  "purpose": "Visual tile",        "art": "art-blocks" },
-    { "id": "mindmap-graph",     "purpose": "Mind map graph",     "art": "art-radial" }
+    {
+      "id": "lead-figure",
+      "purpose": "Lead figure",
+      "art": "art-hatch"
+    },
+    {
+      "id": "psych-feature-fig",
+      "purpose": "Psych feature figure",
+      "art": "art-bursts"
+    },
+    {
+      "id": "media-music-art",
+      "purpose": "Music tile",
+      "art": "art-rings"
+    },
+    {
+      "id": "media-video-art",
+      "purpose": "Video tile",
+      "art": "art-stripes-warm"
+    },
+    {
+      "id": "media-audio-art",
+      "purpose": "Audio tile",
+      "art": "art-radial"
+    },
+    {
+      "id": "media-visual-art",
+      "purpose": "Visual tile",
+      "art": "art-blocks"
+    },
+    {
+      "id": "mindmap-graph",
+      "purpose": "Mind map graph",
+      "art": "art-confetti"
+    }
   ]
-}
-</script>
+}</script>
 
 <script>
 (function () {
@@ -2776,5 +3827,6 @@
 })();
 </script>
 
-</body>
-</html>
+
+
+</body></html>
