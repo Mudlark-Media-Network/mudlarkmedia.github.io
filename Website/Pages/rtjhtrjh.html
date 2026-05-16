@@ -6,50 +6,6 @@
 <title>My Fallout With Troy Barile-Simleness &mdash; Mudlark Media</title>
 <meta name="description" content="Academic fraud and weaponized trust: how an investigative journalist used fabricated authority to threaten lives and silence truth. Merged with the timeline and evidence appendix.">
 
-  STRUCTURE OF THIS FILE
-  --------------------------------------------------------------------------
-  HEAD
-    1. FONTS              — Michroma, Public Sans, Azeret Mono (Mudlark repo)
-    2. PALETTE + ROOT     — exact match to home.html
-    3. RESET / BASE       — html, body, links, selection
-    4. HEADER + NAV       — exact match to home.html
-    5. FOOTER             — exact match to home.html
-    6. AR-* ARTICLE       — hero, body column, drop cap, section breaks
-    7. TL-* TIMELINE      — left-rail sticky timeline (the merged appendix)
-    8. EV-* EVIDENCE      — hover-to-enlarge thumbnail strips
-    9. CHAT, QUOTES, ETC. — receipts, pull quotes, chat exchanges, crime list
-   10. RESPONSIVE         — tablet collapses timeline to top, mobile single column
-
-  BODY
-    a. <header>           — masthead + nav (DO NOT EDIT to match home)
-    b. <main>             — article hero, then .ar-grid (timeline | body), then close
-    c. <footer>           — DO NOT EDIT to match home
-
-  CONTENT NOTES
-    - Names follow the source PDF exactly (Troy Barile-Simleness, Sascha Barros,
-      Astra Crosby, Lisa Voldeng, Brandy Zadrozny, Laura Robinson, George Tonks).
-    - [REDACTED] markers are preserved from the source.
-    - All long verbatim quotes are wrapped in <blockquote class="ar-quote-troy">
-      or <blockquote class="ar-quote-me"> so they keep Troy / author colors.
-    - Evidence figures use <figure class="ev"> with a .ev-thumb placeholder
-      background. Replace the background with the real screenshot when ready;
-      the hover-zoom and caption will still work.
-    - The timeline is hand-numbered in the markup. Phase colors are set per-entry
-      via class .tl-p1 ... .tl-p6 (setup, articles, building, trigger, threats,
-      aftermath). Edit individual entries by changing the class.
-
-  HOVER-TO-ZOOM IMAGES
-    - .ev-thumb starts small and scales on hover via transform: scale(...).
-    - transform-origin is tweaked per column so edge images grow INTO the page,
-      not off the side. See the .evidence .ev:nth-child rules.
-
-  ACCESSIBILITY
-    - Hover-zoom is purely visual; the captions carry the information.
-    - All semantic elements use real heading levels: h1 once, h2 for sections,
-      h3 for sub-sections, h4 for inline labels.
-================================================================================
--->
-
 <style>
   /* ============================================================
      1. FONTS — pulled from the Mudlark repo, identical to home.html
