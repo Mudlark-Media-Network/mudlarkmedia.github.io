@@ -1,0 +1,2422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Fallout With Troy Barile-Simleness &mdash; Mudlark Media</title>
+<meta name="description" content="Academic fraud and weaponized trust: how an investigative journalist used fabricated authority to threaten lives and silence truth. Merged with the timeline and evidence appendix.">
+
+  STRUCTURE OF THIS FILE
+  --------------------------------------------------------------------------
+  HEAD
+    1. FONTS              — Michroma, Public Sans, Azeret Mono (Mudlark repo)
+    2. PALETTE + ROOT     — exact match to home.html
+    3. RESET / BASE       — html, body, links, selection
+    4. HEADER + NAV       — exact match to home.html
+    5. FOOTER             — exact match to home.html
+    6. AR-* ARTICLE       — hero, body column, drop cap, section breaks
+    7. TL-* TIMELINE      — left-rail sticky timeline (the merged appendix)
+    8. EV-* EVIDENCE      — hover-to-enlarge thumbnail strips
+    9. CHAT, QUOTES, ETC. — receipts, pull quotes, chat exchanges, crime list
+   10. RESPONSIVE         — tablet collapses timeline to top, mobile single column
+
+  BODY
+    a. <header>           — masthead + nav (DO NOT EDIT to match home)
+    b. <main>             — article hero, then .ar-grid (timeline | body), then close
+    c. <footer>           — DO NOT EDIT to match home
+
+  CONTENT NOTES
+    - Names follow the source PDF exactly (Troy Barile-Simleness, Sascha Barros,
+      Astra Crosby, Lisa Voldeng, Brandy Zadrozny, Laura Robinson, George Tonks).
+    - [REDACTED] markers are preserved from the source.
+    - All long verbatim quotes are wrapped in <blockquote class="ar-quote-troy">
+      or <blockquote class="ar-quote-me"> so they keep Troy / author colors.
+    - Evidence figures use <figure class="ev"> with a .ev-thumb placeholder
+      background. Replace the background with the real screenshot when ready;
+      the hover-zoom and caption will still work.
+    - The timeline is hand-numbered in the markup. Phase colors are set per-entry
+      via class .tl-p1 ... .tl-p6 (setup, articles, building, trigger, threats,
+      aftermath). Edit individual entries by changing the class.
+
+  HOVER-TO-ZOOM IMAGES
+    - .ev-thumb starts small and scales on hover via transform: scale(...).
+    - transform-origin is tweaked per column so edge images grow INTO the page,
+      not off the side. See the .evidence .ev:nth-child rules.
+
+  ACCESSIBILITY
+    - Hover-zoom is purely visual; the captions carry the information.
+    - All semantic elements use real heading levels: h1 once, h2 for sections,
+      h3 for sub-sections, h4 for inline labels.
+================================================================================
+-->
+
+<style>
+  /* ============================================================
+     1. FONTS — pulled from the Mudlark repo, identical to home.html
+     ============================================================ */
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+    font-weight: 100 1000; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+    font-weight: 100 1000; font-style: italic; font-display: swap;
+  }
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/IBM_Plex_Sans/IBMPlexSans-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Spline Sans Mono';
+    src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Spline_Sans_Mono/SplineSansMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300 700; font-style: normal; font-display: swap;
+  }
+
+  /* ============================================================
+     2. PALETTE + ROOT — exact mirror of home.html so the page
+        responds the same way to any future palette edits.
+     ============================================================ */
+  :root {
+    --c-1:  #E8B23A; --c-2:  #DD5E2C; --c-3:  #2EA39C;
+    --c-4:  #4F95CC; --c-5:  #CC6094; --c-6:  #6CB855;
+    --c-7:  #131210; --c-8:  #1F1D19; --c-9:  #ECE5D2; --c-10: #9C9583;
+
+    --gold: var(--c-1); --rust: var(--c-2); --teal: var(--c-3);
+    --blue: var(--c-4); --pink: var(--c-5); --green: var(--c-6);
+
+    --bg:       var(--c-7);
+    --bg-surf:  var(--c-8);
+    --bg-elev:  color-mix(in srgb, var(--c-8) 80%, var(--c-9) 20%);
+    --rule:     color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
+    --rule-on:  color-mix(in srgb, var(--c-7) 78%, var(--c-9) 22%);
+
+    --ink:      var(--c-9);
+    --ink-soft: var(--c-10);
+    --ink-mute: color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
+
+    --serif-d:  'Fraunces', 'Georgia', serif;
+    --serif-b:  'Source Serif 4', 'Fraunces', 'Georgia', serif;
+    --sans:     'IBM Plex Sans', system-ui, sans-serif;
+    --mono:     'Spline Sans Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+    --pad-x:    clamp(20px, 4vw, 56px);
+    --max-w:    1360px;
+    --art-max:  1200px;
+
+    --shadow-alpha: 0.40;
+    --shadow-blur:  30px;
+  }
+
+  /* ============================================================
+     3. RESET / BASE
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif-b);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern', 'liga';
+    scroll-behavior: smooth;
+  }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--gold); color: var(--bg); }
+
+  /* ============================================================
+     4. HEADER + NAV — mirror of home.html masthead and primary nav
+     ============================================================ */
+  .masthead-row { padding: 36px var(--pad-x) 36px; }
+  .brand {
+    display: inline-flex; align-items: center; gap: 16px;
+    color: var(--ink); line-height: 1;
+  }
+  .brand-name {
+    font-family: var(--serif-d);
+    font-weight: 500;
+    font-size: clamp(48px, 7vw, 88px);
+    letter-spacing: -0.022em;
+    color: var(--ink);
+    font-variation-settings: 'opsz' 144, 'SOFT' 40;
+    line-height: 0.95;
+  }
+  .nav {
+    padding: 18px var(--pad-x);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: 4px 30px;
+    font-family: var(--sans); font-size: 14.5px;
+  }
+  .nav a {
+    display: inline-flex; align-items: baseline; gap: 9px;
+    padding: 6px 0; color: var(--ink); transition: color 0.15s;
+  }
+  .nav a::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    transform: translateY(-2px); transition: transform 0.15s; flex-shrink: 0;
+  }
+  .nav a:hover { text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+  .nav a:hover::before { transform: translateY(-2px) scale(1.4); }
+  .nav a.c-gold::before  { background: var(--gold); }
+  .nav a.c-rust::before  { background: var(--rust); }
+  .nav a.c-teal::before  { background: var(--teal); }
+  .nav a.c-pink::before  { background: var(--pink); }
+  .nav a.c-blue::before  { background: var(--blue); }
+  .nav a.c-green::before { background: var(--green); }
+  .nav a.c-cream::before { background: var(--ink-soft); }
+  .nav a.c-gold:hover  { text-decoration: underline var(--gold); }
+  .nav a.c-rust:hover  { text-decoration: underline var(--rust); }
+  .nav a.c-teal:hover  { text-decoration: underline var(--teal); }
+  .nav a.c-pink:hover  { text-decoration: underline var(--pink); }
+  .nav a.c-blue:hover  { text-decoration: underline var(--blue); }
+  .nav a.c-green:hover { text-decoration: underline var(--green); }
+  .nav a.c-cream:hover { text-decoration: underline var(--ink-soft); }
+  .nav a.is-current::before { transform: translateY(-2px) scale(1.4); }
+  .nav a.is-current { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1.5px; }
+
+  /* ============================================================
+     5. FOOTER — mirror of home.html
+     ============================================================ */
+  footer { border-top: 1px solid var(--rule); padding: 60px var(--pad-x) 32px; margin-top: 80px; }
+  .foot-inner { max-width: var(--max-w); margin: 0 auto; }
+  .foot-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+  .foot-brand .brand .brand-name { font-family: var(--sans); font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.018em; }
+  .foot-tag {
+    margin-top: 16px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .foot-col h4 {
+    font-family: var(--sans); font-size: 13px;
+    letter-spacing: 0.04em; margin-bottom: 16px; font-weight: 500;
+  }
+  .foot-col.a h4 { color: var(--rust); }
+  .foot-col.b h4 { color: var(--teal); }
+  .foot-col.c h4 { color: var(--blue); }
+  .foot-col ul { list-style: none; }
+  .foot-col li { margin-bottom: 9px; }
+  .foot-col a {
+    font-family: var(--serif-b); font-size: 14.5px;
+    color: var(--ink); transition: color 0.15s;
+  }
+  .foot-col a:hover { color: var(--gold); }
+
+  /* ============================================================
+     6. AR-*  ARTICLE PAGE COMPONENTS
+        Hero, drop cap, section breaks, paragraphs, lists.
+     ============================================================ */
+  main { flex: 1; padding: 0 var(--pad-x) 96px; }
+  .wrap { max-width: var(--max-w); margin: 0 auto; }
+
+  /* ---- Hero band ---- */
+  .ar-hero {
+    max-width: var(--art-max);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+  .ar-kicker {
+    font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--pink);
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .ar-kicker .sep { color: var(--ink-mute); }
+  .ar-kicker .id  { color: var(--ink-soft); }
+  .ar-kicker .doc-no { font-variant-numeric: tabular-nums; }
+
+  .ar-headline {
+    font-family: var(--serif-d);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+    font-size: clamp(40px, 6.2vw, 88px);
+    line-height: 0.96;
+    letter-spacing: -0.024em;
+    margin-bottom: 28px;
+    max-width: 18ch;
+  }
+  .ar-headline em {
+    font-style: italic;
+    color: var(--rust);
+    font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  }
+  .ar-deck {
+    font-family: var(--serif-b);
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 58ch;
+    margin-bottom: 32px;
+  }
+  .ar-deck b { color: var(--pink); font-weight: 500; }
+
+  .ar-byline {
+    display: flex; align-items: baseline; flex-wrap: wrap;
+    gap: 14px;
+    font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-soft);
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .ar-byline .who { color: var(--ink); font-weight: 500; }
+  .ar-byline .sep { color: var(--ink-mute); }
+  .ar-byline .tags {
+    margin-left: auto;
+    display: flex; gap: 14px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .ar-byline .tags span::before { content: '['; margin-right: 2px; color: var(--pink); }
+  .ar-byline .tags span::after  { content: ']'; margin-left: 2px; color: var(--pink); }
+  .ar-byline .tags .t-r::before, .ar-byline .tags .t-r::after { color: var(--rust); }
+  .ar-byline .tags .t-g::before, .ar-byline .tags .t-g::after { color: var(--gold); }
+
+  /* ---- Lead figure (the document map) ---- */
+  .ar-lead-fig {
+    max-width: var(--art-max);
+    margin: 32px auto 0;
+    position: relative;
+    aspect-ratio: 16 / 7;
+    background: var(--bg-surf);
+    box-shadow:
+      0 8px var(--shadow-blur) rgba(0, 0, 0, var(--shadow-alpha)),
+      inset 0 80px 60px -40px rgba(255, 255, 255, 0);
+    overflow: hidden;
+  }
+  .ar-lead-fig::after {
+    /* the ripple art from home.html, scoped here */
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 35% 80% at 22% 50%, transparent 22%, color-mix(in srgb, transparent 78%, var(--c-5)) 23%, transparent 24.5%),
+      radial-gradient(ellipse 26% 60% at 22% 50%, transparent 35%, color-mix(in srgb, transparent 82%, var(--c-5)) 36%, transparent 37.5%),
+      radial-gradient(ellipse 16% 40% at 22% 50%, transparent 48%, color-mix(in srgb, transparent 84%, var(--c-5)) 49%, transparent 50.5%),
+      radial-gradient(ellipse 30% 70% at 76% 50%, transparent 30%, color-mix(in srgb, transparent 84%, var(--c-2)) 31%, transparent 32.5%),
+      radial-gradient(ellipse 20% 50% at 76% 50%, transparent 45%, color-mix(in srgb, transparent 86%, var(--c-2)) 46%, transparent 47.5%),
+      repeating-linear-gradient(0deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
+      repeating-linear-gradient(90deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
+      var(--bg-surf);
+    pointer-events: none;
+  }
+  .ar-lead-fig .stamp {
+    position: absolute; top: 18px; left: 18px;
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--pink);
+    padding: 4px 10px;
+    background: rgba(19, 18, 16, 0.7);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+  }
+  .ar-lead-fig .cap {
+    position: absolute; bottom: 18px; left: 18px; right: 18px;
+    display: flex; justify-content: space-between; gap: 16px;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-soft); letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  /* ---- Two-column body grid: timeline | content ---- */
+  .ar-grid {
+    max-width: var(--art-max);
+    margin: 64px auto 0;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .ar-body {
+    max-width: 68ch;
+  }
+
+  /* ---- Section break (centered italic with rules) ---- */
+  .ar-break {
+    margin: 56px 0 36px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+  .ar-break::before, .ar-break::after {
+    content: ''; height: 1px; background: var(--rule);
+  }
+  .ar-break em {
+    font-family: var(--serif-d); font-style: italic; font-weight: 400;
+    font-size: 18px; color: var(--ink-soft);
+    font-variation-settings: 'opsz' 60, 'SOFT' 100;
+    letter-spacing: 0.005em;
+  }
+
+  /* ---- Article paragraphs ---- */
+  .ar-body p {
+    font-family: var(--serif-b);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 22px;
+  }
+  .ar-body p b, .ar-body p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .ar-body p em, .ar-body p i {
+    color: color-mix(in srgb, var(--ink) 90%, var(--pink) 10%);
+  }
+  .ar-body p u {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--gold) 70%, transparent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+  }
+  .ar-body h2 {
+    font-family: var(--serif-d);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 60, 'SOFT' 50;
+    font-size: clamp(26px, 2.6vw, 34px);
+    letter-spacing: -0.018em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 48px 0 18px;
+  }
+  .ar-body h2 .sec-no {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--pink);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+  .ar-body h3 {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 22px; line-height: 1.2;
+    color: var(--ink);
+    margin: 32px 0 14px;
+  }
+
+  /* ---- Drop cap on the opening paragraph ---- */
+  .ar-body .ar-lead-p::first-letter {
+    font-family: var(--serif-d);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+    font-size: 5.2em;
+    line-height: 0.85;
+    float: left;
+    margin: 6px 12px -6px 0;
+    color: var(--rust);
+  }
+
+  /* ---- Inline emphasis spans ---- */
+  .ink-pink  { color: var(--pink); }
+  .ink-rust  { color: var(--rust); }
+  .ink-gold  { color: var(--gold); }
+  .ink-teal  { color: var(--teal); }
+  .ink-green { color: var(--green); }
+  .ink-blue  { color: var(--blue); }
+
+  /* ---- Numbered claim block (the "I can prove that..." opener) ---- */
+  .ar-claims {
+    margin: 28px 0 36px;
+    display: flex; flex-direction: column;
+  }
+  .ar-claim {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 18px;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .ar-claim:last-child { border-bottom: 1px solid var(--rule); }
+  .ar-claim .n {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 30px; line-height: 1;
+    color: var(--pink);
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: 'opsz' 60;
+  }
+  .ar-claim .body {
+    font-family: var(--serif-b); font-size: 16px;
+    line-height: 1.5; color: var(--ink);
+  }
+  .ar-claim .body b { color: var(--ink); font-weight: 600; }
+
+  /* ---- Pull quote (large italic break) ---- */
+  .ar-pull {
+    margin: 40px 0;
+    padding: 24px 0 24px 28px;
+    border-left: 3px solid var(--gold);
+    font-family: var(--serif-d);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 2vw, 26px);
+    line-height: 1.32;
+    color: var(--ink);
+    font-variation-settings: 'opsz' 60, 'SOFT' 100;
+  }
+  .ar-pull.is-rust { border-left-color: var(--rust); }
+  .ar-pull.is-pink { border-left-color: var(--pink); }
+  .ar-pull.is-teal { border-left-color: var(--teal); }
+  .ar-pull cite {
+    display: block;
+    margin-top: 12px;
+    font-family: var(--mono); font-style: normal;
+    font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  /* ---- Receipt box (mono, for the "Sascha's position" callouts) ---- */
+  .ar-receipt {
+    margin: 32px 0;
+    padding: 22px 24px;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 28px, color-mix(in srgb, transparent 96%, var(--c-9)) 28px 29px),
+      var(--bg-surf);
+    border-left: 2px solid var(--ink-soft);
+    position: relative;
+  }
+  .ar-receipt::before {
+    content: 'EXHIBIT';
+    position: absolute; top: -10px; left: 22px;
+    background: var(--bg);
+    padding: 2px 8px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.15em; color: var(--ink-soft);
+  }
+  .ar-receipt p {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .ar-receipt p:last-child { margin-bottom: 0; }
+  .ar-receipt .who {
+    color: var(--gold);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ---- Chat exchange block (Me / Troy) ---- */
+  .ar-chat {
+    margin: 32px 0;
+    display: flex; flex-direction: column;
+    gap: 8px;
+    padding: 22px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .ar-chat .msg {
+    max-width: 88%;
+    padding: 12px 16px;
+    font-family: var(--serif-b);
+    font-size: 14.5px; line-height: 1.45;
+    background: var(--bg-surf);
+    position: relative;
+  }
+  .ar-chat .msg::before {
+    content: attr(data-who);
+    position: absolute;
+    top: -16px;
+    font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .ar-chat .msg.me {
+    align-self: flex-start;
+    border-left: 2px solid var(--teal);
+  }
+  .ar-chat .msg.me::before { left: 0; color: var(--teal); }
+  .ar-chat .msg.troy {
+    align-self: flex-end;
+    border-right: 2px solid var(--rust);
+    text-align: left;
+  }
+  .ar-chat .msg.troy::before { right: 0; color: var(--rust); }
+  .ar-chat .msg.med {
+    align-self: center;
+    border-top: 1px solid var(--ink-soft);
+    border-bottom: 1px solid var(--ink-soft);
+    background: transparent;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .ar-chat .msg.med::before { left: 50%; transform: translateX(-50%); }
+  .ar-chat .skip {
+    align-self: center;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 4px 0;
+  }
+
+  /* ---- Numbered logic chain (the 10 steps to Troy) ---- */
+  .ar-chain {
+    margin: 32px 0;
+    padding: 28px 0;
+    border-top: 1px dashed var(--rule-on);
+    border-bottom: 1px dashed var(--rule-on);
+    display: flex; flex-direction: column;
+    counter-reset: chain;
+  }
+  .ar-chain h4 {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .ar-chain ol { list-style: none; padding: 0; }
+  .ar-chain li {
+    counter-increment: chain;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    padding: 10px 0;
+    align-items: baseline;
+    border-bottom: 1px solid color-mix(in srgb, transparent 80%, var(--ink-mute));
+  }
+  .ar-chain li:last-child { border-bottom: none; }
+  .ar-chain li::before {
+    content: counter(chain, decimal-leading-zero);
+    font-family: var(--mono); font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .ar-chain li span {
+    font-family: var(--serif-b);
+    font-size: 14.5px; line-height: 1.45;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* ---- Bordered warning box (lethal stakes / sound event) ---- */
+  .ar-warn {
+    margin: 36px 0;
+    padding: 24px 26px;
+    border: 1px solid var(--rust);
+    background: color-mix(in srgb, var(--rust) 6%, transparent);
+  }
+  .ar-warn p {
+    font-family: var(--serif-d); font-style: italic;
+    font-size: 17px; line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .ar-warn p:last-child { margin-bottom: 0; }
+  .ar-warn .label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ---- Crimes list ---- */
+  .ar-crimes {
+    margin: 32px 0;
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--rule);
+  }
+  .ar-crime {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .ar-crime .n {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--rust);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+  .ar-crime h4 {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 18px; line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-variation-settings: 'opsz' 30, 'SOFT' 50;
+  }
+  .ar-crime p {
+    font-family: var(--serif-b);
+    font-size: 14.5px; line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* ---- Domain stamp row (the 3 websites) ---- */
+  .ar-domains {
+    margin: 28px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .ar-domain {
+    padding: 14px 16px;
+    border: 1px solid var(--rule-on);
+    background: var(--bg-surf);
+  }
+  .ar-domain .nm {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 16px; color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .ar-domain .dt {
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Closing band (final "He should be ashamed.") ---- */
+  .ar-close {
+    max-width: var(--art-max);
+    margin: 80px auto 0;
+    padding: 64px 0 24px;
+    border-top: 2px solid var(--rust);
+    text-align: center;
+  }
+  .ar-close p {
+    font-family: var(--serif-d);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(26px, 3.5vw, 44px);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+    color: var(--ink);
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  }
+  .ar-close p.is-final {
+    color: var(--rust);
+    margin-top: 28px;
+  }
+
+  /* ============================================================
+     7. TL-*  TIMELINE SIDEBAR  (the merged evidence appendix)
+        Sticky on desktop. Collapses above the article on mobile.
+     ============================================================ */
+  .tl {
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding: 0 4px 24px 0;
+
+    /* invisible scrollbar that still works */
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-on) transparent;
+  }
+  .tl::-webkit-scrollbar { width: 4px; }
+  .tl::-webkit-scrollbar-track { background: transparent; }
+  .tl::-webkit-scrollbar-thumb { background: var(--rule-on); border-radius: 2px; }
+
+  .tl-head {
+    padding: 0 0 14px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 18px;
+  }
+  .tl-head .label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .tl-head h3 {
+    font-family: var(--serif-d); font-weight: 500;
+    font-size: 22px; line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.014em;
+  }
+  .tl-head .note {
+    margin-top: 10px;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .tl-month {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 22px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--rule-on);
+  }
+  .tl-month:first-of-type { margin-top: 0; }
+
+  .tl-entry {
+    position: relative;
+    padding: 10px 0 10px 22px;
+    border-left: 1px solid var(--rule);
+    margin-left: 6px;
+    transition: border-color 0.15s, padding-left 0.15s;
+  }
+  .tl-entry::before {
+    content: '';
+    position: absolute;
+    left: -5px; top: 14px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--tl-c, var(--ink-mute));
+    box-shadow: 0 0 0 3px var(--bg);
+    transition: transform 0.15s;
+  }
+  .tl-entry:hover { border-left-color: var(--tl-c, var(--ink-soft)); padding-left: 26px; }
+  .tl-entry:hover::before { transform: scale(1.3); }
+
+  .tl-entry .d {
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .tl-entry .d .t {
+    color: var(--ink-mute);
+    margin-left: 6px;
+  }
+  .tl-entry .e {
+    font-family: var(--serif-b);
+    font-size: 12.5px; line-height: 1.42;
+    color: var(--ink);
+  }
+  .tl-entry .e b { color: var(--tl-c, var(--ink)); font-weight: 600; }
+
+  /* Timeline entry images — small, inline document/photo thumbnails */
+  .tl-img {
+    display: block;
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  /* Phase colors — set on individual .tl-entry tags. Change per entry to
+     re-categorize. Phase legend:
+       p1 gold  — setup / backstory
+       p2 rust  — first articles, first contact
+       p3 teal  — investigation building
+       p4 pink  — Troy's trigger article + my callout
+       p5 red   — escalation + threats (uses --rust deeper)
+       p6 blue  — aftermath / response docs
+  */
+  .tl-entry.tl-p1 { --tl-c: var(--gold); }
+  .tl-entry.tl-p2 { --tl-c: var(--rust); }
+  .tl-entry.tl-p3 { --tl-c: var(--teal); }
+  .tl-entry.tl-p4 { --tl-c: var(--pink); }
+  .tl-entry.tl-p5 { --tl-c: #B33A2C; }
+  .tl-entry.tl-p6 { --tl-c: var(--blue); }
+
+  .tl-legend {
+    margin-top: 22px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tl-legend .row {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .tl-legend .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ============================================================
+     8. EV-*  EVIDENCE THUMBNAIL STRIPS — small until hover.
+        Edge-aware transform-origin so they grow INTO the page.
+     ============================================================ */
+  .evidence {
+    margin: 36px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    position: relative;
+  }
+  .evidence.is-4 { grid-template-columns: repeat(4, 1fr); }
+  .evidence.is-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .ev {
+    position: relative;
+    z-index: 1;
+    cursor: zoom-in;
+  }
+  .ev-thumb {
+    aspect-ratio: 4 / 3;
+    background: var(--bg-surf);
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.4s ease;
+    transform-origin: center center;
+    z-index: 1;
+    border: 1px solid var(--rule-on);
+  }
+  /* default thumbnail art — a faint grid so the slot reads as a document */
+  .ev-thumb::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg,  transparent 0 12px, color-mix(in srgb, transparent 95%, var(--c-9)) 12px 13px),
+      repeating-linear-gradient(90deg, transparent 0 12px, color-mix(in srgb, transparent 95%, var(--c-9)) 12px 13px);
+  }
+  .ev-thumb .stamp {
+    position: absolute; top: 6px; left: 6px;
+    padding: 2px 6px;
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-soft);
+    background: rgba(19, 18, 16, 0.7);
+    z-index: 2;
+  }
+  .ev-thumb .stamp.is-evid { color: var(--gold); }
+  .ev-thumb .stamp.is-chat { color: var(--rust); }
+  .ev-thumb .stamp.is-doc  { color: var(--teal); }
+
+  .ev:hover { z-index: 100; }
+  .ev:hover .ev-thumb {
+    transform: scale(2.4);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--rule-on);
+    z-index: 50;
+  }
+  /* Edge-aware origins, so edge images don't grow off-page */
+  .evidence .ev:nth-child(3n+1) .ev-thumb { transform-origin: center left; }
+  .evidence .ev:nth-child(3n+2) .ev-thumb { transform-origin: center center; }
+  .evidence .ev:nth-child(3n)   .ev-thumb { transform-origin: center right; }
+  .evidence.is-4 .ev:nth-child(4n+1) .ev-thumb { transform-origin: center left; }
+  .evidence.is-4 .ev:nth-child(4n+2) .ev-thumb { transform-origin: center left; }
+  .evidence.is-4 .ev:nth-child(4n+3) .ev-thumb { transform-origin: center right; }
+  .evidence.is-4 .ev:nth-child(4n)   .ev-thumb { transform-origin: center right; }
+  .evidence.is-2 .ev:nth-child(2n+1) .ev-thumb { transform-origin: center left; }
+  .evidence.is-2 .ev:nth-child(2n)   .ev-thumb { transform-origin: center right; }
+
+  .ev-cap {
+    margin-top: 8px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--ink-mute);
+    line-height: 1.35;
+  }
+  .ev-cap b { color: var(--ink-soft); font-weight: 400; }
+
+  /* Variant art tiles for thumbnails — for the slots in this article */
+  .ev-art-kickstarter::before {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, transparent 70%, var(--c-1)), transparent 60%),
+      radial-gradient(circle at 30% 40%, color-mix(in srgb, transparent 80%, var(--c-2)), transparent 40%),
+      repeating-linear-gradient(0deg, transparent 0 10px, color-mix(in srgb, transparent 94%, var(--c-9)) 10px 11px);
+  }
+  .ev-art-fundraiser::before {
+    background:
+      linear-gradient(45deg, color-mix(in srgb, transparent 75%, var(--c-5)), transparent 65%),
+      radial-gradient(circle at 70% 70%, color-mix(in srgb, transparent 85%, var(--c-2)), transparent 40%);
+  }
+  .ev-art-linkedin::before {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, transparent 82%, var(--c-4)), transparent 60%),
+      repeating-linear-gradient(0deg, transparent 0 16px, color-mix(in srgb, transparent 92%, var(--c-9)) 16px 17px);
+  }
+  .ev-art-court::before {
+    background:
+      linear-gradient(0deg, var(--c-7) 0 6%, transparent 6% 16%, var(--c-7) 16% 22%, transparent 22% 32%, var(--c-7) 32% 38%, transparent 38% 48%, var(--c-7) 48% 54%, transparent 54% 100%),
+      repeating-linear-gradient(0deg, transparent 0 14px, color-mix(in srgb, transparent 94%, var(--c-9)) 14px 15px);
+  }
+  .ev-art-website::before {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, transparent 78%, var(--c-3)), transparent 60%),
+      linear-gradient(90deg, var(--bg-surf) 0 20%, transparent 20% 100%),
+      repeating-linear-gradient(0deg, transparent 0 8px, color-mix(in srgb, transparent 94%, var(--c-9)) 8px 9px);
+  }
+  .ev-art-chat::before {
+    background:
+      radial-gradient(circle at 30% 40%, color-mix(in srgb, transparent 80%, var(--c-3)) 0 30px, transparent 35px),
+      radial-gradient(circle at 70% 70%, color-mix(in srgb, transparent 80%, var(--c-2)) 0 30px, transparent 35px),
+      var(--bg-surf);
+  }
+  .ev-art-doc::before {
+    background:
+      linear-gradient(180deg, transparent 0 30%, color-mix(in srgb, transparent 88%, var(--c-9)) 30% 32%, transparent 32% 50%, color-mix(in srgb, transparent 88%, var(--c-9)) 50% 52%, transparent 52% 70%, color-mix(in srgb, transparent 88%, var(--c-9)) 70% 72%, transparent 72%),
+      var(--bg-surf);
+  }
+  .ev-art-scene::before {
+    background:
+      radial-gradient(ellipse 40% 30% at 50% 75%, color-mix(in srgb, transparent 60%, var(--c-7)), transparent 70%),
+      linear-gradient(180deg, color-mix(in srgb, transparent 70%, var(--c-4)) 0 60%, transparent 60%),
+      var(--bg-surf);
+  }
+  .ev-art-news::before {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, transparent 70%, var(--c-1)) 0 8%, transparent 8%),
+      repeating-linear-gradient(0deg, transparent 0 11px, color-mix(in srgb, transparent 92%, var(--c-9)) 11px 12px),
+      var(--bg-surf);
+  }
+  .ev-art-riley::before {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, transparent 75%, #B33A2C), transparent 60%),
+      repeating-linear-gradient(90deg, transparent 0 18px, color-mix(in srgb, transparent 92%, var(--c-9)) 18px 19px),
+      var(--bg-surf);
+  }
+
+  /* ============================================================
+     9. MISC: TOC, footnote-style asides, end-of-article meta
+     ============================================================ */
+  .ar-toc {
+    margin: 36px 0 0;
+    padding: 20px 22px;
+    border: 1px solid var(--rule-on);
+    background: var(--bg-surf);
+  }
+  .ar-toc .label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .ar-toc ol {
+    list-style: none;
+    column-count: 2;
+    column-gap: 30px;
+  }
+  .ar-toc li {
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--ink-soft);
+    padding: 5px 0;
+    counter-increment: toc;
+    line-height: 1.35;
+    break-inside: avoid;
+  }
+  .ar-toc ol { counter-reset: toc; }
+  .ar-toc li::before {
+    content: counter(toc, decimal-leading-zero) "  ";
+    color: var(--ink-mute);
+  }
+  .ar-toc li a:hover { color: var(--gold); }
+
+  .ar-end-meta {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.06em;
+  }
+  .ar-end-meta b { color: var(--ink-soft); font-weight: 400; }
+
+  /* ============================================================
+     10. RESPONSIVE
+     ============================================================ */
+  @media (max-width: 1100px) {
+    .ar-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .tl {
+      position: relative;
+      top: auto;
+      max-height: none;
+      padding-bottom: 0;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 24px;
+    }
+    .ar-body { max-width: 70ch; margin: 0 auto; }
+    .foot-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+  @media (max-width: 640px) {
+    .ar-headline { font-size: 38px; }
+    .ar-deck     { font-size: 17px; }
+    .ar-byline   { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .ar-byline .tags { margin-left: 0; }
+    .ar-lead-fig { aspect-ratio: 4 / 3; }
+    .evidence, .evidence.is-4, .evidence.is-2 { grid-template-columns: 1fr 1fr; }
+    .evidence .ev:nth-child(odd)  .ev-thumb { transform-origin: center left; }
+    .evidence .ev:nth-child(even) .ev-thumb { transform-origin: center right; }
+    .ev:hover .ev-thumb { transform: scale(1.8); }
+    .ar-domains { grid-template-columns: 1fr; }
+    .ar-toc ol { column-count: 1; }
+    .ar-end-meta { grid-template-columns: 1fr; }
+    .nav { gap: 4px 22px; font-size: 13.5px; }
+    .foot-top { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER  —  must stay identical to home.html so the brand and
+                navigation match across the site.
+     ============================================================ -->
+<header>
+  <div class="masthead-row">
+    <a href="/" class="brand" aria-label="Mudlark Media">
+      <span class="brand-name">Mudlark Media</span>
+    </a>
+  </div>
+
+  <nav class="nav" aria-label="Primary">
+    <a href="/ethos"    class="c-gold">Network Ethos</a>
+    <a href="/articles" class="c-rust is-current">Articles</a>
+    <a href="/opsec"    class="c-teal">Digital OpSec</a>
+    <a href="/psych"    class="c-pink">Psychological Warfare</a>
+    <a href="/media"    class="c-blue">Media</a>
+    <a href="/mindmap"  class="c-green">Mind Map</a>
+    <a href="/contact"  class="c-cream">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================================================
+       ARTICLE HERO  —  kicker, headline, deck, byline.
+       ============================================================ -->
+  <section class="ar-hero">
+    <p class="ar-kicker">
+      <span class="doc-no">Case File &mdash; 042</span>
+      <span class="sep">/</span>
+      <span>Investigations</span>
+      <span class="sep">/</span>
+      <span>Filed 04 May 2026</span>
+      <span class="sep">/</span>
+      <span class="id">v.2.0 &mdash; merged with appendix</span>
+    </p>
+
+    <h1 class="ar-headline">My <em>fallout</em> with Troy Barile-Simleness.</h1>
+
+    <p class="ar-deck">
+      Academic fraud and weaponized trust &mdash; how an <b>&ldquo;investigative journalist&rdquo;</b> used fabricated authority to threaten lives and silence truth. Combined with the timeline and evidence appendix.
+    </p>
+
+    <div class="ar-byline">
+      <span>By <span class="who">L.&nbsp;V.&nbsp;Maestri</span></span>
+      <span class="sep">&middot;</span>
+      <span>~50 min read</span>
+      <span class="sep">&middot;</span>
+      <span>Posted 04 May 2026</span>
+      <span class="tags">
+        <span>Fraud</span>
+        <span class="t-r">Survivor advocacy</span>
+        <span class="t-g">Methodology</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LEAD FIGURE  —  document-map style banner.
+       Replace the gradient art with the real image when ready;
+       the .stamp and .cap will remain in place.
+       ============================================================ -->
+  <figure class="ar-lead-fig" aria-label="Document map banner">
+    <span class="stamp">Figure A &mdash; document map</span>
+    <span class="cap">
+      <span>Composite of 47 source documents &middot; 4 days of direct messaging</span>
+      <span>2025&ndash;2026</span>
+    </span>
+  </figure>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS  —  optional jump targets.
+       Sections IDs match the ar-body h2 ids below.
+       ============================================================ -->
+  <div class="wrap" style="max-width: var(--art-max); margin: 0 auto;">
+    <div class="ar-toc">
+      <span class="label">Inside this file</span>
+      <ol>
+        <li><a href="#sec-who">Who? What? Why?</a></li>
+        <li><a href="#sec-fundraiser">Fundraiser?</a></li>
+        <li><a href="#sec-domains">Three domains, three months.</a></li>
+        <li><a href="#sec-real">Who is he, really?</a></li>
+        <li><a href="#sec-gov">What is on government databases.</a></li>
+        <li><a href="#sec-agg">What appears in aggregator databases.</a></li>
+        <li><a href="#sec-problem">So what&rsquo;s the problem, then?</a></li>
+        <li><a href="#sec-architect">&ldquo;I am not the architect&hellip;&rdquo;</a></li>
+        <li><a href="#sec-real-life">The events that occurred in real life.</a></li>
+        <li><a href="#sec-riley">The Riley Protocol.</a></li>
+        <li><a href="#sec-crimes">What he actually did.</a></li>
+        <li><a href="#sec-close">Come back to safety, Troy.</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ARTICLE GRID  —  [timeline | body]
+       Timeline is sticky on desktop, collapses on tablet/mobile.
+       ============================================================ -->
+  <div class="ar-grid">
+
+    <!--  TIMELINE / EVIDENCE APPENDIX (left rail)  -->
+    <aside class="tl" aria-label="Timeline and evidence appendix">
+
+      <div class="tl-head">
+        <span class="label">Timeline &amp; Evidence</span>
+        <h3>Every claim is documented. Every quote is shown. The conclusion is yours.</h3>
+        <p class="note">
+          Sascha has reviewed this article in advance to confirm the statements attributed to them.
+        </p>
+      </div>
+
+      <!--  DEC 2025  -->
+      <div class="tl-month">Dec 2025</div>
+
+      <div class="tl-entry tl-p1">
+        <span class="d">Dec 31</span>
+        <div class="e">Troy is reported in <b>local news</b> about his Kickstarter for &ldquo;The Elementlings.&rdquo;</div>
+        <img class="tl-img" src="article-images/002_Jan_16_Troys_first_post_about_Sascha.jpg" alt="Local news interview" />
+      </div>
+
+      <!--  JAN 2026  -->
+      <div class="tl-month">Jan 2026</div>
+
+      <div class="tl-entry tl-p1">
+        <span class="d">Jan 16</span>
+        <div class="e">Troy&rsquo;s <b>first documented post</b> about Sascha Barros (Riley) &mdash; a repost of a Forensic Pyschologist.&rsquo;</div>
+      </div>
+      <div class="tl-entry tl-p1">
+        <span class="d">Jan 22</span>
+        <div class="e">The Elementlings Kickstarter <b>fails</b>.</div>
+        <img class="tl-img" src="article-images/003_Jan_22_Troys_Elementlings_Kickstarter_fails.jpg" alt="Kickstarter campaign" />
+      </div>
+      <div class="tl-entry tl-p1">
+        <span class="d">Jan 29</span>
+        <div class="e"><b>Fundraiser for Sascha</b> appears under user &ldquo;K2 Gives,&rdquo; Las Vegas. Obfuscated to avoid traffic.</div>
+        <img class="tl-img" src="article-images/_(1_of_2).jpg" alt="K2 Gives fundraiser" />
+      </div>
+
+      <!--  FEB 2026  -->
+      <div class="tl-month">Feb 2026</div>
+
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 9</span>
+        <div class="e">Troy&rsquo;s first Substack post: <i>&ldquo;The World is Changing &mdash; And It Starts Now.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 10</span>
+        <div class="e">Troy <b>first messages Sascha</b> directly.</div>
+        <img class="tl-img" src="article-images/007_Feb_10_Troy_first_messages_Sascha.webp" alt="First message" />
+      </div>
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 18</span>
+        <div class="e">Lisa Voldeng publishes her first article on George Tonks.</div>
+      </div>
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 18</span>
+        <div class="e"><b>Troy unloads 5 rounds of premade articles</b> over ~24 hours, naming Sascha before its end. Series begins with &ldquo;The Architecture Was Built After 1945.&rdquo;</div>
+        <img class="tl-img" src="article-images/008_Feb_18_Architecture_Was_Built_After.jpg" alt="Architecture articles" />
+      </div>
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 19</span>
+        <div class="e">Sascha responds to Troy for the first time.</div>
+      </div>
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 22</span>
+        <div class="e">Astra is calling on a public official to gain attention for Sascha.</div>
+      </div>
+      <div class="tl-entry tl-p2">
+        <span class="d">Feb 26</span>
+        <div class="e">Earliest evidence of <b>Astra Crosby</b> seeking to charm Sascha.</div>
+        <img class="tl-img" src="article-images/009_Feb_26_Earliest_evidence_Astra_Crosby.jpg" alt="Astra Crosby" />
+      </div>
+
+      <!--  MAR 2026  -->
+      <div class="tl-month">Mar 2026</div>
+
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 02</span>
+        <div class="e"><b>Grifter Nation</b> domain registered.</div>
+        <img class="tl-img" src="article-images/010_Mar_02_Grifter_Nation_domain_registered.jpg" alt="Grifter Nation" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 10</span>
+        <div class="e">Lisa Voldeng announces resignation of support for Sascha. Troy releases Part I of <i>The Machine: &ldquo;The Woman in the Middle.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 11</span>
+        <div class="e">Astra Crosby messages Sascha directly for the first time.</div>
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 13</span>
+        <div class="e">Troy&rsquo;s <b>first contribution to WhoWhatWhy</b>.</div>
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 17</span>
+        <div class="e">Sascha returns from interview with Brandy Zadrozny. Astra is overjoyed.</div>
+        <img class="tl-img" src="article-images/017_Mar_29_Astra_Crosby_lends_her_phone.jpg" alt="Interview coverage" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 27</span>
+        <div class="e">Troy releases the interview and surrounding documents Voldeng had paywalled. He said she had no right. <b>Since deleted.</b></div>
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 29</span>
+        <div class="e">Astra lends her phone to Sascha for a live TikTok interview Troy arranged. She replies to Kathy Griffin for visibility, then goes nearly silent.</div>
+        <img class="tl-img" src="article-images/018_Mar_29_gallery.jpg" alt="TikTok interview" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Mar 30</span>
+        <div class="e">Sascha&rsquo;s ex-wife goes into <b>&ldquo;weapons-grade&rdquo; damage control</b> &mdash; before the MSNOW article had even released.</div>
+      </div>
+
+      <!--  APR 2026  -->
+      <div class="tl-month">Apr 2026</div>
+
+      <div class="tl-entry tl-p3">
+        <span class="d">Apr 03</span>
+        <div class="e">Lisa Voldeng gives further statements retracting support.</div>
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Apr 05</span>
+        <div class="e"><b>Follow The Files</b> domain registered.</div>
+        <img class="tl-img" src="article-images/image (43).jpg" alt="Follow The Files" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Apr 06</span>
+        <div class="e"><b>Amalgamated Army</b> domain registered. Name chosen by Sascha; site made for Sascha; Troy is the registrant.</div>
+        <img class="tl-img" src="article-images/024_Apr_06_Amalgamated_Army_domain_registered.jpg" alt="Amalgamated Army" />
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Apr 09</span>
+        <div class="e">Brandy Zadrozny releases her article on Sascha for MSNOW. Troy releases a special edition of <i>The Machine</i> in response.</div>
+      </div>
+      <div class="tl-entry tl-p3">
+        <span class="d">Apr 13</span>
+        <div class="e">Astra <b>publicly retracts support</b> for Sascha. Begins misidentifying and deadnaming them; starts deleting earlier comments.</div>
+      </div>
+
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 15</span>
+        <div class="e"><b>Troy publishes the article withdrawing support for Sascha.</b> Calls them a liar and dangerous. Weaponizes a vulnerable candid photo.</div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 16 <span class="t">8:00 PM</span></span>
+        <div class="e">I post a <b>public callout</b> of Troy on social media. He responds with mockery, calls me &ldquo;little boy,&rdquo; deletes his comments, then blocks me.</div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">5:00 AM</span></span>
+        <div class="e">Troy claims the Apr 15 article wasn&rsquo;t his idea &mdash; it was a covert operation to get close to Astra. Implies Part II will be something I&rsquo;ll like.</div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">6:00 AM</span></span>
+        <div class="e">Troy claims to be a therapist. Then immediately walks it back: &ldquo;more on the research side.&rdquo;</div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">8:00 AM</span></span>
+        <div class="e">Sascha responds: <i>&ldquo;It has gotten a conversation started&hellip; for my own sanity I need to take a break from this.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">10:30 AM</span></span>
+        <div class="e">When pressed, Sascha says: <i>&ldquo;I really don&rsquo;t know.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">4:30 PM</span></span>
+        <div class="e">Mediator contacts me.</div>
+      </div>
+      <div class="tl-entry tl-p4">
+        <span class="d">Apr 17 <span class="t">5:00 PM</span></span>
+        <div class="e"><b>&ldquo;I am not the architect.&rdquo;</b> Troy calls me a liar for not having Sascha&rsquo;s confirmation he claimed existed.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">5:00 PM</span></span>
+        <div class="e">Troy tells me he <b>has the power to have me committed</b>. I block him for the first time.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">5:30 PM</span></span>
+        <div class="e">Unmarked white <b>work truck</b> seen where the abandoned car had been for years.</div>
+        <img class="tl-img" src="article-images/048_Apr_17_530pm_Work_truck_seen.jpg" alt="Work truck" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">11:00 PM</span></span>
+        <div class="e">First breakthrough in mediation chat.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">11:30 PM</span></span>
+        <div class="e">I send the unedited apology and 10-step logic chain through the mediator.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">night</span></span>
+        <div class="e"><b>Grocery store incident.</b> Older white car with blacked-out windshield speeds the center of two lanes, pins us at the edge of the road.</div>
+        <img class="tl-img" src="article-images/_(3_of_4).jpg" alt="Grocery store lane diagram" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">2:00 AM</span></span>
+        <div class="e">I send my article to Troy.</div>
+        <img class="tl-img" src="article-images/062_Apr_18_7am_Sascha_confirms_op.jpg" alt="Riley Protocol" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">3:00 AM</span></span>
+        <div class="e">Troy: <i>&ldquo;There is no denying what happened to Sascha.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">3:30 AM</span></span>
+        <div class="e">Troy claims a PsyD: <i>&ldquo;no one needs to know that.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">1:30 PM</span></span>
+        <div class="e">Says he&rsquo;s <b>not a therapist</b>, has no National Provider Identifier number.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">10:52 PM</span></span>
+        <div class="e">Sascha messages me directly with their own suspicions: <i>&ldquo;Something&rsquo;s off.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">11:00 PM</span></span>
+        <div class="e">Troy continues to divert and refuses to engage. I leave the chat.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">11:30 PM</span></span>
+        <div class="e">Troy threatens to <b>release chats</b>. <i>&ldquo;Putting thousands of people in danger. Not because I tell them to but because that is protocol.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">12:30 AM</span></span>
+        <div class="e">Troy says my addition has to go. <b>Threatens to pull my Deadman&rsquo;s Switches</b> for the first time. Says he knows where I live and about my childhood.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">1:00 AM</span></span>
+        <div class="e">Says he knows <b>Sascha&rsquo;s address, who they live with, and about their kids</b>. <i>&ldquo;I have the power. Don&rsquo;t make me use it.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">1:30 AM</span></span>
+        <div class="e">Roommate <b>evacuates</b>. Troy: <i>&ldquo;It doesn&rsquo;t matter where she goes.&rdquo;</i> Roommate sees a <b>dark vehicle with windowless white trailer</b> at the spot the work truck had been.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">2:00 AM</span></span>
+        <div class="e">Sascha agrees to delay because of the threats.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">6:19 AM</span></span>
+        <div class="e"><b>Sound event.</b> I text my roommate and Sascha.</div>
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">9:00 AM</span></span>
+        <div class="e"><b>I flee my home.</b> Gone for days.</div>
+      </div>
+
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">2:00 AM</span></span>
+        <div class="e">Troy claims the clinician is being monitored. He had already claimed he was working with thousands of others. <b>Releases my article to Laura Robinson.</b></div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">3:14 AM</span></span>
+        <div class="e">Troy&rsquo;s last message: <i>&ldquo;The deed is done.&rdquo;</i> I block him.</div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">4:00 AM</span></span>
+        <div class="e">I publish a <b>&ldquo;cold&rdquo; version</b> of the article that strips everything he threatened over.</div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">10:00 AM</span></span>
+        <div class="e">Clinician: <i>&ldquo;Your work reads like someone in their right mind.&rdquo;</i></div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">11:00 AM</span></span>
+        <div class="e">Troy&rsquo;s fake PhD is <b>called out</b> by others in the field. He assumes it&rsquo;s because of a plot I orchestrated.</div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 22</span>
+        <div class="e"><b>The Riley Protocol</b> &mdash; a &ldquo;congressional reference document&rdquo; with forensic-styled scoring. The day after he reposts its main thesis on Substack.</div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 24 <span class="t">2:00 PM</span></span>
+        <div class="e">More formal video evaluation and signed letter from clinician.</div>
+      </div>
+
+      <!--  MAY 2026  -->
+      <div class="tl-month">May 2026</div>
+      <div class="tl-entry tl-p6">
+        <span class="d">May 04</span>
+        <div class="e"><b>This article is filed.</b> Public version 2.0 merges the original report with the timeline and evidence appendix.</div>
+      </div>
+
+      <div class="tl-legend">
+        <div class="row"><span class="dot" style="background:var(--gold)"></span><span>Setup / backstory</span></div>
+        <div class="row"><span class="dot" style="background:var(--rust)"></span><span>First articles, first contact</span></div>
+        <div class="row"><span class="dot" style="background:var(--teal)"></span><span>Investigation builds</span></div>
+        <div class="row"><span class="dot" style="background:var(--pink)"></span><span>Trigger article + callout</span></div>
+        <div class="row"><span class="dot" style="background:#B33A2C"></span><span>Escalation + threats</span></div>
+        <div class="row"><span class="dot" style="background:var(--blue)"></span><span>Aftermath</span></div>
+      </div>
+
+    </aside>
+
+    <!--  MAIN ARTICLE BODY (right column)  -->
+    <article class="ar-body">
+
+      <!-- ================= WHO? WHAT? WHY? ================= -->
+      <div class="ar-break"><em>Who? What? Why?</em></div>
+
+      <p class="ar-lead-p" id="sec-who">
+        Troy runs a Substack called <b>The Fallout Report</b>, including a series he calls <i>The Machine</i>, and a suite of adjacent properties. He sells an <b>OSINT workbook</b> for those wanting to learn investigative journalism. He contributes to <b>WhoWhatWhy</b>. He describes himself as a <b>survivor-centric investigative journalist</b> who has spent years mapping the network operating to rehabilitate Ghislaine Maxwell&rsquo;s public image and attack the credibility of Epstein survivors.
+      </p>
+
+      <p>
+        Troy explicitly states he is a <b>&ldquo;Survivor Advocate.&rdquo;</b>
+      </p>
+
+      <p>
+        What I believe is that <b>Troy Raymond Barile-Simleness is a fraud</b>. That he used false professional credentials to build his career, misled the people he represented, carelessly used illegal methods to gain his information, and even attempted to intimidate people into silence.
+      </p>
+
+      <div class="ar-claims">
+        <div class="ar-claim">
+          <span class="n">01</span>
+          <div class="body">
+            I can prove that Troy&rsquo;s professional methodology is one of <b>intentional honeypot</b>. He gets close to people he investigates, charms them, gets them to reveal things about themselves, then weaponizes that against them. The cases of honeypot in this article are not the only time Troy has used this methodology.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">02</span>
+          <div class="body">
+            I can prove that he <b>threatened multiple people&rsquo;s lives, with joy</b>, as he made statements implying he had the power to end the lives of an amateur investigative journalist (myself), a clinician, another survivor, and Sascha themselves &mdash; and their children. This was in order to suppress my journalism, much of it <i>after I agreed to remove any mention of his actions, his name, his threats, or even any implication he threatened me</i>.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">03</span>
+          <div class="body">
+            I can also prove he committed, or conspired to commit, <b>at least 10 crimes</b> in his interactions with me and others. Whether or not he is actually criminally liable, and whether or not anyone decides to prosecute him, is a different matter.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">04</span>
+          <div class="body">
+            I also believe he has a fundraiser sitting ready to collect money in Sascha Barros&rsquo; name &mdash; that Sascha never asked for and never authorized &mdash; waiting for the right moment to be shared. And that the right moment, for someone in Sascha&rsquo;s position, <b>would most likely be a tragedy</b>.
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= FUNDRAISER ================= -->
+      <div class="ar-break"><em>Fundraiser?</em></div>
+
+      <h2 id="sec-fundraiser"><span class="sec-no">&sect; 01 &mdash; Money before tragedy</span>A page seeded with influencers, sitting at zero.</h2>
+
+      <p>
+        On <b>January 16th, 2026</b>, Troy posted his first documented acknowledgement of Sascha Barros (Riley) by sharing a post from a professional clinician. Troy has specifically stated he did not know Sascha Barros in January. He says he didn&rsquo;t know of Lisa Voldeng or Sascha until Voldeng platformed George Tonks &mdash; someone Troy has known since they were both young. Voldeng platformed Tonks on <b>February 18th</b>. This is the same day Troy unloaded <b>five rounds of premade articles</b> that named Sascha before its end. <b>He first messaged Sascha on the 10th</b> of that month &mdash; more than a week before the article released.
+      </p>
+
+      <p>
+        A few days after Troy&rsquo;s repost of Sascha&rsquo;s story, a Kickstarter campaign Troy ran for a fantasy novel series and collectible toy line called <i>The Elementlings</i> <b>closed without reaching its funding goal</b>. The project was described by a local news anchor as his life&rsquo;s work, motivated during a time of genuine grieving. He was interviewed by a local network after distributing little gift baggies; a toy and some heartfelt words. The interview shows a human being behind the modeling-style photographs of their internet presence.
+      </p>
+
+      <p>
+        A week after that failure, a new funding page was created.
+      </p>
+
+      <!-- EVIDENCE STRIP — fundraiser / kickstarter -->
+      <div class="evidence">
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">003_Jan_22_Troys_Elementlings_Kickstarter_fails.jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Ev. K1</span></div>
+          <figcaption class="ev-cap"><b>Kickstarter</b> &mdash; The Elementlings campaign page, closed unfunded 22 Jan 2026.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">002_Jan_16_Troys_first_post_about_Sascha.jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Ev. K2</span></div>
+          <figcaption class="ev-cap"><b>Local news</b> &mdash; on-camera interview describing the project as his &ldquo;life&rsquo;s work.&rdquo;</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_2).jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Ev. K3</span></div>
+          <figcaption class="ev-cap"><b>K2 Gives</b> &mdash; the new fundraiser, created in Sascha&rsquo;s name. Las Vegas. Zero donations, high-profile follower seeding.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        One week after the Kickstarter ended, a new, <b>sophisticated fundraising page</b> to help document the story of Sascha Barros was created by user <b>K2 Gives</b>, in Las Vegas. The banner image places a childhood photo of Sascha alongside Jeffrey Epstein and Donald Trump.
+      </p>
+
+      <p>
+        While the fundraiser sits at zero donations, <b>it is seeded with high-profile influencer followers</b> that suggest a professional marketing infrastructure rather than a grassroots effort. The organization shares a naming convention with a Las Vegas digital marketing and web development company specializing in social strategy and search engine optimization. The majority of the founders of that company also have side projects as journalists. This mimics Troy&rsquo;s pattern exactly &mdash; <i>just with seemingly less fraud</i>.
+      </p>
+
+      <div class="ar-pull is-pink">
+        The lack of active promotion of this crowdfunding page suggests a &ldquo;ready-made&rdquo; financial vessel, positioned to be triggered during a moment of high visibility &mdash; or tragedy &mdash; to monetize their story.
+      </div>
+
+      <div class="ar-receipt">
+        <span class="who">Sascha Barros</span>
+        <p>
+          &ldquo;I have never authorized any type of GoFundMe or pay-to-hear, nothing. I have specifically NOT monetized any of my accounts so I could avoid even looking like I was trying to make a profit from any of this.&rdquo;
+        </p>
+        <p>
+          &ldquo;If ANYONE is asking for money or has something behind a paywall, they are NOT affiliated with me.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        Sascha&rsquo;s position is clear. The second statement was made at the early stages of our timeline, before any major events had occurred.
+      </p>
+
+      <p>
+        <b>I restate: we do not know who made this crowdfunding page.</b> But whoever made it doesn&rsquo;t change the reality: this is a <b>financial instrument pointed at a human being, waiting for a trigger</b>.
+      </p>
+
+      <!-- ================= THREE DOMAINS ================= -->
+      <h2 id="sec-domains"><span class="sec-no">&sect; 02 &mdash; The three websites</span>Three domains, in three months.</h2>
+
+      <p>
+        Troy has at least three websites:
+      </p>
+
+      <div class="ar-domains">
+        <div class="ar-domain">
+          <div class="nm">Grifter Nation</div>
+          <div class="dt">Domain registered &middot; 03/02/26</div>
+        </div>
+        <div class="ar-domain">
+          <div class="nm">Follow The Files</div>
+          <div class="dt">Domain registered &middot; 04/05/26</div>
+        </div>
+        <div class="ar-domain">
+          <div class="nm">Amalgamated Army</div>
+          <div class="dt">Domain registered &middot; 04/06/26</div>
+        </div>
+      </div>
+
+      <p>
+        It is worth noting that the choice of the last domain name came <b>directly from Sascha</b>, the website was made <b>for Sascha</b>, and Troy is just the one who owns it. He has since removed any positive mention of Sascha in exchange for <i>The Riley Protocol</i> and other documents strictly asserting Sascha is lying.
+      </p>
+
+      <p class="ink-rust"><i>That&rsquo;s not illegal, but it&rsquo;s not right.</i></p>
+
+      <p>
+        Sascha confirmed Troy claimed to have built these websites himself. <b>Grifter Nation</b>, <b>Follow The Files</b>, and <b>Amalgamated Army</b> were made within extremely short timeframes. The complexity of the websites, the information architecture, and the visual consistency are unlikely to be the work of someone who clicked through a default template on a common website builder. Whether they were hand-made or built on a platform is something I cannot confirm. What I can say is that the competence he claims to demonstrate fits precisely with someone who spent years in <b>digital marketing, PR, and media strategy</b>.
+      </p>
+
+      <p>
+        It does not fit with someone whose primary identity is a research neuroscientist who spent the better part of a decade in a doctoral program.
+      </p>
+
+      <!-- EVIDENCE STRIP — the three websites -->
+      <div class="evidence">
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">010_Mar_02_Grifter_Nation_domain_registered.jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Web 01</span></div>
+          <figcaption class="ev-cap"><b>Grifter Nation</b> &mdash; landing page snapshot, registered 02 Mar 2026.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">image (43).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Web 02</span></div>
+          <figcaption class="ev-cap"><b>Follow The Files</b> &mdash; landing page snapshot, registered 05 Apr 2026.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">024_Apr_06_Amalgamated_Army_domain_registered.jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Web 03</span></div>
+          <figcaption class="ev-cap"><b>Amalgamated Army</b> &mdash; name chosen by Sascha, owned by Troy. Registered 06 Apr 2026.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        A PhD candidate in cognitive neuroscience building polished activist media websites in their spare time is possible. But a <b>marketing professional with a decade of digital strategy experience</b> doing the same thing is <i>expected</i>.
+      </p>
+
+      <p>
+        <b>One of those backgrounds is documented. The other has no public record anywhere.</b>
+      </p>
+
+      <div class="ar-pull is-rust">
+        If Troy were ever positioned as the hero who exposed the truth about Sascha Barros, the credentialed investigator who did the work no one else would do, and Sascha were then to die or disappear &mdash; the page would be perfectly placed.
+        <cite>The hero narrative feeds the collection mechanism.</cite>
+      </div>
+
+      <!-- ================= WHO IS HE REALLY ================= -->
+      <div class="ar-break"><em>Who is he really, though?</em></div>
+
+      <h2 id="sec-real"><span class="sec-no">&sect; 03 &mdash; The documented record</span>Model scout, dog walker, cannapreneur.</h2>
+
+      <p>
+        Troy&rsquo;s documented professional background, confirmed on his own LinkedIn, has nothing to do with journalism, investigation, or even neuroscience. He spent <b>two and a half years as a Senior Model Scout</b> at Aesthetics PPD in the Greater Tampa Bay Area, scouting and booking individuals of all ages for fashion and editorial productions. He then moved to New York, where from 2009 to 2011 he co-owned and operated a <b>dog walking company</b>. His education is in marketing and business.
+      </p>
+
+      <p>
+        His LinkedIn profile reads: <i>&ldquo;Entrepreneur &mdash; Cannapreneur &mdash; Therapist &mdash; Educator &mdash; Philanthropist.&rdquo;</i> His entire documented professional history is marketing, PR, talent management, cannabis industry work, and pet services. His own workbook, the one he provides to people who want to learn investigative journalism, states in the author bio: <b>&ldquo;He is not a trained journalist, learned to do this by doing it.&rdquo;</b>
+      </p>
+
+      <p>
+        That is the most honest sentence in his entire public record. To be clear, <b>he has been doing this for 3 months</b>.
+      </p>
+
+      <!-- EVIDENCE STRIP — LinkedIn -->
+      <div class="evidence is-2">
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">LI&nbsp;01</span></div>
+          <figcaption class="ev-cap"><b>LinkedIn header</b> &mdash; &ldquo;Entrepreneur &middot; Cannapreneur &middot; Therapist &middot; Educator &middot; Philanthropist.&rdquo;</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(2_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">LI&nbsp;02</span></div>
+          <figcaption class="ev-cap"><b>Education section</b> &mdash; the degrees claimed and the overlap that gives the timeline away.</figcaption>
+        </figure>
+      </div>
+
+      <p>His LinkedIn, which lists him as <b>Professor at City Cannabis College in Chico, California</b>, is expansive:</p>
+
+      <ul style="font-family: var(--serif-b); font-size: 16px; line-height: 1.6; color: var(--ink); margin: 0 0 22px 22px;">
+        <li>Bachelor (of Science; inferred) in Industrial and Organizational Psychology, <b>Temple University</b>, 2005&ndash;2008</li>
+        <li>Bachelor (of Science; inferred) in Clinical Psychology, <b>Temple University</b>, also 2005&ndash;2008</li>
+        <li>Bachelor (unspecified) in Marketing, <b>University of South Florida</b>, 2008&ndash;2010</li>
+        <li>Master of Business Administration in Marketing, <b>University of South Florida</b>, 2010&ndash;2013</li>
+        <li>Advanced Certificate in Cannabis Industry Management, <b>Oaksterdam University</b>, 2017&ndash;2018</li>
+        <li>Master of Science in Organizational Leadership, <b>Colorado State University Global</b>, 2019&ndash;2020</li>
+      </ul>
+
+      <p>
+        <b>No doctorate.</b> An MS in Leadership and an MBA in marketing. No master&rsquo;s in any psychology-related field.
+      </p>
+
+      <p>
+        It&rsquo;s worth noting the overlap in timeframes for two of these degrees. Running <b>two full bachelor&rsquo;s programs simultaneously at the same institution</b> over the same three years is unlikely. Accreditation standards, credit hour requirements, and institutional policy make it extremely difficult to complete two independent bachelor&rsquo;s degrees in the same timeframe at the same school. What you can do in that window is declare a dual major, which produces <i>one</i> degree with two fields listed, or a major with a minor.
+      </p>
+
+      <h3>So what?</h3>
+
+      <p>
+        Simply lying about having a degree is not a crime. However, when false credentials are used to <b>obtain employment</b>, <b>establish authority over a victim or representative of a victim</b>, or to induce someone to <b>disclose information or resources</b> they would not otherwise have provided, the conduct becomes <b>fraud</b>.
+      </p>
+
+      <div class="ar-pull is-gold">
+        The distinction is not just linguistic. It is the difference between a lie and a crime.
+      </div>
+
+      <p>
+        When a stranger questioned his doctorate, instead of producing his credentials, he decided it was an operation against him. He called one of those people questioning him my <i>&ldquo;chihuahua&rdquo;</i>, and told me to tell them to back off. Troy then stated that it was too late even if I did, and that <b>&ldquo;others are now keeping an eye on [them] as well&rdquo;</b>.
+      </p>
+
+      <p>
+        It is important to note that <i>&ldquo;my chihuahua&rdquo;</i> is a respected individual within their highly specialized field. They are a <b>Licensed Therapist with over 20 years of experience in trauma therapy</b>, a recognized expert intimately familiar with the intersection of mental health and the legal system. They have won awards from the City of Berkeley for their work training other clinicians to recognize and treat dissociative disorders.
+      </p>
+
+      <p>
+        A PhD in any field requires years of sustained, focused academic work; prior degrees, original peer-reviewed research, and a dissertation that survives scrutiny from real experts in that field. Troy&rsquo;s documented career between his last confirmed degree and the claimed 2024 doctorate is <b>cannabis industry work, digital marketing, and PR</b>.
+      </p>
+
+      <p style="font-family: var(--serif-b); font-size: 17px; line-height: 1.5; color: var(--ink); margin: 16px 0;">
+        There is no published research.<br>
+        No conference presentations.<br>
+        No academic affiliations.<br>
+        <span class="ink-pink">No institutional record of any kind connecting him to any kind of research environment.</span>
+      </p>
+
+      <p>
+        Cognitive Neuroscience specifically makes his claims absurd. It is among the most rigorous and methodologically demanding fields in all of science, a discipline that sits at the intersection of neurology, psychology, and biology, that requires fluency in <b>neuroimaging, statistical modeling, and experimental design</b>, and that holds itself to extraordinarily high standards precisely because the consequences of bad science in that space are unusually severe.
+      </p>
+
+      <p>
+        Bad cognitive neuroscience gets cited in courtrooms. It shapes how we treat trauma survivors, how we assess credibility, how we build policy around memory and mental health. The people in that field are acutely aware of what it costs when someone misrepresents what the science says.
+      </p>
+
+      <div class="ar-pull">
+        A man whose entire documented academic history is a marketing MBA and a one-year online leadership degree, who spent his professional life scouting models, walking dogs, and getting into petty schemes, <em>does not arrive at a doctorate in cognitive neuroscience</em>.
+      </div>
+
+      <!-- ================= GOVERNMENT DATABASES ================= -->
+      <div class="ar-break"><em>What is on government databases.</em></div>
+
+      <h2 id="sec-gov"><span class="sec-no">&sect; 04 &mdash; Primary court records</span>A long record, documented, and real.</h2>
+
+      <p>
+        In <b>2007</b>, Troy was charged in Pasco County, Florida with fraud &mdash; an insufficient funds check, Florida statute 832.05. It is confirmed on the Pasco County clerk&rsquo;s primary court database. The judge declined to enter a formal conviction, instead placing him on probation and ordering restitution; a disposition that keeps the charge off a standard background check. But it is not an acquittal. <b>Wachovia Bank</b> appears as a bondsman, implying arrest. <b>Wells Fargo</b> appears as an expert witness. This is not a background aggregator entry. <b>This is a primary court record.</b>
+      </p>
+
+      <p>
+        In <b>2022</b>, a consumer lending company called United Finance CO filed a small claims case against Troy and a co-defendant in Jackson County, Oregon. The two were sued jointly, which means they had some kind of shared financial relationship at the time. The defendants successfully moved to dismiss before any judgment was entered. The case is confirmed on the Jackson County court database.
+      </p>
+
+      <p>
+        It is worth noting that Medford is also where, around the same period, Troy was reported as being found in a <b>stolen or unauthorized vehicle</b>. He has denied this, but the report includes his full name.
+      </p>
+
+      <!-- EVIDENCE STRIP — court records -->
+      <div class="evidence">
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_3).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Ct&nbsp;01</span></div>
+          <figcaption class="ev-cap"><b>Pasco County, FL</b> &mdash; 2007 fraud charge (Fla. Stat. 832.05), Wachovia as bondsman.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(2_of_3).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Ct&nbsp;02</span></div>
+          <figcaption class="ev-cap"><b>Jackson County, OR</b> &mdash; 2022 small claims, defendants jointly named.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(3_of_3).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">Ct&nbsp;03</span></div>
+          <figcaption class="ev-cap"><b>Medford, OR</b> &mdash; report of being found in a stolen or unauthorized vehicle. Same period.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ================= AGGREGATOR DATABASES ================= -->
+      <h2 id="sec-agg"><span class="sec-no">&sect; 05 &mdash; Aggregator entries</span>What pulls and what stays. <i>Read this section with caution.</i></h2>
+
+      <p>
+        These websites pull data regularly, allowing them to obtain and retain information that other databases delete. This cuts two ways: <b>these sites can also be unreliable</b>. It&rsquo;s important to remember exactly how unreliable this section is when reading it.
+      </p>
+
+      <p>
+        In <b>2006</b>, Troy was charged with obtaining property by worthless check over the felony threshold &mdash; a third-degree felony under Florida statute: <b>Adjudication Withheld</b>. The Hillsborough County clerk&rsquo;s public portal returns no result for his name, which in Florida is consistent with a record that has been expunged. <i>This charge appears 3 separate times on aggregators.</i>
+      </p>
+
+      <p>
+        In <b>2021</b>, a charge appears of <b>Theft From An Elder Or Dependent Adult</b>. It&rsquo;s worth noting the co-defendant that appears in the 2022 fraud charges. <i>This same charge appears twice.</i>
+      </p>
+
+      <p>
+        These are among several court-processed evictions, traffic violations, failures to provide registration, and failures to appear in court.
+      </p>
+
+      <div class="ar-pull is-teal">
+        I want to state clearly here: these are not claims I am making because I think they make Troy a bad person. These are mostly just petty crimes. I only bring it up because the severity of the events in this article demands it.
+      </div>
+
+      <!-- ================= SO WHAT'S THE PROBLEM ================= -->
+      <div class="ar-break"><em>So what&rsquo;s the problem, then?</em></div>
+
+      <h2 id="sec-problem"><span class="sec-no">&sect; 06 &mdash; How I got involved</span>I was not a believer. I pushed in to test a framework.</h2>
+
+      <p>
+        When I began my own personal investigation into Sascha Barros, <b>I was not doing it as a &ldquo;believer&rdquo;</b>. I thought it was a set of good opportunities to test the skills in investigative journalism I had been learning for nearly a year. Eventually, after joining the discourse around the story, I began to feel <b>the level of organized hatred directed at Sascha was disproportionate</b> to what any ordinary person, even a liar, actually deserved. That disproportionality felt like a signal worth investigating.
+      </p>
+
+      <p>
+        So I pushed my way in with <b>Iterative Adversarial Inquiry</b>, a framework released after these events specifically to test who in the discourse was a genuine actor and who was performing as one. I began calling out well-known figures on their hypocrisy and self-stated contradictions: <b>Laura Robinson</b>, <b>Brandy Zadrozny</b>. Eventually one of those targets was <b>Troy Raymond Barile-Simleness</b>.
+      </p>
+
+      <p>
+        Troy published a Substack piece on <b>April 15th</b> that withdrew his support for Sascha, called them a liar, and labeled them dangerous. On its face, as journalism, it was indefensible. It attacked an alleged trafficking survivor&rsquo;s credibility with no new evidence and compounded the existing harassment campaign against them. Its thesis was that finding minor irregularities in great enough numbers would invalidate Sascha&rsquo;s story, even going further to say that because of these inconsistencies it also proved they were dangerous. <b>Its methodology was scientific, but applied to no scientific field.</b>
+      </p>
+
+      <p>
+        I called him out publicly, in direct terms. I called him <b>weak</b>. I called him a <b>bad investigator</b>. And most importantly: <b>I told him he was a liability in the space he worked in</b>. I told him he would make a good case study as someone who used cultural rhetoric to defend their worldview &mdash; an even better one than Laura Robinson.
+      </p>
+
+      <p>
+        I made it clear that I wanted to engage in public view, and only removed myself from the view in good faith. Since that good faith is now gone, I am exposing him for his behavior.
+      </p>
+
+      <p>
+        Troy eventually messaged me on another account, telling me that his entire article was actually a plot: a tactic designed primarily to <b>gain the trust of Astra Crosby</b>, with a secondary goal of regaining Sascha&rsquo;s vehicle that was left at her house. According to Troy, his article was the first stage of a covert operation designed to insert himself into Astra&rsquo;s social circle with the ultimate goal of gaining information about Lisa Voldeng. If he did take that vehicle, he could have been arrested for the same charge as his arrest in Medford, Oregon in 2023.
+      </p>
+
+      <p>
+        This is not an appropriate methodology in any space, but especially not in the space he has built his career in. <i>He works in spaces where the line between victim and victimizer is often a thin one, where indoctrination is a standard method, and weaponizing trust in figures with institutional backing and allyship is an actively dangerous one.</i> I have documented nearly a dozen honeypot victims of Troy.
+      </p>
+
+      <p><b>Troy has been in this space 3 months.</b></p>
+
+      <div class="ar-warn">
+        <span class="label">Section aside &middot; lethal stakes</span>
+        <p>If Troy were to actually attempt to honeypot anyone who is actually connected to these networks, then he would likely be killed.</p>
+        <p>The only reason Troy is still alive is because he is too stupid to know who is a worthwhile target and who is not. An actual education in psychology would have made his real targets apparent to him.</p>
+      </div>
+
+      <h3>His attack on Sascha was a manufactured entry point into this honeypot.</h3>
+
+      <p>
+        He wanted to appear as someone who had <b>turned against Sascha so that Astra</b>, who had already expressed opposition to Sascha, would trust him. At this point our differences were a matter of Sascha&rsquo;s discretion, and that I thought his plan was stupid. I made that clear and spelled my logic out to him. His only answer was to allude that Lisa Voldeng was a bad actor.
+      </p>
+
+      <p>
+        I told him <b>Sascha has given me no reason to indicate that they disapproved of my writing</b>. Troy&rsquo;s entire assertion was that his plan was approved by Sascha, that they were in support, and that me attacking Troy on the merit of his own article would ruin his operation. When I told him I had asked Sascha directly, and that they gave me no indication they knew about this operation or didn&rsquo;t want me to publish, Troy told me Sascha agreed with him &mdash; I just needed to talk to Sascha.
+      </p>
+
+      <p>
+        <b>So I did.</b>
+      </p>
+
+      <p class="ink-pink"><i>He called me a liar.</i></p>
+
+      <p>
+        When the threats began to escalate, my only possible safety in case these were credible threats was <b>public visibility</b>. I shared general details of what was happening with the clinician I had contacted weeks ago about Sascha in relation to their experience with trauma and DID. They believed I was having reasonable responses to real events, and that I was not having a psychotic break or experiencing a delusional episode.
+      </p>
+
+      <p>
+        Troy contacted someone who already knew of the operation and knew Sascha in order to have them reach out as a mediator. As the new mediator and I were talking, we eventually agreed: the plan was irresponsible, its damage went beyond Sascha, that Troy would likely have to <b>come clean about everything he had done</b>, exfiltrate from the covert operation, and hopefully even grow as a person as a result.
+      </p>
+
+      <p>
+        I was eventually convinced he was a genuine actor with a bad methodology and a severe insecure immaturity. After I wrote a formal 7k-character apology to Troy apologizing for my insults and explaining why this was still important &mdash; directly stating why it was dangerous for him to continue doing what he was doing &mdash; he seemed to agree.
+      </p>
+
+      <div class="ar-chain">
+        <h4>The logic chain I sent through the mediator</h4>
+        <ol>
+          <li><span>If Sascha is telling the truth, <b>&ldquo;they&rdquo; are going to be working to discredit Sascha.</b></span></li>
+          <li><span>If anyone is working to discredit Sascha, <b>Troy would be the primary target</b>. The face of the investigation.</span></li>
+          <li><span>He had no operational security, and already had his network compromised. I evidenced this directly to him.</span></li>
+          <li><span>Operatives are skilled. They will be able to deceive. They are universally skilled in this specific way, exclusively. It is the single most important part of being an operative, as opposed to an unwitting asset.</span></li>
+          <li><span>His 04/15 article proves he doesn&rsquo;t understand psychology well enough to be a covert operative, <b>let alone spot one</b>.</span></li>
+          <li><span>Astra is not skilled. She is obvious. She may be an unwitting asset, but she is not an operative.</span></li>
+          <li><span>If Astra isn&rsquo;t an operative, he was not in danger.</span></li>
+          <li><span>If there is a &ldquo;they&rdquo;, then he was likely being led at Voldeng intentionally &mdash; also not an operative. The second of the two fundamental aspects of a perfect asset, and the exact opposite feature of a perfect operative.</span></li>
+          <li><span>Satanic panic is the face of this kind of diversion.</span></li>
+          <li><span>He couldn&rsquo;t come back from this without going public about his operation, admitting he made this mistake, <b>and growing in the light of public visibility</b>.</span></li>
+        </ol>
+      </div>
+
+      <p>
+        Over the rest of the night and all of the next day, <b>everyone in that conversation, including Sascha, reached the same conclusion</b>. Sascha states they were never fully comfortable with the operation. Troy initially appeared to accept the terms, but was not explicit.
+      </p>
+
+      <p>
+        I felt the potential danger was not being understood. I made it clear that I felt Troy was missing key context. I was about to describe things that could put me in danger in order to make him understand. <b>Maybe I was wrong</b>, maybe the statements I was about to make weren&rsquo;t dangerous. But that was what I made clear before I made them.
+      </p>
+
+      <p>Specifically, a context Troy <b>agreed with</b>.</p>
+
+      <div class="ar-chat" aria-label="Chat exchange — Troy and me">
+        <div class="msg me" data-who="Me">
+          I don&rsquo;t think you actually know where I&rsquo;m going with it. I might need to write for a sec. This is much bigger than you think, I believe.
+        </div>
+        <div class="msg troy" data-who="Troy">
+          Are you talking about how high this goes? Like up to the 5 person tribunal?
+        </div>
+        <div class="msg me" data-who="Me">Um, no exactly, no.</div>
+        <div class="msg troy" data-who="Troy">NWO</div>
+        <div class="msg me" data-who="Me">Not exactly, it&rsquo;s even worse. It&rsquo;s broader, cultural.</div>
+        <div class="msg troy" data-who="Troy">I&rsquo;m like very interested, but I&rsquo;m more worried about your safety.</div>
+        <div class="msg me" data-who="Me">It&rsquo;s not names. It&rsquo;s not like that at all, actually. That&rsquo;s why I have to take a moment, I&rsquo;m sorry, let me write. It&rsquo;s not that long.</div>
+        <div class="msg troy" data-who="Troy">OK, I do have to go to bed soon though cause it&rsquo;s 4 AM and I&rsquo;m exhausted. But I&rsquo;m definitely waiting for this.</div>
+        <div class="skip">[ &mdash; he goes silent. returns one hour after I went to bed, ignoring the entire point &mdash; ]</div>
+        <div class="msg me" data-who="Me">Still just waiting on [Troy], he just said he was busy.</div>
+        <div class="msg med" data-who="Mediator">Someone please call him?</div>
+        <div class="skip">[ &mdash; 4 hours pass &mdash; ]</div>
+        <div class="msg me" data-who="Me">Where is Troy? Why are they taking so long? Is anyone talking to them?</div>
+        <div class="msg troy" data-who="Troy">I am being exposed? It is not the right time for that. You guys don&rsquo;t know what I&rsquo;m going through even before what just happened to me.</div>
+        <div class="msg me" data-who="Me">Troy you must remember you are still a likely asset. You have done nothing to prove otherwise other than appear to be a genuine person&hellip; if you cannot see why what you are doing is actually a bad idea, not just for your safety, but for Sascha and their story, <b>you should not be leading the charge for that justice</b>. Your constant diverting for sympathy every time you are confronted is only making me more suspicious.</div>
+        <div class="msg troy" data-who="Troy">What is suspect? What the fuck is going on right now?</div>
+        <div class="msg me" data-who="Me">Check up on the chat! What are you even doing sitting here NOT catching up with the chat? You are stalling for time and refuse to explain any reason why what you are doing could be important.</div>
+        <div class="msg troy" data-who="Troy">I BROKE MY FOOT.</div>
+        <div class="msg me" data-who="Me">Troy you have actually just proven to me you cannot be trusted to run this case. This is bigger than your foot. This is bigger than your cat. This is bigger than you. If you cannot get over yourself, you are a liability.</div>
+        <div class="msg troy" data-who="Troy">I am so over the drama from everyone. Do whatever you need to do but understand that comes with consequences. You are literally putting my safety at risk now.</div>
+      </div>
+
+      <p>
+        He then shifted again to belittling me and refused to engage a single point I made even when directed to focus on the issues directly. I told him I was sorry we could not reach him, that we had all hoped he would grow as a person, and I left the group chat.
+      </p>
+
+      <!-- ================= I AM NOT THE ARCHITECT ================= -->
+      <div class="ar-break"><em>&ldquo;I am not the architect&hellip;&rdquo;</em></div>
+
+      <h2 id="sec-architect"><span class="sec-no">&sect; 07 &mdash; The threats become direct</span>He found my personal Facebook.</h2>
+
+      <p>
+        That section title quote came from before I was invited into the group chat, when the threats were minor, and I was not scared for my life. It is extremely important that this context be understood for what followed. <b>He found my personal Facebook and messaged me there</b> after I left that group chat.
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">Troy &middot; via Facebook</span>
+        <p>
+          &ldquo;I will release that entire chat aside from Sascha and [REDACTED], putting myself, other children, [REDACTED] and thousands of people working on this in danger. They will be after you and not because I tell them but because that is protocol. <b>That&rsquo;s a warning.</b>&rdquo;
+        </p>
+      </div>
+
+      <p>
+        His constant threatening and diverting was wearing on me. At this point, it became clear to me it didn&rsquo;t really matter if these threats were credible &mdash; someone in his space, with his choice of career, should never behave like this.
+      </p>
+
+      <p>
+        I showed him a new statement I was adding to the article &mdash; explaining how the people I was dealing with seemed concerned with sending AI images of opponents to laugh at them, were following leads that have no chance of finding evidence, that I feared they may have been put there to discredit the investigation, and that <b>Sascha agreed</b> the operation was putting the entire investigation at risk.
+      </p>
+
+      <p>He responded swiftly:</p>
+
+      <div class="ar-receipt">
+        <span class="who">Troy</span>
+        <p>&ldquo;That whole thing needs to go. They&rsquo;re going to know who you are talking about. <b>These people are very protective of me.</b>&rdquo;</p>
+      </div>
+
+      <p>
+        I responded with his statement about not being &ldquo;the architect&rdquo; in mind. Nothing I said should have put anyone at risk.
+      </p>
+
+      <div class="ar-chat" aria-label="Chat exchange — the threats become direct">
+        <div class="msg me" data-who="Me">So you are admitting you are in contact with the exact people you should be exposing under the threat of force to the lives of children?</div>
+        <div class="msg troy" data-who="Troy">No, this is a network of individuals who save children. From all around the world, and from every type of professional background. You don&rsquo;t have to believe me, but they will come for you.</div>
+        <div class="msg me" data-who="Me">Silence only benefits these networks. <i>Then I will die.</i></div>
+        <div class="msg troy" data-who="Troy"><b>And so will Sascha.</b></div>
+      </div>
+
+      <p>
+        Though I still desperately wanted to believe Troy was genuine, my faith was slipping away. <b>This is the moment threats became gleeful, direct, and genuinely unhinged.</b>
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">Troy &middot; verbatim, in sequence</span>
+        <p>&ldquo;You have two choices. You don&rsquo;t publish it at all and at this point you don&rsquo;t mention me or my operation or anything that could even be tied back to me if my mother were to read it. That&rsquo;s all I have to say. I will pull the deadman&rsquo;s switch.&rdquo;</p>
+        <p>&ldquo;My safety comes before yours and before Sascha&rsquo;s and before everyone else&rsquo;s.&rdquo;</p>
+        <p>&ldquo;So what&rsquo;s it going to be? You have two choices, which are you choosing?&rdquo;</p>
+        <p>&ldquo;And you&rsquo;re absolutely right I do know who you are and I know where you live and I know about your family and I know about your childhood. And so do thousands of other people. Because the other day, when you were a threat, you were put at the top of the list of people to watch. I&rsquo;m waiting for your answer. <b>You have two minutes.</b>&rdquo;</p>
+        <p>&ldquo;1 minute. It&rsquo;s you who is putting Sascha in danger.&rdquo;</p>
+        <p>&ldquo;<b>30 seconds.</b>&rdquo;</p>
+      </div>
+
+      <p>My response at the time? <b>&ldquo;Lol&rdquo;</b></p>
+
+      <p>
+        When I refused to remove that paragraph, Troy said in response:
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">Troy</span>
+        <p>&ldquo;[Then] it&rsquo;s over for Sascha too. I even have their address. I also know who they live with. And a whole fucking lot more. <b>Information on their children</b> and everything. The fact this is happening right now is hilarious. <b>I have the power. Don&rsquo;t make me use it.</b>&rdquo;</p>
+      </div>
+
+      <p>
+        These statements were clearer threats than before. They were not vague. They were direct. <b>He included Sascha and their children.</b>
+      </p>
+
+      <p>
+        When I asked Sascha if Troy should know where they lived, they said that he should not know where they were at that time. <b>This began to worry me</b>, the idea that maybe Troy was not genuine finally began creeping up my spine.
+      </p>
+
+      <p>
+        As soon as I reached that stage, I could not in good conscience keep my roommate in the home that Troy claimed to know the location of. Since I was planning on releasing soon, she needed to be out of the house.
+      </p>
+
+      <p>
+        When I said I needed to focus on moving my roommate to safety, he said: <i>&ldquo;It doesn&rsquo;t matter where they go.&rdquo;</i> Then: <i>&ldquo;You aren&rsquo;t understanding. You can&rsquo;t hide.&rdquo;</i> Then a thumbs-up emoji. Eventually: <i>&ldquo;Just be careful who you talk to online because they may not be who you think they are. Because you already have.&rdquo;</i> Then a winky face.
+      </p>
+
+      <p>
+        Troy&rsquo;s last message to me was at <b>3:14 AM on the 20th of April</b>:
+      </p>
+
+      <div class="ar-pull is-rust">
+        &ldquo;The deed is done. If you knew what I knew you wouldn&rsquo;t be trying to help someone that you can&rsquo;t help.&rdquo;
+        <cite>Troy &middot; 20 Apr 2026 &middot; 03:14</cite>
+      </div>
+
+      <p>
+        When I read those messages a few minutes after he sent them, I blocked him.
+      </p>
+
+      <p>
+        <b>He had proved this was about intimidation over personal embarrassment</b>, or he wouldn&rsquo;t have released everything anyway.
+      </p>
+
+      <!-- ================= REAL LIFE EVENTS ================= -->
+      <div class="ar-break"><em>At exactly 6:16, 3 hours later, something occurred in my own home.</em></div>
+
+      <h2 id="sec-real-life"><span class="sec-no">&sect; 08 &mdash; The events that occurred in real life</span>A white car. A work truck. A sound I cannot explain.</h2>
+
+      <p>
+        I became more scared than I had ever been in my life. I suddenly believed everything Troy had said. <b>I fled my home to a hotel. I checked my car for GPS trackers.</b> I may have been posting about the threats I was receiving for the previous 24 hours, but this is the first moment I actually believed them.
+      </p>
+
+      <p>
+        On <b>April 17th</b>, just before I was added to any group chat, and soon after I first blocked Troy&rsquo;s Threads over his constant threats, something happened that I didn&rsquo;t think twice about at the time. An <b>abandoned car</b> near our home was removed. This car had been there since before we moved in &mdash; about two years &mdash; and held a thick layer of likely years&rsquo; worth of pollen buildup. <b>In its place was a lone, unmarked white work truck</b>, bundles of electric cords in the back. This was not a tow truck. <i>It was not suspicious.</i>
+      </p>
+
+      <p>
+        That night, my roommate and I went to a 24/7 grocery store &mdash; not unusual for us, we almost never go during the day. As we were walking in, <b>an older white car with solid black windows, including windshield, came close to hitting us both</b>. They were speeding down the center of both lanes of the road that separated the grocery store from its parking lot. At the time I did not believe any of the threats from Troy &mdash; I was laughing at them as we walked in.
+      </p>
+
+      <p>
+        <b>I did not even look at the license plate. I assumed this was a random act of aggression.</b>
+      </p>
+
+      <p>
+        The car stopped directly in front of us, blocking our path, then turned perpendicular to the lanes in front of us, and too slowly began pulling away. It stopped diagonal in the road, cutting us off from the store, <b>effectively pinning us against the edge of the road</b>. As we quickly walked away, it turned back toward us as we entered the store. It only occurred to me once we were inside what it could have meant. I was still not yet paranoid.
+      </p>
+
+      <!-- EVIDENCE STRIP — scene -->
+      <div class="evidence">
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">048_Apr_17_530pm_Work_truck_seen.jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Sc&nbsp;01</span></div>
+          <figcaption class="ev-cap"><b>Front of the duplex</b> &mdash; abandoned car gone, work truck in its place, 17 Apr.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(3_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Sc&nbsp;02</span></div>
+          <figcaption class="ev-cap"><b>Grocery store lane</b> &mdash; the diagonal path of the blacked-out car relative to the entrance.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(4_of_4).jpg'); background-size: cover; background-position: center;"><span class="stamp is-evid">Sc&nbsp;03</span></div>
+          <figcaption class="ev-cap"><b>Empty patch</b> &mdash; concrete and years-old leaves where the trailer had been. Returned to.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        That night, as my roommate evacuated from our home, and as she was pulling away, she drove past the place where the abandoned car had been, where the work truck had been earlier that very day. She says what she saw, given the context, <b>gave her chills</b>. A dark truck or van with a similarly blacked-out windshield, parked nearby, connected to a generic, windowless, white trailer. She was in so much fear she couldn&rsquo;t even bring herself to look at the vehicle. When she returned hours later to bring me to a hotel due to the sound event, <b>both the trailer and vehicle were gone</b>. In its place is only a patch of concrete, still covered with years of caked leaves on the ground.
+      </p>
+
+      <p>
+        Four hours after my roommate left, I experienced <b>the sound event</b>.
+      </p>
+
+      <div class="ar-warn">
+        <span class="label">I have not been fully honest about this publicly until now.</span>
+        <p>I do not have a history of any kind of hallucinations. I have never had a psychotic break.</p>
+        <p>It started quiet, behind me. At first I was confused. Its initial low volume was more of a curiosity. I thought it was a neighbor, then an electrical crew outside, as it continued to get louder. My cats ran away down the hallway.</p>
+        <p>After I turned around to face it, I realized it was coming directly from my front door. The volume was not constant, more like a whirring or humming, with at least two different sets of oscillations. <b>It was extremely high-pitched, similar to a guitar&rsquo;s feedback.</b></p>
+        <p>Sometimes it felt like it would hit me, being extremely loud and mildly painful. My neck and ears crackled like I just ate something intensely sour.</p>
+        <p>Then it would go quiet, and I could barely hear it. Its volume faded in and out, and in my mind, it seemed like the sound was moving around my home. It came back to me 3 or 4 times at least.</p>
+        <p>It lasted an indeterminate amount of time, as due to the intense fear and panic, I had no ability to properly think or even perceive.</p>
+      </div>
+
+      <p>
+        Before this moment, I truly believed that all the threats were just talk. My position relative to the door would lead the source of the sound to directly in front of my home, or a wall of the asymmetrical duplex that extends further forward than our unit. If the sound was not coming from directly in front of my home, it must have come from far enough that it must have come from the other side of that unit. <b>The other side of that unit is fence, then another duplex.</b>
+      </p>
+
+      <p>
+        I have never been so scared in my life. Even now, I am not comfortable entertaining the idea this was anything but a hallucination inside my own head, <b>but I can&rsquo;t ignore the possibility</b>. I left after that and did not return for days, until drafting a series of statements, buying security cameras, and checking with a licensed therapist.
+      </p>
+
+      <h3>Directional Ultrasonic Devices &mdash; commercially available.</h3>
+
+      <p>
+        These systems utilize ultrasonic transducers to create a <b>narrow, laser-like beam of sound</b> that only becomes audible when it interacts with a surface or the listener&rsquo;s head, allowing for precise targeting that leaves little acoustic trace in the surrounding environment. While once highly inaccessible technology, these devices are now widely accessible for legitimate uses in high-end retail displays, museums, and targeted advertising. Anyone determined enough can build a DIY acoustic device for as little as <b>$5 to $15 thousand dollars</b>.
+      </p>
+
+      <p>
+        This commercial availability means that any corrupt organized group, or any individual with a budget, can deploy these tools to harass a target or disrupt a space without the massive logistical footprint or power requirements of older, military-grade LRAD systems.
+      </p>
+
+      <p>
+        I was evaluated more informally by the same clinician I have mentioned. I do not claim this as a definitive answer to whether I was being delusional or hallucinating, only as an anecdotal against that. <b>They had already told me my work reads like a person in their right mind.</b>
+      </p>
+
+      <p>
+        Soon after I fled and before I returned home, I released a <i>&ldquo;cold&rdquo;</i> version of the article. I avoided mentioning Troy because of the threats. I have calmed since, and my perspective has changed.
+      </p>
+
+      <!-- ================= THE RILEY PROTOCOL ================= -->
+      <h2 id="sec-riley"><span class="sec-no">&sect; 09 &mdash; His response document</span>The Riley Protocol &mdash; a checklist in a lab coat.</h2>
+
+      <p>
+        Troy dropped his next article about Sascha, called <b>The Riley Protocol</b>, about 48 hours later. Formatted as a <b>congressional reference document</b> on Sascha&rsquo;s own website, filled with academic citations, evidentiary tiers, and a forensic matrix that goes far beyond anything in his previous career. <i>Seven of nine narrative dimensions score below 30%</i> on a <b>&ldquo;credibility chart&rdquo; he built himself</b>.
+      </p>
+
+      <!-- EVIDENCE STRIP — the Riley Protocol -->
+      <div class="evidence is-2">
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">_(1_of_1).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">RP&nbsp;01</span></div>
+          <figcaption class="ev-cap"><b>The Riley Protocol</b> &mdash; cover page, formatted as a congressional reference document.</figcaption>
+        </figure>
+        <figure class="ev">
+          <div class="ev-thumb" style="background-color: var(--bg-surf);">image (50).jpg'); background-size: cover; background-position: center;"><span class="stamp is-doc">RP&nbsp;02</span></div>
+          <figcaption class="ev-cap"><b>Credibility chart</b> &mdash; the scoring matrix Troy chose, applied, and validated himself.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        The full response to its specific claims will be the subject of a separate piece. What needs to be said here is simpler and more foundational.
+      </p>
+
+      <p>
+        The Riley Protocol treats <b>inconsistency as fabrication</b>, <b>memory gaps as evidentiary failures</b>, and <b>absent records as proof that nothing happened at all</b>.
+      </p>
+
+      <div class="ar-pull is-rust">
+        That is not a forensic standard. <em>It is a checklist.</em>
+        <cite>The same one applied to every survivor who has ever named someone powerful.</cite>
+      </div>
+
+      <p>
+        <i>Inconsistent story. Bad timing. Wants attention. Waited too long. Doesn&rsquo;t act right.</i> The checklist has one function: producing a predetermined conclusion while making it look earned.
+      </p>
+
+      <p>
+        The Riley Protocol is framed within the thesis of my own article, that Troy himself complimented. He said it couldn&rsquo;t be argued with. He said even without sources and receipts, the article was so valuable that everyone should read it. He then wrote the most comprehensive and intensive investigative reporting of his entire career within two days based on a thesis in the core of an article about which he stated:
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">Troy &middot; on my draft</span>
+        <p>&ldquo;This is the best piece I have read on Sascha so far in general. <b>There is no denying what happened to Sascha.</b> Anyone who says otherwise needs to really step outside of the box that they live in.&rdquo;</p>
+      </div>
+
+      <p>
+        The &ldquo;credibility chart&rdquo; does not become data because it looks like data. Troy chose the numbers himself, applied them himself, and had it validated by no one but himself. He then <b>submitted it to congressional offices as forensic analysis</b>.
+      </p>
+
+      <p>Why? Was Congress actively investigating? <b>He didn&rsquo;t do this for Congress; he did it to fool everyone who read it into thinking it was a legitimate piece of journalism.</b></p>
+
+      <p>
+        His own $10 OSINT workbook, sold to the same audience reading The Riley Protocol, explicitly states that an investigator&rsquo;s job is to present documented facts and let readers draw conclusions. He violated that on a foundational level with every scoring category he pulled out of his own ass to assert those conclusions himself. <b>The chart is his conclusion wearing a lab coat and a fake pair of glasses.</b>
+      </p>
+
+      <h3>Memory science is not ambiguous.</h3>
+
+      <p>
+        Inconsistent memory is normal, expected, and exceptions to that are so rare they are labeled: <b>Eidetic Memory</b>, <b>Savant Syndrome</b>, etc. Troy cites memory science in his own theoretical framework, which makes his intentional, knowledgeable misapplication of it inexcusable.
+      </p>
+
+      <p>
+        Peripheral details, names, sequences, and specific locations are vulnerable to distortion. The emotional core of trauma &mdash; the fear, the pain, the helplessness &mdash; is encoded differently and is much more stable. Treating a wrong name or a timeline gap as evidence the abuse didn&rsquo;t happen is not skepticism.
+      </p>
+
+      <div class="ar-pull is-pink">
+        It is a standard calibrated specifically to make survivors impossible to believe, and Troy dressed it up in academic citations and called it forensic analysis.
+      </div>
+
+      <p>
+        This cognitive fragility is often culturally weaponized through the tactic of <b>DARVO</b>: <i>Deny, Attack; Reverse Victim and Offender</i>. By hyper-focusing on chronological errors, bad-faith actors poison the well, shifting public scrutiny from the actions of the accused to the flaws of the survivor.
+      </p>
+
+      <p>
+        It demands a courtroom standard of proof <b>that the human brain is not evolved to provide for childhood events</b>. We must understand the space we are creating for survivors using this kind of rhetoric.
+      </p>
+
+      <p style="font-family: var(--serif-d); font-style: italic; font-size: 18px; line-height: 1.4; color: var(--ink-soft); margin: 28px 0; max-width: 56ch;">
+        A detailed response to The Riley Protocol&rsquo;s specific claims, named-figure chronology, and evidentiary methodology will be the subject of a dedicated article I will be writing.
+      </p>
+
+      <p>
+        Most important of all of this, the document was produced by a man who threatened a survivor he was working with directly &mdash; including them and their children &mdash; threatened other victims into a state of paranoia that led them to flee their home, threatened gang-stalking of a clinician who questioned his credentials, and <b>fabricated the academic authority he used to give his conclusions institutional weight</b>, then submitted a forensic takedown of an alleged trafficking survivor to Congress under a dangerously flawed thesis.
+      </p>
+
+      <p class="ink-rust"><i>The production value of the document does not change who produced it.</i></p>
+
+      <div class="ar-receipt">
+        <span class="who">Troy &middot; after I went public</span>
+        <p>&ldquo;What a sad life to live. Maybe that&rsquo;s why I&rsquo;ve had a happy marriage for 13 years. I feel bad for you. Must be very lonely. Just be careful who you talk to online because they may not be who you think they are.&rdquo; <i>Winky face.</i></p>
+      </div>
+
+      <p>
+        The feigned empathy in their belittlements here did very little to counter the obvious implied joy he got from making these statements.
+      </p>
+
+      <!-- ================= WHAT HE ACTUALLY DID ================= -->
+      <div class="ar-break"><em>What he actually did, given direct definitions.</em></div>
+
+      <h2 id="sec-crimes"><span class="sec-no">&sect; 10 &mdash; The legal framing</span>I am not a lawyer. Whether any of these constitute prosecutable offenses is for the legal system to decide.</h2>
+
+      <p>
+        The following potential offenses are drawn from the documented record in this article and the screenshots available on request.
+      </p>
+
+      <div class="ar-crimes">
+        <div class="ar-crime">
+          <span class="n">01</span>
+          <div>
+            <h4>Terroristic Threatening</h4>
+            <p>Explicit, timed threats against my life and my roommate&rsquo;s. He claimed knowledge of my home address and family history. He stated that thousands of people were watching me and that I had been placed at the top of a list.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">02</span>
+          <div>
+            <h4>Extortion</h4>
+            <p>Explicitly structured his threats as a conditional demand: silence, or consequences. He offered two choices and attached specific threatened actions to each. This is distinct from terroristic threatening and may represent the stronger charge.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">03</span>
+          <div>
+            <h4>Witness Tampering</h4>
+            <p>Troy threatened me if I published information about conduct connected to an ongoing matter involving Sascha Barros, a named party in publicly documented harassment and abuse allegations. Under federal witness tampering statute, attempting to intimidate, threaten, or corruptly persuade another person constitutes witness tampering regardless of whether formal proceedings have been initiated.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">04</span>
+          <div>
+            <h4>Stalking and Harassment</h4>
+            <p>Claimed ongoing surveillance of me, my roommate, and a clinical professional. He located my personal Facebook after I blocked his primary account and continued contact through that channel. The conduct spans multiple platforms and multiple targets and continued after explicit requests to stop.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">05</span>
+          <div>
+            <h4>Targeted Criminal Harassment of a Licensed Professional</h4>
+            <p>Separate from the general harassment charge, specific statements that others were now keeping an eye on that clinical professional constitutes targeted harassment of a specific individual in a professional context. This is documentable as a discrete offense independent of the rest.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">06</span>
+          <div>
+            <h4>Wire Fraud</h4>
+            <p>The fundraiser created in Sascha&rsquo;s name without their knowledge or authorization, using Sascha&rsquo;s childhood image alongside Epstein and Trump to solicit donations, is a potential wire fraud instrument if it was created with intent to deceive donors about its authorization. Sascha&rsquo;s public statement that they never authorized any fundraising on their behalf is on record. Jurisdiction is federal.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">07</span>
+          <div>
+            <h4>Academic Impersonation and Fraudulent Misrepresentation</h4>
+            <p>Publicly claimed a doctorate in cognitive neuroscience and two master&rsquo;s degrees in psychology to establish authority over survivors, journalists, and congressional recipients of his documents. The conduct may constitute fraudulent misrepresentation under civil and potentially criminal law depending on jurisdiction.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">08</span>
+          <div>
+            <h4>Impersonation of a Licensed Professional</h4>
+            <p>His own LinkedIn biography describes him as a therapist. No therapy license for Troy Raymond Barile-Simleness has been located in any state licensing database. Though he lists himself as a therapist on that LinkedIn, he admits he has no National Provider Identifier number.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">09</span>
+          <div>
+            <h4>Unlicensed Private Investigator Activity</h4>
+            <p>Conducted covert infiltration operations, honeypot methodology, and surveillance of individuals without any documented PI license in Nevada, British Columbia, or any other jurisdiction in which he operated. His own admissions in direct messages describe conducting a covert operation designed to extract information from a target through deception. Nevada and British Columbia both require licensure for this category of activity. This charge is separate from Conspiracy To Commit the same crime.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">10</span>
+          <div>
+            <h4>Conspiracy to Obtain Property by Deception</h4>
+            <p>Obtained my unpublished article under false pretenses during a mediation process, representing that he intended to honor the terms agreed to in that process. He then used the article as a weapon, threatening to release edited versions of it.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">11</span>
+          <div>
+            <h4>Conspiracy to Commit Theft and Obtaining Property by False Pretenses</h4>
+            <p>His stated plan of recovering Sascha&rsquo;s vehicle from her property. If that vehicle was taken or intended to be taken without lawful authority, and if the consent of any party involved was obtained through deception, the conduct falls within the statutory definition of theft by deception in both US and Canadian jurisdictions.</p>
+          </div>
+        </div>
+        <div class="ar-crime">
+          <span class="n">12</span>
+          <div>
+            <h4>Conspiracy to Commit Criminal Trespass</h4>
+            <p>His own stated operational plan involved entering property in British Columbia under false pretenses. Whether or not the entry was executed, a documented plan to enter property through deception may constitute conspiracy to commit criminal trespass.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ar-pull is-teal">
+        I want to restate: the legal determination on any of these is not mine to make. The US legal system is decided case-by-case, and state-by-state. What is illegal in one place may not be illegal in the next.
+      </div>
+
+      <p>
+        None of this is the behavior of someone aligned with survivors. <b>It is the behavior of someone who learned the language of survivor advocacy well enough to weaponize it.</b>
+      </p>
+
+      <!-- ================= CLOSING / COME BACK ================= -->
+      <h2 id="sec-close"><span class="sec-no">&sect; 11 &mdash; The thing I wanted, in the end</span>I wanted him to come back to the light.</h2>
+
+      <p>
+        I respected Troy before all of this happened. I complimented one of his articles in the past. I was excited when he responded. I told my roommate, <i>&ldquo;that guy I told you about actually responded to me!&rdquo;</i>. I offered my services as an unpaid, volunteer &ldquo;intern&rdquo;. I was filled with respect for their fight for Sascha. He projected a high-profile visibility I chose not to double-check, and as such, I held him on a pedestal.
+      </p>
+
+      <p>
+        When he released that article, it did not hurt because he had betrayed Sascha&rsquo;s trust. <b>It hurt because he betrayed my trust.</b> No matter how many times I insulted him, I was always clear: I wanted to believe him. I wanted him to grow, show he was capable of being humble. I wanted him to prove he was deserving of that respect.
+      </p>
+
+      <p>
+        His article on Sascha hit me in the face because all of his attacks on Sascha <b>applied to me directly as a survivor of abuse</b>. I told him this at the very beginning. Before any DMs had been exchanged, in my very first post tagging him about his article.
+      </p>
+
+      <p>
+        I wanted during all of this for him to come back into the light. I used this metaphor a dozen times. If he had shown the ability to correct his course at any point during these events, I would have welcomed him back. <i>I told him I would even defend him myself.</i>
+      </p>
+
+      <p>
+        There was a point both of us were in tears, together, because of these events. I was convinced he was undergoing a stupid, but well-intentioned operation. I thought he was choosing to grow. This exchange meant a lot to me for a single day:
+      </p>
+
+      <div class="ar-chat" aria-label="The moment of tears">
+        <div class="msg me" data-who="Me">Troy, you need to calm down. I am sorry. I am writing you an apology right now. It&rsquo;s long, because there are things you don&rsquo;t know yet and I have to explain. But I&rsquo;m writing it rn it&rsquo;ll be like another 20 min or something.</div>
+        <div class="msg troy" data-who="Troy">I would honestly love to see what you have. That&rsquo;s why I wish you would like stop being so aggressive because <b>I actually believe you</b>. You don&rsquo;t need to apologize. You haven&rsquo;t done anything wrong.</div>
+        <div class="msg me" data-who="Me">Yes, I understand. That&rsquo;s why I&rsquo;m being clear in my apology. But you got angry and doubled down. I thought I was justified. I wasn&rsquo;t, but that&rsquo;s what you led me to believe. I&rsquo;m sorry Troy.</div>
+        <div class="msg troy" data-who="Troy">I&rsquo;m sorry too.</div>
+        <div class="msg me" data-who="Me">I understand the risks you are willing to undertake for this. But there is still something important. It&rsquo;s life and death.</div>
+        <div class="msg troy" data-who="Troy">You&rsquo;re literally about to make me cry.</div>
+        <div class="msg me" data-who="Me">And you need to understand.</div>
+        <div class="msg troy" data-who="Troy">I want to understand.</div>
+      </div>
+
+      <div class="ar-pull is-gold">
+        Come back to safety, Troy. It&rsquo;s what we all want. It&rsquo;s what Sascha wants.
+        <cite>I begged.</cite>
+      </div>
+
+      <p>
+        In the end, none of this mattered. In the end, he made his choice.
+      </p>
+
+      <p>
+        Over hundreds more messages, dozens of threats, belittlements, and refusal to grow &mdash; whatever Troy Raymond Barile-Simleness believes about himself, whatever hero narrative he has built in the hall of mirrors he operates in, the documented record describes a man who caused <b>real harm to real people</b> while claiming to protect them.
+      </p>
+
+      <p>
+        The severity of Troy&rsquo;s conduct lies in his willingness to transition from an ally to an aggressor the moment his narrative was challenged. His documented threats against a journalist, a clinician, a survivor, and even children, reveal <b>a pattern of behavior designed to induce terror</b> &mdash; and does not require credibility to be used as a weapon of fear.
+      </p>
+
+      <!-- end-of-article meta -->
+      <div class="ar-end-meta">
+        <div>
+          <b>Filed</b> &middot; 04 May 2026 <br>
+          <b>Author</b> &middot; L. V. Maestri <br>
+          <b>Edition</b> &middot; v.2.0 (merged with appendix)
+        </div>
+        <div>
+          <b>Receipts</b> &middot; available on request <br>
+          <b>Excluded</b> &middot; private Signal chats involving Sascha <br>
+          <b>Next</b> &middot; a dedicated response to <i>The Riley Protocol</i>
+        </div>
+      </div>
+
+    </article>
+  </div>
+
+  <!-- ============================================================
+       CLOSING BAND  —  the final two lines, large.
+       ============================================================ -->
+  <div class="ar-close">
+    <p><em>He should be ashamed.</em></p>
+    <p class="is-final"><em>And he should leave.</em></p>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     FOOTER  —  must stay identical to home.html.
+     ============================================================ -->
+<footer>
+  <div class="foot-inner">
+
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="/" class="brand" aria-label="Mudlark Media">
+          <span class="brand-name">Mudlark Media</span>
+        </a>
+        <p class="foot-tag">Volunteer. Zero-fund. Public domain.</p>
+      </div>
+
+      <div class="foot-col a">
+        <h4>Take Time</h4>
+        <ul>
+          <li><a href="/articles">Articles</a></li>
+          <li><a href="/psych">Psychological Warfare</a></li>
+          <li><a href="/media">Media &amp; Music</a></li>
+          <li><a href="/mindmap">Mind Map</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col b">
+        <h4>Take Care</h4>
+        <ul>
+          <li><a href="/opsec">Digital OpSec</a></li>
+          <li><a href="/opsec/threat-model">Threat Models</a></li>
+          <li><a href="/opsec/signal">Signal &amp; Encrypted Chat</a></li>
+          <li><a href="/opsec/identity">Identity Hygiene</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col c">
+        <h4>Take Action</h4>
+        <ul>
+          <li><a href="/ethos">Network Ethos</a></li>
+          <li><a href="/contact#submit">Submit a Story</a></li>
+          <li><a href="/contact#projects">Suggest a Project</a></li>
+          <li><a href="https://github.com/mudlark-media">GitHub Repo &nearr;</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
