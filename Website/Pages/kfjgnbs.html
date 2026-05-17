@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+<html lang="en" style="--c-1: #c97748; --c-2: #a85228; --c-3: #8d6e5b; --c-4: #d4a98e; --c-5: #8d4e30; --c-6: #74665e; --c-7: #1c1917; --c-8: #3c3530; --c-9: #ece5d2; --c-10: #9c9583; --bg-pattern-color: var(--c-2); --bg-pattern-alpha: 0.08; --rhythm: 0.95; --pad-x: 30px; --headline-scale: 0.85; --shadow-alpha: 0.8; --shadow-blur: 80px; --shine-alpha: 0.16; --slot-alpha: 0;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Horrors Were Always Real &mdash; Mudlark Media</title>
+<meta name="description" content="The current reality and truth of Sascha Barros. How bad actors have led the world astray about a survivor's story, and why the dismissal of one reflects the dismissal of all of them.">
+
+<style>
+/* ============================== FONTS (from the Mudlark repo) ============================== */
+@font-face {
+  font-family: 'Michroma';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Michroma/Michroma-Regular.ttf') format('truetype');
+  font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Public Sans';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf') format('truetype');
+  font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Public Sans';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Public_Sans/static/PublicSans-Italic.ttf') format('truetype');
+  font-weight: 100 1000; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf') format('truetype');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Azeret Mono';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style Guide/Fonts/Azeret_Mono/static/AzeretMono-Regular.ttf') format('truetype');
+  font-weight: 300 700; font-style: normal; font-display: swap;
+}
+
+/* ============================== PALETTE + ROOT ============================== */
+:root {
+  --c-1:  #c97748; --c-2:  #a85228; --c-3:  #8d6e5b; --c-4:  #d4a98e;
+  --c-5:  #8d4e30; --c-6:  #74665e; --c-7:  #181412; --c-8:  #3c3530;
+  --c-9:  #ece5d2; --c-10: #9c9583;
+
+  --gold: var(--c-1); --rust: var(--c-2); --teal: var(--c-3);
+  --blue: var(--c-4); --pink: var(--c-5); --green: var(--c-6);
+
+  --bg:        var(--c-7);
+  --bg-surf:   var(--c-8);
+  --bg-elev:   color-mix(in srgb, var(--c-8) 80%, var(--c-9) 20%);
+  --rule:      color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
+  --rule-on:   color-mix(in srgb, var(--c-7) 78%, var(--c-9) 22%);
+
+  --ink:       var(--c-9);
+  --ink-soft:  var(--c-10);
+  --ink-mute:  color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
+
+  --tint-gold: color-mix(in srgb, transparent 93%, var(--c-1));
+  --tint-rust: color-mix(in srgb, transparent 93%, var(--c-2));
+  --tint-teal: color-mix(in srgb, transparent 93%, var(--c-3));
+  --tint-blue: color-mix(in srgb, transparent 93%, var(--c-4));
+  --tint-pink: color-mix(in srgb, transparent 93%, var(--c-5));
+  --tint-green:color-mix(in srgb, transparent 93%, var(--c-6));
+
+  --serif-d: 'Michroma', 'Georgia', serif;
+  --serif-b: 'Public Sans', 'Georgia', serif;
+  --sans:    'Orbitron', system-ui, sans-serif;
+  --mono:    'Azeret Mono', ui-monospace, monospace;
+
+  --pad-x: clamp(20px, 4vw, 56px);
+  --max-w: 1360px;
+  --art-max: 1180px;
+
+  --rhythm: 0.95;
+  --headline-scale: 0.85;
+  --shadow-alpha: 0.8;
+  --shadow-blur: 80px;
+  --shine-alpha: 0.16;
+  --slot-alpha: 0;
+  --bg-pattern-color: var(--c-2);
+  --bg-pattern-alpha: 0.08;
+
+  /* editor */
+  --e-bg: #1A1916; --e-input-bg: #131210; --e-fg: #ECE5D2;
+  --e-fg-soft: #9C9583; --e-rule: #3F3C33; --e-accent: #E8B23A;
+  --e-mono: 'Azeret Mono', ui-monospace, monospace;
+  --e-display: 'Public Sans', Georgia, serif;
+}
+
+/* ============================== RESET / BASE ============================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  background: #1c1917; color: var(--ink);
+  font-family: var(--serif-b); font-size: 16px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern', 'liga';
+}
+body { min-height: 100vh; display: flex; flex-direction: column; }
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--gold); color: var(--bg); }
+img { max-width: 100%; display: block; }
+b, strong { font-weight: 600; }
+
+/* ============================== BG PATTERN ============================== */
+.bg-pattern {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+  color: var(--bg-pattern-color);
+  opacity: var(--bg-pattern-alpha);
+}
+body > * { position: relative; z-index: 1; }
+body > .bg-pattern { z-index: 0; }
+
+/* ============================== MASTHEAD + NAV (match home) ============================== */
+.masthead-row { padding: 36px var(--pad-x) 36px; }
+.brand { display: inline-flex; align-items: center; gap: 16px; color: var(--ink); line-height: 1; }
+.brand-name {
+  font-family: var(--serif-d); font-weight: 500;
+  font-size: clamp(48px, 7vw, 88px);
+  letter-spacing: -0.022em; color: var(--ink);
+  font-variation-settings: 'opsz' 144, 'SOFT' 40; line-height: 0.95;
+}
+.foot-brand .brand { gap: 0; }
+.foot-brand .brand-name { font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -0.018em; font-family: var(--sans); }
+
+.nav {
+  padding: 18px var(--pad-x);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; gap: 4px 30px;
+  font-family: var(--sans); font-size: 14.5px;
+}
+.nav a { display: inline-flex; align-items: baseline; gap: 9px; padding: 6px 0; color: var(--ink); transition: color 0.15s; }
+.nav a::before { content: ''; width: 7px; height: 7px; border-radius: 50%; transform: translateY(-2px); transition: transform 0.15s; flex-shrink: 0; }
+.nav a:hover { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+.nav a:hover::before { transform: translateY(-2px) scale(1.4); }
+.nav a.c-gold::before  { background: var(--gold); }
+.nav a.c-rust::before  { background: var(--rust); }
+.nav a.c-teal::before  { background: var(--teal); }
+.nav a.c-pink::before  { background: var(--pink); }
+.nav a.c-blue::before  { background: var(--blue); }
+.nav a.c-green::before { background: var(--green); }
+.nav a.c-cream::before { background: var(--ink-soft); }
+.nav a.c-gold:hover  { text-decoration-color: var(--gold); }
+.nav a.c-rust:hover  { text-decoration-color: var(--rust); }
+.nav a.c-teal:hover  { text-decoration-color: var(--teal); }
+.nav a.c-pink:hover  { text-decoration-color: var(--pink); }
+.nav a.c-blue:hover  { text-decoration-color: var(--blue); }
+.nav a.c-green:hover { text-decoration-color: var(--green); }
+.nav a.c-cream:hover { text-decoration-color: var(--ink-soft); }
+
+main { flex: 1; padding: 0 var(--pad-x) 64px; }
+.wrap { max-width: var(--max-w); margin: 0 auto; }
+
+/* ============================== ARTICLE HEADER ============================== */
+.ar-header {
+  padding: calc(56px * var(--rhythm)) 0 48px;
+  border-bottom: 1px solid var(--rule);
+  max-width: var(--art-max);
+  margin: 0 auto;
+}
+.ar-header-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ar-header-kicker::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--rust);
+  flex-shrink: 0;
+}
+.ar-header-id {
+  color: var(--ink-soft);
+  margin-left: 4px;
+}
+.ar-header-title {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 20;
+  font-size: calc(clamp(44px, 7vw, 92px) * var(--headline-scale));
+  line-height: 0.94;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  margin-bottom: 36px;
+  max-width: 18ch;
+}
+.ar-header-title em {
+  font-style: italic;
+  color: var(--rust);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+.ar-header-deck {
+  font-family: var(--serif-b);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 68ch;
+  margin-bottom: 28px;
+}
+.ar-header-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.ar-header-who {
+  color: var(--ink-soft);
+}
+
+/* artwork preset used on lead figure */
+[data-slot] { position: relative; overflow: hidden; }
+[data-slot].art-hatch {
+  background:
+    repeating-linear-gradient( 45deg, transparent 0 7px, color-mix(in srgb, transparent 94%, var(--c-9)) 7px 8px),
+    repeating-linear-gradient(-45deg, transparent 0 7px, color-mix(in srgb, transparent 94%, var(--c-9)) 7px 8px),
+    var(--bg-surf);
+}
+[data-slot].art-redact {
+  background:
+    linear-gradient(90deg, var(--c-7) 0 60%, transparent 60% 65%, var(--c-7) 65% 95%, transparent 95%) 0 22% / 100% 14px no-repeat,
+    linear-gradient(90deg, transparent 0 8%, var(--c-7) 8% 72%, transparent 72%) 0 44% / 100% 14px no-repeat,
+    linear-gradient(90deg, var(--c-7) 0 45%, transparent 45% 50%, var(--c-7) 50% 88%, transparent 88%) 0 66% / 100% 14px no-repeat,
+    linear-gradient(90deg, transparent 0 12%, var(--c-7) 12% 55%, transparent 55%) 0 84% / 100% 14px no-repeat,
+    repeating-linear-gradient(0deg, transparent 0 18px, color-mix(in srgb, transparent 93%, var(--c-9)) 18px 19px),
+    var(--bg-surf);
+}
+[data-slot].art-graph {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, color-mix(in srgb, transparent 92%, var(--c-9)) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, color-mix(in srgb, transparent 92%, var(--c-9)) 23px 24px),
+    var(--bg-surf);
+}
+[data-slot].art-confetti {
+  background:
+    radial-gradient(circle at 15% 25%, var(--c-1) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 78% 12%, var(--c-2) 0 5px, transparent 5.5px),
+    radial-gradient(circle at 45% 80%, var(--c-5) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 88% 55%, var(--c-3) 0 5px, transparent 5.5px),
+    radial-gradient(circle at 25% 65%, var(--c-4) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 60% 30%, var(--c-6) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 92% 88%, var(--c-1) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 8% 88%, var(--c-2) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 38% 18%, var(--c-3) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 68% 64%, var(--c-5) 0 3px, transparent 3.5px),
+    var(--bg-surf);
+}
+[data-slot].art-blueprint {
+  background:
+    linear-gradient(transparent 49.5%, color-mix(in srgb, transparent 70%, var(--c-4)) 49.5% 50.5%, transparent 50.5%),
+    linear-gradient(90deg, transparent 49.5%, color-mix(in srgb, transparent 70%, var(--c-4)) 49.5% 50.5%, transparent 50.5%),
+    repeating-linear-gradient(0deg, transparent 0 11px, color-mix(in srgb, transparent 95%, var(--c-4)) 11px 12px),
+    repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, transparent 95%, var(--c-4)) 11px 12px),
+    var(--bg-surf);
+}
+[data-slot].art-ripple {
+  background:
+    radial-gradient(ellipse 55% 45% at 30% 35%, transparent 22%, color-mix(in srgb, transparent 78%, var(--c-5)) 23%, transparent 24.5%),
+    radial-gradient(ellipse 42% 35% at 30% 35%, transparent 35%, color-mix(in srgb, transparent 82%, var(--c-5)) 36%, transparent 37.5%),
+    radial-gradient(ellipse 28% 23% at 30% 35%, transparent 48%, color-mix(in srgb, transparent 84%, var(--c-5)) 49%, transparent 50.5%),
+    radial-gradient(ellipse 50% 42% at 72% 70%, transparent 30%, color-mix(in srgb, transparent 84%, var(--c-2)) 31%, transparent 32.5%),
+    repeating-linear-gradient(0deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
+    repeating-linear-gradient(90deg, transparent 0 43px, color-mix(in srgb, transparent 97%, var(--c-9)) 43px 44px),
+    var(--bg-surf);
+}
+[data-slot].art-topo {
+  background:
+    repeating-radial-gradient(ellipse 80% 60% at 30% 40%, transparent 0 16px, color-mix(in srgb, transparent 93%, var(--c-3)) 16px 17px),
+    repeating-radial-gradient(ellipse 60% 70% at 75% 65%, transparent 0 14px, color-mix(in srgb, transparent 94%, var(--c-2)) 14px 15px),
+    var(--bg-surf);
+}
+[data-slot].art-dotgrid {
+  background:
+    radial-gradient(circle, color-mix(in srgb, transparent 75%, var(--c-9)) 0 1.5px, transparent 1.5px) 0 0 / 22px 22px,
+    var(--bg-surf);
+}
+[data-slot].art-bursts {
+  background:
+    linear-gradient(120deg, color-mix(in srgb, transparent 82%, var(--c-5)), transparent 60%),
+    linear-gradient(330deg, color-mix(in srgb, transparent 86%, var(--c-4)), transparent 60%),
+    radial-gradient(circle at 28% 65%, color-mix(in srgb, transparent 75%, var(--c-5)), transparent 35%),
+    radial-gradient(circle at 80% 30%, color-mix(in srgb, transparent 88%, var(--c-1)), transparent 40%),
+    repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, transparent 96%, var(--c-9)) 11px 12px),
+    var(--bg-surf);
+}
+[data-slot].art-rings {
+  background:
+    radial-gradient(circle at 50% 50%, var(--c-7) 0 8%, transparent 8.5%),
+    repeating-radial-gradient(circle at 50% 50%, var(--c-4) 0 1px, transparent 1px 5px),
+    var(--bg-surf);
+}
+[data-slot].art-radial {
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, transparent 95%, var(--c-4)), transparent 70%),
+    var(--bg-surf);
+}
+[data-slot].art-blocks {
+  background:
+    linear-gradient(45deg, color-mix(in srgb, transparent 65%, var(--c-5)), transparent 60%),
+    linear-gradient(135deg, transparent 50%, color-mix(in srgb, transparent 82%, var(--c-1))),
+    linear-gradient(180deg, color-mix(in srgb, transparent 90%, var(--c-6)), transparent 50%),
+    var(--bg-surf);
+}
+[data-slot].art-stripes-warm {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, transparent 82%, var(--c-1)), transparent 70%),
+    repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, transparent 97%, var(--c-9)) 11px 12px),
+    var(--bg-surf);
+}
+[data-slot].art-bands {
+  background: linear-gradient(180deg,
+    var(--bg-surf) 0 14%,
+    color-mix(in srgb, transparent 80%, var(--c-2)) 14% 28%,
+    var(--bg-surf) 28% 42%,
+    color-mix(in srgb, transparent 80%, var(--c-1)) 42% 56%,
+    var(--bg-surf) 56% 70%,
+    color-mix(in srgb, transparent 80%, var(--c-5)) 70% 84%,
+    var(--bg-surf) 84% 100%);
+}
+[data-slot].art-static {
+  background:
+    repeating-radial-gradient(circle at 0% 0%, color-mix(in srgb, transparent 92%, var(--c-9)) 0 1px, transparent 1px 4px),
+    repeating-radial-gradient(circle at 100% 100%, color-mix(in srgb, transparent 92%, var(--c-9)) 0 1px, transparent 1px 5px),
+    var(--bg-surf);
+}
+[data-slot].art-halftone {
+  background:
+    radial-gradient(circle, var(--c-2) 18%, transparent 19%) 0 0 / 16px 16px,
+    radial-gradient(circle, var(--c-2) 12%, transparent 13%) 8px 8px / 16px 16px,
+    linear-gradient(135deg, color-mix(in srgb, transparent 80%, var(--c-7)) 30%, transparent 70%),
+    var(--bg-surf);
+}
+
+/* ============================================================
+   AR-SOLO  —  single-column article wrapper (no left rail)
+   ============================================================ */
+.ar-solo {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 0 32px;
+}
+
+/* ============================================================
+   AR-BODY (right column, the article itself)
+   ============================================================ */
+.ar-body {
+  font-family: var(--serif-b);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  max-width: 68ch;
+}
+.ar-body p { margin: 0 0 20px; }
+.ar-body p i, .ar-body p em { color: var(--rust); font-style: italic; }
+.ar-body p b, .ar-body p strong { color: var(--ink); font-weight: 600; }
+
+.ar-body .ar-lead-p {
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  font-weight: 500;
+  border-left: 3px solid var(--gold);
+  padding-left: 22px;
+  margin-left: -26px;
+}
+
+/* ============================================================
+   SEC-DIV  —  wordless section divider
+   ============================================================ */
+.sec-div {
+  margin: 72px 0 36px;
+  position: relative;
+  height: 1px;
+  background: var(--rule);
+}
+.sec-div::before {
+  content: '';
+  position: absolute;
+  left: 0; top: -2px;
+  width: 48px; height: 5px;
+  background: var(--rust);
+}
+/* sub-divider replacing h3 */
+.sub-div {
+  margin: 44px 0 24px;
+  position: relative;
+  height: 1px;
+  background: var(--rule);
+}
+.sub-div::before {
+  content: '';
+  position: absolute;
+  left: 0; top: -1px;
+  width: 24px; height: 3px;
+  background: var(--gold);
+}
+
+/* ============================================================
+   AR-BODY H2  —  section headers
+   ============================================================ */
+.ar-body h2 {
+  margin: 80px 0 28px;
+  padding: 20px 0 20px 24px;
+  border-left: 5px solid var(--rust);
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 80, 'SOFT' 30;
+  font-size: calc(clamp(26px, 2.8vw, 36px) * var(--headline-scale));
+  letter-spacing: -0.016em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+/* Case study headers with background tint */
+.ar-body h2.case-study {
+  background: color-mix(in srgb, transparent 94%, var(--rust));
+  padding: 28px 32px;
+  margin-left: -32px;
+  margin-right: -32px;
+  border-left: 0;
+  border-top: 2px solid var(--rust);
+  border-bottom: 2px solid var(--rust);
+}
+
+.ar-break {
+  margin: 56px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.ar-break em { font-style: normal; color: var(--rust); letter-spacing: 0.14em; }
+.ar-break::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule-on);
+}
+.ar-break::after {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--rule-on);
+}
+
+/* color helpers */
+.ink-pink  { color: var(--pink); }
+.ink-rust  { color: var(--rust); }
+.ink-gold  { color: var(--gold); }
+.ink-teal  { color: var(--teal); }
+.ink-blue  { color: var(--blue); }
+.ink-green { color: var(--green); }
+.ink-soft  { color: var(--ink-soft); }
+
+/* ============================================================
+   AR-CLAIMS  —  compact reviewer list
+   ============================================================ */
+.ar-claims {
+  margin: 24px 0 32px;
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+}
+.ar-claim {
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+.ar-claim .n {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.ar-claim .body {
+  font-family: var(--serif-b);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.ar-claim .body b { color: var(--ink); font-weight: 600; }
+.ar-claim .body i, .ar-claim .body em { color: var(--rust); font-style: italic; }
+
+/* ============================================================
+   AR-PULL  —  pull quote
+   ============================================================ */
+.ar-pull {
+  margin: 44px -40px;
+  padding: 32px 48px;
+  background: var(--tint-gold);
+  border-left: 4px solid var(--gold);
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 23px;
+  line-height: 1.35;
+  color: var(--ink);
+  font-variation-settings: 'opsz' 60, 'SOFT' 100;
+  letter-spacing: -0.008em;
+}
+.ar-pull em { color: var(--gold); font-style: italic; }
+.ar-pull cite {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.ar-pull.is-rust  { background: var(--tint-rust); border-color: var(--rust); }
+.ar-pull.is-rust em { color: var(--rust); }
+.ar-pull.is-pink  { background: var(--tint-pink); border-color: var(--pink); }
+.ar-pull.is-pink em { color: var(--pink); }
+.ar-pull.is-teal  { background: var(--tint-teal); border-color: var(--teal); }
+.ar-pull.is-teal em { color: var(--teal); }
+.ar-pull.is-gold  { background: var(--tint-gold); border-color: var(--gold); }
+.ar-pull.is-gold em { color: var(--gold); }
+.ar-pull.is-blue  { background: var(--tint-blue); border-color: var(--blue); }
+.ar-pull.is-blue em { color: var(--blue); }
+
+/* ============================================================
+   AR-RECEIPT  —  direct quoted message
+   ============================================================ */
+.ar-receipt {
+  margin: 28px 0;
+  padding: 22px 26px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  position: relative;
+  font-family: var(--serif-b);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+.ar-receipt::before {
+  display: none;
+}
+.ar-receipt .who {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 10px;
+}
+.ar-receipt p { margin-bottom: 10px; color: var(--ink); }
+.ar-receipt p:last-child { margin-bottom: 0; }
+.ar-receipt p b { color: var(--ink); font-weight: 600; }
+.ar-receipt p i, .ar-receipt p em { color: var(--rust); font-style: italic; }
+
+/* ============================================================
+   AR-DOMAINS  —  three website cards
+   ============================================================ */
+.ar-domains {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 22px 0 28px;
+}
+.ar-domain {
+  padding: 16px 18px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  border-top: 2px solid var(--rust);
+  transition: border-top-color 0.15s;
+}
+.ar-domain:hover { border-top-color: var(--gold); }
+.ar-domain .nm {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 6px;
+  font-variation-settings: 'opsz' 30;
+}
+.ar-domain .dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   CW-BAR  —  content warning graphic
+   ============================================================ */
+.cw-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 40px 0 28px;
+}
+.cw-bar::before,
+.cw-bar::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #B33A2C;
+}
+.cw-bar-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B33A2C;
+  padding: 6px 18px;
+  border: 1px solid #B33A2C;
+  margin: 0 16px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   AR-WARN  —  warning / aside box
+   ============================================================ */
+.ar-warn {
+  margin: 32px 0;
+  padding: 22px 26px;
+  background: color-mix(in srgb, transparent 92%, #B33A2C);
+  border-left: 3px solid #B33A2C;
+}
+.ar-warn .label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B33A2C;
+  margin-bottom: 12px;
+}
+.ar-warn p {
+  font-family: var(--serif-b);
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.ar-warn p:last-child { margin-bottom: 0; }
+.ar-warn p b { color: var(--ink); font-weight: 600; }
+.ar-warn p i, .ar-warn p em { color: var(--gold); font-style: italic; }
+
+/* ============================================================
+   AR-CHAT  —  Troy vs Me message thread
+   ============================================================ */
+.ar-chat {
+  margin: 28px 0;
+  padding: 22px 22px 14px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ar-chat .msg {
+  position: relative;
+  padding: 10px 14px 10px 16px;
+  max-width: 80%;
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  line-height: 1.45;
+  border-left: 2px solid var(--rule-on);
+}
+.ar-chat .msg::before {
+  content: attr(data-who);
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  opacity: 0.9;
+}
+.ar-chat .msg.me {
+  align-self: flex-start;
+  background: color-mix(in srgb, transparent 88%, var(--c-4));
+  border-left-color: var(--blue);
+  color: var(--ink);
+}
+.ar-chat .msg.me::before { color: var(--blue); }
+.ar-chat .msg.troy {
+  align-self: flex-end;
+  background: color-mix(in srgb, transparent 88%, var(--c-2));
+  border-left: 0;
+  border-right: 2px solid var(--rust);
+  padding-left: 14px;
+  padding-right: 16px;
+  text-align: left;
+  color: var(--ink);
+}
+.ar-chat .msg.troy::before { color: var(--rust); }
+.ar-chat .msg.med {
+  align-self: center;
+  background: color-mix(in srgb, transparent 88%, var(--c-3));
+  border-left-color: var(--teal);
+  color: var(--ink);
+  max-width: 70%;
+}
+.ar-chat .msg.med::before { color: var(--teal); }
+.ar-chat .msg b { font-weight: 600; }
+.ar-chat .msg i, .ar-chat .msg em { color: var(--rust); font-style: italic; }
+.ar-chat .skip {
+  align-self: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+  padding: 4px 12px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============================================================
+   AR-CHAIN  —  numbered logic chain
+   ============================================================ */
+.ar-chain {
+  margin: 28px 0;
+  padding: 22px 26px;
+  background: var(--bg-surf);
+  border: 1px solid var(--rule-on);
+  border-top: 2px solid var(--teal);
+}
+.ar-chain h4 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+.ar-chain ol {
+  list-style: none;
+  counter-reset: chain;
+  padding: 0;
+}
+.ar-chain ol li {
+  counter-increment: chain;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.ar-chain ol li::before {
+  content: counter(chain, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+.ar-chain ol li b { color: var(--ink); font-weight: 600; }
+.ar-chain ol li i, .ar-chain ol li em { color: var(--gold); font-style: italic; }
+
+/* ============================================================
+   AR-CRIMES  —  list of potential offenses
+   ============================================================ */
+.ar-crimes {
+  margin: 28px 0;
+  border-top: 1px solid var(--rule);
+}
+.ar-crime {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 22px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+  transition: padding-left 0.2s, background 0.2s;
+}
+.ar-crime:hover {
+  padding-left: 8px;
+  background: color-mix(in srgb, transparent 96%, #B33A2C);
+}
+.ar-crime .n {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1;
+  color: #B33A2C;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'opsz' 60;
+}
+.ar-crime h4 {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.25;
+  font-variation-settings: 'opsz' 30, 'SOFT' 40;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.ar-crime p {
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ============================================================
+   EVIDENCE STRIP
+   ============================================================ */
+.evidence {
+  margin: 26px 0;
+  display: grid;
+  gap: 14px;
+}
+.evidence.is-2 { grid-template-columns: 1fr 1fr; }
+.evidence.is-3 { grid-template-columns: repeat(3, 1fr); }
+.ev-fig {
+  margin: 0;
+  padding: 0;
+}
+.ev-fig:hover {
+  box-shadow: none;
+}
+.ev-fig { display: none; }
+.ev-fig img {
+  width: 100%; height: auto;
+  display: block;
+  cursor: zoom-in;
+  transition: transform 0.25s;
+}
+.ev-fig:hover img { transform: scale(1.02); }
+.ev-cap {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+.ev-cap b { color: var(--ink); font-weight: 600; }
+
+/* ============================================================
+   AR-CLOSE  —  final two lines, large
+   ============================================================ */
+.ar-close {
+  max-width: var(--art-max);
+  margin: 56px auto 14px;
+  padding: 48px var(--pad-x) 28px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+}
+.ar-close p {
+  font-family: var(--serif-d);
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+.ar-close p em { color: var(--rust); font-style: italic; }
+.ar-close p.is-final {
+  margin-top: 14px;
+  color: var(--rust);
+}
+
+/* ============================================================
+   AR-END-META  —  bottom credits / file info
+   ============================================================ */
+.ar-end-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.ar-end-meta b { color: var(--ink); font-weight: 400; }
+.ar-end-meta i { color: var(--gold); font-style: italic; }
+
+/* ============================================================
+   FOOTER (match home)
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 60px var(--pad-x) 32px;
+  margin-top: 80px;
+}
+.foot-inner { max-width: var(--max-w); margin: 0 auto; }
+.foot-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 56px;
+  margin-bottom: 56px;
+}
+.foot-tag {
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.foot-col h4 {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.foot-col.a h4 { color: var(--rust); }
+.foot-col.b h4 { color: var(--teal); }
+.foot-col.c h4 { color: var(--blue); }
+.foot-col ul { list-style: none; }
+.foot-col li { margin-bottom: 9px; }
+.foot-col a {
+  font-family: var(--serif-b);
+  font-size: 14.5px;
+  color: var(--ink);
+  transition: color 0.15s;
+}
+.foot-col a:hover { color: var(--gold); }
+
+.foot-editor {
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   EDITOR POPUP CHROME
+   ============================================================ */
+.editor-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid var(--e-rule);
+  padding: 6px 12px;
+  color: var(--e-fg-soft);
+  font-family: var(--e-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.editor-trigger:hover { border-color: var(--e-accent); color: var(--e-fg); }
+.editor-trigger-glyph {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+.editor-trigger-glyph::before,
+.editor-trigger-glyph::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--e-fg-soft);
+  transition: background 0.2s;
+}
+.editor-trigger-glyph::before { top: 0; left: 0; }
+.editor-trigger-glyph::after  { top: 3px; left: 3px; opacity: 0.6; }
+.editor-trigger:hover .editor-trigger-glyph::before,
+.editor-trigger:hover .editor-trigger-glyph::after { background: var(--e-accent); }
+
+.editor-overlay {
+  position: fixed; inset: 0;
+  background: transparent;
+  z-index: 998;
+  display: none;
+}
+.editor-overlay.open { display: block; }
+.editor-panel {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 380px; max-height: 80vh;
+  background: var(--e-bg);
+  border: 1px solid var(--e-rule);
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  font-family: var(--e-mono);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.editor-panel.open { display: flex; }
+.editor-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--e-rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.editor-header-title {
+  font-family: var(--e-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--e-fg-soft);
+}
+.editor-close {
+  background: transparent;
+  border: none;
+  color: var(--e-fg-soft);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  line-height: 1;
+}
+.editor-close:hover { color: var(--e-fg); }
+.editor-body {
+  overflow-y: auto;
+  padding: 18px;
+  flex: 1;
+}
+.editor-section { margin-bottom: 24px; }
+.editor-section h3 {
+  font-family: var(--e-display);
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--e-fg);
+}
+
+.editor-lock {
+  width: 14px; height: 14px;
+  background: transparent;
+  border: 1px solid var(--e-fg-soft);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.editor-lock:hover { border-color: var(--e-fg); }
+.editor-lock.is-locked {
+  background: var(--e-fg-soft);
+  border-color: var(--e-fg-soft);
+}
+.editor-lock.is-locked:hover { background: var(--e-fg); border-color: var(--e-fg); }
+
+.editor-grid-palette {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.editor-palette-cell {
+  background: var(--e-input-bg);
+  border: 1px solid var(--e-rule);
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  grid-template-rows: auto auto;
+  gap: 4px 8px;
+  align-items: center;
+  min-width: 0;
+}
+.editor-palette-cell .swatch {
+  grid-row: 1 / 3;
+  width: 26px; height: 26px;
+  background: var(--swatch, transparent);
+}
+.editor-palette-cell .label {
+  grid-column: 2; grid-row: 1;
+  font-family: var(--e-mono);
+  font-size: 9.5px;
+  color: var(--e-fg-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.editor-palette-cell .controls {
+  grid-column: 2; grid-row: 2;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+}
+.editor-palette-cell .controls .editor-input { flex: 1; min-width: 0; }
+
+.editor-input {
+  background: var(--e-input-bg);
+  border: 1px solid var(--e-rule);
+  color: var(--e-fg);
+  font-family: var(--e-mono);
+  font-size: 10px;
+  padding: 6px 4px;
+  width: 100%;
+  text-align: center;
+}
+.editor-input:focus { outline: none; border-color: var(--e-accent); }
+
+.editor-label-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.editor-label {
+  font-family: var(--e-mono);
+  font-size: 10px;
+  color: var(--e-fg-soft);
+  letter-spacing: 0.04em;
+}
+
+.editor-section-group { margin-bottom: 14px; }
+.editor-section-group-title {
+  font-family: var(--e-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--e-fg);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--e-rule);
+}
+.editor-section-spot {
+  display: grid;
+  grid-template-columns: 16px 60px 1fr;
+  gap: 6px;
+  margin-bottom: 4px;
+  align-items: center;
+}
+.editor-section-spot .swatch {
+  width: 16px; height: 16px;
+  background: var(--swatch, transparent);
+}
+.editor-section-spot .spot-label {
+  font-family: var(--e-mono);
+  font-size: 10px;
+  color: var(--e-fg-soft);
+  letter-spacing: 0.04em;
+}
+
+.editor-select {
+  background: var(--e-input-bg);
+  border: 1px solid var(--e-rule);
+  color: var(--e-fg);
+  font-family: var(--e-mono);
+  font-size: 11px;
+  padding: 6px 8px;
+  width: 100%;
+  cursor: pointer;
+}
+.editor-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--e-accent) 0%,
+    var(--e-accent) var(--fill, 50%),
+    var(--e-rule) var(--fill, 50%),
+    var(--e-rule) 100%
+  );
+  outline: none;
+}
+.editor-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  background: var(--e-accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.editor-slider::-moz-range-thumb {
+  width: 12px; height: 12px;
+  background: var(--e-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.editor-button {
+  background: transparent;
+  border: 1px solid var(--e-rule);
+  color: var(--e-fg-soft);
+  font-family: var(--e-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.editor-button:hover { border-color: var(--e-accent); color: var(--e-fg); }
+.editor-actions { display: flex; flex-direction: column; gap: 6px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .ar-solo { padding: 36px 0 24px; }
+  .foot-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .ar-domains { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .ar-header { padding-bottom: 36px; }
+  .foot-top { grid-template-columns: 1fr; }
+  .nav { gap: 4px 22px; font-size: 13.5px; }
+  .ar-claim, .ar-crime { grid-template-columns: 44px 1fr; gap: 14px; }
+  .ar-claim .n, .ar-crime .n { font-size: 28px; }
+  .ar-end-meta { grid-template-columns: 1fr; }
+  .ar-pull { margin-left: 0; margin-right: 0; padding: 22px 24px; font-size: 19px; }
+  .ar-receipt { padding: 18px 20px; }
+  .ar-chat .msg { max-width: 92%; }
+  .evidence.is-2, .evidence.is-3 { grid-template-columns: 1fr; }
+  .ar-body .ar-lead-p { margin-left: 0; }
+  .editor-panel { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
+}
+</style>
+</head>
+<body>
+
+<svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="bg-pattern-tile" width="32" height="32" patternUnits="userSpaceOnUse">
+      <g id="bg-pattern-shape">
+        <line x1="0" y1="32" x2="32" y2="0" stroke="currentColor" stroke-width="1"></line>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg-pattern-tile)"></rect>
+</svg>
+
+<header>
+  <div class="masthead-row">
+    <a href="/" class="brand" aria-label="Mudlark Media">
+      <span class="brand-name">Mudlark Media</span>
+    </a>
+  </div>
+
+  <nav class="nav" aria-label="Primary">
+    <a href="/ethos" class="c-gold">Network Ethos</a>
+    <a href="/articles" class="c-rust">Articles</a>
+    <a href="/opsec" class="c-teal">Digital OpSec</a>
+    <a href="/psych" class="c-pink">Psychological Warfare</a>
+    <a href="/media" class="c-blue">Media</a>
+    <a href="/mindmap" class="c-green">Mind Map</a>
+    <a href="/contact" class="c-cream">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================================================
+       ARTICLE HEADER
+       ============================================================ -->
+  <header class="ar-header wrap" data-section="lead">
+    <p class="ar-header-kicker">The Fallout Report <span class="ar-header-id">M&minus;002</span></p>
+    <h1 class="ar-header-title">The <em>Horrors</em> Were Always Real.</h1>
+    <p class="ar-header-deck">The current reality and truth of Sascha Barros (they/them). How bad actors have led the world astray about a survivor&rsquo;s story &mdash; and why the dismissal of one reflects the dismissal of all of them.</p>
+    <p class="ar-header-meta">By <span class="ar-header-who">L.&nbsp;V.&nbsp;Maestri</span> &middot; ~60 min read &middot; 25 Apr 2026</p>
+  </header>
+
+  <!-- ============================================================
+       SINGLE-COLUMN ARTICLE BODY
+       ============================================================ -->
+  <div class="ar-solo">
+    <article class="ar-body">
+
+      <!-- ============================== CONTENT WARNING ============================== -->
+      <div class="ar-warn">        <p>
+          THIS ARTICLE DISCUSSES CASES OF EXTREME ORGANIZED CHILD ABUSE, TORTURE, AND HUMAN TRAFFICKING <i>NOT RELATED TO SASCHA BARROS</i>. READERS ARE WARNED TO PRIORITIZE THEIR OWN MENTAL HEALTH WHEN READING THE SECTION OF THIS ARTICLE ABOUT THOSE CASES.
+        </p>
+      </div>
+
+      <!-- ============================== § 01 ============================== -->
+      <div class="ar-break"></div>
+
+      <p class="ar-lead-p" id="sec-empathy">
+        Dr. Laura Robinson wants you to know she feels terrible about Sascha Barros, and that she deeply empathizes, sympathizes, and wants the best for Sascha. Her stress on her compassion takes up most of the space of her entire article. She says she thinks Sascha&rsquo;s memories reflect reality. She says they have a burden to bear. She says they cannot find any evidence Sascha ever lied. She even goes out of her way to mention that Sascha has refused any monetary assistance.
+      </p>
+
+      <p>
+        She even says: <b>&ldquo;The things that happened to you are serious.&rdquo;</b>
+      </p>
+
+      <p>
+        Her tone reads as genuine, she chooses her words carefully, and she is believable. But by the end of her piece, she has attempted to thoroughly destroy any reason to take Sascha&rsquo;s severe abuse seriously. <b>Not with evidence, but by deeply and cruelly pathologizing Sascha Barros</b> with the strained force of empathy of someone who can barely contain their disdain. The sympathy and the dismissal coexist without tension specifically because Robinson does not notice they are in conflict. That combination &mdash; the expressed care and the practiced indifference &mdash; is not unique to Robinson. It is the defining feature of almost every major piece written about Sascha Barros.
+      </p>
+
+      <p>
+        We will get to the story, and why its real horror isn&rsquo;t about the abuse described, but first, we must understand the space we are walking into. If this was an easy story to believe, I would not need this preface. Dismissal is easy, even when it&rsquo;s not exploiting our psyches to make it easier, and so it is much harder to be brave in the face of these kinds of horrors. It can be difficult, even painful, to look into the light.
+      </p>
+
+      <div class="ar-pull is-gold">
+        And if he is compelled to look straight at the light, will he not have a pain in his eyes which will make him turn away to take refuge in the objects of vision which he can see.
+        <cite>&mdash; Plato, Allegory of the Cave</cite>
+      </div>
+
+      <p>
+        Before anyone ever wrote about Sascha Barros, there was a documented law enforcement investigation at the United States Army Garrison, Fort Carson, Colorado, when child sexual abuse material was found circulating within an Army peer-to-peer distribution network. In 2009, Howard Pankratz, writing for the <i>Denver Post</i>, published an article on the statements made by the Colorado Springs Police Department and the Fort Carson Criminal Investigation Division&rsquo;s joint probe into this network. By its conclusion, two arrests were made: <b>Mica Rochet and Michael Morris</b>. It is not in Brandy&rsquo;s piece. It is not in Laura&rsquo;s piece. But it is in coverage from other journalists, including <b>Jordan Liles</b>, who wrote his own article for <i>Snopes</i> about Sascha in January.
+      </p>
+
+      <p>
+        Unlike the piece from Senior Enterprise Reporter Brandy Zadrozny, his is not a hit piece. He actually uses legitimate journalistic methodology, going out of his way to try and confirm the facts of the case by reaching into the obvious leads at play. The story of what happened at Ft. Carson is not meant to stand here as evidence, but as a clear investigative lead. The Army JAGNET ACCA Library&rsquo;s online database, at the time of writing, has indexed records dating as far back as 2015. That is eleven years. In 2020, when Sascha began speaking about their abuse, if there had been any investigation, it may have been publicly available knowledge.
+      </p>
+
+      <p>
+        It is possible that to those investigators, Sascha&rsquo;s identification and decades-old abuse could have been easily viewed as incidental to their case, and as such, not documented &mdash; but police and military investigators involved would likely remember their level of certainty in any identification. <b>If I was a real journalist, it would be my first and primary route of inquiry to motivate a law enforcement investigation into the abuse of Sascha Barros.</b>
+      </p>
+
+      <!-- ============================== § 02 ============================== -->
+      <div class="sec-div" id="sec-checklist"></div>
+
+      <div class="ar-receipt">
+        <p>
+          &ldquo;There is a core set of arguments that gets applied to survivors of sexual assault whenever they begin to talk about their abuse. These arguments are presented as skepticism, not denial, but they are still stated to fill the space denial would exist in. They are the first wave of resistance to justice for sexual assault, despite not being designed to resist that justice. These arguments often have the vocabulary of evidentiary standards despite not containing them, while being platformed by journalistic outlets, and they are then echoed by people who support the accused and do not want to believe.&rdquo;
+        </p>
+        <p>
+          &ldquo;Even when they cannot prove their claims, they make firm statements of truth that these arguments disprove the accounts of those survivors. These deniers state clearly: <i>They have mental health issues. They are desperate for validation. They just want attention. They are not performing the emotions expected of them. Their story is inconsistent. The timing is suspect.</i> Combined with assertions that it was their own fault, entirely bad-faith skepticism, and disbelief about why they took so long to come forward. These arguments form a checklist, and the checklist has one function: to produce a predetermined conclusion in anyone wanting one while making the conclusion look like it was actually earned.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        Nearly every one of these statements has been made, and nearly all of them accompanied with an insult or a rejection of Sascha as a human being. No matter how much of this has been applied to Sascha &mdash; from people wishing for their death to invalidating their identity &mdash; they do not adjust their beliefs. These people cannot see the pain they inflict on people they never even thought of when they made these statements. I&rsquo;m sure Laura would be thinking that <i>they know not what they do</i>, if she wasn&rsquo;t one of them herself.
+      </p>
+
+      <h3>Laura Robinson&rsquo;s body of work.</h3>
+
+      <p>
+        In spring 2023, Laura Robinson obtained a PhD in New Testament Studies from Duke University. Her dissertation does not contrast with the absence of any mention on her Substack or social media about the Palestinian genocide or Gaza (despite her topics on Israel, Jews, and an active presence and political engagement) &mdash; it tracks with it. A download of her dissertation, a ctrl-F, and searching for the word <i>expansion</i> will give you a good idea of what it is about. Don&rsquo;t misunderstand: scripture justification for Zionism is Old Testament. The New Testament&rsquo;s Limited and Great Commissions are about preaching, healing the sick, rejecting money and unnecessary possessions, and leaving when you are unwelcome. It&rsquo;s only hypocritical in the absence of support for the Palestinian people considering her expensive body of work and constant political participation.
+      </p>
+
+      <p>
+        Six months after she got her PhD, she wrote an article named <i>&ldquo;How We Invented trafficking,&rdquo;</i> and when I saw that, I was sure it was a bait. It is not. Six months after her PhD, she was already downplaying the danger, severity, and rate of human trafficking, not just here in the US, but around the world. Brandy Zadrozny is intelligent about her attacks. Laura is not. The article starts out on people like Elon Musk and conspiracy theorists in general, then goes into a lengthy explanation of the Trans-Atlantic Slave trade as well as the forced labor &mdash; including sex work &mdash; of Chinese immigrants. After an apparent mental disconnect in order to pivot, she declares that since anti-trafficking laws started immediately after the Civil War, our modern understanding of trafficking was about hysteria over the documented &ldquo;white slavery&rdquo; paranoia in the early 1900s.
+      </p>
+
+      <p>
+        She then asserts the public does not understand sex work or &ldquo;non-monogamous relationships,&rdquo; in order to kick off this pivot. She makes it clear: human trafficking, as a concept, is a product of white supremacy, rooted in the white supremacist&rsquo;s &ldquo;idea that a white child or white woman would be sexually desirable to men of all races, and thus exceptionally valuable to anyone who wanted to commodify her.&rdquo; This is her perspective from the beginning of the piece. She thinks concern for cases like the Epstein files is an &ldquo;image of trafficking that pervades the American consciousness&hellip; Women and children &mdash; usually very small ones &mdash; are kidnapped by organizations and smuggled overseas.&rdquo;
+      </p>
+
+      <p>
+        <b>Laura Robinson has been actively dismissing human trafficking her entire career</b>, as short as it has been. She uses reasonable takes, but always in the same direction: to dismiss voices while pretending she is not, feigning empathy while she actively applies double standards to victims and people who platform their stories. It&rsquo;s constantly on her Substack with over 5k followers.
+      </p>
+
+      <p>
+        In the summer of 2024, she finally wrote a piece she had been wanting to for a long time &mdash; about the podcast <i>Something Was Wrong</i>. She made it into an entire series, where she criticizes one victim for their humor when talking about their abuse. Another is dismissed because no crime was committed, with an emotional disregard for psychological abuse. She dismisses a family vlogger&rsquo;s online harassment, putting the word <i>stalker</i> in scare quotes. Again she dismisses another set of stories because they are about catfishing. In one article she attacks the show for being corporate, making money. In the next, she criticizes it for lacking in rigor or proper structure. She has gone over every part of our checklist in her articles. In nearly every article she writes that isn&rsquo;t about religion, her aim is the same: <b>speak against anyone talking about abuse, and to Laura, if they are lying, it&rsquo;s only better for her.</b>
+      </p>
+
+      <p>
+        She disguises her true intentions behind takes that only make sense without the context of a worldview that is consistent with reality. Laura Robinson does not have that. Creating safe spaces for people to talk about pain and trauma, even if no one is criminally responsible, is a good act. It helps us recognize forms of abuse we did not understand before we heard a firsthand account. <b>But it can also create a new contextualization for something they may not have even believed was a crime.</b>
+      </p>
+
+      <!-- ============================== § 03 ============================== -->
+      <div class="sec-div" id="sec-rape-academy"></div>
+
+      <p>
+        I have a story from someone I care about a lot. When news broke about the Rape Academy, it was a hard day for us. I have known her for years, and I have been trying to help her recover from an emotionally abusive relationship the whole time. She has gone to therapy, and I try to press her to continue, but she has refused many times to go back. When this story broke, she said something to me that stunned me. She said to me that <b>she had never been raped</b>. But this could not have been true considering the context of her abuse was psychological and emotional manipulation. I told her that what she experienced was not sex, but rape. She had not realized that. She had not contextualized those events in that way.
+      </p>
+
+      <p>
+        After continuing the conversation, it became apparent that the extent of her abuse was much worse than either of us had realized. After she realized, everything came into place. He knew what he was doing, and he had a plan. He found a vulnerable person through Craigslist &mdash; an insecure trans girl finally on hormones for the first time in her life. He then lied to her, intentionally, about who he was, what he did, and even the kind of world she lived in. Her rapist enjoyed torture &mdash; emotionally, psychologically, and even physically &mdash; with sex. He constantly trafficked her into predatory spaces more times than she can remember. These events occurred in public, in groups that participated under the impression given by her trafficker that her body was freely accessible to them. There she was sexually assaulted, forced to touch men she sometimes never even knew. If she refused, they would force her. Her life was even directly threatened at least once, and because of our culture, she was able to dismiss it as a joke.
+      </p>
+
+      <p>
+        Like the conditioning of other victims of abuse, she had been reprogrammed into not just believing that the abuse was normal, but into thinking that there was no escape. In this case, she had been convinced that the outside world was even worse. He destroyed and rebuilt her mind into believing the entire world was that predatory space that defined her body as accessible. She has directed blame for her abuse at herself since her abuse had begun nearly fifteen years ago. <b>My roommate didn&rsquo;t realize she had been kidnapped, raped, tortured, and trafficked for nearly seven years after she was able to break free.</b> Her family didn&rsquo;t know. Her therapists didn&rsquo;t know. And I didn&rsquo;t know. That alone is a failure, on everyone&rsquo;s part, but especially mine. I am disgusted with myself. The culture we live in had allowed her to never realize what had happened.
+      </p>
+
+      <div class="ar-pull is-rust">
+        Evil isn&rsquo;t everywhere, but it is there, and we have to learn, not just to see it, but to actively stop it. We have to learn to look at the light, even if it hurts our eyes.
+      </div>
+
+      <p>
+        If this story was on that podcast that Laura attacked, invalidated, mocked, and then dismissed, there would be a lot more people who would be realizing they had also been kidnapped. Laura expects the public to shut up and sit down, and let the institutions do the work. Whether intentionally or not, she is fighting to keep these kinds of cases in the dark. She wants everyone to walk a fine line or she refuses them grace. As someone desperately clinging to their worldview, and willing to attack anyone in order to do that, she was ready for Sascha to come forward.
+      </p>
+
+      <p>
+        She says Sascha is delusional, attention seeking, inconsistent, motivated by current events, and waited too long to report to be believable. If this article was about them, I&rsquo;d spell it out. But this isn&rsquo;t about Laura. This isn&rsquo;t even about Brandy &mdash; as I already wrote about her horrible hypocrisy. <b>They are just two perfect examples of a person driven by a need to protect their own worldview so strong they made it their entire life&rsquo;s work.</b> No, this is about Sascha, and we should give them respect enough to really listen to the story, not just dismiss them with cheap tricks. I cannot stress this enough: <i>the story as you have been told is not true</i>. That is not because of anything Sascha has ever said. That is because the discourse around Sascha has been seeded with misinformation, and it may or may not be intentional.
+      </p>
+
+      <!-- ============================== § 04 ============================== -->
+      <div class="sec-div" id="sec-public"></div>
+
+      <p>
+        The public as a whole has been severely moved by Sascha&rsquo;s accounts. Just hearing about this story is difficult &mdash; not just to believe, but to listen to. And it may somehow be harder to really listen than to believe. It is important that we put this story in context. Not everyone knows everything everyone else knows.
+      </p>
+
+      <p>
+        In moments of institutional failure, public discourse is not a distraction or an escape &mdash; it is <b>a powerful corrective force wielded by the people</b>. During the Flint Water Crisis, officials spent months drinking the water on TV, insisting it was safe. Residents showed them bottles of brown, lead-filled liquid; they shoved the evidence in their faces and called them out for their bullshit directly. The state was eventually forced to declare an emergency and open criminal investigations. But despite over a dozen felony indictments, every single criminal charge had been dismissed or dropped. Several people were charged with involuntary manslaughter. There have been zero arrests. One person has been fired. One had a year of probation. The state spent over $50 million on legal fees defending these people. According to <i>Frontline PBS</i>, as many as 50 people may have been killed, but information is made from inferences in data and cannot be confirmed.
+      </p>
+
+      <p>
+        Sometime around 1970, in Missouri, the Times Beach Board of Aldermen hired a contractor to spray &ldquo;oil&rdquo; on their dirt roads to keep the dust from polluting the air. This was a cost-cutting measure. By 1971, cats, dogs, and birds began dropping dead. At a local stable, over 40 horses eventually died after suffering for months. When children began falling ill, the city downplayed events and worked on keeping the public in line. Over the next five years a byproduct of Agent Orange was sprayed all over the town. By the time 1982 arrived, a full decade later, the largest flood in the city&rsquo;s history contaminated the city and thousands of families were forced to abandon their homes, and every business had to close. Dioxin is not just a poison, it&rsquo;s a carcinogen, and it damages reproductive and immune systems, causes developmental issues, and even hormone interference. In 1983, thirteen years after the poisoning began, the tested levels of dioxin in the town was found to be about <b>300 times what is considered safe</b>.
+      </p>
+
+      <p>
+        In Flint, public outcry was eventually able to illuminate the issue. In 2025, it was reported that the last pipe was replaced. Flint is an objective systemic failure to protect our infrastructure, but it was a victory for public outcry; the residents refused to let the official silence outlast their voices. They forced a crisis into the light, at a high cost, and because of their struggle the people of Flint have water. At town halls, police physically dragged activists out of the room and arrested them for the crime of demanding clean water coming out of their pipes. People who were loud about the water were followed by unmarked police cars, their professional reputations were destroyed by communication and reputation-management apparatuses, and sued while the officials who poisoned them had their legal fees covered by the very people they murdered.
+      </p>
+
+      <p>
+        Times Beach, somehow, is the dark alternative. It is what happens when the public is too quiet, too trusting, or too isolated to fight. When the owner of the stables called the Center for Disease Control and local health officials, they ignored her instead of investigating the poison in the dirt. Eventually, the ground was tested, but for four years, the people of Times Beach sat in the dirt, unaware that the poison beneath them was slowly killing them before it was ever tested. After the results had been found in 1974, for another eight years the information campaign against the poisoning had affected the people of the town. <b>Times Beach&rsquo;s population, who was overwhelmingly working class, did not need to believe in a single lie from the mouths of their politicians for the environment of denial and accusations against anyone talking about the poison beneath their feet to keep them docile.</b>
+      </p>
+
+      <p>
+        In the end, anyone who didn&rsquo;t die lost their homes during the flood that destroyed the entire town. By 1985, the town was gone. The township itself was legally and officially dissolved. Today, the 2,240 people who called Times Beach home are represented by a state park. Where 800 homes once stood, there is now a desolate meadow and a massive grass-covered mound containing the incinerated remains of the town. It is beautifully maintained &mdash; <i>a monument of the ruling class&rsquo;s disregard for human life</i>.
+      </p>
+
+      <p>
+        These are just two examples chosen from a very long list. We see it in Flint and Times Beach, but also the Bhopal gas disaster, the PBB contamination in Michigan, the Triangle Shirtwaist fire, the Exxon Valdez oil spill, the Hawks Nest Tunnel, Hinkley groundwater contamination, and more. In Minamata, Japan, mercury poisoning caused the discovery of an entirely new disease named after the town. History is littered with the wreckage of communities that lost a battle with their rulers. In every case, the common denominator for those in the resistance is <b>a radical and painful adaptation of their worldview</b>.
+      </p>
+
+      <div class="ar-pull is-pink">
+        We must first accept the pipes are broken. We must accept the poison is in the dirt under our feet. We must accept the people in charge are not coming to help: <em>because they are the ones who caused these problems.</em>
+      </div>
+
+      <!-- ============================== § 05 ============================== -->
+      <div class="sec-div" id="sec-cw"></div>
+
+      <div class="cw-bar">
+        <span class="cw-bar-label">Content Warning</span>
+      </div>
+
+      <p>
+        This next section is the hardest to write about. These cases are public knowledge, but the details make Sascha&rsquo;s story look tame. <b>If you are not skeptical, specifically, of the levels of abuse described, then you have no need to read this section.</b> If you already believe evil exists, and those evil people know each other, and they coordinate to hide it, then you do not need to hurt yourself by reading what I am about to write.
+      </p>
+      <p>
+        I will not be going into any of the graphic details, only the actions themselves, but even without the gruesomeness, they are hard to learn about. The focus is on compassion for the victims. Their experiences are placed forefront in the discussion, and the abusers are only mentioned in the context of their actions.
+      </p>
+
+      <h2 class="case-study">The Kentler Experiment (Germany, 1970s onward).</h2>
+
+      <p>
+        It starts in Germany in the 1970s, on the same side of the Berlin Wall controlled by American military force during the Allied occupation. Led by German psychologist and sexologist Helmut Kentler, a project was carried out that lasted potentially thirty years. Dubbed the Kentler Experiment, the program <b>deliberately placed homeless, neglected, and at-risk children into the foster care of pedophiles.</b> Kentler argued that pedophiles would make &ldquo;especially loving&rdquo; parents because they were &ldquo;smitten and infatuated&rdquo; with the children. While knowledge was passed around for decades due to abuse becoming so widespread, the full extent of the experiment began gaining widespread public attention around 2015. The lead investigators have explicitly stated that we may never know the real number because of the intentional lack of scientific rigor and data collection during the experiment&rsquo;s peak years.
+      </p>
+
+      <p>
+        Sascha was adopted after they arrived in the US; their adoption records are not German. They were stamped in Greene County, Tennessee. This document is in good condition, indicating it was well cared for. If there was any official adoption approval in Germany, the paperwork that resulted would have been kept similarly. <b>Bill Riley showed up with a German child he had no documented custody over and adopted them by bringing them into the local courthouse.</b> Sascha was taken from somewhere that may have been intentionally giving at-risk children to pedophiles. Sascha was adopted because they were at-risk.
+      </p>
+
+      <h2 class="case-study">The Dozier School for Boys (Florida, 1900&ndash;2011).</h2>
+
+      <p>
+        In Florida, a reform school that operated for 111 years called The Dozier School for Boys was found to be a hell for victims who were placed in its care. In the 1960s investigators found boys as young as 8 years old being held at the facility, sometimes for offenses as minor as truancy or &ldquo;incorrigibility.&rdquo; A group of survivors known as the <b>White House Boys</b> testified for years about a horrifying, concrete, perfectly square, flat-roofed white building on the campus where they were taken to be brutally beaten and sexually abused. Forensic confirmation from the University of South Florida, which identified nearly 100 deaths and at least 55 burial sites, eventually validated the survivors&rsquo; claims. The school&rsquo;s official records only accounted for 31 deaths. To this day, there are possibly as many as 200 children who were &ldquo;processed in&rdquo; to Dozier but for whom there is no record of them ever leaving.
+      </p>
+
+      <p>
+        In 2008, <b>Dick Colon</b>, a victim of the school, gave testimony of the abuse they and others had been subjected to. For 42 years, he kept the details of his abuse, and the guilt he felt over his powerlessness, secret even from his wife until the White House Boys began coming forward in the late 2000s. One of the most routine punishments involved boys being forced to lie face-down on a bed and grab its metal bars while being struck with a heavy leather and metal strap. Guards told the boys that if they made any sound, let go, or even moved, the count would start over. Colon has shown his scars on his back and behind that tell the tale of the intensity of abuse. He was brought in at least eleven times in the torture dungeon called the &ldquo;White House.&rdquo;
+      </p>
+
+      <p>
+        On one occasion, he says he saw a Black boy shoved into an industrial dryer. The boy&rsquo;s body was wrapped in linens and brought out of the laundry to be disposed of. This was not the only victim to make claims of people being killed in those dryers. Colon often took the blame for violations committed by older boys in exchange for their protection from other bullies on campus, as victims were unable to maintain solidarity in the face of such conditions. Some staff members allegedly staged fights between the boys, forcing them to brawl while guards placed cash bets on the outcome. Those who lost or refused to fight were often sent to the White House for punishment. These horrors are aside from the forced labor, medical neglect, starvation, solitary confinement, and constant psychological abuse. Children were often forced to continue wearing bloody clothes, unable to bathe. During nearly all stages of the operation of the Dozier school, <b>children were sold into labor</b>, bought by local companies to work in local fields. Dozier didn&rsquo;t close until three years after Dick Colon testified. He still blames himself for not being able to save the boy he saw in the dryer.
+      </p>
+
+      <h2 class="case-study">The Turpin family (California, 2018).</h2>
+
+      <p>
+        In January 2018, 13 siblings were rescued from a house of horrors owned by the Turpin family in Perris, California, where they had been imprisoned, starved, and tortured for years by their parents. The siblings ranged in age from 2 to 29 at the time of their rescue. The family&rsquo;s ordeal came to light when <b>17-year-old Jordan Turpin escaped through a window and called 911 using a deactivated cell phone</b>. Before escaping, she used it to take photos of her sisters chained to their beds to provide proof to the police. While on the phone with the dispatcher, Jordan admitted she did not know what medication was. When police arrived at the home, they found children shackled to beds with padlocks and chains.
+      </p>
+
+      <p>
+        All the victims were severely malnourished; Jennifer Turpin, 29 at the time, weighed only 82 pounds, suffering from severe neuropathy due to malnutrition. She recounts how they were starved on one meal a day, while the parents would buy fast food or desserts like apple pies and leave them on the counter for the children to see but never touch. The house was filled with toys still in their original packaging, yet the children were strictly forbidden from playing with them. The parents enforced a nocturnal schedule where the children slept during the day and were active only at night to avoid neighbor interaction. They also used low-battery smoke alarms to create a constant, distressing beeping sound as a mechanism of psychological torture. Jennifer talked about how they were punished for &ldquo;playing with water&rdquo; if they washed their hands above their wrists. The victims had not showered in over a year and lived in horrible unsanitary living conditions.
+      </p>
+
+      <p>
+        The children were kept entirely off the social radar through home-schooling, with the father registering his home as the &ldquo;Sandcastle Day School.&rdquo; As a result, many of the siblings lacked basic world knowledge following their rescue. The younger siblings were placed in foster care, where some reportedly faced further abuse, including physical and sexual assault. In early 2026, it was reported that six of the siblings reached a $13.5 million settlement with Riverside County and a foster agency to resolve claims of further abuse they suffered in the foster care system. After finally becoming free, Jennifer Turpin has dedicated much of her time to victim advocacy, and has consistently stated her goal is to change the Turpin family name <b>from a symbol of victimhood to one of strength</b>.
+      </p>
+
+      <h2 class="case-study">Genie Wiley (California, 1970).</h2>
+
+      <p>
+        The story of Genie Wiley is one of the most heartbreaking stories ever told. I am sure you have heard of it. But the reality is much worse than you likely know. The horrors that occurred have transcended reality entirely, often obscuring the human being behind the story, and the other victims who lived in the home of likely one of the most sadistic people known in modern times. The household was controlled through extreme violence and paranoia, turning the home into a fortress where the rules of the outside world didn&rsquo;t apply. Irene Wiley, mother of Genie and John, was nearly blind, trapped by violence, intimidation, and her own disability. Irene may have also suffered from a frozen psychological state due to years of extreme domestic abuse.
+      </p>
+
+      <p>
+        In October 1970, after a violent argument, Irene fled their home with Genie while her husband was out for groceries. John had already run away. She initially stayed at her parents&rsquo; house, and about three weeks after fleeing, Irene went to a government building in Temple City, California, to apply for disability benefits for her own blindness, taking Genie with her. Because she was 90% blind due to cataracts, she accidentally walked into the general social services office instead of the blindness office next door. A social worker in the office noticed the pair, initially assuming Genie was a 6-year-old child with severe autism because of her tiny stature and strange walk. <b>When Irene informed the worker that Genie was actually 13 years old, the staff realized they were witnessing a case of extreme, criminal neglect.</b>
+      </p>
+
+      <p>
+        Genie spent the first 13 years of her life in near-total isolation, kept confined to a small, darkened room in their California home. When she was discovered, Genie was mute, severely malnourished, and struggled to even walk. During her captivity, the days were spent tied naked to a child&rsquo;s potty chair. She wore a makeshift harness that functioned like a straitjacket, allowing her to move only her hands and feet. At night, she was bound in a sleeping bag and placed in a crib enclosed with a metal wire mesh cover to keep her immobilized. Her mother and brother were forbidden from speaking to, or even around, Genie. Any communication between family members was done in whispers out of earshot. The entire family lived in silence. Genie&rsquo;s father hated the noise children made and never wanted them. Two previous children died in infancy; one was left in a garage because of its crying, where it died of pneumonia at ten weeks old.
+      </p>
+
+      <p>
+        When she was rescued, she didn&rsquo;t just lack language; she lacked the basic framework of a human personality. Because Genie had no language to label her memories or plan for the future, she lived entirely in the moment, having no concept of yesterday or tomorrow. In her room, there were no mirrors and very few objects, and as a result, Genie struggled with the concept of herself as an individual separate from the rest of the world. When she first saw herself in a mirror, she didn&rsquo;t recognize the reflection as herself. When frustrated, she would have what researchers called <b>silent storms</b>. She would scratch, flail, and beat herself violently, but without making a single sound. She could endure injuries that would make most children scream, showing almost no outward reaction. Her nervous system had been trained to suppress the signal of pain, likely to avoid further punishment.
+      </p>
+
+      <p>
+        Early on, many doctors diagnosed her with infantile autism. Later, they realized her symptoms were actually environmental retardation. Her brain wasn&rsquo;t broken from birth; <b>it had simply pruned away the neurons meant for social and linguistic interaction because they were never used.</b> She eventually learned hundreds of words and could communicate through non-verbal means, but after research funding ended in the mid-1970s, Genie was placed in a series of foster homes, some of which were, again, abusive. This led her to regress, eventually losing much of the language she had gained. By the time she was moved into adult care, she was essentially mute again. She is believed to be alive. Her location is a strictly guarded secret to protect her from the media and unwanted attention.
+      </p>
+
+      <div class="ar-break"></div>
+
+      <p>
+        Just like the previous section, I could have used any set of examples. I was not limited by choice of options. How many times must stories like this be ignored before we start collecting them together in an attempt to actually shift our worldviews to be aware of the scope and scale of abuse? We are moving on to Sascha now, and as we do so, I urge you to pay attention to many of the parallels between not just these stories and Sascha&rsquo;s, but about the arguments in the checklist about Eric Swalwell. Nearly every one of those arguments can be addressed by just these three stories. <b>They have been addressed, because we can clearly see that they do not apply to the story as they are discussed.</b>
+      </p>
+
+      <!-- ============================== § 06 ============================== -->
+      <div class="sec-div" id="sec-sascha"></div>
+
+      <h2>Sascha Barros</h2>
+
+      <div class="evidence is-2">
+        <figure class="ev-fig">
+          <div data-slot="ev-dd214" data-slot-purpose="DD&minus;214 &mdash; Certificate of Release or Discharge" class="art-redact" style="aspect-ratio: 4 / 5;"></div>
+          <figcaption class="ev-cap"><b>DD-214</b> &mdash; Riley, William Sascha. 13B48 Cannon Crewmember, 14 years 0 months. Separation 26 May 2016.</figcaption>
+        </figure>
+        <figure class="ev-fig">
+          <div data-slot="ev-sniper" data-slot-purpose="Sniper Course Diploma &amp; Enhancement Certificate" class="art-blueprint" style="aspect-ratio: 4 / 5;"></div>
+          <figcaption class="ev-cap"><b>Sniper Course</b> &mdash; Fort Benning diploma (12 Nov 2004) and Ballistic Edge Sniper Enhancement Certificate, Ft. Carson (28 Oct 2005).</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        Sascha Barros, Sergeant First Class, over a career that spanned over 20 years, became a decorated member of the U.S. Army&rsquo;s field artillery and tactical communities. As a 13B Cannon Crewmember, they balanced the heavy-hitting demands of field artillery with the surgical precision of an elite marksman &mdash; a rare combination of skills earned through the grueling U.S. Army Sniper School at Fort Benning, where they graduated near top of their class, as well as the Advanced Sniper Enhancement Course at Ft. Carson.
+      </p>
+
+      <p>
+        Sascha&rsquo;s military career is defined by years of foreign service, primarily across multiple tours in Iraq, through some of the most challenging chapters of recent military history. The paperwork only tells part of the story; the <b>Bronze Star Medal</b> and the <b>Army Commendation Medal with &ldquo;V&rdquo; Device</b> speak to the rest, marking moments of genuine heroism and valor while facing enemy forces. As a graduate of the Advanced Leader Course and a certified Basic Instructor, Sascha didn&rsquo;t just hold knowledge; they passed it on. Whether teaching advanced ballistics, team communication, or Level 2 Combatives, Sascha focused on ensuring the next generation of soldiers was prepared for the realities of the field.
+      </p>
+
+      <p>
+        Though Sascha retired in 2016 following a permanent disability, the record they left behind is one of deep impact. From the Combat Action Badge to five Good Conduct Medals, the medals represent a lifetime of showing up, standing firm, and leading. They were born <b>Manuel Sascha Barros</b> in Germany in 1973, adopted in 1978 by <b>William Kyle Riley</b>, a Vietnam veteran and helicopter pilot, and brought to the United States. The military record, including DD-214 and multiple certifications of specialization, is clearly documented. The adoption is documented. The court record names the plaintiffs as William K. Riley and his wife, Irene U. Riley.
+      </p>
+
+      <p>
+        Sascha grew up moving between Tennessee, Alabama, and Texas, following Bill&rsquo;s work as a flight instructor and helicopter pilot. By their own account and by the account of people who knew them, they were a difficult child, prone to fights, hard to manage. They joined the Army after, in a court appearance following a fight, they were given a choice between jail and service. They served, left, came back after September 11, did three tours in Iraq. They married, and had two children. Adoption to another country, a rough childhood, and 20 years of military service. <b>This part is what we know, what is not contested.</b> Much of the discourse on the topic treats it as sufficient. That a person this damaged, this volatile, this clearly struggling, would not need anything else to have happened to them in order to believe that.
+      </p>
+
+      <p>
+        This biography described above is not unusual, though. It is, with minor variation in success, the biography of a significant portion of the United States military. Children from unstable homes, with absentee or incarcerated parents, with behavioral records and court appearances, who joined because the alternative was jail. The military has never lacked for them. The idea that this particular history is so extreme that it explains away everything that follows requires ignoring how ordinary it is as a path to service, <b>and how many people walk it without fabricating abuse conspiracies</b>.
+      </p>
+
+      <!-- ============================== § 07 ============================== -->
+      <div class="sec-div" id="sec-astra"></div>
+
+      <h2>Astra Crosby</h2>
+
+      <p>
+        Astra Crosby, who recently met Sascha over the course of three days during their stay in Canada, expressed what at first appeared to be legitimate concerns about the character of Sascha Barros. Astra recently attempted to apply the most charitable pathologizing framework applied to Sascha so far: the factitious disorder Munchausen, the compulsion to fabricate physical suffering in order to receive care and attention. It is a diagnosis that has never been applied by a clinician, but it is logically consistent, unlike most other accusations. It must also be specified that Munchausen is about physical ailments, not psychological ones &mdash; those are different conditions, but I was willing to generously interpret their intent. Over the course of her time with Sascha Barros, she eventually reached a conclusion that they seemed unstable, deceitful, and dangerous. She was clear: she felt unsafe.
+      </p>
+
+      <p>
+        That fear has a factual basis that deserves to be stated plainly. Veterans with combat PTSD are statistically more likely to engage in intimate partner violence than the general population. The research on this is not contested. The VA&rsquo;s own clinical literature acknowledges that combat veterans with PTSD present elevated rates of anger dysregulation, hyperarousal, and relationship violence. Sascha has documented combat PTSD. Sascha has documented combat exposure across three deployments. Sascha has now, by both the accusations from their ex-wife and their own freely volunteered account, been physically violent toward at least one partner. None of that requires speculation. <b>The pattern is documented, the research predicts it</b>, and this person&rsquo;s read of Sascha as potentially dangerous was at first, not unnecessary pathologizing.
+      </p>
+
+      <p>
+        The same research also predicts the behavioral features they observed and found alarming: the emotional dysregulation, the apparent lack of remorse in the moment, the rapid shifts in presentation, the hunger for validation. <b>These are not features that distinguish genuine trauma from fabricated trauma.</b> They are features that the research associates with both. It is important to note that abuse alleged by Sascha when they were a child and the abuse toward Pearleen are not in competition with each other. Both are consistent with the same underlying history. Both deserve to be taken seriously. Both parties deserve justice.
+      </p>
+
+      <p>
+        Because of Astra&rsquo;s video, uploaded to her YouTube, the levels of daily harassment Sascha receives has increased dramatically. One person commented on Sascha&rsquo;s own public admission of guilt with desire to put a bullet in their head. It was not a threat; it was an emotionally charged desire. This person&rsquo;s read was that they were too loud and aggressive in their actions, and that set them off. People are angry, not just because of the abuse &mdash; the accusations had already been made by Sascha&rsquo;s ex-wife &mdash; but the platform Crosby brought to the table a new intensity. <b>People are demanding Sascha behave how they expect and rejecting their right to justice when they don&rsquo;t comply.</b>
+      </p>
+
+      <p>
+        At least as far back as February, Astra had been in public support of Sascha on Threads. She publicly tagged prominent figures and attempted to make them engage with Sascha. They both bonded over animals, with her showing constant support. She was a believer, a committed one, and a constant presence in support of Sascha. Eventually, when they traveled to Canada to be under the protection of Lisa Voldeng, she reached out to Sascha, and they agreed to meet. She invited them to her home and they began bonding, quickly becoming close. She asked Sascha if she could paint them, and said that she liked their tattoos. When Sascha took off their clothes and let her photograph them, Sascha was happy, excited to be bonding with someone, and even desperate to be validated. The event made them feel like posting one of those pictures she took, and <b>the outrage was swift</b>.
+      </p>
+
+      <p>
+        For almost two weeks, her account is nearly silent, with only a few replies and no posts. When she comes back, she has withdrawn her support for Sascha, posting a video accusing them of being a liar, of having a factitious disorder, of being dangerous and unhinged. She insisted the footage she covertly gathered, that would be illegal in most US states, would prove not only that Sascha was dangerous, but that they were also lying about everything. That gap in time was spent editing the video, coordinating a response, and prepping for a public betrayal that seems to have been designed to capitalize off the &ldquo;scoop.&rdquo;
+      </p>
+
+      <p>
+        I warned her directly that how she was framing things would increase the harassment Sascha was already receiving. She ignored it completely. When someone in Sascha&rsquo;s replies wished for a bullet in Sascha&rsquo;s head, I showed it to her, again tagging her directly. She ignored that too. She kept posting. When others genuinely questioned her characterization, she told them they were being cruel to everyone who is on her side. <b>The standard she held strangers to was considerably higher than the one she held herself to.</b>
+      </p>
+
+      <p>
+        The instant she posted resignation of her support she was deadnaming and intentionally misidentifying Sascha in public posts, including in a reply directly at Kathy Griffin, who she was trying to recruit in order to also further attacks on Sascha. She believes that the harassment is justified and that it is a legitimate course of action for someone who spent over 20 years in the military and that she believes has a psychological disorder that makes not lying nearly impossible for them. If she believed they had a factitious disorder, her actual assessment would not be to actively encourage a harassment campaign. <b>If she was ever a supporter of Sascha, they wouldn&rsquo;t have intentionally begun refusing to validate their very identity.</b>
+      </p>
+
+      <!-- ============================== § 08 ============================== -->
+      <div class="sec-div" id="sec-interview"></div>
+
+      <p>
+        The Investigative Interview Protocol, developed at the National Institute of Child Health and Human Development and used in forensic child abuse investigations across the United States, United Kingdom, Canada, and across multiple European countries, was <b>built specifically to prevent this technique</b>. The protocol mandates open-ended free recall questioning before any directed questioning, explicitly prohibits option-posing and suggestive prompts in early phases, and requires that interviewers allow subjects to say they do not know or do not remember without pressure to produce an answer.
+      </p>
+
+      <p>
+        The reason the protocol exists is that research repeatedly demonstrated that without it, interviewers reliably contaminated testimony, producing statements that reflected the interviewer&rsquo;s assumptions rather than the subject&rsquo;s independent recollection. NICHD found that interviewers trained in the protocol used <b>at least three times more open-ended prompts and approximately half as many suggestive prompts</b> as untrained interviewers. The difference in reliability of the resulting testimony was substantial.
+      </p>
+
+      <p>
+        Quantitative analysis of 54 interview transcripts from the McMartin and Kelly Michaels daycare cases, published in the journal <i>Social Influence</i>, found that interviewers were significantly more likely than the comparison group interviewers to introduce new suggestive information, provide praise and positive reinforcement for desired answers, express disapproval when children denied abuse, exert conformity pressure, and invite children to speculate rather than recall. <b>The Kelly Michaels conviction was reversed</b> by the New Jersey Appeals Court explicitly on the grounds that the children had been interviewed in a manner so suggestive as to render their statements unreliable.
+      </p>
+
+      <p>
+        What an interview confirms depends entirely on what the interviewer believes before the recording begins. Both cases emerged from the same cultural moment. The McMartin investigation began in 1983 when a single parent with no physical evidence called police to allege abuse; the following day, police sent a letter to 200 families naming the accused by name and instructing parents to question their children at home. By the time children reached investigators, they had already been questioned by panicked parents, community members, and therapists who were convinced abuse had occurred. In 1985, the Kelly Michaels case was triggered by a four-year-old boy&rsquo;s reaction to a rectal thermometer. He told the doctor his teacher &ldquo;takes my temperature the same way,&rdquo; but once investigators became involved, they ignored any innocent context for the remark. In both cases, the investigators did not begin by asking whether abuse had occurred. <b>They began with the conclusion that it had, and treated every denial as a &ldquo;disclosure phase&rdquo; to be overcome.</b>
+      </p>
+
+      <p>
+        In the released recording of Astra and Sascha, Astra asked whether Sascha&rsquo;s former partner engaged in reactive abuse specifically designed to provoke the subject into hitting her. The subject had not introduced this framing. The interviewer introduced it and sought confirmation. Crosby then asked whether Sascha had ever been physically violent with a partner before that relationship. They described a mutually violent relationship in which both parties had traumatic histories. She continuously provided the space with normalizations of the abuse described, laughing and providing encouragement to intentionally fish for juicier details, and continued further confirmation-seeking rather than open-ended follow-up. <b>The resulting clip was then presented publicly as Sascha bragging about harming women.</b>
+      </p>
+
+      <!-- ============================== § 09 ============================== -->
+      <div class="sec-div" id="sec-hiding"></div>
+
+      <p>
+        I originally believed Astra had acted in good faith. I wanted to know more about her framework in attempting to diagnose Sascha with Munchausen, because there were other factitious disorders that may have been more applicable. I believed it was, at least, the most logical engagement of the possibility of their account being lies. I did not fully believe Sascha&rsquo;s story entirely, even at the time. I simply choose to believe even alleged survivors until there is actual proof otherwise.
+      </p>
+
+      <p>
+        This is not the reason I now believe in Sascha&rsquo;s story. This is one of the reasons I am scared. I don&rsquo;t have to believe anything about anyone trying to endanger me to be scared. It&rsquo;s what it means about our culture, and it&rsquo;s what it means about our ability to see what is real and what is not. <b>Sascha&rsquo;s story is not unbelievable.</b> It is exactly the sort of story that would happen to someone on the near-impossible end of statistical probability we cannot ignore. <i>It is the story of every one of the people&rsquo;s stories that happened just like Sascha, but didn&rsquo;t live to tell their story.</i>
+      </p>
+
+      <div class="ar-pull is-pink">
+        One of us is hiding something. It ain&rsquo;t me.
+        <cite>&mdash; Sascha Barros, caption to a photograph taken by Astra Crosby</cite>
+      </div>
+
+      <p>
+        In the photo, scars are visible. The meaning of the photo is obvious, but it doesn&rsquo;t matter to the people who have convinced themselves Sascha&rsquo;s very story is an attack on their fragile worldview, and it must be defended at all costs.
+      </p>
+
+      <!-- ============================== § 10 ============================== -->
+      <div class="sec-div" id="sec-bill"></div>
+
+      <div class="evidence is-2">
+        <figure class="ev-fig">
+          <div data-slot="ev-riley-helo" data-slot-purpose="Hughes OH&minus;6A &mdash; APD donation, 1996" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>Hughes OH-6A</b> &mdash; the model Bill Riley reportedly leased and flew during the 1996 Atlanta Olympics; later donated to APD.</figcaption>
+        </figure>
+        <figure class="ev-fig">
+          <div data-slot="ev-riley-award" data-slot-purpose="Wright Brothers &ldquo;Master Pilot&rdquo; Award &mdash; FAA, 2020" class="art-graph" style="aspect-ratio: 4 / 3;"></div>
+          <figcaption class="ev-cap"><b>FAA Wright Brothers Award</b> &mdash; conferred September 2020 for 55+ years of safe operation, no violations.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        William Kyle &ldquo;Bill&rdquo; Riley began in aviation under instruction of his uncle John, a former World War II pilot instructor. While working at his uncle&rsquo;s shop, Bill traded labor for pilot lessons, leading to his first solo flight in a Cessna on May 19, 1965. His career took a detour when he was drafted into the United States Army during the Vietnam War. Determined to make the military a career, Bill successfully applied for Army Flight School and transitioned into aviation. Over a nearly 30-year military career that officially concluded with his retirement in 1994, Bill specialized in technical flight operations, amassing thousands of hours in both rotary and fixed-wing aircraft. He did not fly jets, as Brandy correctly states, <b>but she also neglects to mention Sascha never made that claim</b>, or even said Bill flew any of Epstein&rsquo;s planes.
+      </p>
+
+      <p>
+        When Bill retired, he immediately transitioned his skills to the private sector in Atlanta, where he played a critical role during the 1996 Summer Olympic Games. Bill secured the contract to provide helicopter EMS services for the event and personally piloted 26 patient transfers, bypassing the massive ground gridlock that prevented traditional ambulances from reaching local hospitals.
+      </p>
+
+      <p>
+        Bill quickly became a prominent fixture in Georgia law enforcement and search-and-rescue circles. Serving as a Lieutenant with the Fayette County Sheriff&rsquo;s Office, he acted as the <b>Project Lifesaver Coordinator</b>, overseeing a program that utilized radio frequency technology to track at-risk individuals, especially children. His connections made him a commentator for at least one news station; notably, in 2012, he provided expert analysis following a fatal Atlanta Police Department helicopter crash. They were flying the Vietnam-era Hughes OH-6A Light 4-Blade helicopter &mdash; possibly the same one Bill Riley used to fly 26 people during the Atlanta 1996 Olympics &mdash; in order to find a missing boy in the area. WSB-TV2 Atlanta states that it was donated to APD by the U.S. Army in 1996 to help with the Olympics. Bill Riley&rsquo;s own statements say he was awarded a contract, and that he leased the helicopter personally. <b>Investigators stated the aircraft did not have a cockpit voice recorder or a data recorder.</b>
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">Bill Riley, on locating a missing child by helicopter</span>
+        <p>
+          &ldquo;The thing about a child is, they are very inquisitive. When they hear a helicopter, they want to see it.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        By 2005, Bill had joined Air Evac Lifeteam as a line pilot in Scottsboro, Alabama, before transferring to the company&rsquo;s national headquarters to serve as a flight simulator instructor in 2016. His extensive career reached a historic milestone in September 2020, when the Federal Aviation Administration honored him with the <b>Wright Brothers Master Pilot Award</b>. This prestigious commendation recognized over 55 years of safe flight operations without a single accident or violation, cementing his legacy as a foundational figure in both military and civilian aviation.
+      </p>
+
+      <p>
+        Bill Riley was not just an old man. He was famous, well known by institutions all over the south. He was an entrenched public figure whose high-profile career as an aviation expert in search-and-rescue operations and a decorated law enforcement official provided him with a massive halo around his head to anyone who knew of him, and more importantly, to every official investigator who gets dazzled by that halo. <b>But the reality cuts both ways: this extreme level of visibility only increases the likelihood of institutional protection.</b> When a perpetrator is a public figure, investigations are often stifled by the hero narrative, as institutions are inherently incentivized to protect their most celebrated icons from accusations that would cause a catastrophic loss of public trust.
+      </p>
+
+      <h3>Greene County, the I-81 corridor, and a place no one was watching.</h3>
+
+      <p>
+        The official record of Bill Riley&rsquo;s military career in the 1980s is likely defined by a series of rapid Permanent Change of Station moves and specialized training and teaching assignments. Sascha&rsquo;s narrative places every named city within the specific military towns where Bill was stationed as an instructor, but more importantly, Sascha also states that Bill may have been put out of the military earlier than that record states by at least 10 years. Even if Bill was in the military the entire time on the official record, a standard 13-month PCS cycle would still have prevented the family from forming deep roots or local ties that might lead neighbors to notice signs of abuse or irregular houseguests.
+      </p>
+
+      <p>
+        Greene County, Tennessee, near the Holston Army Ammunition Plant, was the first place Sascha was taken to and the place their adoption papers were stamped. During this period, Greene County&rsquo;s law enforcement and judicial structures were heavily insulated. Local deputies often stalled investigations that involved prominent local figures or criminal allies. The push for the Tennessee Bureau of Investigation to become an independent agency in March 1980 was a direct response to the realization that local counties could not be trusted to investigate their own criminal networks after years of intense corruption. Modern TBI studies confirm that Tennessee has a long-standing history of child trafficking within the state. <b>Greene County sits along the I-81 corridor, which has been historically identified as a major route for the movement of illicit materials and trafficking victims.</b>
+      </p>
+
+      <p>
+        In 1983, the Army officially designated Aviation as its own branch. This caused a massive, sudden influx of personnel to Enterprise and New Brockton. Bill&rsquo;s career undoubtedly took him to this location during, or likely just before, that time. Fort Rucker would eventually be called the &ldquo;Home of Army Aviation.&rdquo; In these towns, the military was the primary economic driver and one of the defining features of the culture of the area. Local law enforcement often deferred to the base&rsquo;s CID for any incidents involving military families. <b>As an expert pilot instructor during Vietnam, Bill inhabited a social circle that was effectively self-policing.</b>
+      </p>
+
+      <!-- ============================== § 11 ============================== -->
+      <div class="sec-div" id="sec-voldeng"></div>
+
+      <p>
+        Sascha has stated repeatedly their earliest claims of abuse are years before 2020. They allege that their adopted mother eventually committed suicide due to the guilt of them speaking out. Mary Lynn Riley died in 2018. The date of these claims have not been verified, but if we are believing victims, we should at least listen to Sascha. They also claim they confirmed their own abuse in 2009. <b>There is no way anyone who has engaged with this story in good faith can claim Sascha &ldquo;unlocked&rdquo; memories in 2020.</b> What Sascha actually did was begin processing their own past abuse, and attempting to identify those who abused them other than their own family. This was almost certainly triggered by COVID-19 and the lockdown involved.
+      </p>
+
+      <p>
+        In March 2022, after Sascha and their wife separated, Sascha filed a missing persons report for Sammy. Unfortunately, Samantha Jackson may not be her real name, as Sascha has stated their memory makes them unable to clearly recall. It is clear this alone brings them immense guilt, but it is also clear her name alone will not bring justice to her family. The kind of guilt Sascha has felt because of that failed memory recall of her name isn&rsquo;t a common type of addition in cases of pure fabrication &mdash; not just because compulsive liars usually avoid guilt at all costs, but as a feature that would have been hard to have even been realized unless the issue meant a lot to you.
+      </p>
+
+      <p>
+        In the summer of 2025, Sascha was contacted by <b>Lisa Voldeng</b>, a Canadian woman based in Victoria, British Columbia, who described herself in ways that shifted depending on the context: entrepreneur, advocate, media and technology professional, someone with contacts in human rights law, the ICC, the RCMP, retired American defense attorneys, NASA, and the Hague. She compared herself to Denzel Washington&rsquo;s character in <i>The Equalizer</i>. She had several grandiose mottos. One was <i>&ldquo;Fangs forward, faith up.&rdquo;</i> If she has any real contacts whatsoever at the level described, I would be suspicious of the nature of their connections considering that these contacts were not utilized at all. <b>This is the person who conducted the interview that two professional journalists and a significant portion of America used to evaluate the credibility of a claim of childhood sexual abuse.</b>
+      </p>
+
+      <p>
+        Her methodology, applied to a person who explicitly described themselves as having difficulty with memory recall and repressed memories, consisted of summarizing Sascha&rsquo;s statements back in stronger terms than Sascha used and then asking for confirmation. She introduced the framing of ritualistic and satanic abuse, which Sascha immediately rejected. She offered her own theory of how the trafficking network was structurally organized, which Sascha then agreed with in general terms, but refused to confirm. She then asserted those things in her summary of the case, obfuscating the truth of Sascha&rsquo;s own words in purposely messy formatting across 6 different sections of interview. She pushed Sascha for names and specific details after Sascha had repeatedly said their memory was unclear, until Sascha produced names and specific details that they had not offered voluntarily.
+      </p>
+
+      <p>
+        This technique has a name. It is not new. It is the same methodology that caused multiple licensed therapists to lose their credentials during the recovered-memory controversies of the 1980s and 1990s. <b>Lisa has no credentials to lose, but the technique is documented and professionally condemned regardless of who uses it.</b>
+      </p>
+
+      <h3>Habel &mdash; the example everyone seized on.</h3>
+
+      <p>
+        The most visible example of what this produces is the name Habel. During the interview, Sascha says they cannot recall the name of the soldier who was arrested at Fort Carson for possessing child sexual abuse material. After a few minutes they can picture the face but not the name. After just a few minutes more of speaking to Lisa, Sascha arrives at Habel, spells it out, and immediately says they &ldquo;don&rsquo;t have the best memory,&rdquo; and &ldquo;one of the things that I struggle with mightily are names.&rdquo; What they described instead is exactly what honest, uncertain memory looks like. <b>Compulsive fabricators rarely flag their own uncertainty.</b> The name confusion is evidence for the reliability of the account, not against it, but it was used for a while as ammunition to call Sascha a liar.
+      </p>
+
+      <p>
+        Lisa&rsquo;s influence on the shape of the testimony extends to the Epstein framing that became central to the published interviews and to all subsequent coverage &mdash; the idea that Bill Riley was Epstein&rsquo;s pilot, the Trump-Epstein ring language &mdash; none of this originates with Sascha. In the underlying testimony, they stated clearly that their father was only around Epstein, may have transported people connected to him, and that they may have seen Epstein once. They specified that they could barely remember him. <b>Lisa took that and built an entire thesis.</b> The satanic panic framing followed the same pattern. Laura and Brandy both used the same satanic-panic association to prime their readers without noting that the person making those claims was Lisa, and that the person being interviewed rejected them entirely.
+      </p>
+
+      <h3>Michael Balis, and a document that already exists.</h3>
+
+      <p>
+        <b>Michael Balis</b>, identified through military records as Sascha&rsquo;s First Sergeant at Fort Carson, confirmed to an independent researcher named Sue Selle that he was Sascha&rsquo;s First Sergeant during the relevant period. He specified First Sergeant, not Commanding Officer &mdash; a distinction he made from his own memory without being prompted. He confirmed to <i>Snopes</i>, separately, that a soldier was found in possession of child sexual abuse material during this period, that there was a conversation about sexually explicit video material depicting a boy resembling Sascha, and that commanding officers asked Sascha questions consistent with what Sascha described in the interview. This is an entirely separate confirmation from Sue Selle&rsquo;s Facebook exchange, personally confirmed by a Senior Reporter who has worked at <i>Snopes</i> since 2016. <b>This is almost certainly the same event reported by</b> <i>The Denver Post</i> <b>in May 2009.</b>
+      </p>
+
+      <p>
+        Sascha was not charged. Sascha was not arrested. The reason is because the commanding officers determined, from questioning Sascha directly, that they appeared underage in the material. That determination, if wrong, would have produced an arrest. It did not produce an arrest. <b>It predates Voldeng by sixteen years. It predates Sascha&rsquo;s public disclosures by twelve years. It is not a recovered memory. It is a documented law enforcement event.</b>
+      </p>
+
+      <!-- ============================== § 12 ============================== -->
+      <div class="sec-div" id="sec-pearleen"></div>
+
+      <p>
+        Research on CSA disclosure patterns consistently finds that the majority of survivors do not disclose during childhood, and that among those who do disclose, recantation rates are high precisely because the social consequences of disclosure fall on the child rather than the abuser. The average delay between abuse and first disclosure in adult survivors is measured in decades, not years. The factors most strongly associated with delayed disclosure are exactly the factors present in Sascha&rsquo;s case: a perpetrator who is a family member or trusted authority figure, social isolation from potential support figures, and a childhood environment in which the child has reason to believe disclosure will not be believed or acted upon. <b>Demanding contemporaneous documentation from a child in those circumstances is not an evidentiary standard. It is a demand calibrated to produce silence.</b>
+      </p>
+
+      <p>
+        Pearleen Riley told Zadrozny that Sascha&rsquo;s new memories frightened her and the children, that she considered them psychotic delusions, that Sascha would spend days in bed with a laptop reading and posting about politics, that Sascha came to believe they had dissociative identity disorder and would sometimes take on the personality and accent of a young girl. Pearleen is a hostile witness. She left in 2021 and Sascha no longer speaks to their children, citing difficulty with Pearleen and communication between them. Not an excuse, but an understanding. These are the circumstances of someone who is not a neutral observer, and her testimony deserves to be weighed with that context the same way Bill&rsquo;s denial does, and the same way every other testimony in this case does &mdash; <b>which is to say carefully, not as confirmation of a predetermined conclusion</b>.
+      </p>
+
+      <p>
+        What Pearleen&rsquo;s account actually corroborates is that something serious was happening to Sascha around 2020 that was destabilizing the household. She describes it as psychotic delusion. She may be right. She is not a clinician, and the difference between a psychotic delusion and a genuine traumatic memory unlocking after decades of suppression is not something a former spouse is positioned to determine. Her anger is consistent with watching someone become unable to function. It does not tell us why.
+      </p>
+
+      <p>
+        What the clinical literature does tell us is that complex PTSD, the diagnosis most associated with prolonged childhood abuse, frequently presents with exactly the features Pearleen describes: periods of withdrawal and dissociation, intense preoccupation with the trauma, emotional dysregulation, and behavior that is frightening or incomprehensible to partners. The onset of these symptoms, often triggered by a life stressor such as financial collapse or marital instability, is a documented pattern. Sascha filed for bankruptcy in 2018, around when they claimed they began speaking about their abuse. The memories became public in 2020. <b>The sequence is consistent with what clinicians would expect from a severe trauma history encountering a destabilizing life event, not with someone fabricating a story for attention.</b>
+      </p>
+
+      <!-- ============================== § 13 ============================== -->
+      <div class="sec-div" id="sec-bone"></div>
+
+      <p>
+        Even setting aside the question of recovered memory, <b>false memory and fabrication are not the same thing.</b> A person can hold memories that do not accurately reflect specific details of real events and still be telling the truth about the central fact that abuse occurred. The research on traumatic memory consistently demonstrates that peripheral details &mdash; names, sequences, specific locations &mdash; are more vulnerable to distortion and confabulation than the core traumatic experience. The emotional core of a traumatic event &mdash; the fear, the pain, the sense of helplessness &mdash; is encoded differently than declarative information and tends to be more stable over time, while the contextual details surrounding it are subject to the same reconstructive processes that affect all memory. Dismissing an entire account because some peripheral details may have shifted, because a name cannot be verified, because a timeline has a gap, is not how memory science works. It is not how it is applied in any other evidentiary context.
+      </p>
+
+      <p>
+        The alternative explanation is simpler and more consistent with what trauma memory research actually says. Sascha remembered the abuse before they remembered who was doing it. The perpetrators were not identified to them by name at the time. They were wealthy strangers whose faces Sascha associated with fear and pain. Identification happened later, as those faces became famous, as Sascha saw them on television and connected them to the memories. <b>That is not the pattern of someone constructing a story. It is the pattern of someone working backward from fragmented sensory memory toward identification.</b>
+      </p>
+
+      <p>
+        Every investigative piece written about Sascha Barros has treated the absence of corroborating records as evidence of fabrication. <b>Not one of them obtained those records.</b> No childhood friends have been located or contacted. No school records have been pulled across the four states the family moved through. No medical records from childhood have been sought. The one event that received the most investigative attention was Fort Carson. It was verified. Multiple soldiers confirmed it. And it is, notably, the one event that even full corroboration cannot resolve, because confirming that material existed and that Sascha was questioned about it does not confirm the abuse itself. It confirms the environment. It confirms the investigation happened. <b>It does not answer the central question.</b> The records that could answer the central question have not been touched. That is not a finding. That is a failure.
+      </p>
+
+      <p>
+        Robinson claims, in the context of Sascha&rsquo;s suggestion that bone injuries could serve as corroboration, that there is no way to tell the difference between an IED and childhood abuse, and she is more wrong about this than she realizes. It is true that you cannot precisely date a fracture from imaging alone. <b>But you can distinguish bones broken in childhood from bones broken in adulthood.</b> Growth plates, bone density, and remodeling patterns differ substantially across that developmental divide. A bone fractured before growth plates close leaves different evidence than one fractured decades later in a fully developed adult skeleton. When the gap is thirty years, and one set of injuries occurred in a child who had not yet reached puberty, this would constitute independent physical evidence of childhood abuse that is entirely separate from memory, entirely outside the reach of recovered-memory critique, and entirely capable of demonstrating that the abuse Sascha describes happened to a child, regardless of who was responsible.
+      </p>
+
+      <div class="ar-pull is-teal">
+        Sascha is not rich. They recently moved out of the country. If we want this to happen, <em>someone with power, someone with money, someone with real institutional backing has to stand up themselves.</em>
+      </div>
+
+      <!-- ============================== § 14 ============================== -->
+      <div class="sec-div" id="sec-after-bill"></div>
+
+      <p>
+        Bill Riley died on April 3, 2026, while visiting his grandchildren. When Sascha posted the obituary link, followers stormed the funeral home website. The obituary was taken down. The argument being made, usually implicitly, is that Bill&rsquo;s death closes something. He cannot be questioned further. He cannot be prosecuted. The story ends with him.
+      </p>
+
+      <p>
+        This is only true if the story is entirely about Bill Riley. The documented evidence does not depend on his testimony. The other named individuals are alive. Records across four states exist and were never retrieved. The film evidence was circulating within a military network as recently as 2009. The Tennessee arrest records exist. The locations Sascha identifies are still there. <b>Networks of this kind do not dissolve when one participant dies.</b> The farms, the jurisdictions, the patterns of trafficking activity in those areas can be evaluated for corroborating CSA and trafficking events across the relevant decades. Every location is a potential lead. <i>Bill&rsquo;s death closes none of them.</i>
+      </p>
+
+      <p>
+        Bill Riley, before his death, told Brandy Zadrozny there was no abuse ring, no brothel, no child murders. He said he did not know who Epstein was. He said he did not understand what he had ever done to make Sascha want to say these things about him. Research on predatory behavior in institutional and community contexts consistently finds that long-term, high-volume offenders are <b>overwhelmingly distinguished not by their capacity for violence or coercion but by their social capital</b>. Studies on child sexual abuse perpetrators who evaded detection for extended periods show that charm, community standing, and the active cultivation of trust are the primary mechanisms of concealment. The offenders who are caught quickly tend to be caught quickly precisely because they lack these tools. The ones who operate for decades do so because they have built environments in which accusation is structurally unbelievable.
+      </p>
+
+      <p>
+        A perpetrator&rsquo;s reputation for warmth, dedication, and trustworthiness is not evidence against the accusation. In the documented cases, it is almost always evidence of the method. <b>This is not evidence Bill Riley was guilty.</b> This is another piece of a puzzle that everyone who claims to know how to solve puzzles looked at and said: <i>&ldquo;that looks like Jenga.&rdquo;</i> I have looked closely, and I say it&rsquo;s a puzzle. And I don&rsquo;t think it&rsquo;s normal these puzzle-solvers don&rsquo;t see that. I think it&rsquo;s the same issue: a defensive worldview.
+      </p>
+
+      <!-- ============================== § 15 ============================== -->
+      <div class="sec-div" id="sec-mechanism"></div>
+
+      <p>
+        The point of this article is not to prove that Sascha was abused. It&rsquo;s to prove that the reality of their story reflects the reality many of us have had to live through. Maybe not everything is true; maybe even none of it is. But what we do know deserves to be listened to. If this story is even partially true, without any names, it means a child was possibly adopted into the household of a potentially known pedophile. They were adopted during some of the peak years of the Kentler experiment. They were brought to the US to be abused and tortured. Sascha was programmed to believe violence was normal, and even rewarded for it, eventually leading to regular fighting in their youth. Over their time in this abusive household, they were tortured and trafficked. Their body was sold, not just for rape, but for the sadistic impulses of others.
+      </p>
+
+      <p>
+        If this story is true, the network has connections in the US military and government. <b>This is not the Epstein network.</b> Epstein was on top of the world, a deputized member of the ruling class because of the kinds of access he could bring to the table for certain kinds of people. But most people were not trafficked by Epstein. Most people are trafficked at the ground level, by real people, within their own families, or within poorly funded institutions without oversight, and it involves a less privileged set of people. The ones at the ground level are the ones who grew up themselves disadvantaged. They are indoctrinated slowly. Those who are fine doing more evil are rewarded. <b>And those with the most power in opaque systems will always be the most cruel.</b>
+      </p>
+
+      <p>
+        This isn&rsquo;t about if everything is real. This is about the fact that all of us &mdash; Brandy, Laura, and everyone else being cruel to Sascha &mdash; have no ground to stand on. People who have built careers, platforms, and identities around a particular understanding of how abuse works, who survivors are, and what credible victimhood looks like &mdash; a story that doesn&rsquo;t fit that framework isn&rsquo;t just inconvenient. It&rsquo;s existentially threatening. The research consistently shows that people under this kind of threat become more rigid, more punitive toward outsiders, and more motivated to find reasons to dismiss rather than engage.
+      </p>
+
+      <p>
+        They reach for the checklist not because the checklist is accurate, but because the checklist is already there and it produces the answer they need. <b>That is the mechanism.</b> It is not unique to this case. It is the same mechanism that has kept institutions from believing survivors for decades, that made it possible for abuse to continue in plain sight, and that makes the language of skepticism so useful as a weapon &mdash; because it sounds like rigor while functioning as a door that only opens one way. They all have put on the guise of allyship and yet turned their back. They use the language of empathy without having any. And they only care about protecting their worldview.
+      </p>
+
+      <!-- ============================== § 16 — REVIEWERS ============================== -->
+      <div class="sec-div" id="sec-reviewers"></div>
+
+      <p>
+        This article has been casually reviewed by several professionals who currently work in relevant fields to the topics at hand. Though they have not authorized me to reveal their identities publicly, I have verified who they are and what they do. These reviews are not a blind peer review conducted by a scientific or academic journal. Though this is a casual set of reviews of an amateur piece of journalism, <b>it was done by some of the most qualified people I could have found on the subject matter.</b>
+      </p>
+
+      <div class="ar-claims">
+        <div class="ar-claim">
+          <span class="n">01</span>
+          <div class="body">
+            <b>A Licensed Marriage and Family Therapist</b> with over 20 years of clinical experience. Master&rsquo;s from John F. Kennedy University; Certified Sensorimotor Psychotherapist; recipient of the Mental Health Achievement Award from the City of Berkeley; currently Board Secretary for the International Society for the Study of Trauma and Dissociation. A trafficking survivor with lived experience of Dissociative Identity Disorder.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">02</span>
+          <div class="body">
+            <b>A Behavioral Neuroscientist and Translational Researcher</b> with a Doctorate in Neuroscience from Georgia State University. Dissertation on the biological and temporal conditions that determine whether an organism becomes resilient or vulnerable to social defeat. Worked with the Detroit Trauma Project at Wayne State University. A plural survivor of human trafficking.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">03</span>
+          <div class="body">
+            <b>A Licensed Mental Health Counselor and clinical director</b> with over a decade in mental health and social service sectors. Master&rsquo;s in Counseling Psychology with a concentration in Trauma Studies from Lesley University; professional certificate in Psychedelic Therapies and Research from CIIS. Board President of Healing Options for Posttraumatic Experiences.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">04</span>
+          <div class="body">
+            <b>A veteran Victim Advocate</b> with years of frontline experience in a municipal Crime Victim Assistance Unit. Specializes in on-site crisis intervention, including 24/7 on-call response, supporting survivors during forensic medical examinations by SANE nurses, and surrogate representation for families of murder victims within the criminal justice system.
+          </div>
+        </div>
+        <div class="ar-claim">
+          <span class="n">05</span>
+          <div class="body">
+            <b>A child welfare specialist</b> with a BA in Psychology from the University of Iowa. Several years with Child Protective Services and Department of Human Services on high-stakes abuse cases. Worked as a Family Safety Risk and Permanency Consultant; specialist in verbal de-escalation and crisis management.
+          </div>
+        </div>
+      </div>
+
+    </article>
+  </div>
+
+  <!-- end-of-article meta -->
+  <div class="ar-end-meta" style="max-width: var(--art-max); margin: 0 auto; padding: 0 var(--pad-x) 64px;">
+    <div>
+      <b>Filed</b> &middot; 25 Apr 2026 <br>
+      <b>Author</b> &middot; L. V. Maestri <br>
+      <b>Subject</b> &middot; the truth and current reality of Sascha Barros (they/them)
+    </div>
+    <div>
+      <b>Reviewers</b> &middot; five professionals, anonymized at their request <br>
+      <b>Companion piece</b> &middot; <i>My Fallout with Troy Barile-Simleness</i> <br>
+      <b>Next</b> &middot; a dedicated response to the institutional non-response
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     FOOTER  —  matches home.html
+     ============================================================ -->
+<footer>
+  <div class="foot-inner">
+
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="/" class="brand" aria-label="Mudlark Media">
+          <span class="brand-name">Mudlark Media</span>
+        </a>
+        <p class="foot-tag">Volunteer. Zero-fund. Public domain.</p>
+      </div>
+
+      <div class="foot-col a">
+        <h4>Take Time</h4>
+        <ul>
+          <li><a href="/articles">Articles</a></li>
+          <li><a href="/psych">Psychological Warfare</a></li>
+          <li><a href="/media">Media &amp; Music</a></li>
+          <li><a href="/mindmap">Mind Map</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col b">
+        <h4>Take Care</h4>
+        <ul>
+          <li><a href="/opsec">Digital OpSec</a></li>
+          <li><a href="/opsec/threat-model">Threat Models</a></li>
+          <li><a href="/opsec/signal">Signal &amp; Encrypted Chat</a></li>
+          <li><a href="/opsec/identity">Identity Hygiene</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col c">
+        <h4>Take Action</h4>
+        <ul>
+          <li><a href="/ethos">Network Ethos</a></li>
+          <li><a href="/contact#submit">Submit a Story</a></li>
+          <li><a href="/contact#projects">Suggest a Project</a></li>
+          <li><a href="https://github.com/mudlark-media">GitHub Repo &nearr;</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-editor">
+      <button class="editor-trigger" type="button" aria-label="Open editor">
+        <span class="editor-trigger-glyph" aria-hidden="true"></span>
+        <span class="editor-trigger-label">Editor</span>
+      </button>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============================== EDITOR POPUP ============================== -->
+<div class="editor-overlay" id="editor-overlay"></div>
+<div class="editor-panel" id="editor-panel" role="dialog" aria-label="Page editor">
+  <div class="editor-header">
+    <div class="editor-header-title">Editor &mdash; Mudlark</div>
+    <button class="editor-close" id="editor-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="editor-body">
+
+    <div class="editor-section">
+      <h3>Palette</h3>
+      <div class="editor-grid-palette" id="editor-palette"></div>
+      <button class="editor-button" id="editor-randomize" type="button">Randomize</button>
+    </div>
+
+    <div class="editor-section">
+      <h3>Sections</h3>
+      <div id="editor-sections"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Slots</h3>
+      <div id="editor-slots"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Fonts</h3>
+      <div id="editor-fonts"></div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Rhythm</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Vertical</span>
+        <input type="range" min="0.7" max="1.5" step="0.05" value="0.95" class="editor-slider" id="editor-rhythm-v" style="--fill: 31.25%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Padding</span>
+        <input type="range" min="12" max="80" step="2" value="40" class="editor-slider" id="editor-rhythm-p" style="--fill: 73.5%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Headline</span>
+        <input type="range" min="0.85" max="1.2" step="0.01" value="0.85" class="editor-slider" id="editor-rhythm-h" style="--fill: 0%;">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Effects</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Shadow</span>
+        <input type="range" min="0" max="80" step="2" value="40" class="editor-slider" id="editor-shadow-alpha" style="--fill: 100%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Blur</span>
+        <input type="range" min="0" max="80" step="2" value="80" class="editor-slider" id="editor-shadow-blur" style="--fill: 100%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Shine</span>
+        <input type="range" min="0" max="30" step="1" value="16" class="editor-slider" id="editor-shine" style="--fill: 53.3%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Picture</span>
+        <input type="range" min="0" max="100" step="2" value="0" class="editor-slider" id="editor-slot-alpha" style="--fill: 0%;">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Background pattern</h3>
+      <div class="editor-label-row">
+        <span class="editor-label">Shape</span>
+        <select class="editor-select" id="editor-bgp-shape">
+          <option value="dot">Dot</option>
+          <option value="ring">Ring</option>
+          <option value="square" selected>Square</option>
+          <option value="cross">Cross</option>
+          <option value="diag">Diagonal</option>
+        </select>
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Colour</span>
+        <select class="editor-select" id="editor-bgp-color"></select>
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Size</span>
+        <input type="range" min="8" max="80" step="2" value="44" class="editor-slider" id="editor-bgp-size" style="--fill: 50%;">
+      </div>
+      <div class="editor-label-row">
+        <span class="editor-label">Alpha</span>
+        <input type="range" min="0" max="60" step="1" value="8" class="editor-slider" id="editor-bgp-alpha" style="--fill: 13.3%;">
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h3>Actions</h3>
+      <div class="editor-actions">
+        <button class="editor-button" id="editor-export" type="button">Export HTML</button>
+        <button class="editor-button" id="editor-copy" type="button">Copy CSS</button>
+        <button class="editor-button" id="editor-reset" type="button">Reset</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="application/json" id="builder-state">{
+  "schema": 4,
+  "page": {
+    "id": "mudlark-horrors-real",
+    "title": "The Horrors Were Always Real",
+    "filename": "the-horrors-were-always-real.html",
+    "siblings": ["home.html","rtjhtrjh.html","MindMap.html"],
+    "repo": "https://github.com/Mudlark-Media-Network/mudlarkmedia.github.io"
+  },
+  "palette": {
+    "c1":  { "value": "#c0835e", "locked": true, "label": "Highlight & hover" },
+    "c2":  { "value": "#9e5c34", "locked": true, "label": "Lead action" },
+    "c3":  { "value": "#8d6e5b", "locked": true, "label": "Numbers & OpSec" },
+    "c4":  { "value": "#d2b3a1", "locked": true, "label": "Links & nav" },
+    "c5":  { "value": "#875a3f", "locked": true, "label": "Italic emphasis" },
+    "c6":  { "value": "#74665e", "locked": true, "label": "Dates & status" },
+    "c7":  { "value": "#211d1b", "locked": true, "label": "Background" },
+    "c8":  { "value": "#4d4540", "locked": true, "label": "Surface" },
+    "c9":  { "value": "#ece5d2", "locked": true, "label": "Main text" },
+    "c10": { "value": "#9c9583", "locked": true, "label": "Soft text" }
+  },
+  "effects": {
+    "shadowAlpha": 0.8,
+    "shadowBlur": "80px",
+    "shineAlpha": 0.16,
+    "slotAlpha": 0
+  },
+  "bgPattern": {
+    "shape": "square",
+    "color": "c2",
+    "size": 44,
+    "alpha": 0.08
+  },
+  "rhythm": {
+    "padX": "30px",
+    "vertical": 0.95,
+    "headlineScale": 0.85
+  },
+  "fonts": {
+    "display": { "family": "Michroma",    "source": "repo" },
+    "body":    { "family": "Public Sans", "source": "repo" },
+    "sans":    { "family": "Orbitron",    "source": "repo" },
+    "mono":    { "family": "Azeret Mono", "source": "repo" },
+    "available": {
+      "display": [
+        { "name": "Michroma",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf" }] },
+        { "name": "Orbitron",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf" }] },
+        { "name": "Public Sans", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf" }] }
+      ],
+      "body": [
+        { "name": "Public Sans", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf" }] },
+        { "name": "Michroma",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Michroma/Michroma-Regular.ttf" }] },
+        { "name": "Orbitron",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf" }] }
+      ],
+      "sans": [
+        { "name": "Orbitron",    "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf" }] },
+        { "name": "Public Sans", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf" }] }
+      ],
+      "mono": [
+        { "name": "Azeret Mono", "files": [{ "weight": "400", "style": "normal", "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/Website/Style%20Guide/Fonts/Azeret_Mono/static/AzeretMono-Regular.ttf" }] }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "lead",
+      "label": "Lead",
+      "bgAlpha": 0,
+      "boxAlpha": 0,
+      "colors": {
+        "accent":  { "paletteKey": "c2" },
+        "heading": { "paletteKey": "c5" }
+      }
+    }
+  ],
+  "slots": [
+    { "id": "lead-figure",    "purpose": "Lead figure — the story under the dismissal", "art": "art-redact"    },
+    { "id": "ev-dd214",       "purpose": "DD-214 — discharge record",                   "art": "art-redact"    },
+    { "id": "ev-sniper",      "purpose": "Sniper Course diploma & enhancement",         "art": "art-blueprint" },
+    { "id": "ev-riley-helo",  "purpose": "Hughes OH-6A — APD donation, 1996",           "art": "art-blueprint" },
+    { "id": "ev-riley-award", "purpose": "FAA Wright Brothers Master Pilot Award",      "art": "art-graph"     }
+  ]
+}</script>
+
+<script>
+(function () {
+  const FONT_ROLES = [
+    { key: 'display', label: 'Display', cssVar: '--serif-d', fallback: 'Georgia, serif' },
+    { key: 'body',    label: 'Body',    cssVar: '--serif-b', fallback: 'Georgia, serif' },
+    { key: 'sans',    label: 'Sans',    cssVar: '--sans',    fallback: 'system-ui, sans-serif' },
+    { key: 'mono',    label: 'Mono',    cssVar: '--mono',    fallback: 'ui-monospace, monospace' }
+  ];
+
+  const SLOT_PRESETS = [
+    { label: 'Square',            value: '1/1',   type: 'ratio'  },
+    { label: 'Photo (4:3)',       value: '4/3',   type: 'ratio'  },
+    { label: 'Widescreen (16:9)', value: '16/9',  type: 'ratio'  },
+    { label: 'Cinema (21:9)',     value: '21/9',  type: 'ratio'  },
+    { label: 'Tile (5:4)',        value: '5/4',   type: 'ratio'  },
+    { label: 'Portrait (3:4)',    value: '3/4',   type: 'ratio'  },
+    { label: 'Tower (2:3)',       value: '2/3',   type: 'ratio'  },
+    { label: 'Tall (9:16)',       value: '9/16',  type: 'ratio'  },
+    { label: 'Banner (5:1)',      value: '5/1',   type: 'ratio'  },
+    { label: 'Hero (3:1)',        value: '3/1',   type: 'ratio'  },
+    { label: 'Short (120px)',     value: '120px', type: 'height' },
+    { label: 'Card (240px)',      value: '240px', type: 'height' },
+    { label: 'Tall card (480px)', value: '480px', type: 'height' }
+  ];
+
+  const ARTWORK_PRESETS = [
+    { value: 'art-ripple',       label: 'Ripples'      },
+    { value: 'art-bursts',       label: 'Bursts'       },
+    { value: 'art-rings',        label: 'LP rings'     },
+    { value: 'art-stripes-warm', label: 'Warm stripes' },
+    { value: 'art-radial',       label: 'Soft glow'    },
+    { value: 'art-blocks',       label: 'Color blocks' },
+    { value: 'art-graph',        label: 'Graph paper'  },
+    { value: 'art-blueprint',    label: 'Blueprint'    },
+    { value: 'art-redact',       label: 'Redaction'    },
+    { value: 'art-confetti',     label: 'Confetti'     },
+    { value: 'art-bands',        label: 'Color bands'  },
+    { value: 'art-static',       label: 'Soft static'  },
+    { value: 'art-topo',         label: 'Topo lines'   },
+    { value: 'art-halftone',     label: 'Halftone'     },
+    { value: 'art-dotgrid',      label: 'Dot grid'     },
+    { value: 'art-hatch',        label: 'Crosshatch'   }
+  ];
+
+  const SECTION_SPOT_VARS = { accent: '--sec', heading: '--sec-heading' };
+
+  const PATTERN_SHAPES = {
+    dot:    (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="0.9" fill="currentColor"/>`,
+    ring:   (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="2" fill="none" stroke="currentColor" stroke-width="0.6"/>`,
+    square: (cx, cy) => `<rect x="${cx-1.5}" y="${cy-1.5}" width="3" height="3" fill="currentColor"/>`,
+    cross:  (cx, cy) => `<path d="M${cx-2.2},${cy} L${cx+2.2},${cy} M${cx},${cy-2.2} L${cx},${cy+2.2}" stroke="currentColor" stroke-width="0.6" fill="none"/>`,
+    diag:   (cx, cy) => `<path d="M${cx-3},${cy-3} L${cx+3},${cy+3}" stroke="currentColor" stroke-width="0.6" fill="none"/>`
+  };
+
+  const STATE_EL = document.getElementById('builder-state');
+  let state, DEFAULTS;
+  try {
+    state = JSON.parse(STATE_EL.textContent);
+    DEFAULTS = JSON.parse(JSON.stringify(state));
+  } catch (e) {
+    console.error('builder-state JSON is invalid:', e);
+    return;
+  }
+
+  function normHex(v) {
+    if (!v) return null;
+    v = v.trim().replace(/^#/, '');
+    if (/^[0-9a-f]{3}$/i.test(v)) v = v.split('').map(c => c + c).join('');
+    if (/^[0-9a-f]{6}$/i.test(v)) return '#' + v.toLowerCase();
+    return null;
+  }
+  function randomHex() {
+    return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+  }
+  function paletteCssVar(key) { return '--c-' + key.slice(1); }
+  function paletteVarRef(key) { return 'var(' + paletteCssVar(key) + ')'; }
+  function updateSliderFill(slider) {
+    const min = parseFloat(slider.min);
+    const max = parseFloat(slider.max);
+    const pct = ((parseFloat(slider.value) - min) / (max - min)) * 100;
+    slider.style.setProperty('--fill', pct + '%');
+  }
+
+  function makeLockBtn(isLocked, onToggle) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'editor-lock' + (isLocked ? ' is-locked' : '');
+    btn.title = 'Lock this color (skip during Randomize)';
+    btn.setAttribute('aria-label', 'Lock');
+    btn.addEventListener('click', () => {
+      const next = !btn.classList.contains('is-locked');
+      btn.classList.toggle('is-locked', next);
+      onToggle(next);
+    });
+    return btn;
+  }
+
+  function paletteOptionList() {
+    return Object.entries(state.palette).map(([key, slot]) => ({
+      key, label: slot.label || key, value: slot.value
+    }));
+  }
+
+  function buildPaletteInputs() {
+    const container = document.getElementById('editor-palette');
+    container.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const key = 'c' + i;
+      const slot = state.palette[key];
+      const cell = document.createElement('div');
+      cell.className = 'editor-palette-cell';
+
+      const swatch = document.createElement('div');
+      swatch.className = 'swatch';
+      cell.appendChild(swatch);
+
+      if (!slot) { cell.classList.add('is-empty'); container.appendChild(cell); continue; }
+
+      swatch.style.setProperty('--swatch', slot.value);
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = slot.label || key;
+      cell.appendChild(label);
+
+      const controls = document.createElement('div');
+      controls.className = 'controls';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'editor-input';
+      input.value = slot.value;
+      input.title = key;
+      input.addEventListener('input', () => {
+        const h = normHex(input.value);
+        if (h) {
+          applyPaletteColor(key, h);
+          swatch.style.setProperty('--swatch', h);
+          refreshSectionSpotSwatches();
+        }
+      });
+      input.addEventListener('blur', () => { input.value = slot.value; });
+      controls.appendChild(input);
+
+      controls.appendChild(makeLockBtn(slot.locked, locked => { slot.locked = locked; }));
+      cell.appendChild(controls);
+      container.appendChild(cell);
+    }
+  }
+
+  function buildSectionsPanel() {
+    const wrap = document.getElementById('editor-sections');
+    wrap.innerHTML = '';
+    const opts = paletteOptionList();
+    state.sections.forEach(sec => {
+      const group = document.createElement('div');
+      group.className = 'editor-section-group';
+      const title = document.createElement('div');
+      title.className = 'editor-section-group-title';
+      title.textContent = sec.label;
+      group.appendChild(title);
+
+      Object.entries(sec.colors).forEach(([spotKey, spot]) => {
+        const row = document.createElement('div');
+        row.className = 'editor-section-spot';
+        const swatch = document.createElement('div');
+        swatch.className = 'swatch';
+        swatch.dataset.sectionId = sec.id;
+        swatch.dataset.spotKey = spotKey;
+        const slot = state.palette[spot.paletteKey];
+        swatch.style.setProperty('--swatch', slot ? slot.value : '#000');
+        row.appendChild(swatch);
+
+        const lbl = document.createElement('span');
+        lbl.className = 'spot-label';
+        lbl.textContent = spotKey;
+        row.appendChild(lbl);
+
+        const sel = document.createElement('select');
+        sel.className = 'editor-select';
+        opts.forEach(o => {
+          const opt = document.createElement('option');
+          opt.value = o.key;
+          opt.textContent = o.label;
+          if (o.key === spot.paletteKey) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', () => {
+          applySectionSpot(sec, spotKey, sel.value);
+          const slot = state.palette[sel.value];
+          swatch.style.setProperty('--swatch', slot ? slot.value : '#000');
+        });
+        row.appendChild(sel);
+
+        group.appendChild(row);
+      });
+
+      group.appendChild(makeAlphaRow('Background', sec.bgAlpha, 40, v => applySectionBgAlpha(sec, v)));
+      group.appendChild(makeAlphaRow('Box',        sec.boxAlpha, 60, v => applySectionBoxAlpha(sec, v)));
+      wrap.appendChild(group);
+    });
+  }
+
+  function makeAlphaRow(label, initialValue, max, onChange) {
+    const row = document.createElement('div');
+    row.className = 'editor-label-row';
+    const lbl = document.createElement('span');
+    lbl.className = 'editor-label';
+    lbl.textContent = label;
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = '0'; slider.max = String(max); slider.step = '1';
+    slider.value = Math.round((initialValue || 0) * 100);
+    slider.className = 'editor-slider';
+    slider.addEventListener('input', () => {
+      onChange(parseFloat(slider.value) / 100);
+      updateSliderFill(slider);
+    });
+    updateSliderFill(slider);
+    row.appendChild(lbl); row.appendChild(slider);
+    return row;
+  }
+
+  function refreshSectionSpotSwatches() {
+    document.querySelectorAll('#editor-sections .swatch').forEach(sw => {
+      const sec = state.sections.find(s => s.id === sw.dataset.sectionId);
+      if (!sec) return;
+      const spot = sec.colors[sw.dataset.spotKey];
+      if (!spot) return;
+      const slot = state.palette[spot.paletteKey];
+      sw.style.setProperty('--swatch', slot ? slot.value : '#000');
+    });
+  }
+
+  function buildSlots() {
+    const wrap = document.getElementById('editor-slots');
+    wrap.innerHTML = '';
+    state.slots.forEach(slot => {
+      const group = document.createElement('div');
+      group.className = 'editor-section-group';
+      const title = document.createElement('div');
+      title.className = 'editor-section-group-title';
+      title.textContent = slot.purpose;
+      group.appendChild(title);
+
+      const artRow = document.createElement('div');
+      artRow.className = 'editor-label-row';
+      const artLbl = document.createElement('span');
+      artLbl.className = 'editor-label'; artLbl.textContent = 'Artwork';
+      const artSel = document.createElement('select');
+      artSel.className = 'editor-select';
+      ARTWORK_PRESETS.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.value; opt.textContent = p.label;
+        if (p.value === slot.art) opt.selected = true;
+        artSel.appendChild(opt);
+      });
+      artSel.addEventListener('change', () => applySlotArt(slot, artSel.value));
+      artRow.appendChild(artLbl); artRow.appendChild(artSel);
+      group.appendChild(artRow);
+
+      const sizeRow = document.createElement('div');
+      sizeRow.className = 'editor-label-row';
+      const sizeLbl = document.createElement('span');
+      sizeLbl.className = 'editor-label'; sizeLbl.textContent = 'Size';
+      const sizeSel = document.createElement('select');
+      sizeSel.className = 'editor-select';
+      const el = document.querySelector(`[data-slot="${slot.id}"]`);
+      const currentAR = el ? el.style.aspectRatio : '';
+      const currentMH = el ? el.style.minHeight : '';
+      SLOT_PRESETS.forEach((preset, idx) => {
+        const opt = document.createElement('option');
+        opt.value = String(idx); opt.textContent = preset.label;
+        if (preset.type === 'ratio'  && preset.value === currentAR) opt.selected = true;
+        if (preset.type === 'height' && preset.value === currentMH) opt.selected = true;
+        sizeSel.appendChild(opt);
+      });
+      sizeSel.addEventListener('change', () => {
+        applySlotPreset(slot.id, SLOT_PRESETS[parseInt(sizeSel.value, 10)]);
+      });
+      sizeRow.appendChild(sizeLbl); sizeRow.appendChild(sizeSel);
+      group.appendChild(sizeRow);
+
+      wrap.appendChild(group);
+    });
+  }
+
+  function applySlotArt(slot, artClass) {
+    const el = document.querySelector(`[data-slot="${slot.id}"]`);
+    if (!el) return;
+    Array.from(el.classList).forEach(c => { if (c.startsWith('art-')) el.classList.remove(c); });
+    el.classList.add(artClass);
+    slot.art = artClass;
+  }
+
+  function buildFontPickers() {
+    const wrap = document.getElementById('editor-fonts');
+    wrap.innerHTML = '';
+    FONT_ROLES.forEach(role => {
+      const row = document.createElement('div');
+      row.className = 'editor-label-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'editor-label'; lbl.textContent = role.label;
+      const sel = document.createElement('select');
+      sel.className = 'editor-select'; sel.dataset.role = role.key;
+      const current = state.fonts[role.key].family;
+      const list = (state.fonts.available && state.fonts.available[role.key]) || [];
+      if (!list.find(f => f.name === current)) {
+        const o = document.createElement('option');
+        o.value = current; o.textContent = current; o.selected = true;
+        sel.appendChild(o);
+      }
+      list.forEach(f => {
+        const o = document.createElement('option');
+        o.value = f.name; o.textContent = f.name;
+        if (f.name === current) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', () => {
+        const entry = list.find(f => f.name === sel.value);
+        if (entry) applyFont(role, entry);
+      });
+      row.appendChild(lbl); row.appendChild(sel);
+      wrap.appendChild(row);
+    });
+  }
+
+  function buildBgPatternColorOptions() {
+    const sel = document.getElementById('editor-bgp-color');
+    sel.innerHTML = '';
+    paletteOptionList().forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.key; opt.textContent = o.label;
+      if (o.key === state.bgPattern.color) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function applyPaletteColor(key, hex) {
+    document.documentElement.style.setProperty(paletteCssVar(key), hex);
+    state.palette[key].value = hex;
+  }
+
+  function applySectionSpot(sec, spotKey, paletteKey) {
+    sec.colors[spotKey].paletteKey = paletteKey;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty(SECTION_SPOT_VARS[spotKey], paletteVarRef(paletteKey));
+  }
+
+  function applySectionBgAlpha(sec, alpha) {
+    sec.bgAlpha = alpha;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty('--sec-bg-alpha', alpha);
+  }
+
+  function applySectionBoxAlpha(sec, alpha) {
+    sec.boxAlpha = alpha;
+    const el = document.querySelector(`[data-section="${sec.id}"]`);
+    if (el) el.style.setProperty('--sec-box-alpha', alpha);
+  }
+
+  function applySlotPreset(id, preset) {
+    const el = document.querySelector(`[data-slot="${id}"]`);
+    if (!el) return;
+    if (preset.type === 'ratio') { el.style.aspectRatio = preset.value; el.style.minHeight = ''; }
+    else { el.style.minHeight = preset.value; el.style.aspectRatio = ''; }
+  }
+
+  function applyFont(role, entry) {
+    let styleEl = document.getElementById('editor-font-' + role.key);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'editor-font-' + role.key;
+      document.head.appendChild(styleEl);
+    }
+    const faces = (entry.files || []).map(f => {
+      const fmt = /\.otf$/i.test(f.url) ? 'opentype' : 'truetype';
+      return `@font-face { font-family: '${entry.name}'; src: url('${f.url}') format('${fmt}'); font-weight: ${f.weight || 400}; font-style: ${f.style || 'normal'}; font-display: swap; }`;
+    }).join('\n');
+    styleEl.textContent = faces;
+    document.documentElement.style.setProperty(role.cssVar, `'${entry.name}', ${role.fallback}`);
+    state.fonts[role.key] = { family: entry.name, source: 'repo' };
+  }
+
+  async function loadFontsFromRepo() {
+    const treeUrl = 'https://api.github.com/repos/Mudlark-Media-Network/mudlarkmedia.github.io/git/trees/main?recursive=1';
+    const rawBase = 'https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/';
+    const prefix  = 'Website/Style Guide/Fonts/';
+    try {
+      const res = await fetch(treeUrl, { headers: { 'Accept': 'application/vnd.github+json' } });
+      if (!res.ok) throw new Error('GitHub API ' + res.status);
+      const data = await res.json();
+      if (!data.tree) throw new Error('No tree in response');
+
+      const families = new Map();
+      data.tree.forEach(item => {
+        if (item.type !== 'blob') return;
+        if (!item.path.startsWith(prefix)) return;
+        if (!/\.(ttf|otf)$/i.test(item.path)) return;
+        const rel = item.path.slice(prefix.length);
+        const parts = rel.split('/');
+        if (parts.length < 2) return;
+        const folder = parts[0];
+        const fileName = parts.slice(1).join('/');
+        const url = rawBase + encodeURI(item.path);
+        if (!families.has(folder)) families.set(folder, []);
+        families.get(folder).push({ name: fileName, url });
+      });
+
+      const entries = [];
+      families.forEach((files, folder) => {
+        const variable       = files.find(f => /VariableFont/i.test(f.name) && !/Italic/i.test(f.name));
+        const variableItalic = files.find(f => /VariableFont/i.test(f.name) &&  /Italic/i.test(f.name));
+        const regular        = files.find(f => /Regular\.(ttf|otf)$/i.test(f.name));
+        const italic         = files.find(f => /-Italic\.(ttf|otf)$/i.test(f.name));
+        const faces = [];
+        if (variable)             faces.push({ weight: '100 1000', style: 'normal', url: variable.url });
+        else if (regular)         faces.push({ weight: '400',      style: 'normal', url: regular.url });
+        else if (files[0])        faces.push({ weight: '400',      style: 'normal', url: files[0].url });
+        if (variableItalic)       faces.push({ weight: '100 1000', style: 'italic', url: variableItalic.url });
+        else if (italic)          faces.push({ weight: '400',      style: 'italic', url: italic.url });
+        if (faces.length) entries.push({ name: folder.replace(/_/g, ' '), files: faces });
+      });
+
+      if (!entries.length) throw new Error('No font files matched in tree');
+      entries.sort((a, b) => a.name.localeCompare(b.name));
+
+      const isMono = f => /\bmono\b/i.test(f.name);
+      const monos  = entries.filter(isMono);
+      const others = entries.filter(f => !isMono(f));
+      state.fonts.available = {
+        display: others,
+        body:    others,
+        sans:    others,
+        mono:    monos.length ? monos : entries
+      };
+      buildFontPickers();
+    } catch (err) {
+      console.warn('Could not load fonts from repo, keeping bundled list:', err && err.message);
+    }
+  }
+
+  function applyBgPatternShape(shape) {
+    state.bgPattern.shape = shape;
+    const tile = document.querySelector('#bg-pattern-tile');
+    const size = parseFloat(tile.getAttribute('width')) || 24;
+    const inner = PATTERN_SHAPES[shape] || PATTERN_SHAPES.dot;
+    document.querySelector('#bg-pattern-shape').innerHTML = inner(size / 2, size / 2);
+  }
+  function applyBgPatternColor(paletteKey) {
+    state.bgPattern.color = paletteKey;
+    document.documentElement.style.setProperty('--bg-pattern-color', paletteVarRef(paletteKey));
+  }
+  function applyBgPatternSize(size) {
+    state.bgPattern.size = size;
+    const tile = document.querySelector('#bg-pattern-tile');
+    tile.setAttribute('width', size); tile.setAttribute('height', size);
+    applyBgPatternShape(state.bgPattern.shape);
+  }
+  function applyBgPatternAlpha(alpha) {
+    state.bgPattern.alpha = alpha;
+    document.documentElement.style.setProperty('--bg-pattern-alpha', alpha);
+  }
+
+  function bindRhythm() {
+    const v = document.getElementById('editor-rhythm-v');
+    const p = document.getElementById('editor-rhythm-p');
+    const h = document.getElementById('editor-rhythm-h');
+    v.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--rhythm', v.value);
+      state.rhythm.vertical = parseFloat(v.value);
+      updateSliderFill(v);
+    });
+    p.addEventListener('input', () => {
+      const flipped = (parseFloat(p.min) + parseFloat(p.max)) - parseFloat(p.value);
+      document.documentElement.style.setProperty('--pad-x', flipped + 'px');
+      state.rhythm.padX = flipped + 'px';
+      updateSliderFill(p);
+    });
+    h.addEventListener('input', () => {
+      document.documentElement.style.setProperty('--headline-scale', h.value);
+      state.rhythm.headlineScale = parseFloat(h.value);
+      updateSliderFill(h);
+    });
+    [v, p, h].forEach(updateSliderFill);
+  }
+
+  function bindEffects() {
+    const sa = document.getElementById('editor-shadow-alpha');
+    const sb = document.getElementById('editor-shadow-blur');
+    const sh = document.getElementById('editor-shine');
+    const pa = document.getElementById('editor-slot-alpha');
+    sa.addEventListener('input', () => {
+      const v = parseFloat(sa.value) / 100;
+      document.documentElement.style.setProperty('--shadow-alpha', v);
+      state.effects.shadowAlpha = v;
+      updateSliderFill(sa);
+    });
+    sb.addEventListener('input', () => {
+      const v = sb.value + 'px';
+      document.documentElement.style.setProperty('--shadow-blur', v);
+      state.effects.shadowBlur = v;
+      updateSliderFill(sb);
+    });
+    sh.addEventListener('input', () => {
+      const v = parseFloat(sh.value) / 100;
+      document.documentElement.style.setProperty('--shine-alpha', v);
+      state.effects.shineAlpha = v;
+      updateSliderFill(sh);
+    });
+    pa.addEventListener('input', () => {
+      const v = parseFloat(pa.value) / 100;
+      document.documentElement.style.setProperty('--slot-alpha', v);
+      state.effects.slotAlpha = v;
+      updateSliderFill(pa);
+    });
+    [sa, sb, sh, pa].forEach(updateSliderFill);
+  }
+
+  function bindBgPattern() {
+    const sh = document.getElementById('editor-bgp-shape');
+    const co = document.getElementById('editor-bgp-color');
+    const sz = document.getElementById('editor-bgp-size');
+    const al = document.getElementById('editor-bgp-alpha');
+    sh.value = state.bgPattern.shape;
+    sz.value = state.bgPattern.size;
+    al.value = Math.round(state.bgPattern.alpha * 100);
+    sh.addEventListener('change', () => applyBgPatternShape(sh.value));
+    co.addEventListener('change', () => applyBgPatternColor(co.value));
+    sz.addEventListener('input',  () => { applyBgPatternSize(parseInt(sz.value, 10)); updateSliderFill(sz); });
+    al.addEventListener('input',  () => { applyBgPatternAlpha(parseFloat(al.value) / 100); updateSliderFill(al); });
+    updateSliderFill(sz); updateSliderFill(al);
+    applyBgPatternShape(state.bgPattern.shape);
+    applyBgPatternColor(state.bgPattern.color);
+    applyBgPatternSize(state.bgPattern.size);
+    applyBgPatternAlpha(state.bgPattern.alpha);
+  }
+
+  function randomizeAll() {
+    Object.entries(state.palette).forEach(([key, slot]) => {
+      if (!slot.locked) applyPaletteColor(key, randomHex());
+    });
+    buildPaletteInputs();
+    refreshSectionSpotSwatches();
+  }
+
+  function exportHtml() {
+    const doc = document.documentElement.cloneNode(true);
+    doc.querySelector('#editor-overlay')?.classList.remove('open');
+    doc.querySelector('#editor-panel')?.classList.remove('open');
+    const styleBlock = doc.querySelector('style');
+    if (styleBlock) {
+      let css = styleBlock.textContent;
+      Object.entries(state.palette).forEach(([key, slot]) => {
+        const cVar = paletteCssVar(key);
+        css = css.replace(new RegExp('(' + cVar + ':\\s*)#[0-9a-fA-F]{3,6}', 'g'), '$1' + slot.value);
+      });
+      styleBlock.textContent = css;
+    }
+    state.sections.forEach(sec => {
+      const el = doc.querySelector(`[data-section="${sec.id}"]`);
+      if (!el) return;
+      Object.entries(sec.colors).forEach(([spotKey, spot]) => {
+        el.style.setProperty(SECTION_SPOT_VARS[spotKey], paletteVarRef(spot.paletteKey));
+      });
+      el.style.setProperty('--sec-bg-alpha',  sec.bgAlpha);
+      el.style.setProperty('--sec-box-alpha', sec.boxAlpha);
+    });
+    const stateScript = doc.querySelector('#builder-state');
+    if (stateScript) stateScript.textContent = JSON.stringify(state, null, 2);
+    const blob = new Blob(['<!DOCTYPE html>\n' + doc.outerHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = state.page.filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function copyCss() {
+    const lines = [':root {'];
+    Object.entries(state.palette).forEach(([k, slot]) => { lines.push(`  ${paletteCssVar(k)}: ${slot.value};`); });
+    lines.push(`  --pad-x: ${state.rhythm.padX};`);
+    lines.push(`  --rhythm: ${state.rhythm.vertical};`);
+    lines.push(`  --headline-scale: ${state.rhythm.headlineScale};`);
+    lines.push(`  --shadow-alpha: ${state.effects.shadowAlpha};`);
+    lines.push(`  --shadow-blur: ${state.effects.shadowBlur};`);
+    lines.push(`  --shine-alpha: ${state.effects.shineAlpha};`);
+    lines.push(`  --slot-alpha: ${state.effects.slotAlpha};`);
+    lines.push(`  --bg-pattern-color: ${paletteVarRef(state.bgPattern.color)};`);
+    lines.push(`  --bg-pattern-alpha: ${state.bgPattern.alpha};`);
+    lines.push('}');
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+  }
+
+  function resetAll() {
+    Object.entries(DEFAULTS.palette).forEach(([k, slot]) => {
+      state.palette[k] = JSON.parse(JSON.stringify(slot));
+      document.documentElement.style.setProperty(paletteCssVar(k), slot.value);
+    });
+    state.effects = JSON.parse(JSON.stringify(DEFAULTS.effects));
+    document.documentElement.style.setProperty('--shadow-alpha', state.effects.shadowAlpha);
+    document.documentElement.style.setProperty('--shadow-blur',  state.effects.shadowBlur);
+    document.documentElement.style.setProperty('--shine-alpha',  state.effects.shineAlpha);
+    document.documentElement.style.setProperty('--slot-alpha',   state.effects.slotAlpha);
+    document.getElementById('editor-shadow-alpha').value = Math.round(state.effects.shadowAlpha * 100);
+    document.getElementById('editor-shadow-blur').value  = parseFloat(state.effects.shadowBlur);
+    document.getElementById('editor-shine').value        = Math.round(state.effects.shineAlpha * 100);
+    document.getElementById('editor-slot-alpha').value   = Math.round(state.effects.slotAlpha * 100);
+    state.bgPattern = JSON.parse(JSON.stringify(DEFAULTS.bgPattern));
+    applyBgPatternShape(state.bgPattern.shape);
+    applyBgPatternColor(state.bgPattern.color);
+    applyBgPatternSize(state.bgPattern.size);
+    applyBgPatternAlpha(state.bgPattern.alpha);
+    document.getElementById('editor-bgp-shape').value = state.bgPattern.shape;
+    document.getElementById('editor-bgp-size').value  = state.bgPattern.size;
+    document.getElementById('editor-bgp-alpha').value = Math.round(state.bgPattern.alpha * 100);
+    Object.assign(state.rhythm, DEFAULTS.rhythm);
+    document.documentElement.style.setProperty('--rhythm', state.rhythm.vertical);
+    document.documentElement.style.setProperty('--pad-x', state.rhythm.padX);
+    document.documentElement.style.setProperty('--headline-scale', state.rhythm.headlineScale);
+    state.sections.forEach((sec, i) => {
+      const defSec = DEFAULTS.sections[i];
+      Object.entries(defSec.colors).forEach(([spotKey, defSpot]) => {
+        sec.colors[spotKey] = { paletteKey: defSpot.paletteKey };
+        applySectionSpot(sec, spotKey, defSpot.paletteKey);
+      });
+      applySectionBgAlpha(sec,  defSec.bgAlpha  || 0);
+      applySectionBoxAlpha(sec, defSec.boxAlpha || 0);
+    });
+    state.fonts = JSON.parse(JSON.stringify(DEFAULTS.fonts));
+    FONT_ROLES.forEach(role => {
+      document.documentElement.style.setProperty(role.cssVar, `'${state.fonts[role.key].family}', ${role.fallback}`);
+      const injected = document.getElementById('editor-font-' + role.key);
+      if (injected) injected.remove();
+    });
+    state.slots.forEach((slot, i) => {
+      const el = document.querySelector(`[data-slot="${slot.id}"]`);
+      if (el) { el.style.aspectRatio = ''; el.style.minHeight = ''; }
+      const defaultArt = DEFAULTS.slots[i] && DEFAULTS.slots[i].art;
+      if (defaultArt && el) {
+        Array.from(el.classList).forEach(c => { if (c.startsWith('art-')) el.classList.remove(c); });
+        el.classList.add(defaultArt);
+        slot.art = defaultArt;
+      }
+    });
+    buildPaletteInputs();
+    buildSectionsPanel();
+    buildSlots();
+    buildFontPickers();
+    buildBgPatternColorOptions();
+    document.querySelectorAll('.editor-slider').forEach(updateSliderFill);
+  }
+
+  const trigger  = document.querySelector('.editor-trigger');
+  const panel    = document.getElementById('editor-panel');
+  const overlay  = document.getElementById('editor-overlay');
+  const closeBtn = document.getElementById('editor-close');
+
+  function openPanel()  { panel.classList.add('open');    overlay.classList.add('open'); }
+  function closePanel() { panel.classList.remove('open'); overlay.classList.remove('open'); }
+
+  trigger.addEventListener('click', openPanel);
+  closeBtn.addEventListener('click', closePanel);
+  overlay.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('.editor-trigger')) openPanel();
+  });
+
+  buildPaletteInputs();
+  buildSectionsPanel();
+  buildSlots();
+  buildFontPickers();
+  buildBgPatternColorOptions();
+  bindRhythm();
+  bindEffects();
+  bindBgPattern();
+
+  document.getElementById('editor-randomize').addEventListener('click', randomizeAll);
+  document.getElementById('editor-export').addEventListener('click', exportHtml);
+  document.getElementById('editor-copy').addEventListener('click', copyCss);
+  document.getElementById('editor-reset').addEventListener('click', resetAll);
+
+  loadFontsFromRepo();
+})();
+</script>
+
+</body>
+</html>
