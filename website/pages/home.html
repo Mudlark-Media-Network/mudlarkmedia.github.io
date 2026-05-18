@@ -35,22 +35,10 @@
   }
 
   :root {
-    /* ============================== PALETTE (popup-driven) ============================== */
-    /* 10-slot palette. c1-c6 are the brand accents, c7-c10 are neutrals.
-       All semantic vars below alias into these slots — change c-N, the whole
-       page follows. */
-    --c-1:  #c0835e;  /* gold */
-    --c-2:  #9e5c34;  /* rust */
-    --c-3:  #8d6e5b;  /* teal */
-    --c-4:  #d2b3a1;  /* blue */
-    --c-5:  #875a3f;  /* pink */
-    --c-6:  #74665e;  /* green */
-    --c-7:  #211d1b;  /* background */
-    --c-8:  #4d4540;  /* surface */
-    --c-9:  #ece5d2;  /* ink */
-    --c-10: #9c9583;  /* soft ink */
-
-    /* Semantic aliases — these keep the niiiiiice CSS unchanged. */
+    /* Palette (--c-1..--c-10) and popup-driven effect vars are set inline on
+       the <html> element — the editor writes there, so inline always wins.
+       Only the derived/semantic vars (aliases, backgrounds, ink, tints,
+       fonts, sizing, editor theme) live here. */
     --gold:      var(--c-1);
     --rust:      var(--c-2);
     --teal:      var(--c-3);
@@ -84,21 +72,7 @@
     --sans:      'Orbitron', system-ui, sans-serif;
     --mono:      'Azeret Mono', ui-monospace, monospace;
 
-    --pad-x:     clamp(20px, 4vw, 56px);
     --max-w:     1360px;
-
-    /* ============================== POPUP-DRIVEN PAGE EFFECTS ============================== */
-    --rhythm:           0.7;
-    --headline-scale:   1.2;
-
-    --shadow-alpha:     0.80;
-    --shadow-blur:      80px;
-    --shine-alpha:      0.12;
-    --slot-alpha:       0.00;   /* niiiiiice has rich custom art per figure;
-                                   keep the placeholder overlay hidden by default */
-
-    --bg-pattern-color: var(--c-10);
-    --bg-pattern-alpha: 0.00;
 
     /* ============================== EDITOR THEME (hardcoded; chrome stays fixed) ============================== */
     --e-bg:       #1A1916;
@@ -132,6 +106,7 @@
      ============================================================ */
   .masthead-row {
     padding: 36px var(--pad-x) 36px;
+    text-align: center;
   }
 
   /* ============================================================
@@ -147,7 +122,7 @@
   .brand-name {
     font-family: var(--serif-d);
     font-weight: 500;
-    font-size: clamp(48px, 7vw, 88px);
+    font-size: clamp(41px, 5.95vw, 75px);
     letter-spacing: -0.022em;
     text-transform: none;
     color: var(--ink);
@@ -169,6 +144,7 @@
     border-bottom: 1px solid var(--rule);
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 4px 30px;
     font-family: var(--sans);
     font-size: 14.5px;
@@ -725,7 +701,7 @@
     color: var(--ink-soft);
   }
   .foot-col h4 {
-    font-family: var(--sans); font-size: 13px;
+    font-family: var(--sans); font-size: 16.25px;
     letter-spacing: 0.04em; margin-bottom: 16px; font-weight: 500;
   }
   .foot-col.a h4 { color: var(--rust); }
@@ -1380,13 +1356,13 @@
   </div>
 
   <nav class="nav" aria-label="Primary">
-    <a href="/website/pages/ethos" class="c-gold">Network Ethos</a>
-    <a href="/website/pages/articles" class="c-rust">Articles</a>
-    <a href="/website/pages/opsec" class="c-teal">Digital OpSec</a>
-    <a href="/website/pages/psych-war" class="c-pink">Psychological Warfare</a>
-    <a href="/website/pages/media" class="c-blue">Media</a>
-    <a href="/website/pages/mindmap" class="c-green">Mind Map</a>
-    <a href="/website/pages/contact" class="c-cream">Contact</a>
+    <a href="/website/pages/ethos.html" class="c-gold">Network Ethos</a>
+    <a href="/website/pages/articles.html" class="c-rust">Articles</a>
+    <a href="/website/pages/opsec.html" class="c-teal">Digital OpSec</a>
+    <a href="/website/pages/psychological-warfare.html" class="c-pink">Psychological Warfare</a>
+    <a href="/website/pages/media.html" class="c-blue">Media</a>
+    <a href="/website/pages/mindmap.html" class="c-green">Mind Map</a>
+    <a href="/website/pages/contact.html" class="c-cream">Contact</a>
   </nav>
 </header>
 
@@ -1416,7 +1392,7 @@
           <span class="sep">·</span>
           posted 04 May 2026
         </p>
-        <a href="/website/pages/articles/fallout-troy-barile-simleness" class="lead-go">Read the article <span class="arr">→</span></a>
+        <a href="/website/pages/articles/fallout-troy-barile-simleness.html" class="lead-go">Read the article <span class="arr">→</span></a>
       </div>
 
     </div>
@@ -1427,17 +1403,17 @@
     <div class="sec-head h-rust">
       <h2>Articles</h2>
       <span class="grow"></span>
-      <a href="/website/pages/articles" class="all">See the archive →</a>
+      <a href="/website/pages/articles.html" class="all">See the archive →</a>
     </div>
 
     <div class="articles">
 
-      <article class="a-card">
+      <a class="a-card" href="/website/pages/articles/the-horrors-were-always-real.html">
         <span class="a-kicker">25 Apr 2026</span>
         <h3 class="a-head">The Horrors Were Always Real.</h3>
         <p class="a-deck">How bad actors have led the world astray about the story of Sascha Barros (THEY/THEM) </p>
         <p class="a-meta">By <b>L.&nbsp;V.&nbsp;Maestri</b> · <b>~90&nbsp;min</b></p>
-      </article>
+      </a>
 
       <article class="a-card is-quote">
         <span class="a-kicker">Editor’s Note · 07 May</span>
@@ -1447,12 +1423,12 @@
         <p class="a-meta">PLACEHOLDER<b>PLACEHOLDER&nbsp;II</b></p>
       </article>
 
-      <article class="a-card">
+      <a class="a-card" href="/website/pages/articles/the-conclusion-came-first.html">
         <span class="a-kicker">11 Apr 2026</span>
         <h3 class="a-head">The Conclusion Came First.</h3>
         <p class="a-deck">How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead — at the cost of victims.</p>
         <p class="a-meta">By <b>L.&nbsp;V.&nbsp;Maestri</b> · <b>~30&nbsp;min</b></p>
-      </article>
+      </a>
 
       <article class="a-card">
         <span class="a-kicker">Method · 01 May</span>
@@ -1469,7 +1445,7 @@
     <div class="sec-head h-pink">
       <h2>Psychological Warfare</h2>
       <span class="grow"></span>
-      <a href="/website/pages/psych-war" class="all">All case files →</a>
+      <a href="/website/pages/psychological-warfare.html" class="all">All case files →</a>
     </div>
 
     <div class="psych-grid">
@@ -1524,7 +1500,7 @@
       <div class="sec-head h-teal">
         <h2>Digital OpSec</h2>
         <span class="grow"></span>
-        <a href="/website/pages/opsec" class="all">All guides →</a>
+        <a href="/website/pages/opsec.html" class="all">All guides →</a>
       </div>
 
       <div class="opsec-list">
@@ -1575,7 +1551,7 @@
       <div class="sec-head h-gold">
         <h2>The Network</h2>
         <span class="grow"></span>
-        <a href="/website/pages/contact" class="all">Join in →</a>
+        <a href="/website/pages/contact.html" class="all">Join in →</a>
       </div>
 
       <div class="members-list">
@@ -1591,7 +1567,7 @@
         <div class="mem"><div class="nm">T.&nbsp;Jian</div><div class="rl">Researcher · Vancouver, BC</div></div>
       </div>
       <p class="members-note">
-        We do not solicit qualifications. <a href="/website/pages/contact">Reach out</a> with what motivates you and we will find a place for it.
+        We do not solicit qualifications. <a href="/website/pages/contact.html">Reach out</a> with what motivates you and we will find a place for it.
       </p>
     </div>
 
@@ -1602,21 +1578,21 @@
     <div class="sec-head h-blue">
       <h2>Media</h2>
       <span class="grow"></span>
-      <a href="/website/pages/media" class="all">All works →</a>
+      <a href="/website/pages/media.html" class="all">All works →</a>
     </div>
 
     <div class="media-grid">
 
-      <a href="/website/pages/media/track-the-quiet-after" class="m-tile m-music">
-        <figure class="m-art art-rings" data-slot="media-music-art" data-slot-purpose="Music — LP rings">
+      <a href="/website/pages/media/track-the-quiet-after.html" class="m-tile m-music">
+        <figure class="m-art art-rings" data-slot="media-music-art">
           <span class="runtime">4:18</span>
         </figure>
         <h4>The Quiet After</h4>
         <p class="by">Original composition by <b>R.&nbsp;Patel</b></p>
       </a>
 
-      <a href="/website/pages/media/in-conversation" class="m-tile m-video">
-        <figure class="m-art art-stripes-warm" data-slot="media-video-art" data-slot-purpose="Video — play frame">
+      <a href="/website/pages/media/in-conversation.html" class="m-tile m-video">
+        <figure class="m-art art-stripes-warm" data-slot="media-video-art">
           <span class="runtime">22:04</span>
           <span class="play" aria-hidden="true"></span>
         </figure>
@@ -1624,8 +1600,8 @@
         <p class="by">With <b>D.&nbsp;Okonkwo</b> and a former records officer</p>
       </a>
 
-      <a href="/website/pages/media/courtroom-hallway" class="m-tile m-audio">
-        <figure class="m-art art-radial" data-slot="media-audio-art" data-slot-purpose="Audio — waveform">
+      <a href="/website/pages/media/courtroom-hallway.html" class="m-tile m-audio">
+        <figure class="m-art art-radial" data-slot="media-audio-art">
           <span class="runtime">14:11</span>
           <span class="bar" style="height: 22%"></span>
           <span class="bar" style="height: 54%"></span>
@@ -1646,8 +1622,8 @@
         <p class="by">Recorded by <b>K.&nbsp;Mortensen</b></p>
       </a>
 
-      <a href="/website/pages/media/portraits-in-absence" class="m-tile m-visual">
-        <figure class="m-art art-blocks" data-slot="media-visual-art" data-slot-purpose="Visual — photo plates">
+      <a href="/website/pages/media/portraits-in-absence.html" class="m-tile m-visual">
+        <figure class="m-art art-blocks" data-slot="media-visual-art">
           <span class="runtime">12 plates</span>
         </figure>
         <h4>Portraits in the absence of</h4>
@@ -1664,7 +1640,7 @@
       <div class="sec-head h-green">
         <h2>Academic &amp; Cited</h2>
         <span class="grow"></span>
-        <a href="/website/pages/articles/cited" class="all">Full bibliography →</a>
+        <a href="/website/pages/articles/cited.html" class="all">Full bibliography →</a>
       </div>
 
       <div class="papers">
@@ -1695,7 +1671,7 @@
       <div class="sec-head h-blue">
         <h2>Mind Map</h2>
         <span class="grow"></span>
-        <a href="/website/pages/mindmap" class="all">Open the full map →</a>
+        <a href="/website/pages/mindmap.html" class="all">Open the full map →</a>
       </div>
 
       <div class="mindmap">
@@ -1718,7 +1694,7 @@
           <span class="mm-node o" style="left: 90%; top: 50%;">Funders</span>
         </div>
         <p class="mm-cap">
-          Each node opens its underlying documents. The full map links <b>3,114 entities</b> across <b>23 case files</b>. <a href="/website/pages/mindmap">Open the full map →</a>
+          Each node opens its underlying documents. The full map links <b>3,114 entities</b> across <b>23 case files</b>. <a href="/website/pages/mindmap.html">Open the full map →</a>
         </p>
       </div>
     </div>
@@ -1741,29 +1717,29 @@
       <div class="foot-col a">
         <h4>Take Time</h4>
         <ul>
-          <li><a href="/website/pages/articles">Articles</a></li>
-          <li><a href="/website/pages/psych-war">Psychological Warfare</a></li>
-          <li><a href="/website/pages/media">Media &amp; Music</a></li>
-          <li><a href="/website/pages/mindmap">Mind Map</a></li>
+          <li><a href="/website/pages/articles.html">Articles</a></li>
+          <li><a href="/website/pages/psychological-warfare.html">Psychological Warfare</a></li>
+          <li><a href="/website/pages/media.html">Media &amp; Music</a></li>
+          <li><a href="/website/pages/mindmap.html">Mind Map</a></li>
         </ul>
       </div>
 
       <div class="foot-col b">
         <h4>Take Care</h4>
         <ul>
-          <li><a href="/website/pages/opsec">Digital OpSec</a></li>
-          <li><a href="/website/pages/opsec/threat-model">Threat Models</a></li>
-          <li><a href="/website/pages/opsec/signal">Signal &amp; Encrypted Chat</a></li>
-          <li><a href="/website/pages/opsec/identity">Identity Hygiene</a></li>
+          <li><a href="/website/pages/opsec.html">Digital OpSec</a></li>
+          <li><a href="/website/pages/opsec/threat-model.html">Threat Models</a></li>
+          <li><a href="/website/pages/opsec/signal.html">Signal &amp; Encrypted Chat</a></li>
+          <li><a href="/website/pages/opsec/identity.html">Identity Hygiene</a></li>
         </ul>
       </div>
 
       <div class="foot-col c">
         <h4>Take Action</h4>
         <ul>
-          <li><a href="/website/pages/ethos">Network Ethos</a></li>
-          <li><a href="/website/pages/contact#submit">Submit a Story</a></li>
-          <li><a href="/website/pages/contact#projects">Suggest a Project</a></li>
+          <li><a href="/website/pages/ethos.html">Network Ethos</a></li>
+          <li><a href="/website/pages/contact.html#submit">Submit a Story</a></li>
+          <li><a href="/website/pages/contact.html#projects">Suggest a Project</a></li>
           <li><a href="https://github.com/mudlark-media">GitHub Repo ↗</a></li>
         </ul>
       </div>
