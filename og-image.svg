@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#211d1b"/>
+  <!-- subtle texture lines -->
+  <line x1="0" y1="628" x2="1200" y2="628" stroke="#3a332e" stroke-width="2"/>
+  <line x1="0" y1="2"   x2="1200" y2="2"   stroke="#3a332e" stroke-width="2"/>
+  <!-- MM monogram -->
+  <text x="600" y="310" text-anchor="middle" dominant-baseline="middle"
+        font-family="'Trebuchet MS','Arial Narrow',Arial,sans-serif"
+        font-weight="700" font-size="220" letter-spacing="-8" fill="#c0835e" opacity="0.18">MM</text>
+  <!-- Site name -->
+  <text x="600" y="272" text-anchor="middle"
+        font-family="'Trebuchet MS','Arial Narrow',Arial,sans-serif"
+        font-weight="700" font-size="68" letter-spacing="6" fill="#c0835e">MUDLARK MEDIA</text>
+  <!-- Tagline -->
+  <text x="600" y="348" text-anchor="middle"
+        font-family="Georgia,serif"
+        font-size="26" letter-spacing="2" fill="#9c9583">A zero-fund, volunteer-run independent media network</text>
+  <!-- Rule -->
+  <line x1="480" y1="390" x2="720" y2="390" stroke="#3a332e" stroke-width="1.5"/>
+  <text x="600" y="415" text-anchor="middle"
+        font-family="'Courier New',monospace"
+        font-size="18" letter-spacing="3" fill="#6a6259">mudlarkmedia.net</text>
+</svg>
