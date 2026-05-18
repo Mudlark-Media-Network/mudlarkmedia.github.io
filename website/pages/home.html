@@ -746,7 +746,7 @@
   main section[data-section]::before {
     content: '';
     position: absolute;
-    inset: -28px calc(-1 * var(--pad-x));
+    inset: 0 calc(-1 * var(--pad-x));
     background: var(--sec, transparent);
     opacity: var(--sec-bg-alpha, 0);
     z-index: -1;
@@ -1335,6 +1335,317 @@
   }
   .editor-button:hover { border-color: var(--e-accent); color: var(--e-fg); }
   .editor-actions { display: flex; flex-direction: column; gap: 6px; }
+
+
+  /* ============================================================
+     ╳  POLISH LAYER  —  appended overrides + flourishes
+     ============================================================ */
+
+  /* ---- FIX: give sections proper internal breathing room so the
+     non-overlapping backgrounds have presence at the seams ---- */
+  main section[data-section] {
+    padding-top: calc(40px * var(--rhythm));
+    padding-bottom: calc(40px * var(--rhythm));
+  }
+  /* the lead has its own top padding already, don't double up */
+  main section[data-section].lead { padding-top: 0; }
+  /* and the first .sec-head sits up against the section top; tighten */
+  main section[data-section] > .sec-head:first-child { margin-top: calc(20px * var(--rhythm)); }
+
+  /* ============================================================
+     FLOURISH  —  Masthead registration ticks  (archival mark)
+     ============================================================ */
+  .masthead-row { position: relative; }
+  .masthead-row::before,
+  .masthead-row::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    width: 22px; height: 22px;
+    border: 1px solid var(--rule-on);
+    opacity: 0.65;
+    pointer-events: none;
+  }
+  .masthead-row::before { left: var(--pad-x); border-right: none; border-bottom: none; }
+  .masthead-row::after  { right: var(--pad-x); border-left: none; border-bottom: none; }
+
+
+  /* ============================================================
+     FLOURISH  —  Matted frame around figures (cinema/museum look)
+     ============================================================ */
+  .lead-fig,
+  .pw-fig,
+  .m-art,
+  .mm-viz {
+    outline: 1px solid var(--rule-on);
+    outline-offset: 8px;
+  }
+  /* ensure the matted frame doesn't visually collide with the .stamp */
+  .lead-fig { isolation: isolate; }
+
+  /* ============================================================
+     INTERACTION  —  Nav dot glow halo on hover
+     ============================================================ */
+  .nav a {
+    transition: color 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .nav a::before {
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+  }
+  .nav a:hover::before { transform: translateY(-2px) scale(1.55); }
+  .nav a.c-gold:hover::before  { box-shadow: 0 0 12px var(--gold); }
+  .nav a.c-rust:hover::before  { box-shadow: 0 0 12px var(--rust); }
+  .nav a.c-teal:hover::before  { box-shadow: 0 0 12px var(--teal); }
+  .nav a.c-pink:hover::before  { box-shadow: 0 0 12px var(--pink); }
+  .nav a.c-blue:hover::before  { box-shadow: 0 0 12px var(--blue); }
+  .nav a.c-green:hover::before { box-shadow: 0 0 12px var(--green); }
+  .nav a.c-cream:hover::before { box-shadow: 0 0 12px var(--ink-soft); }
+  .nav a:focus-visible { outline: 2px dashed currentColor; outline-offset: 4px; }
+
+  /* ============================================================
+     INTERACTION  —  Lead "Read" button: shimmer sweep + lift
+     ============================================================ */
+  .lead-go {
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.04em;
+    transition: background 0.2s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+    isolation: isolate;
+  }
+  .lead-go::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.18) 50%, transparent 75%);
+    transform: translateX(-110%);
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .lead-go:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+  .lead-go:hover::after { transform: translateX(110%); }
+  .lead-go:active { transform: translateY(0); }
+  .lead-go .arr {
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: inline-block;
+  }
+  .lead-go:hover .arr { transform: translateX(4px); }
+
+  /* ============================================================
+     INTERACTION  —  Article tags fill on hover
+     ============================================================ */
+  .lead-tags span {
+    transition: color 0.2s ease, background 0.2s ease;
+    padding: 2px 6px;
+    margin: -2px -6px;
+  }
+  .lead-tags span:hover { color: var(--ink); }
+  .lead-tags .t1:hover { background: color-mix(in srgb, transparent 80%, var(--pink)); }
+  .lead-tags .t2:hover { background: color-mix(in srgb, transparent 80%, var(--rust)); }
+  .lead-tags .t3:hover { background: color-mix(in srgb, transparent 80%, var(--gold)); }
+
+  /* ============================================================
+     INTERACTION  —  Article cards: lift + colored glow + accent grows
+     ============================================================ */
+  .a-card {
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .a-card:hover { transform: translateY(-4px); }
+  .a-card::before {
+    transition: height 0.25s ease, box-shadow 0.3s ease;
+  }
+  .a-card:hover::before {
+    height: 4px;
+    box-shadow: 0 0 18px var(--rust);
+  }
+  .a-card.is-quote:hover::before {
+    box-shadow: 0 0 18px var(--gold);
+  }
+  /* refined divider above article meta */
+  .a-meta {
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ============================================================
+     INTERACTION  —  Psych Warfare list items: slide + bouncy number
+     ============================================================ */
+  .pw-item {
+    transition: padding-left 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pw-item:hover { padding-left: 6px; }
+  .pw-item .n {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: left center;
+  }
+  .pw-item:hover .n { transform: scale(1.18); }
+
+  /* ============================================================
+     INTERACTION  —  OpSec numbers scale dramatically on hover
+     ============================================================ */
+  .op-item {
+    transition: padding-left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .op-item .num {
+    display: inline-block;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: left center;
+  }
+  .op-item:hover .num { transform: scale(1.12); }
+  .op-item .level {
+    transition: letter-spacing 0.25s ease;
+  }
+  .op-item:hover .level { letter-spacing: 0.18em; }
+
+  /* ============================================================
+     INTERACTION  —  Members list rows
+     ============================================================ */
+  .mem {
+    transition: background 0.2s ease, padding-left 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    padding-left: 0;
+    padding-right: 12px;
+  }
+  .mem:hover {
+    background: color-mix(in srgb, transparent 94%, var(--ink));
+    padding-left: 8px;
+  }
+
+  /* ============================================================
+     INTERACTION  —  Media tiles: lift + colored glow under each art
+     ============================================================ */
+  .m-tile {
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .m-tile:hover { transform: translateY(-4px); }
+  .m-music:hover .m-art  { box-shadow: 0 8px var(--shadow-blur) rgba(0,0,0,var(--shadow-alpha)), inset 0 80px 60px -40px rgba(255,255,255,var(--shine-alpha)), 0 0 28px color-mix(in srgb, transparent 65%, var(--blue)); }
+  .m-video:hover .m-art  { box-shadow: 0 8px var(--shadow-blur) rgba(0,0,0,var(--shadow-alpha)), inset 0 80px 60px -40px rgba(255,255,255,var(--shine-alpha)), 0 0 28px color-mix(in srgb, transparent 65%, var(--gold)); }
+  .m-audio:hover .m-art  { box-shadow: 0 8px var(--shadow-blur) rgba(0,0,0,var(--shadow-alpha)), inset 0 80px 60px -40px rgba(255,255,255,var(--shine-alpha)), 0 0 28px color-mix(in srgb, transparent 65%, var(--teal)); }
+  .m-visual:hover .m-art { box-shadow: 0 8px var(--shadow-blur) rgba(0,0,0,var(--shadow-alpha)), inset 0 80px 60px -40px rgba(255,255,255,var(--shine-alpha)), 0 0 28px color-mix(in srgb, transparent 65%, var(--pink)); }
+  .m-art { transition: box-shadow 0.35s ease; }
+
+  /* media: subtle play-triangle / waveform animations on hover */
+  .m-video .play { transition: filter 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .m-video:hover .play { filter: drop-shadow(0 0 10px var(--gold)); transform: scale(1.12); }
+  .m-audio .m-art .bar { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: center; }
+  .m-audio:hover .m-art .bar:nth-child(odd)  { transform: scaleY(1.25); }
+  .m-audio:hover .m-art .bar:nth-child(even) { transform: scaleY(0.85); }
+
+  /* ============================================================
+     INTERACTION  —  Papers: hover slide + format badge fills
+     ============================================================ */
+  .paper {
+    transition: padding-left 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .paper:hover { padding-left: 6px; }
+  .paper .fmt {
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .paper .fmt.pdf:hover  { background: color-mix(in srgb, transparent 85%, var(--rust));  border-color: var(--rust); }
+  .paper .fmt.html:hover { background: color-mix(in srgb, transparent 85%, var(--blue));  border-color: var(--blue); }
+  .paper .fmt.book:hover { background: color-mix(in srgb, transparent 85%, var(--gold));  border-color: var(--gold); }
+  .paper .yr {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: left center;
+  }
+  .paper:hover .yr { transform: scale(1.1); }
+
+  /* ============================================================
+     ICON  —  Replace sequence numbers in lists with a simple diamond
+     glyph. Affects ONLY ordered-item markers, never dates/years.
+     ============================================================ */
+  .op-item .num,
+  .pw-item .n {
+    /* hide the digit text without breaking grid layout / baseline */
+    font-size: 0 !important;
+    line-height: 1;
+  }
+  .op-item .num::before,
+  .pw-item .n::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* the psych-warfare list lives in a narrower column — slightly smaller */
+  .pw-item .n::before {
+    width: 11px;
+    height: 11px;
+  }
+  /* on item hover, bounce the diamond a touch (replaces the old number-scale) */
+  .op-item:hover .num::before,
+  .pw-item:hover .n::before {
+    transform: rotate(45deg) scale(1.25);
+  }
+  /* override the earlier scale hover on the wrapper to avoid double-scaling */
+  .op-item:hover .num { transform: none; }
+  .pw-item:hover .n   { transform: none; }
+
+  /* ============================================================
+     LIFE  —  Subtle breathing on central mind-map node
+     Signals 'live data' without being noisy.
+     ============================================================ */
+  .mm-node.x {
+    animation: mmPulse 3.6s ease-in-out infinite;
+  }
+  @keyframes mmPulse {
+    0%, 100% { box-shadow: 0 0 24px color-mix(in srgb, transparent 60%, var(--blue)); }
+    50%      { box-shadow: 0 0 44px color-mix(in srgb, transparent 35%, var(--blue)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mm-node.x { animation: none; }
+  }
+
+  /* ============================================================
+     FOOTER  —  Column separators + refined hover
+     ============================================================ */
+  .foot-col { position: relative; padding-left: 28px; }
+  .foot-col::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 4px; bottom: 4px;
+    width: 1px;
+    background: var(--rule-on);
+    opacity: 0.6;
+  }
+  .foot-brand { padding-left: 0; }
+  .foot-brand::before { display: none; }
+  .foot-col a {
+    transition: color 0.2s ease, padding-left 0.2s ease;
+  }
+  .foot-col a:hover { padding-left: 4px; }
+  @media (max-width: 1100px) {
+    .foot-col, .foot-brand { padding-left: 0; }
+    .foot-col::before { display: none; }
+  }
+
+  /* ============================================================
+     INTERACTION  —  All section "all" links: refined
+     ============================================================ */
+  .sec-head .all {
+    transition: color 0.2s ease, border-color 0.2s ease, letter-spacing 0.2s ease;
+  }
+  .sec-head .all:hover { letter-spacing: 0.02em; }
+
+  /* ============================================================
+     COMPOSITIONAL  —  members-note link hover refinement
+     ============================================================ */
+  .members-note a { transition: opacity 0.2s ease; }
+  .members-note a:hover { opacity: 0.72; }
+
+  /* ============================================================
+     COMPOSITIONAL  —  mm-cap link refinement
+     ============================================================ */
+  .mm-cap a { transition: opacity 0.2s ease; }
+  .mm-cap a:hover { opacity: 0.72; }
+
 </style>
 </head>
 <body>
