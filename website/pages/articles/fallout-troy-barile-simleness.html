@@ -4013,10 +4013,25 @@ footer {
     activeClone = clone;
     activeOriginal = img;
 
-    const finalLeft = rect.left;
-    const finalTop  = rect.top;
-    const finalRight  = finalLeft + rect.width  * scale;
-    const finalBottom = finalTop  + rect.height * scale;
+    let finalLeft = rect.left;
+    let finalTop  = rect.top;
+    const expandedW = rect.width  * scale;
+    const expandedH = rect.height * scale;
+
+    // Shift left if overflow right
+    if (finalLeft + expandedW > window.innerWidth) {
+      finalLeft = Math.max(0, window.innerWidth - expandedW);
+    }
+    // Shift up if overflow bottom
+    if (finalTop + expandedH > window.innerHeight) {
+      finalTop = Math.max(0, window.innerHeight - expandedH);
+    }
+
+    const finalRight  = finalLeft + expandedW;
+    const finalBottom = finalTop  + expandedH;
+
+    clone.style.left = finalLeft + 'px';
+    clone.style.top = finalTop + 'px';
 
     requestAnimationFrame(() => {
       clone.style.transform = `scale(${scale})`;
