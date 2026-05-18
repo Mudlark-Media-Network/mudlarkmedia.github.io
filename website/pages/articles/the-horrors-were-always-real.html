@@ -34,12 +34,11 @@
   font-weight: 300 700; font-style: normal; font-display: swap;
 }
 
-/* ============================== PALETTE + ROOT ============================== */
+/* ============================== ROOT (derived vars only) ============================== */
+/* Palette --c-1..--c-10 and popup-driven effect vars are set inline on
+   the <html> element — the editor writes there, so inline always wins.
+   Only derived/semantic vars live here. */
 :root {
-  --c-1:  #c97748; --c-2:  #a85228; --c-3:  #8d6e5b; --c-4:  #d4a98e;
-  --c-5:  #8d4e30; --c-6:  #74665e; --c-7:  #181412; --c-8:  #3c3530;
-  --c-9:  #ece5d2; --c-10: #9c9583;
-
   --gold: var(--c-1); --rust: var(--c-2); --teal: var(--c-3);
   --blue: var(--c-4); --pink: var(--c-5); --green: var(--c-6);
 
@@ -65,18 +64,8 @@
   --sans:    'Orbitron', system-ui, sans-serif;
   --mono:    'Azeret Mono', ui-monospace, monospace;
 
-  --pad-x: clamp(20px, 4vw, 56px);
   --max-w: 1360px;
   --art-max: 1180px;
-
-  --rhythm: 0.95;
-  --headline-scale: 0.85;
-  --shadow-alpha: 0.8;
-  --shadow-blur: 80px;
-  --shine-alpha: 0.16;
-  --slot-alpha: 0;
-  --bg-pattern-color: var(--c-2);
-  --bg-pattern-alpha: 0.08;
 
   /* editor */
   --e-bg: #1A1916; --e-input-bg: #131210; --e-fg: #ECE5D2;
@@ -111,11 +100,11 @@ body > * { position: relative; z-index: 1; }
 body > .bg-pattern { z-index: 0; }
 
 /* ============================== MASTHEAD + NAV (match home) ============================== */
-.masthead-row { padding: 36px var(--pad-x) 36px; }
+.masthead-row { padding: 36px var(--pad-x) 36px; text-align: center; }
 .brand { display: inline-flex; align-items: center; gap: 16px; color: var(--ink); line-height: 1; }
 .brand-name {
   font-family: var(--serif-d); font-weight: 500;
-  font-size: clamp(48px, 7vw, 88px);
+  font-size: clamp(41px, 5.95vw, 75px);
   letter-spacing: -0.022em; color: var(--ink);
   font-variation-settings: 'opsz' 144, 'SOFT' 40; line-height: 0.95;
 }
@@ -125,7 +114,7 @@ body > .bg-pattern { z-index: 0; }
 .nav {
   padding: 18px var(--pad-x);
   border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-  display: flex; flex-wrap: wrap; gap: 4px 30px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 30px;
   font-family: var(--sans); font-size: 14.5px;
 }
 .nav a { display: inline-flex; align-items: baseline; gap: 9px; padding: 6px 0; color: var(--ink); transition: color 0.15s; }
@@ -1259,13 +1248,13 @@ footer {
   </div>
 
   <nav class="nav" aria-label="Primary">
-    <a href="/website/pages/ethos" class="c-gold">Network Ethos</a>
-    <a href="/website/pages/articles" class="c-rust">Articles</a>
-    <a href="/website/pages/opsec" class="c-teal">Digital OpSec</a>
-    <a href="/website/pages/psych-war" class="c-pink">Psychological Warfare</a>
-    <a href="/website/pages/media" class="c-blue">Media</a>
-    <a href="/website/pages/mindmap" class="c-green">Mind Map</a>
-    <a href="/website/pages/contact" class="c-cream">Contact</a>
+    <a href="/website/pages/ethos.html" class="c-gold">Network Ethos</a>
+    <a href="/website/pages/articles.html" class="c-rust">Articles</a>
+    <a href="/website/pages/opsec.html" class="c-teal">Digital OpSec</a>
+    <a href="/website/pages/psychological-warfare.html" class="c-pink">Psychological Warfare</a>
+    <a href="/website/pages/media.html" class="c-blue">Media</a>
+    <a href="/website/pages/mindmap.html" class="c-green">Mind Map</a>
+    <a href="/website/pages/contact.html" class="c-cream">Contact</a>
   </nav>
 </header>
 
@@ -1883,29 +1872,29 @@ footer {
       <div class="foot-col a">
         <h4>Take Time</h4>
         <ul>
-          <li><a href="/website/pages/articles">Articles</a></li>
-          <li><a href="/website/pages/psych-war">Psychological Warfare</a></li>
-          <li><a href="/website/pages/media">Media &amp; Music</a></li>
-          <li><a href="/website/pages/mindmap">Mind Map</a></li>
+          <li><a href="/website/pages/articles.html">Articles</a></li>
+          <li><a href="/website/pages/psychological-warfare.html">Psychological Warfare</a></li>
+          <li><a href="/website/pages/media.html">Media &amp; Music</a></li>
+          <li><a href="/website/pages/mindmap.html">Mind Map</a></li>
         </ul>
       </div>
 
       <div class="foot-col b">
         <h4>Take Care</h4>
         <ul>
-          <li><a href="/website/pages/opsec">Digital OpSec</a></li>
-          <li><a href="/website/pages/opsec/threat-model">Threat Models</a></li>
-          <li><a href="/website/pages/opsec/signal">Signal &amp; Encrypted Chat</a></li>
-          <li><a href="/website/pages/opsec/identity">Identity Hygiene</a></li>
+          <li><a href="/website/pages/opsec.html">Digital OpSec</a></li>
+          <li><a href="/website/pages/opsec/threat-model.html">Threat Models</a></li>
+          <li><a href="/website/pages/opsec/signal.html">Signal &amp; Encrypted Chat</a></li>
+          <li><a href="/website/pages/opsec/identity.html">Identity Hygiene</a></li>
         </ul>
       </div>
 
       <div class="foot-col c">
         <h4>Take Action</h4>
         <ul>
-          <li><a href="/website/pages/ethos">Network Ethos</a></li>
-          <li><a href="/website/pages/contact#submit">Submit a Story</a></li>
-          <li><a href="/website/pages/contact#projects">Suggest a Project</a></li>
+          <li><a href="/website/pages/ethos.html">Network Ethos</a></li>
+          <li><a href="/website/pages/contact.html#submit">Submit a Story</a></li>
+          <li><a href="/website/pages/contact.html#projects">Suggest a Project</a></li>
           <li><a href="https://github.com/mudlark-media">GitHub Repo &nearr;</a></li>
         </ul>
       </div>
