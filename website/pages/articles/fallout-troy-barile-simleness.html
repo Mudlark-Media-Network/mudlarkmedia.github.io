@@ -1383,6 +1383,281 @@ footer {
   .lead-fig { aspect-ratio: 4 / 3; }
   .editor-panel { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
 }
+
+
+/* ============================================================
+   AR-PULL CITE — restyle as prose continuation, not a label.
+   The cite elements are the author's own written content that
+   extends the pull quote thought. Match the pull quote's serif
+   italic style so they read as one continuous statement.
+   ============================================================ */
+.ar-pull cite {
+  font-family: var(--serif-d) !important;
+  font-size: inherit !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: inherit !important;
+  text-transform: none !important;
+  color: var(--ink) !important;
+  margin-top: 8px !important;
+  display: block !important;
+  font-variation-settings: 'opsz' 60, 'SOFT' 100 !important;
+}
+
+
+/* ============================================================
+   REMOVE ALL LABELS — no metadata headers on quote blocks.
+   ar-receipt .who       : speaker attributions ("TROY · VIA FACEBOOK" etc)
+   ar-chain h4           : "THE LOGIC CHAIN I SENT THROUGH THE MEDIATOR"
+   ar-warn .label        : "SECTION ASIDE · LETHAL STAKES" etc
+   ============================================================ */
+.ar-receipt .who     { display: none !important; }
+.ar-chain h4         { display: none !important; }
+.ar-warn .label      { display: none !important; }
+/* remove top margin that was reserving space for the now-hidden who label */
+.ar-receipt p:first-of-type { margin-top: 0 !important; }
+/* ar-chain needs a bit of top breathing room since its h4 is gone */
+.ar-chain ol         { margin-top: 0 !important; }
+
+
+/* ============================================================
+   UNIFIED QUOTE STYLE — ar-receipt and ar-chat both use the
+   same editorial blockquote treatment. Left/right accent bar
+   per speaker gives visual distinction without bubble fills.
+   Italic text throughout signals paraphrase, not exact quote.
+   ============================================================ */
+
+/* ar-receipt: remove the box, add editorial left-bar */
+.ar-receipt {
+  background: transparent !important;
+  border: none !important;
+  border-left: 3px solid var(--rust) !important;
+  padding: 0 0 0 22px !important;
+  margin: 28px 0 !important;
+}
+.ar-receipt p {
+  font-style: italic !important;
+  color: var(--ink) !important;
+  margin-bottom: 12px !important;
+}
+.ar-receipt p:last-child { margin-bottom: 0 !important; }
+.ar-receipt .who {
+  margin-bottom: 10px !important;
+  color: var(--rust) !important;
+  letter-spacing: 0.12em !important;
+}
+/* Sascha's receipt gets blue bar instead */
+.ar-receipt:has(.who:first-child) { border-left-color: var(--rust); }
+
+/* ar-chat: add colored accent bars for speaker distinction */
+.ar-chat .msg.me {
+  border-left: 3px solid var(--blue) !important;
+  padding-left: 18px !important;
+  padding-right: 20% !important;
+}
+.ar-chat .msg.troy {
+  border-right: 3px solid var(--rust) !important;
+  padding-right: 18px !important;
+  padding-left: 20% !important;
+}
+.ar-chat .msg.med {
+  border-left: 3px solid var(--teal) !important;
+  padding-left: 18px !important;
+  padding-right: 10% !important;
+}
+
+/* ============================================================
+   SPACING FIX — equal breathing room above and below the
+   first section heading ("Who? What? Why?")
+   ============================================================ */
+.dossier-head {
+  margin-bottom: 0 !important;
+}
+.dossier-head ~ .ar-grid {
+  padding-top: 0 !important;
+}
+.ar-body > .ar-break:first-child {
+  margin-top: 28px;
+}
+
+/* ============================================================
+   CHAT RESTYLING — editorial paraphrase, not texting app.
+   Keeps opposing-sides layout but removes bubble fills/borders
+   that visually imply exact quotes. Italic text signals
+   paraphrase throughout.
+   ============================================================ */
+.ar-chat {
+  background: transparent !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: 1px solid var(--rule) !important;
+  border-bottom: 1px solid var(--rule) !important;
+  padding: 20px 0 12px !important;
+  gap: 14px !important;
+}
+.ar-chat .msg {
+  background: transparent !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding: 12px 0 !important;
+  border-top: 1px solid var(--rule) !important;
+  font-style: italic;
+}
+/* first message needs no top rule */
+.ar-chat .msg:first-child {
+  border-top: none !important;
+  padding-top: 0 !important;
+}
+/* the attribution label stays non-italic and colored */
+.ar-chat .msg::before {
+  font-style: normal !important;
+  opacity: 0.75 !important;
+  letter-spacing: 0.12em !important;
+}
+/* since all text is italic, em/i inside means "not italic" — de-italic */
+.ar-chat .msg i,
+.ar-chat .msg em {
+  font-style: normal !important;
+  color: var(--ink-soft) !important;
+}
+/* keep opposing alignment without the bubble feel */
+.ar-chat .msg.me   { padding-right: 20% !important; }
+.ar-chat .msg.troy { padding-left: 20% !important; padding-right: 0 !important; text-align: left !important; }
+.ar-chat .msg.med  { padding-left: 10% !important; padding-right: 10% !important; text-align: center !important; }
+/* skip markers */
+.ar-chat .skip { padding: 0 !important; }
+
+
+/* Remove numbers from the crimes / offenses list */
+.ar-crimes .ar-crime {
+  grid-template-columns: 1fr;
+}
+.ar-crimes .ar-crime .n {
+  display: none !important;
+}
+
+/* Remove numbers from intro claims list (not the logic chain) */
+.ar-claims .ar-claim {
+  grid-template-columns: 1fr;
+}
+.ar-claims .ar-claim .n {
+  display: none;
+}
+
+
+/* DOSSIER HEAD  —  case-file article opening */
+.dossier-head {
+  position: relative;
+  max-width: var(--art-max);
+  margin: 24px auto 32px;
+  padding: 36px 0 32px;
+  border-top: 3px solid var(--rust);
+  border-bottom: 1px solid var(--rule);
+}
+.dossier-head::before,
+.dossier-head::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--rule-on);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.dossier-head::before { left: 0;  border-right: none; border-bottom: none; }
+.dossier-head::after  { right: 0; border-left:  none; border-bottom: none; }
+
+.dh-strip {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+  padding-bottom: 24px; margin-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
+}
+.dh-strip-pub { color: var(--rust); }
+.dh-strip-sep { color: var(--ink-mute); opacity: 0.6; }
+.dh-strip-spacer { flex: 1; }
+.dh-icon {
+  display: inline-block; width: 11px; height: 11px;
+  background: var(--rust); transform: rotate(45deg); flex-shrink: 0;
+}
+.dh-id {
+  display: inline-block; padding: 5px 12px;
+  border: 1.5px solid var(--rust); color: var(--rust);
+  letter-spacing: 0.22em; font-weight: 500;
+  transform: rotate(-1.5deg);
+  background: color-mix(in srgb, transparent 92%, var(--rust));
+  white-space: nowrap;
+}
+
+.dh-title {
+  font-family: var(--serif-d); font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  font-size: calc(clamp(38px, 5.6vw, 72px) * var(--headline-scale));
+  line-height: 0.95; letter-spacing: -0.024em;
+  margin-bottom: 28px; color: var(--ink);
+  max-width: 22ch; text-wrap: pretty;
+}
+.dh-title em {
+  font-style: italic; color: var(--rust);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+
+.dh-deck {
+  font-family: var(--serif-b); font-size: 18.5px;
+  line-height: 1.55; color: var(--ink);
+  max-width: 56ch; margin-bottom: 32px;
+}
+.dh-deck i, .dh-deck em { color: var(--ink-soft); font-style: italic; }
+
+.dh-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 22px;
+  padding-top: 22px; border-top: 1px solid var(--rule);
+}
+.dh-meta {
+  display: flex; align-items: center; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.06em; color: var(--ink-soft);
+}
+.dh-meta-item {
+  padding: 0 18px; border-right: 1px solid var(--rule-on); line-height: 1.4;
+}
+.dh-meta-item:first-child { padding-left: 0; }
+.dh-meta-item:last-child  { border-right: none; padding-right: 0; }
+.dh-who { color: var(--ink); }
+
+.dh-tags {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.dh-tags span {
+  padding: 5px 10px; border: 1px solid var(--rule-on);
+  transition: background 0.2s ease, border-color 0.2s ease;
+  cursor: default; white-space: nowrap;
+}
+.dh-tags span::before { content: '['; margin-right: 4px; opacity: 0.7; }
+.dh-tags span::after  { content: ']'; margin-left: 4px;  opacity: 0.7; }
+.dh-tags .t1 { color: var(--pink); border-color: color-mix(in srgb, transparent 65%, var(--pink)); }
+.dh-tags .t2 { color: var(--rust); border-color: color-mix(in srgb, transparent 65%, var(--rust)); }
+.dh-tags .t3 { color: var(--gold); border-color: color-mix(in srgb, transparent 65%, var(--gold)); }
+.dh-tags .t1:hover { background: color-mix(in srgb, transparent 85%, var(--pink)); border-color: var(--pink); }
+.dh-tags .t2:hover { background: color-mix(in srgb, transparent 85%, var(--rust)); border-color: var(--rust); }
+.dh-tags .t3:hover { background: color-mix(in srgb, transparent 85%, var(--gold)); border-color: var(--gold); }
+
+@media (max-width: 700px) {
+  .dossier-head { padding: 28px 0 24px; }
+  .dossier-head::before, .dossier-head::after { display: none; }
+  .dh-strip { font-size: 10px; gap: 8px; }
+  .dh-id { transform: none; font-size: 10px; padding: 4px 9px; }
+  .dh-foot { flex-direction: column; align-items: flex-start; }
+  .dh-meta { font-size: 10px; }
+  .dh-meta-item { padding: 0 10px; }
+  .dh-meta-item:first-child { padding-left: 0; }
+}
+
 </style>
 </head>
 <body>
@@ -1417,48 +1692,27 @@ footer {
 <main>
 
   <!-- ============================================================
-       ARTICLE HERO  —  matches home's lead style
+       ARTICLE HEADER  —  case-file dossier opening (no image, no CTA)
        ============================================================ -->
-  <section data-section="lead" class="lead wrap" style="--sec: var(--c-2); --sec-heading: var(--c-5);">
-    <div class="lead-inner">
+  <header class="dossier-head wrap" data-section="lead">
 
-      <figure class="lead-fig art-redact" data-slot="lead-figure" data-slot-purpose="Lead figure" aria-label="Figure A &mdash; document map" style="aspect-ratio: 16 / 9;">
-        <span class="stamp">Figure A &mdash; document map</span>
-        <span class="cap">
-          <span>Composite of source documents</span>
-          <span>Dec 2025 &ndash; May 2026</span>
-        </span>
-      </figure>
 
-      <div class="lead-text">
-        <p class="lead-kicker">
-          <span>The Fallout Report</span>
-          <span class="sep">/</span>
-          Case File
-          <span class="sep">/</span>
-          <span class="id">M&minus;001</span>
-        </p>
-        <h1 class="lead-head">My <em>Fallout</em> with Troy Barile-Simleness.</h1>
-        <p class="lead-deck">
-          Academic fraud and weaponized trust &mdash; how an &ldquo;investigative journalist&rdquo; used fabricated authority to threaten lives and silence truth. <i>Merged with the timeline and evidence appendix.</i>
-        </p>
-        <p class="lead-meta">
-          <span class="who">By L.&nbsp;V.&nbsp;Maestri</span>
-          <span class="sep">&middot;</span>
-          ~50 min read
-          <span class="sep">&middot;</span>
-          posted 04 May 2026
-        </p>
-        <p class="lead-tags">
-          <span class="t1">academic fraud</span>
-          <span class="t2">survivor advocacy</span>
-          <span class="t3">criminal threats</span>
-        </p>
-        <a href="#sec-who" class="lead-go">Read the article <span class="arr">&rarr;</span></a>
+    <h1 class="dh-title">My <em>Fallout</em> with Troy Barile-Simleness.</h1>
+
+    <p class="dh-deck">
+      Academic fraud and weaponized trust &mdash; how an &ldquo;investigative journalist&rdquo; used fabricated authority to threaten lives and silence truth. <i>Merged with the timeline and evidence appendix.</i>
+    </p>
+
+    <div class="dh-foot">
+      <div class="dh-meta">
+        <span class="dh-meta-item dh-who">By L.&nbsp;V.&nbsp;Maestri</span>
+        <span class="dh-meta-item">~50 min read</span>
+        <span class="dh-meta-item">posted 04 May 2026</span>
       </div>
 
     </div>
-  </section>
+
+  </header>
 
   <!-- ============================================================
        ARTICLE GRID  —  [timeline | body]
@@ -1942,7 +2196,7 @@ footer {
       <!-- ================= FUNDRAISER ================= -->
       <div class="ar-break"><em>Fundraiser?</em></div>
 
-      <h2 id="sec-fundraiser"><span class="sec-no">&sect; 01 &mdash; Money before tragedy</span></h2>
+      <h2 id="sec-fundraiser">Money before tragedy</h2>
 
       <p>
         On <b>January 16th, 2026</b>, Troy posted his first documented acknowledgement of Sascha Barros (Riley) by sharing a post from a professional clinician. Troy has specifically stated he did not know Sascha Barros in January. He says he didn&rsquo;t know of Lisa Voldeng or Sascha until Voldeng platformed George Tonks &mdash; someone Troy has known since they were both young. Voldeng platformed Tonks on <b>February 18th</b>. This is the same day Troy unloaded <b>five rounds of premade articles</b> that named Sascha before its end. <b>He first messaged Sascha on the 10th</b> of that month &mdash; more than a week before the article released.
@@ -1998,7 +2252,7 @@ footer {
       </p>
 
       <!-- ================= THREE DOMAINS ================= -->
-      <h2 id="sec-domains"><span class="sec-no">&sect; 02 &mdash; The three websites</span></h2>
+      <h2 id="sec-domains">The three websites</h2>
 
       <p>
         Troy has at least three websites:
@@ -2060,7 +2314,7 @@ footer {
       <!-- ================= WHO IS HE REALLY ================= -->
       <div class="ar-break"><em>Who is he really, though?</em></div>
 
-      <h2 id="sec-real"><span class="sec-no">&sect; 03 &mdash; The documented record</span></h2>
+      <h2 id="sec-real">The documented record</h2>
 
       <p>
         Troy&rsquo;s documented professional background, confirmed on his own LinkedIn, has nothing to do with journalism, investigation, or even neuroscience. He spent <b>two and a half years as a Senior Model Scout</b> at Aesthetics PPD in the Greater Tampa Bay Area, scouting and booking individuals of all ages for fashion and editorial productions. He then moved to New York, where from 2009 to 2011 he co-owned and operated a <b>dog walking company</b>. His education is in marketing and business.
@@ -2148,7 +2402,7 @@ footer {
       <!-- ================= GOVERNMENT DATABASES ================= -->
       <div class="ar-break"><em>What is on government databases.</em></div>
 
-      <h2 id="sec-gov"><span class="sec-no">&sect; 04 &mdash; Primary court records</span></h2>
+      <h2 id="sec-gov">Primary court records</h2>
 
       <p>
         In <b>2007</b>, Troy was charged in Pasco County, Florida with fraud &mdash; an insufficient funds check, Florida statute 832.05. It is confirmed on the Pasco County clerk&rsquo;s primary court database. The judge declined to enter a formal conviction, instead placing him on probation and ordering restitution; a disposition that keeps the charge off a standard background check. But it is not an acquittal. <b>Wachovia Bank</b> appears as a bondsman, implying arrest. <b>Wells Fargo</b> appears as an expert witness. This is not a background aggregator entry. <b>This is a primary court record.</b>
@@ -2174,7 +2428,7 @@ footer {
       </div>
 
       <!-- ================= AGGREGATOR DATABASES ================= -->
-      <h2 id="sec-agg"><span class="sec-no">&sect; 05 &mdash; Aggregator entries</span></h2>
+      <h2 id="sec-agg">Aggregator entries</h2>
 
       <p>
         These websites pull data regularly, allowing them to obtain and retain information that other databases delete. This cuts two ways: <b>these sites can also be unreliable</b>. It&rsquo;s important to remember exactly how unreliable this section is when reading it.
@@ -2199,7 +2453,7 @@ footer {
       <!-- ================= SO WHAT'S THE PROBLEM ================= -->
       <div class="ar-break"><em>So what&rsquo;s the problem, then?</em></div>
 
-      <h2 id="sec-problem"><span class="sec-no">&sect; 06 &mdash; How I got involved</span></h2>
+      <h2 id="sec-problem">How I got involved</h2>
 
       <p>
         When I began my own personal investigation into Sascha Barros, <b>I was not doing it as a &ldquo;believer&rdquo;</b>. I thought it was a set of good opportunities to test the skills in investigative journalism I had been learning for nearly a year. Eventually, after joining the discourse around the story, I began to feel <b>the level of organized hatred directed at Sascha was disproportionate</b> to what any ordinary person, even a liar, actually deserved. That disproportionality felt like a signal worth investigating.
@@ -2325,7 +2579,7 @@ footer {
       <!-- ================= I AM NOT THE ARCHITECT ================= -->
       <div class="ar-break"><em>&ldquo;I am not the architect&hellip;&rdquo;</em></div>
 
-      <h2 id="sec-architect"><span class="sec-no">&sect; 07 &mdash; The threats become direct</span></h2>
+      <h2 id="sec-architect">The threats become direct</h2>
 
       <p>
         That section title quote came from before I was invited into the group chat, when the threats were minor, and I was not scared for my life. It is extremely important that this context be understood for what followed. <b>He found my personal Facebook and messaged me there</b> after I left that group chat.
@@ -2369,7 +2623,7 @@ footer {
       </p>
 
       <div class="ar-receipt">
-        <span class="who">Troy &middot; verbatim, in sequence</span>
+        <span class="who">Troy</span>
         <p>&ldquo;You have two choices. You don&rsquo;t publish it at all and at this point you don&rsquo;t mention me or my operation or anything that could even be tied back to me if my mother were to read it. That&rsquo;s all I have to say. I will pull the deadman&rsquo;s switch.&rdquo;</p>
         <p>&ldquo;My safety comes before yours and before Sascha&rsquo;s and before everyone else&rsquo;s.&rdquo;</p>
         <p>&ldquo;So what&rsquo;s it going to be? You have two choices, which are you choosing?&rdquo;</p>
@@ -2425,7 +2679,7 @@ footer {
       <!-- ================= REAL LIFE EVENTS ================= -->
       <div class="ar-break"><em>At exactly 6:16, 3 hours later, something occurred in my own home.</em></div>
 
-      <h2 id="sec-real-life"><span class="sec-no">&sect; 08 &mdash; The events that occurred in real life</span></h2>
+      <h2 id="sec-real-life">The events that occurred in real life</h2>
 
       <p>
         I became more scared than I had ever been in my life. I suddenly believed everything Troy had said. <b>I fled my home to a hotel. I checked my car for GPS trackers.</b> I may have been posting about the threats I was receiving for the previous 24 hours, but this is the first moment I actually believed them.
@@ -2467,7 +2721,7 @@ footer {
       </p>
 
       <div class="ar-warn">
-        <span class="label">I have not been fully honest about this publicly until now.</span>
+        <p><em>I have not been fully honest about this publicly until now.</em></p>
         <p>I do not have a history of any kind of hallucinations. I have never had a psychotic break.</p>
         <p>It started quiet, behind me. At first I was confused. Its initial low volume was more of a curiosity. I thought it was a neighbor, then an electrical crew outside, as it continued to get louder. My cats ran away down the hallway.</p>
         <p>After I turned around to face it, I realized it was coming directly from my front door. The volume was not constant, more like a whirring or humming, with at least two different sets of oscillations. <b>It was extremely high-pitched, similar to a guitar&rsquo;s feedback.</b></p>
@@ -2503,7 +2757,7 @@ footer {
       </p>
 
       <!-- ================= THE RILEY PROTOCOL ================= -->
-      <h2 id="sec-riley"><span class="sec-no">&sect; 09 &mdash; His response document</span></h2>
+      <h2 id="sec-riley">His response document</h2>
 
       <p>
         Troy dropped his next article about Sascha, called <b>The Riley Protocol</b>, about 48 hours later. Formatted as a <b>congressional reference document</b> on Sascha&rsquo;s own website, filled with academic citations, evidentiary tiers, and a forensic matrix that goes far beyond anything in his previous career. <i>Seven of nine narrative dimensions score below 30%</i> on a <b>&ldquo;credibility chart&rdquo; he built himself</b>.
@@ -2600,7 +2854,7 @@ footer {
       <!-- ================= WHAT HE ACTUALLY DID ================= -->
       <div class="ar-break"><em>What he actually did, given direct definitions.</em></div>
 
-      <h2 id="sec-crimes"><span class="sec-no">&sect; 10 &mdash; The legal framing</span></h2>
+      <h2 id="sec-crimes">The legal framing</h2>
 
       <p>
         The following potential offenses are drawn from the documented record in this article and the screenshots available on request.
@@ -2702,7 +2956,7 @@ footer {
       </p>
 
       <!-- ================= CLOSING / COME BACK ================= -->
-      <h2 id="sec-close"><span class="sec-no">&sect; 11 &mdash; The thing I wanted, in the end</span></h2>
+      <h2 id="sec-close">The thing I wanted, in the end</h2>
 
       <p>
         I respected Troy before all of this happened. I complimented one of his articles in the past. I was excited when he responded. I told my roommate, <i>&ldquo;that guy I told you about actually responded to me!&rdquo;</i>. I offered my services as an unpaid, volunteer &ldquo;intern&rdquo;. I was filled with respect for their fight for Sascha. He projected a high-profile visibility I chose not to double-check, and as such, I held him on a pedestal.
