@@ -4007,7 +4007,7 @@ footer {
     activeOriginal = img;
 
     requestAnimationFrame(() => {
-      const scale = Math.min(MAX_WIDTH() / rect.width, MAX_HEIGHT() / rect.height);
+      const scale = Math.min(1, MAX_WIDTH() / img.naturalWidth, MAX_HEIGHT() / img.naturalHeight);
       clone.style.transform = `scale(${scale})`;
       clone.classList.add('is-open');
     });
