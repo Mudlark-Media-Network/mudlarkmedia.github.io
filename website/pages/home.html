@@ -1348,7 +1348,10 @@
     padding-bottom: calc(40px * var(--rhythm));
   }
   /* the lead has its own top padding already, don't double up */
-  main section[data-section].lead { padding-top: 0; }
+  main section[data-section].lead {
+    padding-top: calc(60px * var(--rhythm));
+    padding-bottom: calc(20px * var(--rhythm));
+  }
   /* and the first .sec-head sits up against the section top; tighten */
   main section[data-section] > .sec-head:first-child { margin-top: calc(20px * var(--rhythm)); }
 
@@ -1982,7 +1985,6 @@
       <div class="sec-head h-blue">
         <h2>Mind Map</h2>
         <span class="grow"></span>
-        <a href="/website/pages/mindmap.html" class="all">Open the full map →</a>
       </div>
 
       <div class="mindmap">
