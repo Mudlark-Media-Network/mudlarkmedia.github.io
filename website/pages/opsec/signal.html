@@ -1,11 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="--c-1: #c0835e; --c-2: #9e5c34; --c-3: #8d6e5b; --c-4: #d2b3a1; --c-5: #875a3f; --c-6: #74665e; --c-7: #211d1b; --c-8: #4d4540; --c-9: #ece5d2; --c-10: #9c9583; --bg-pattern-color: var(--c-3); --bg-pattern-alpha: 0.1; --accent: var(--c-3); --pad-x: 30px;">
 <head>
-  <meta charset="utf-8">
-  <title>Under Construction — Mudlark Media</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal &amp; Encrypted Chat &mdash; Mudlark Media</title>
+<meta name="description" content="Working guide: Signal and encrypted chat for survivors and sources. Under construction.">
+<style>
+@font-face { font-family:'Michroma'; src:url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Michroma/Michroma-Regular.ttf') format('truetype'); font-display:swap; }
+@font-face { font-family:'Public Sans'; src:url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf') format('truetype'); font-display:swap; }
+@font-face { font-family:'Orbitron'; src:url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Orbitron/static/Orbitron-Regular.ttf') format('truetype'); font-display:swap; }
+@font-face { font-family:'Azeret Mono'; src:url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Azeret_Mono/static/AzeretMono-Regular.ttf') format('truetype'); font-display:swap; }
+:root { --bg:var(--c-7); --rule:color-mix(in srgb,var(--c-7) 88%,var(--c-9) 12%); --ink:var(--c-9); --ink-soft:var(--c-10); --ink-mute:color-mix(in srgb,var(--c-7) 40%,var(--c-10) 60%);
+  --gold:var(--c-1);--rust:var(--c-2);--teal:var(--c-3);--blue:var(--c-4);--pink:var(--c-5);--green:var(--c-6);
+  --serif-d:'Michroma',Georgia,serif;--serif-b:'Public Sans',Georgia,serif;--sans:'Orbitron',system-ui,sans-serif;--mono:'Azeret Mono',ui-monospace,monospace;
+  --pad-x:clamp(20px,4vw,56px);--max-w:1360px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{background:var(--bg);color:var(--ink);font-family:var(--serif-b);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+body{min-height:100vh;display:flex;flex-direction:column;} a{color:inherit;text-decoration:none;}
+::selection{background:var(--accent);color:var(--bg);}
+.bg-pattern{position:fixed;inset:0;z-index:0;pointer-events:none;color:var(--bg-pattern-color);opacity:var(--bg-pattern-alpha);}
+body > *{position:relative;z-index:1;} body > .bg-pattern{z-index:0;}
+.masthead-row{padding:36px var(--pad-x);text-align:center;}
+.brand{display:inline-flex;align-items:center;gap:16px;color:var(--ink);line-height:1;}
+.brand-name{font-family:var(--serif-d);font-weight:500;font-size:clamp(41px,5.95vw,75px);letter-spacing:-0.022em;line-height:0.95;}
+.nav{padding:18px var(--pad-x);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;justify-content:center;gap:4px 30px;font-family:var(--sans);font-size:14.5px;}
+.nav a{display:inline-flex;align-items:baseline;gap:9px;padding:6px 0;}
+.nav a::before{content:'';width:7px;height:7px;border-radius:50%;transform:translateY(-2px);flex-shrink:0;}
+.nav a:hover{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px;}
+.nav a.c-gold::before{background:var(--gold);} .nav a.c-rust::before{background:var(--rust);} .nav a.c-teal::before{background:var(--teal);}
+.nav a.c-pink::before{background:var(--pink);} .nav a.c-blue::before{background:var(--blue);} .nav a.c-green::before{background:var(--green);}
+.nav a.c-cream::before{background:var(--ink-soft);}
+main{flex:1;padding:0 var(--pad-x) 96px;} .wrap{max-width:var(--max-w);margin:0 auto;}
+.uc{display:flex;flex-direction:column;align-items:flex-start;padding:96px 0;border-bottom:1px solid var(--rule);}
+.uc-kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;}
+.uc-head{font-family:var(--serif-d);font-weight:500;font-size:clamp(36px,4.6vw,64px);line-height:0.98;letter-spacing:-0.022em;margin-bottom:24px;max-width:18ch;}
+.uc-head em{font-style:italic;color:var(--accent);}
+.uc-deck{font-family:var(--serif-b);font-size:17.5px;line-height:1.55;color:var(--ink-soft);max-width:60ch;margin-bottom:28px;}
+.uc-meta{font-family:var(--mono);font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:32px;}
+.uc-meta b{color:var(--ink-soft);font-weight:400;}
+.uc-back{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:14px;padding:12px 22px;background:var(--accent);color:var(--c-9);transition:background 0.15s;}
+.uc-back:hover{background:var(--pink);}
+footer{border-top:1px solid var(--rule);padding:40px var(--pad-x);margin-top:auto;}
+.foot-inner{max-width:var(--max-w);margin:0 auto;display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;}
+.foot-brand{font-family:var(--sans);font-size:16px;letter-spacing:-0.01em;}
+.foot-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
+</style>
 </head>
 <body>
-  <p>UNDER CONSTRUCTION</p>
-  <p><a href="/website/pages/home">← Back to home</a></p>
+<svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="bg-pattern-tile" width="44" height="44" patternUnits="userSpaceOnUse"><rect x="20.5" y="20.5" width="3" height="3" fill="currentColor"></rect></pattern></defs><rect width="100%" height="100%" fill="url(#bg-pattern-tile)"></rect></svg>
+<header>
+  <div class="masthead-row"><a href="/" class="brand" aria-label="Mudlark Media"><span class="brand-name">MUDLARK MEDIA</span></a></div>
+  <nav class="nav" aria-label="Primary">
+    <a href="/website/pages/ethos.html" class="c-gold">Network Ethos</a>
+    <a href="/website/pages/articles.html" class="c-rust">Articles</a>
+    <a href="/website/pages/opsec.html" class="c-teal">Digital OpSec</a>
+    <a href="/website/pages/psychological-warfare.html" class="c-pink">Psychological Warfare</a>
+    <a href="/website/pages/media.html" class="c-blue">Media</a>
+    <a href="/website/pages/mindmap.html" class="c-green">Mind Map</a>
+    <a href="/website/pages/contact.html" class="c-cream">Contact</a>
+  </nav>
+</header>
+<main>
+  <section class="wrap uc">
+    <p class="uc-kicker">Under Construction · OpSec Guide</p>
+    <h1 class="uc-head">Signal &amp; encrypted chat without <em>performing</em> security.</h1>
+    <p class="uc-deck">A working guide on the setup that actually survives the first stressful week &mdash; not a textbook checklist. Covers safety numbers, disappearing messages, screenshot discipline, and the parts that always break in practice.</p>
+    <p class="uc-meta">Status: <b>drafting</b> · published when ready</p>
+    <a href="/website/pages/opsec.html" class="uc-back">← Back to OpSec</a>
+  </section>
+</main>
+<footer><div class="foot-inner"><span class="foot-brand">Mudlark Media</span><span class="foot-tag">Volunteer. Zero-fund. Public domain.</span></div></footer>
 </body>
 </html>
