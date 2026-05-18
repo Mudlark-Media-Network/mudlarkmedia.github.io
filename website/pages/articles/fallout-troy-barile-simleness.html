@@ -4038,16 +4038,13 @@ footer {
       clone.classList.add('is-open');
     });
 
-    clone.addEventListener('mouseleave', destroyClone);
-
     const moveHandler = (ev) => {
       if (!activeClone) {
         document.removeEventListener('mousemove', moveHandler);
         return;
       }
-      const pad = 4;
-      if (ev.clientX < finalLeft - pad || ev.clientX > finalRight + pad ||
-          ev.clientY < finalTop  - pad || ev.clientY > finalBottom + pad) {
+      if (ev.clientX < rect.left || ev.clientX > rect.right ||
+          ev.clientY < rect.top  || ev.clientY > rect.bottom) {
         document.removeEventListener('mousemove', moveHandler);
         destroyClone();
       }
