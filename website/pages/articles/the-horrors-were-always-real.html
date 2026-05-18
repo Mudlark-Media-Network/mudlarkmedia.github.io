@@ -411,6 +411,7 @@ main { flex: 1; padding: 0 var(--pad-x) 64px; }
 .ar-body h2.case-study {
   background: color-mix(in srgb, transparent 94%, var(--rust));
   padding: 28px 32px;
+  text-align: center;
   margin-left: -32px;
   margin-right: -32px;
   border-left: 0;
@@ -1225,6 +1226,148 @@ footer {
   .ar-body .ar-lead-p { margin-left: 0; }
   .editor-panel { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
 }
+
+
+/* ============================================================
+   ╳  HORRORS POLISH LAYER  —  all aesthetic + label fixes
+   ============================================================ */
+
+/* ---- HEADER: thick rust top border + corner ticks (matches Troy dossier-head) ---- */
+.ar-header {
+  border-top: 3px solid var(--rust) !important;
+  padding-top: 36px !important;
+  position: relative;
+}
+.ar-header::before,
+.ar-header::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--rule-on);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.ar-header::before { left: 0;  border-right: none; border-bottom: none; }
+.ar-header::after  { right: 0; border-left:  none; border-bottom: none; }
+
+/* ---- HEADER: hide kicker ("The Fallout Report M−002") ---- */
+.ar-header-kicker { display: none !important; }
+
+/* ---- REMOVE ALL LABELS ---- */
+/* speaker attributions on receipts */
+.ar-receipt .who     { display: none !important; }
+/* ar-chain heading label */
+.ar-chain h4         { display: none !important; }
+/* ar-warn metadata labels */
+.ar-warn .label      { display: none !important; }
+/* clear spacing left by hidden elements */
+.ar-receipt p:first-of-type { margin-top: 0 !important; }
+.ar-chain ol { margin-top: 0 !important; }
+
+/* ---- AR-CLAIMS: hide numbered markers (reviewers list) ---- */
+.ar-claims .ar-claim .n { display: none !important; }
+.ar-claims .ar-claim    { gap: 0 !important; }
+
+/* ---- UNIFIED QUOTE STYLE: editorial paraphrase (no box/bubble) ---- */
+.ar-receipt {
+  background: transparent !important;
+  border: none !important;
+  border-left: 3px solid var(--rust) !important;
+  padding: 0 0 0 22px !important;
+  margin: 28px 0 !important;
+}
+.ar-receipt p {
+  font-style: italic !important;
+  color: var(--ink) !important;
+  margin-bottom: 12px !important;
+}
+.ar-receipt p:last-child { margin-bottom: 0 !important; }
+
+/* ---- AR-CHAT: editorial dialogue, not texting app ---- */
+.ar-chat {
+  background: transparent !important;
+  border: none !important;
+  border-top: 1px solid var(--rule) !important;
+  border-bottom: 1px solid var(--rule) !important;
+  padding: 20px 0 12px !important;
+  gap: 14px !important;
+}
+.ar-chat .msg {
+  background: transparent !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding: 12px 0 !important;
+  border-top: 1px solid var(--rule) !important;
+  font-style: italic;
+}
+.ar-chat .msg:first-child {
+  border-top: none !important;
+  padding-top: 0 !important;
+}
+.ar-chat .msg::before {
+  font-style: normal !important;
+  opacity: 0.75 !important;
+  letter-spacing: 0.12em !important;
+}
+.ar-chat .msg i,
+.ar-chat .msg em {
+  font-style: normal !important;
+  color: var(--ink-soft) !important;
+}
+/* colored accent bars per speaker */
+.ar-chat .msg.me   { border-left: 3px solid var(--blue) !important; padding-left: 18px !important; padding-right: 20% !important; }
+.ar-chat .msg.troy { border-right: 3px solid var(--rust) !important; padding-right: 18px !important; padding-left: 20% !important; }
+.ar-chat .msg.med  { border-left: 3px solid var(--teal) !important; padding-left: 18px !important; padding-right: 10% !important; }
+.ar-chat .skip { padding: 0 !important; }
+
+/* ---- AR-PULL CITE: prose continuation, not a label ---- */
+.ar-pull cite {
+  font-family: var(--serif-d) !important;
+  font-size: inherit !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: inherit !important;
+  text-transform: none !important;
+  color: var(--ink) !important;
+  margin-top: 8px !important;
+  display: block !important;
+  font-variation-settings: 'opsz' 60, 'SOFT' 100 !important;
+}
+
+/* ---- HOME-PAGE POLISH: nav dot glow, card lifts etc. (match home-polished) ---- */
+.nav a {
+  transition: color 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nav a::before {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+}
+.nav a:hover::before { transform: translateY(-2px) scale(1.55); }
+.nav a.c-gold:hover::before  { box-shadow: 0 0 12px var(--gold); }
+.nav a.c-rust:hover::before  { box-shadow: 0 0 12px var(--rust); }
+.nav a.c-teal:hover::before  { box-shadow: 0 0 12px var(--teal); }
+.nav a.c-pink:hover::before  { box-shadow: 0 0 12px var(--pink); }
+.nav a.c-blue:hover::before  { box-shadow: 0 0 12px var(--blue); }
+.nav a.c-green:hover::before { box-shadow: 0 0 12px var(--green); }
+.nav a.c-cream:hover::before { box-shadow: 0 0 12px var(--ink-soft); }
+.foot-col a { transition: color 0.2s ease; }
+.foot-col { position: relative; padding-left: 28px; }
+.foot-col::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 1px;
+  background: var(--rule-on);
+  opacity: 0.6;
+}
+.foot-brand { padding-left: 0; }
+.foot-brand::before { display: none; }
+@media (max-width: 1100px) {
+  .foot-col, .foot-brand { padding-left: 0; }
+  .foot-col::before { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -1505,7 +1648,7 @@ footer {
       <!-- ============================== § 06 ============================== -->
       <div class="sec-div" id="sec-sascha"></div>
 
-      <h2>Sascha Barros</h2>
+      <h2 class="case-study">Sascha Barros</h2>
 
       <div class="evidence is-2">
         <figure class="ev-fig">
