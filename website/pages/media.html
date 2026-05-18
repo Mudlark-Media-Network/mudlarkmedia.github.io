@@ -49,51 +49,44 @@
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
   margin-bottom: 64px;
 }
 .media-tile {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
-.media-tile-frame {
+.media-thumb {
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 1px solid var(--rule);
   background: var(--bg-surf);
   overflow: hidden;
+  display: block;
 }
-.media-tile iframe {
+.media-thumb img {
   width: 100%;
   height: 100%;
-  border: none;
-}
-.media-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--bg-surf) 0%, color-mix(in srgb, var(--bg-surf) 80%, var(--ink-soft) 20%) 100%);
-  color: var(--ink-soft);
-  font-family: var(--mono);
-  font-size: 12px;
-  text-align: center;
-  padding: 24px;
+  object-fit: cover;
+  display: block;
 }
 .media-title {
   font-family: var(--serif-d);
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.2;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
+.media-title em {
+  font-style: italic;
+  color: var(--accent);
+}
 .media-desc {
   font-family: var(--serif-b);
-  font-size: 13px;
+  font-size: 12px;
   color: var(--ink-soft);
   line-height: 1.5;
 }
@@ -227,37 +220,17 @@ footer { border-top: 1px solid var(--rule); padding: 40px var(--pad-x); margin-t
     <p style="margin-bottom: 48px;"></p>
 
     <div class="media-grid">
-      <div class="media-tile">
-        <div class="media-tile-frame">
-          <iframe src="https://www.youtube.com/embed/ZMJ_Hl7x7mw" title="We're Not Mad Enough by Matt Tranberg" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
+      <a href="https://www.youtube.com/watch?v=ZMJ_Hl7x7mw" class="media-tile">
+        <img class="media-thumb" src="https://img.youtube.com/vi/ZMJ_Hl7x7mw/hqdefault.jpg" alt="We're Not Mad Enough">
         <p class="media-title">We're Not Mad <em>Enough</em></p>
-        <p class="media-desc">Matt Tranberg · Original compositions · Virginia Giuffre, Sascha Riley, and the state</p>
-      </div>
+        <p class="media-desc">Matt Tranberg · Original compositions</p>
+      </a>
 
-      <div class="media-tile">
-        <div class="media-tile-frame">
-          <iframe src="https://www.youtube.com/embed/zXTHJo5uFjw" title="Toe The Line (Something We Do While We Die)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
+      <a href="https://www.youtube.com/watch?v=zXTHJo5uFjw" class="media-tile">
+        <img class="media-thumb" src="https://img.youtube.com/vi/zXTHJo5uFjw/hqdefault.jpg" alt="Toe The Line">
         <p class="media-title">Toe The <em>Line</em></p>
-        <p class="media-desc">Network audio · Personal, anthemic · Something we do while we die</p>
-      </div>
-
-      <div class="media-tile">
-        <div class="media-tile-frame">
-          <div class="media-placeholder">Field<br/>Recordings</div>
-        </div>
-        <p class="media-title">Field <em>recordings</em></p>
-        <p class="media-desc">Hearings, hallways, ambient · Room being built</p>
-      </div>
-
-      <div class="media-tile">
-        <div class="media-tile-frame">
-          <div class="media-placeholder">Visual<br/>Essays</div>
-        </div>
-        <p class="media-title">Visual <em>essays</em></p>
-        <p class="media-desc">Photo series & document maps · Room being built</p>
-      </div>
+        <p class="media-desc">Network audio · Personal &amp; anthemic</p>
+      </a>
     </div>
   </section>
 </main>
