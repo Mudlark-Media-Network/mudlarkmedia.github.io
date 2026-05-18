@@ -1957,6 +1957,13 @@ footer {
         <span class="d">Apr 17 <span class="t">11:00 PM</span></span>
         <div class="e">We have our first breakthrough.</div>
         <img class="tl-img" src="article-images/047_Apr_17_5pm_He_tells_me_he_has.jpg" alt="Long mediator chat closing at 11:06 PM" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_a.png" alt="First breakthrough — screenshot a" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_b.png" alt="First breakthrough — screenshot b" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_c.png" alt="First breakthrough — screenshot c" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_d.png" alt="First breakthrough — screenshot d" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_e.png" alt="First breakthrough — screenshot e" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_f.png" alt="First breakthrough — screenshot f" />
+        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_g.png" alt="First breakthrough — screenshot g" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">11:30 PM</span></span>
@@ -3964,8 +3971,9 @@ footer {
 (function () {
   let activeClone = null;
   let activeOriginal = null;
-  const MAX_WIDTH = () => window.innerWidth * 0.88;
-  const MAX_HEIGHT = () => window.innerHeight * 0.88;
+  const ABS_MAX_W = 780;
+  const VW_CAP = 0.60;
+  const VH_CAP = 0.75;
 
   function destroyClone() {
     if (!activeClone) return;
@@ -3982,6 +3990,17 @@ footer {
     if (activeClone) return;
 
     const rect = img.getBoundingClientRect();
+    const natW = img.naturalWidth  || rect.width;
+    const natH = img.naturalHeight || rect.height;
+
+    const targetW = Math.min(
+      ABS_MAX_W,
+      window.innerWidth  * VW_CAP,
+      window.innerHeight * VH_CAP * (natW / natH),
+      natW
+    );
+    const scale = Math.max(1, targetW / rect.width);
+
     const clone = img.cloneNode();
     clone.className = 'tl-img-clone';
     clone.style.left = rect.left + 'px';
@@ -3994,13 +4013,31 @@ footer {
     activeClone = clone;
     activeOriginal = img;
 
+    const finalLeft = rect.left;
+    const finalTop  = rect.top;
+    const finalRight  = finalLeft + rect.width  * scale;
+    const finalBottom = finalTop  + rect.height * scale;
+
     requestAnimationFrame(() => {
-      const scale = Math.min(MAX_WIDTH() / rect.width, MAX_HEIGHT() / rect.height);
       clone.style.transform = `scale(${scale})`;
       clone.classList.add('is-open');
     });
 
     clone.addEventListener('mouseleave', destroyClone);
+
+    const moveHandler = (ev) => {
+      if (!activeClone) {
+        document.removeEventListener('mousemove', moveHandler);
+        return;
+      }
+      const pad = 4;
+      if (ev.clientX < finalLeft - pad || ev.clientX > finalRight + pad ||
+          ev.clientY < finalTop  - pad || ev.clientY > finalBottom + pad) {
+        document.removeEventListener('mousemove', moveHandler);
+        destroyClone();
+      }
+    };
+    document.addEventListener('mousemove', moveHandler);
   });
 
   window.addEventListener('scroll', destroyClone, { passive: true });
