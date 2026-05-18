@@ -1750,13 +1750,13 @@ footer {
       <div class="tl-entry tl-p1">
         <span class="d">Jan 22</span>
         <div class="e">Troy&rsquo;s Elementlings Kickstarter fails.</div>
-        <img class="tl-img" src="article-images/_(1_of_1).jpg" alt="Elementlings Kickstarter — Funding Unsuccessful Jan 22, 2026" />
+        <img class="tl-img" src="article-images/_1_of_1.jpg" alt="Elementlings Kickstarter — Funding Unsuccessful Jan 22, 2026" />
       </div>
       <div class="tl-entry tl-p1">
         <span class="d">Jan 29</span>
         <div class="e">Fundraiser for Sascha appears under K2 Gives. Obfuscated to avoid traffic.</div>
-        <img class="tl-img" src="article-images/_(1_of_2).jpg" alt="K2 Gives — Organizer card, created Jan 29, 2026" />
-        <img class="tl-img" src="article-images/_(2_of_2).jpg" alt="Sascha Riley Awareness Fund banner" />
+        <img class="tl-img" src="article-images/_1_of_2.jpg" alt="K2 Gives — Organizer card, created Jan 29, 2026" />
+        <img class="tl-img" src="article-images/_2_of_2.jpg" alt="Sascha Riley Awareness Fund banner" />
       </div>
 
       <!--  FEB 2026  -->
@@ -1842,10 +1842,10 @@ footer {
       <div class="tl-entry tl-p3">
         <span class="d">Mar 30</span>
         <div class="e">Sascha&rsquo;s ex-wife goes into &ldquo;weapons-grade&rdquo; damage control. The MSNOW article on Sascha had not yet been released. She knew what it was going to say before it released because she was likely told directly when interviewed by Brandy Zadrozny.</div>
-        <img class="tl-img" src="article-images/_(1_of_4).jpg" alt="Ex-wife damage control 1 of 4" />
-        <img class="tl-img" src="article-images/_(2_of_4).jpg" alt="Ex-wife damage control 2 of 4" />
-        <img class="tl-img" src="article-images/_(3_of_4).jpg" alt="Ex-wife damage control 3 of 4" />
-        <img class="tl-img" src="article-images/_(4_of_4).jpg" alt="Ex-wife damage control 4 of 4" />
+        <img class="tl-img" src="article-images/_1_of_4.jpg" alt="Ex-wife damage control 1 of 4" />
+        <img class="tl-img" src="article-images/_2_of_4.jpg" alt="Ex-wife damage control 2 of 4" />
+        <img class="tl-img" src="article-images/_3_of_4.jpg" alt="Ex-wife damage control 3 of 4" />
+        <img class="tl-img" src="article-images/_4_of_4.jpg" alt="Ex-wife damage control 4 of 4" />
       </div>
 
       <!--  APR 2026  -->
@@ -3976,8 +3976,8 @@ footer {
 (function () {
   let activeClone = null;
   let activeOriginal = null;
-  const MAX_WIDTH = 680;
-  const MAX_HEIGHT = 520;
+  const MAX_WIDTH = () => window.innerWidth * 0.88;
+  const MAX_HEIGHT = () => window.innerHeight * 0.88;
 
   function destroyClone() {
     if (!activeClone) return;
@@ -4007,9 +4007,7 @@ footer {
     activeOriginal = img;
 
     requestAnimationFrame(() => {
-      const scaledW = rect.width * 3;
-      const scaledH = rect.height * 3;
-      const scale = Math.min(3, MAX_WIDTH / rect.width, MAX_HEIGHT / rect.height);
+      const scale = Math.min(MAX_WIDTH() / rect.width, MAX_HEIGHT() / rect.height);
       clone.style.transform = `scale(${scale})`;
       clone.classList.add('is-open');
     });
