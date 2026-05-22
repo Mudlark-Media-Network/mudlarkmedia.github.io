@@ -728,6 +728,94 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       border: 1px solid rgba(255,255,255,0.15);
     }
+
+    /* Diagnostics Styling */
+    .collab-diagnostics {
+      margin-top: 6px;
+      border-top: 1px dashed rgba(255,255,255,0.08);
+      padding-top: 6px;
+    }
+    .collab-diag-toggle {
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.15s ease;
+      text-decoration: none;
+    }
+    .collab-diag-toggle:hover {
+      color: #fff;
+    }
+    .collab-diag-content {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 6px;
+      background: rgba(0,0,0,0.25);
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .collab-diag-content.open {
+      display: flex;
+    }
+    .collab-diag-error {
+      color: #ff4757;
+      font-family: monospace;
+      font-size: 9px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background: rgba(255,71,87,0.08);
+      padding: 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,71,87,0.15);
+    }
+    .collab-diag-success {
+      color: #2ed573;
+      font-size: 9px;
+      background: rgba(46,213,115,0.08);
+      padding: 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(46,213,115,0.15);
+    }
+    .collab-diag-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 8px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      margin-top: 4px;
+    }
+    .collab-diag-input-row {
+      display: flex;
+      gap: 4px;
+    }
+    .collab-diag-input-row input {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      color: #fff;
+      padding: 3px 5px;
+      font-size: 9px;
+      flex: 1;
+      font-family: monospace;
+      outline: none;
+    }
+    .collab-diag-input-row button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      padding: 3px 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 8px;
+      text-transform: uppercase;
+    }
+    .collab-diag-input-row button:hover {
+      background: rgba(255,255,255,0.2);
+    }
   </style>
 </head>
 <body>
@@ -805,6 +893,24 @@
       <div class="collab-row">
         <div class="collab-user-name" id="collab-profile-name" style="font-weight:bold;">Signed In</div>
         <button class="collab-auth-btn" id="btn-auth-logout" style="flex:0; padding:4px 8px;">Logout</button>
+      </div>
+    </div>
+
+    <!-- Diagnostics Panel -->
+    <div class="collab-diagnostics">
+      <a href="#" class="collab-diag-toggle" id="collab-diag-toggle">⚙️ Diagnostics</a>
+      <div class="collab-diag-content" id="collab-diag-content">
+        <div class="collab-diag-label">Active Connection Log</div>
+        <div id="collab-diag-status" class="collab-diag-success">No active initialization or connection errors.</div>
+        
+        <div class="collab-diag-label">Database URL</div>
+        <div class="collab-diag-input-row">
+          <input type="text" id="collab-diag-db-url" placeholder="https://..." spellcheck="false" />
+          <button id="btn-collab-reconnect">Save</button>
+        </div>
+        <div style="font-size:8px; color:rgba(255,255,255,0.3); margin-top:2px; line-height:1.2;">
+          If offline, verify your RTDB is created in Firebase Console and set its regional URL here (e.g. including europe-west1).
+        </div>
       </div>
     </div>
   </div>
@@ -2451,12 +2557,13 @@
     // ====================================================================
     // FIREBASE COLLABORATION & SYNCING SYSTEM
     // ====================================================================
+    const savedDbUrl = localStorage.getItem('collab_database_url') || "https://mudlark-media-live-collab-default-rtdb.firebaseio.com";
     const FIREBASE_CONFIG = {
       apiKey: "AIzaSyAsNxhW4pnot_51DogHB4_P7pnRaDsZh7k",
       authDomain: "mudlark-media-live-collab.firebaseapp.com",
       projectId: "mudlark-media-live-collab",
       storageBucket: "mudlark-media-live-collab.firebasestorage.app",
-      databaseURL: "https://mudlark-media-live-collab-default-rtdb.firebaseio.com",
+      databaseURL: savedDbUrl,
       messagingSenderId: "842430875051",
       appId: "1:842430875051:web:4a7c7116f2b9bccdb37eee",
       measurementId: "G-WH5HDT7PTD"
@@ -2489,12 +2596,50 @@
       localStorage.setItem('collab_usercolor', myColor);
     }
 
+    function logCollabError(msg, err) {
+      console.warn("Collab error logged:", msg, err);
+      const diagStatus = document.getElementById('collab-diag-status');
+      if (diagStatus) {
+        diagStatus.className = 'collab-diag-error';
+        const detail = err ? `\n(${err.code || err.message || err})` : '';
+        diagStatus.textContent = msg + detail;
+      }
+    }
+
     // Initialize UI inputs
     document.addEventListener('DOMContentLoaded', () => {
       const nameInput = document.getElementById('collab-my-name');
       const colorInput = document.getElementById('collab-my-color');
       if (nameInput) nameInput.value = myName;
       if (colorInput) colorInput.value = myColor;
+
+      // Diagnostics panel toggling
+      const toggle = document.getElementById('collab-diag-toggle');
+      const content = document.getElementById('collab-diag-content');
+      if (toggle && content) {
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          content.classList.toggle('open');
+        });
+      }
+
+      // Fill in current database URL
+      const dbInput = document.getElementById('collab-diag-db-url');
+      if (dbInput) {
+        dbInput.value = FIREBASE_CONFIG.databaseURL;
+      }
+
+      // Reconnect button
+      const reconnectBtn = document.getElementById('btn-collab-reconnect');
+      if (reconnectBtn && dbInput) {
+        reconnectBtn.addEventListener('click', () => {
+          const newUrl = dbInput.value.trim();
+          if (newUrl) {
+            localStorage.setItem('collab_database_url', newUrl);
+            window.location.reload();
+          }
+        });
+      }
     });
 
     function initFirebase() {
@@ -2516,6 +2661,7 @@
       } catch (e) {
         console.error("Firebase failed to initialize:", e);
         setCollabStatus('offline', '⚠️ Collaboration Offline');
+        logCollabError("Failed to initialize Firebase", e);
       }
     }
 
@@ -2547,6 +2693,8 @@
         } else {
           setCollabStatus('offline', 'Offline');
         }
+      }, (err) => {
+        logCollabError("Connection listener blocked", err);
       });
 
       const nameInput = document.getElementById('collab-my-name');
@@ -2574,6 +2722,8 @@
         const users = snapshot.val() || {};
         updateUsersList(users);
         updatePeerCursors(users);
+      }, (err) => {
+        logCollabError("Could not load users list. Check database rules.", err);
       });
     }
 
@@ -2584,6 +2734,9 @@
         name: myName,
         color: myColor,
         lastActive: firebase.database.ServerValue.TIMESTAMP
+      }).catch(err => {
+        console.error("Presence update failed:", err);
+        logCollabError("Presence write failed. Check database rules.", err);
       });
     }
 
@@ -2713,6 +2866,9 @@
         } else {
           fetchRepoState();
         }
+      }).catch(err => {
+        console.error("Board sync once failed:", err);
+        logCollabError("Could not load board state. Check database rules.", err);
       });
 
       boardRef.on('value', (snapshot) => {
@@ -2727,6 +2883,9 @@
             isApplyingFirebaseUpdate = false;
           }
         }
+      }, (err) => {
+        console.error("Board sync stream failed:", err);
+        logCollabError("Could not stream board state. Check database rules.", err);
       });
     }
 
@@ -2738,6 +2897,7 @@
         const boardId = getBoardId();
         database.ref(`boards/${boardId}/state`).set(state).catch(e => {
           console.error("Firebase save failed:", e);
+          logCollabError("Failed to save board state. Check database rules.", e);
         });
       }, 1000);
     }
