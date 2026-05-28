@@ -732,6 +732,42 @@
       font: inherit;
       outline: none;
     }
+    /* Right-click context menu */
+    .ctx-menu {
+      position: fixed;
+      z-index: 10000;
+      min-width: 150px;
+      background: rgba(20,22,28,0.97);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+      padding: 4px;
+      font-family: inherit;
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      user-select: none;
+      backdrop-filter: blur(6px);
+    }
+    .ctx-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .ctx-item:hover { background: rgba(30,144,255,0.35); }
+    .ctx-item.disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    .ctx-item.disabled:hover { background: transparent; }
+    .ctx-sep {
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 4px 6px;
+    }
     .collab-section {
       display: flex;
       flex-direction: column;
@@ -983,7 +1019,7 @@
     </div>
 
     <!-- User Profile Settings -->
-    <div class="collab-section">
+    <div class="collab-section" id="collab-identity-section">
       <div class="collab-status" style="color:rgba(255,255,255,0.4)">My Identity</div>
       <div class="collab-row">
         <span class="collab-identity-hint" style="flex:1;color:rgba(255,255,255,0.4);font-size:11px;">Click your name above to rename</span>
@@ -1767,6 +1803,7 @@
         startX: e.clientX,
         startY: e.clientY,
         startCenterPt: project(view.lat, view.lng, view.zoom),
+        moved: false,
       };
       mapEl.style.cursor = 'grabbing';
     });
@@ -1774,6 +1811,7 @@
       if (!panState) return;
       const dx = e.clientX - panState.startX;
       const dy = e.clientY - panState.startY;
+      if (!panState.moved && (Math.abs(dx) + Math.abs(dy)) > 4) panState.moved = true;
       const newCenter = unproject(panState.startCenterPt.x - dx, panState.startCenterPt.y - dy, view.zoom);
       view.lat = clampLat(newCenter.lat);
       view.lng = clampLng(newCenter.lng);
@@ -1782,8 +1820,11 @@
     });
     document.addEventListener('mouseup', (e) => {
       if (e.button !== 2 || !panState) return;
+      const wasMoved = panState.moved;
       panState = null;
       mapEl.style.cursor = 'default';
+      // A right-click that didn't pan → open the context menu.
+      if (!wasMoved) showContextMenu(e);
     });
 
     const ZOOM_ANIM_MS = 200;
@@ -3068,6 +3109,132 @@
     });
 
     // ====================================================================
+    // Right-click context menu (copy pins/nodes, paste onto the board)
+    // ====================================================================
+    let clipboard = null;          // { kind: 'pin'|'node', data: {...} }
+    let lastContextWorld = null;   // world coords of the last right-click (paste target)
+
+    // Clone a pin/node's data fields (no id, no DOM refs, no cached layout).
+    function clonePinData(p) {
+      return {
+        sizeBase: p.sizeBase, fillColor: p.fillColor, fillAlpha: p.fillAlpha,
+        borderColor: p.borderColor, borderWidth: p.borderWidth,
+        glowDistance: p.glowDistance, glowBrightness: p.glowBrightness,
+        metadata: p.metadata,
+        attachments: (p.attachments || []).filter(a => !a.uploading).map(cleanAttachment)
+      };
+    }
+    function cloneNodeData(n) {
+      return {
+        title: n.title, wBase: n.wBase, metadata: n.metadata,
+        bgColor: n.bgColor, bgAlpha: n.bgAlpha, textColor: n.textColor,
+        indicatorColor: n.indicatorColor, borderColor: n.borderColor, borderWidth: n.borderWidth,
+        glowDistance: n.glowDistance, glowBrightness: n.glowBrightness,
+        flipped: n.flipped,
+        attachments: (n.attachments || []).filter(a => !a.uploading).map(cleanAttachment)
+      };
+    }
+
+    function copyElement(kind, id) {
+      const obj = kind === 'pin' ? findPin(id) : findNode(id);
+      if (!obj) return;
+      const data = kind === 'pin' ? clonePinData(obj) : cloneNodeData(obj);
+      // Deep-copy so later edits to the original don't mutate the clipboard.
+      clipboard = { kind, data: JSON.parse(JSON.stringify(data)) };
+    }
+
+    function pasteClipboard() {
+      if (!clipboard) return;
+      // Paste at the right-click location if we have one, else the view center.
+      let lat = view.lat, lng = view.lng;
+      if (lastContextWorld) {
+        const ll = unproject(lastContextWorld.wx, lastContextWorld.wy, view.zoom);
+        lat = clampLat(ll.lat); lng = clampLng(ll.lng);
+      }
+      const data = JSON.parse(JSON.stringify(clipboard.data));
+      if (clipboard.kind === 'pin') {
+        const pin = { id: newId(), lat, lng, ...DEFAULT_PIN, ...data };
+        pin.attachments = Array.isArray(data.attachments) ? data.attachments : [];
+        pins.push(pin);
+        createPinEl(pin);
+        placePin(pin, view.zoom);
+      } else {
+        const node = { id: newId(), lat, lng, ...DEFAULT_NODE, ...data };
+        node.attachments = Array.isArray(data.attachments) ? data.attachments : [];
+        nodes.push(node);
+        createNodeEl(node);
+        placeNode(node, view.zoom);
+      }
+      scheduleUnifiedSave();
+      scheduleRender();
+    }
+
+    let ctxMenuEl = null;
+    function closeContextMenu() {
+      if (ctxMenuEl) { ctxMenuEl.remove(); ctxMenuEl = null; }
+    }
+    // Close on any click/mousedown outside the menu (capture phase so it runs
+    // before element handlers), but ignore presses inside the menu itself.
+    document.addEventListener('mousedown', (ev) => {
+      if (ctxMenuEl && !ctxMenuEl.contains(ev.target)) closeContextMenu();
+    }, true);
+    window.addEventListener('blur', closeContextMenu);
+    window.addEventListener('wheel', closeContextMenu, { passive: true });
+
+    function showContextMenu(e) {
+      closeContextMenu();
+      lastContextWorld = eventToWorld(e);
+
+      // What was right-clicked?
+      const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+      const elObj = targetEl && targetEl.closest('[data-kind]');
+      const kind = elObj ? elObj.dataset.kind : null;
+      const id = elObj ? elObj.dataset.id : null;
+
+      const items = [];
+      if (kind === 'pin' || kind === 'node') {
+        items.push({ label: 'Copy', action: () => copyElement(kind, id) });
+        items.push({
+          label: 'Paste', disabled: !clipboard,
+          action: pasteClipboard
+        });
+      } else {
+        // Empty board area.
+        items.push({
+          label: clipboard
+            ? (clipboard.kind === 'pin' ? 'Paste Pin' : 'Paste Node')
+            : 'Paste',
+          disabled: !clipboard,
+          action: pasteClipboard
+        });
+      }
+
+      const menu = document.createElement('div');
+      menu.className = 'ctx-menu';
+      for (const it of items) {
+        if (it.sep) { const s = document.createElement('div'); s.className = 'ctx-sep'; menu.appendChild(s); continue; }
+        const row = document.createElement('div');
+        row.className = 'ctx-item' + (it.disabled ? ' disabled' : '');
+        row.textContent = it.label;
+        if (!it.disabled) {
+          row.addEventListener('mousedown', (ev) => ev.stopPropagation());
+          row.addEventListener('click', () => { closeContextMenu(); it.action(); });
+        }
+        menu.appendChild(row);
+      }
+      document.body.appendChild(menu);
+      ctxMenuEl = menu;
+
+      // Position, keeping the menu on-screen.
+      const mw = menu.offsetWidth, mh = menu.offsetHeight;
+      let x = e.clientX, y = e.clientY;
+      if (x + mw > window.innerWidth)  x = window.innerWidth  - mw - 6;
+      if (y + mh > window.innerHeight) y = window.innerHeight - mh - 6;
+      menu.style.left = Math.max(4, x) + 'px';
+      menu.style.top  = Math.max(4, y) + 'px';
+    }
+
+    // ====================================================================
     // IP geolocation: nudge the initial center toward the user
     // ====================================================================
     async function loadInitialView() {
@@ -4114,11 +4281,15 @@
 
       auth.onAuthStateChanged((user) => {
         const authSec = document.getElementById('collab-auth-section');
+        const identSec = document.getElementById('collab-identity-section');
         const profSec = document.getElementById('collab-profile-section');
         const profName = document.getElementById('collab-profile-name');
 
         if (user) {
+          // Logged in: hide identity-editing + sign-in entirely; only the
+          // active-people list (and logout) remain.
           if (authSec) authSec.style.display = 'none';
+          if (identSec) identSec.style.display = 'none';
           if (profSec) profSec.style.display = 'flex';
           
           let disp = user.displayName || user.email || 'Signed In';
@@ -4139,6 +4310,7 @@
           }
         } else {
           if (authSec) authSec.style.display = 'block';
+          if (identSec) identSec.style.display = 'flex';
           if (profSec) profSec.style.display = 'none';
         }
       });
