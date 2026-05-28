@@ -679,6 +679,28 @@
       background: rgba(255,255,255,0.08);
       color: #fff;
     }
+    /* Diagnostics gear — its own button beside the Collab button */
+    .diag-toggle-btn {
+      left: auto;
+      right: 16px;
+      padding: 8px 12px;
+      font-size: 14px;
+      line-height: 1;
+    }
+    /* Diagnostics floats above its own gear button (bottom-right) */
+    #diag-widget {
+      left: auto;
+      right: 16px;
+      width: 240px;
+    }
+    /* Provider icon shown to the right of a user's name */
+    .collab-user-provider {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+    .collab-user-provider svg { width: 100%; height: 100%; display: block; fill: currentColor; }
     .collab-presence-widget h4 {
       margin: 0 0 4px 0;
       font-size: 9px;
@@ -1004,9 +1026,10 @@
     Collab
     <span id="collab-user-count" style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px;">1</span>
   </button>
+  <button id="btn-diag-toggle" class="collab-toggle-btn diag-toggle-btn" title="Diagnostics">⚙️</button>
   <div class="collab-presence-widget" id="collab-widget">
     <h4>Collaboration</h4>
-    
+
     <!-- Connection Status -->
     <div id="collab-status-text" class="collab-status unconfigured">
       <span class="collab-user-badge" style="background: currentColor;"></span>
@@ -1016,15 +1039,6 @@
     <!-- Active User List -->
     <div class="collab-user-list" id="collab-user-list">
       <!-- Synced users will appear here -->
-    </div>
-
-    <!-- User Profile Settings -->
-    <div class="collab-section" id="collab-identity-section">
-      <div class="collab-status" style="color:rgba(255,255,255,0.4)">My Identity</div>
-      <div class="collab-row">
-        <span class="collab-identity-hint" style="flex:1;color:rgba(255,255,255,0.4);font-size:11px;">Click your name above to rename</span>
-        <input type="color" id="collab-my-color" title="Cursor Color" value="#1e90ff" />
-      </div>
     </div>
 
     <!-- Auth Section -->
@@ -1051,22 +1065,22 @@
         <button class="collab-auth-btn" id="btn-auth-logout" style="flex:0; padding:4px 8px;">Logout</button>
       </div>
     </div>
+  </div>
 
-    <!-- Diagnostics Panel -->
-    <div class="collab-diagnostics">
-      <a href="#" class="collab-diag-toggle" id="collab-diag-toggle">⚙️ Diagnostics</a>
-      <div class="collab-diag-content" id="collab-diag-content">
-        <div class="collab-diag-label">Active Connection Log</div>
-        <div id="collab-diag-status" class="collab-diag-success">No active initialization or connection errors.</div>
-        
-        <div class="collab-diag-label">Database URL</div>
-        <div class="collab-diag-input-row">
-          <input type="text" id="collab-diag-db-url" placeholder="https://..." spellcheck="false" />
-          <button id="btn-collab-reconnect">Save</button>
-        </div>
-        <div style="font-size:8px; color:rgba(255,255,255,0.3); margin-top:2px; line-height:1.2;">
-          If status shows "Rules Blocked" or "Offline": (1) Check Firebase Console → Realtime Database → Rules — set <code style="font-size:8px;color:rgba(255,200,100,0.7)">{".read":true,".write":true}</code> for testing. (2) Verify the DB URL below matches your region (e.g. europe-west1).
-        </div>
+  <!-- Diagnostics Widget (separate, toggled by its own gear button) -->
+  <div class="collab-presence-widget" id="diag-widget">
+    <h4>Diagnostics</h4>
+    <div class="collab-diag-content open" id="collab-diag-content">
+      <div class="collab-diag-label">Active Connection Log</div>
+      <div id="collab-diag-status" class="collab-diag-success">No active initialization or connection errors.</div>
+
+      <div class="collab-diag-label">Database URL</div>
+      <div class="collab-diag-input-row">
+        <input type="text" id="collab-diag-db-url" placeholder="https://..." spellcheck="false" />
+        <button id="btn-collab-reconnect">Save</button>
+      </div>
+      <div style="font-size:8px; color:rgba(255,255,255,0.3); margin-top:2px; line-height:1.2;">
+        If status shows "Rules Blocked" or "Offline": (1) Check Firebase Console → Realtime Database → Rules — set <code style="font-size:8px;color:rgba(255,200,100,0.7)">{".read":true,".write":true}</code> for testing. (2) Verify the DB URL below matches your region (e.g. europe-west1).
       </div>
     </div>
   </div>
@@ -3444,6 +3458,18 @@
     let myUserId = 'user_' + Math.random().toString(36).substr(2, 9);
     let myName = localStorage.getItem('collab_username') || '';
     let myColor = localStorage.getItem('collab_usercolor') || '';
+    let myProvider = null;   // 'github.com' | 'google.com' | 'password' | null (set on sign-in)
+
+    // Small inline SVG icon for a given auth provider, or '' if unknown/none.
+    function providerIconSVG(provider) {
+      if (provider === 'github.com') {
+        return '<svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>';
+      }
+      if (provider === 'google.com') {
+        return '<svg viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114A5.94 5.94 0 0 1 8 12.576a5.94 5.94 0 0 1 5.99-5.943c1.55 0 2.97.59 4.065 1.556l3.226-3.226C19.31 3.116 16.84 2 13.99 2 8.163 2 3.424 6.74 3.424 12.576S8.163 23.15 13.99 23.15c5.762 0 10.28-4.053 10.28-9.89 0-.649-.078-1.285-.216-1.902l-11.814-.073z"/></svg>';
+      }
+      return '';
+    }
     let myPresenceRef = null;
     // GitHub OAuth access token — IN MEMORY ONLY (never localStorage). Captured
     // at sign-in; lost on refresh by design, re-acquired by re-auth when committing.
@@ -3485,13 +3511,13 @@
       if (nameInput) nameInput.value = myName;
       if (colorInput) colorInput.value = myColor;
 
-      // Diagnostics panel toggling
-      const toggle = document.getElementById('collab-diag-toggle');
-      const content = document.getElementById('collab-diag-content');
-      if (toggle && content) {
-        toggle.addEventListener('click', (e) => {
-          e.preventDefault();
-          content.classList.toggle('open');
+      // Diagnostics gear — its own floating widget, separate from the Collab button
+      const diagToggle = document.getElementById('btn-diag-toggle');
+      const diagWidget = document.getElementById('diag-widget');
+      if (diagToggle && diagWidget) {
+        diagToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          diagWidget.classList.toggle('open');
         });
       }
 
@@ -3624,6 +3650,7 @@
         id: myUserId,
         name: myName,
         color: myColor,
+        provider: myProvider || null,
         lastActive: firebase.database.ServerValue.TIMESTAMP
       }).catch(err => {
         console.error("Presence update failed:", err);
@@ -3687,6 +3714,17 @@
 
         item.appendChild(badge);
         item.appendChild(name);
+
+        // Provider icon (GitHub/Google) to the right of the name, if signed in.
+        const icon = providerIconSVG(user.provider);
+        if (icon) {
+          const ip = document.createElement('span');
+          ip.className = 'collab-user-provider';
+          ip.title = user.provider === 'github.com' ? 'Signed in with GitHub' : 'Signed in with Google';
+          ip.innerHTML = icon;
+          item.appendChild(ip);
+        }
+
         listEl.appendChild(item);
       }
     }
@@ -4281,37 +4319,37 @@
 
       auth.onAuthStateChanged((user) => {
         const authSec = document.getElementById('collab-auth-section');
-        const identSec = document.getElementById('collab-identity-section');
         const profSec = document.getElementById('collab-profile-section');
         const profName = document.getElementById('collab-profile-name');
 
         if (user) {
-          // Logged in: hide identity-editing + sign-in entirely; only the
-          // active-people list (and logout) remain.
+          // Logged in: hide the Sign In section; only the active-people list
+          // and the logged-in/logout row remain.
           if (authSec) authSec.style.display = 'none';
-          if (identSec) identSec.style.display = 'none';
           if (profSec) profSec.style.display = 'flex';
-          
+
+          const provider = (user.providerData && user.providerData[0])
+            ? user.providerData[0].providerId : null;
+          myProvider = provider;
+
           let disp = user.displayName || user.email || 'Signed In';
-          if (user.providerData && user.providerData[0]) {
-            const provider = user.providerData[0].providerId;
-            if (provider === 'github.com') disp = '🐱 ' + disp;
-            else if (provider === 'google.com') disp = '🌐 ' + disp;
-            else disp = '✉️ ' + disp;
-          }
+          if (provider === 'github.com') disp = '🐱 ' + disp;
+          else if (provider === 'google.com') disp = '🌐 ' + disp;
+          else disp = '✉️ ' + disp;
           if (profName) profName.textContent = disp;
-          
+
           if (user.displayName && !localStorage.getItem('collab_username_custom')) {
             myName = user.displayName;
-            const nameInput = document.getElementById('collab-my-name');
-            if (nameInput) nameInput.value = myName;
             localStorage.setItem('collab_username', myName);
-            updatePresenceInDB();
           }
+          // Publish the provider (+ any name change) so peers see our icon.
+          updatePresenceInDB();
         } else {
+          // Signed out: show the Sign In section again, clear the provider.
+          myProvider = null;
           if (authSec) authSec.style.display = 'block';
-          if (identSec) identSec.style.display = 'flex';
           if (profSec) profSec.style.display = 'none';
+          updatePresenceInDB();
         }
       });
 
