@@ -1041,19 +1041,14 @@
       <!-- Synced users will appear here -->
     </div>
 
-    <!-- Auth Section -->
+    <!-- Auth Section: GitHub only. Signing in authorizes committing files to
+         the Mudlark Media repo; local save works without signing in. -->
     <div class="collab-section" id="collab-auth-section">
-      <div class="collab-status" style="color:rgba(255,255,255,0.4)">Sign In</div>
+      <div class="collab-status" style="color:rgba(255,255,255,0.4)">Sign in to commit files</div>
       <div class="collab-row">
-        <!-- Google Sign-in -->
-        <button class="collab-auth-btn" id="btn-auth-google" title="Sign in with Google">
-          <svg viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114A5.94 5.94 0 0 1 8 12.576a5.94 5.94 0 0 1 5.99-5.943c1.55 0 2.97.59 4.065 1.556l3.226-3.226C19.31 3.116 16.84 2 13.99 2 8.163 2 3.424 6.74 3.424 12.576S8.163 23.15 13.99 23.15c5.762 0 10.28-4.053 10.28-9.89 0-.649-.078-1.285-.216-1.902l-11.814-.073z"/></svg>
-          Google
-        </button>
-        <!-- GitHub Sign-in -->
         <button class="collab-auth-btn" id="btn-auth-github" title="Sign in with GitHub">
           <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          GitHub
+          Sign in with GitHub
         </button>
       </div>
     </div>
@@ -3203,7 +3198,10 @@
       const targetEl = document.elementFromPoint(e.clientX, e.clientY);
       const elObj = targetEl && targetEl.closest('[data-kind]');
       const kind = elObj ? elObj.dataset.kind : null;
-      const id = elObj ? elObj.dataset.id : null;
+      // dataset values are strings, but pin/node .id are numbers (newId()).
+      // Coerce numeric ids back to Number so findPin/findNode (strict ===) match.
+      let id = elObj ? elObj.dataset.id : null;
+      if (id != null && /^\d+$/.test(id)) id = Number(id);
 
       const items = [];
       if (kind === 'pin' || kind === 'node') {
@@ -4020,7 +4018,8 @@
       if (cred.accessToken) gitHubToken = cred.accessToken;
       const username = result && result.additionalUserInfo
         && result.additionalUserInfo.username;
-      refreshMudlarkMembership(username);
+      refreshMudlarkMembership(username).then(updateAuthUI);
+      updateAuthUI();
     }
 
     async function handleGithubAuthError(err) {
@@ -4031,54 +4030,25 @@
         return;
       }
       const pendingCred = err.credential;
-      const email = err.email;
 
-      // (1) We ALREADY hold a valid GitHub OAuth token in the pending credential.
-      //     Capture it now so uploads/commits work this session regardless of
-      //     whether the Firebase account-link below succeeds. (This is why the
-      //     old flow showed "unauthorized": the link popup was blocked before we
-      //     ever captured the token.)
+      // GitHub is the only sign-in method now, so this only happens if the
+      // email collides with a pre-existing account from the old multi-provider
+      // days. We still hold a valid GitHub OAuth token in the pending
+      // credential — capture it so commits work this session, and (if a stale
+      // Firebase user is around) link GitHub onto it without a second popup.
       if (pendingCred && pendingCred.accessToken) {
         gitHubToken = pendingCred.accessToken;
         await refreshMudlarkMembership(null);
+        updateAuthUI();
       }
-
-      // (2) If a Firebase user is already signed in (e.g. via Google in a prior
-      //     session), link GitHub straight onto it — NO second popup, so nothing
-      //     for the browser to block.
-      if (auth.currentUser) {
+      if (auth.currentUser && pendingCred) {
         try {
           await auth.currentUser.linkWithCredential(pendingCred);
           await refreshMudlarkMembership(githubUsername);
+          updateAuthUI();
         } catch (e) {
-          // Already linked, or credential in use elsewhere — non-fatal; the
-          // token from step (1) still makes commits work.
           console.warn('GitHub link skipped:', e && e.message);
         }
-        return;
-      }
-
-      // (3) Not signed in yet → land them as their existing account. Use a
-      //     REDIRECT (never popup-blocked) instead of the auto popup that was
-      //     failing. After they return signed in, clicking GitHub once more hits
-      //     branch (2) and links cleanly.
-      try {
-        const methods = await auth.fetchSignInMethodsForEmail(email);
-        if (methods.includes('google.com')) {
-          uiAlert("Your email is already registered with Google.\n\n" +
-                "You're authorized to upload for this session. We'll now send you to Google to sign in so your accounts link — when you return, click GitHub once more to finish linking.");
-          const gp = new firebase.auth.GoogleAuthProvider();
-          gp.setCustomParameters({ login_hint: email });
-          await auth.signInWithRedirect(gp);
-        } else if (methods.includes('password')) {
-          uiAlert(`This email (${email}) is registered with an email/password login.\n` +
-                "Sign in with email first, then click GitHub to link it.\n\n" +
-                "(You can still upload this session — your GitHub access is active.)");
-        } else {
-          uiAlert("You're authorized to upload this session. Click GitHub again if you also need to be signed in.");
-        }
-      } catch (e) {
-        console.warn('Could not start link redirect:', e && e.message);
       }
     }
 
@@ -4301,6 +4271,58 @@
       });
     }
 
+    // Single source of truth for the collab widget's auth UI. Called from the
+    // Firebase auth-state listener AND from every GitHub token-capture path so
+    // the panel reflects ACTUAL authorization, not just the Firebase session.
+    function updateAuthUI() {
+      const authSec = document.getElementById('collab-auth-section');
+      const profSec = document.getElementById('collab-profile-section');
+      const profName = document.getElementById('collab-profile-name');
+      const fbUser = (typeof auth !== 'undefined' && auth) ? auth.currentUser : null;
+
+      // Authorized = a Firebase session OR a captured GitHub token.
+      const signedIn = !!fbUser || !!gitHubToken;
+
+      // Provider for the icon/label: prefer the live Firebase provider, else
+      // fall back to GitHub when we only hold a token.
+      let provider = null;
+      if (fbUser && fbUser.providerData && fbUser.providerData[0]) {
+        provider = fbUser.providerData[0].providerId;
+      } else if (gitHubToken) {
+        provider = 'github.com';
+      }
+      myProvider = provider;
+
+      console.log('[Desmata] updateAuthUI →',
+        { firebaseUser: !!fbUser, gitHubToken: !!gitHubToken, provider, signedIn });
+
+      if (signedIn) {
+        if (authSec) authSec.style.display = 'none';
+        if (profSec) profSec.style.display = 'flex';
+
+        const base = (fbUser && (fbUser.displayName || fbUser.email)) || githubUsername || 'Signed In';
+        let disp = base;
+        if (provider === 'github.com') disp = '🐱 ' + base;
+        else if (provider === 'google.com') disp = '🌐 ' + base;
+        else disp = '✉️ ' + base;
+        if (profName) profName.textContent = disp;
+
+        // Adopt the provider's name as our collab name unless the user picked one.
+        if (!localStorage.getItem('collab_username_custom')) {
+          const adopt = (fbUser && fbUser.displayName) || githubUsername;
+          if (adopt && adopt !== myName) {
+            myName = adopt;
+            localStorage.setItem('collab_username', myName);
+          }
+        }
+      } else {
+        if (authSec) authSec.style.display = 'block';
+        if (profSec) profSec.style.display = 'none';
+      }
+      // Publish provider/name so peers see our icon + current name.
+      updatePresenceInDB();
+    }
+
     function setupAuthSystem() {
       const emailToggleBtn = document.getElementById('btn-auth-email-toggle');
       const emailForm = document.getElementById('collab-email-form');
@@ -4317,49 +4339,13 @@
         .then((result) => { if (result && result.user && result.credential) captureGithubResult(result); })
         .catch((err) => { if (err && err.code) handleGithubAuthError(err); });
 
-      auth.onAuthStateChanged((user) => {
-        const authSec = document.getElementById('collab-auth-section');
-        const profSec = document.getElementById('collab-profile-section');
-        const profName = document.getElementById('collab-profile-name');
-
-        if (user) {
-          // Logged in: hide the Sign In section; only the active-people list
-          // and the logged-in/logout row remain.
-          if (authSec) authSec.style.display = 'none';
-          if (profSec) profSec.style.display = 'flex';
-
-          const provider = (user.providerData && user.providerData[0])
-            ? user.providerData[0].providerId : null;
-          myProvider = provider;
-
-          let disp = user.displayName || user.email || 'Signed In';
-          if (provider === 'github.com') disp = '🐱 ' + disp;
-          else if (provider === 'google.com') disp = '🌐 ' + disp;
-          else disp = '✉️ ' + disp;
-          if (profName) profName.textContent = disp;
-
-          if (user.displayName && !localStorage.getItem('collab_username_custom')) {
-            myName = user.displayName;
-            localStorage.setItem('collab_username', myName);
-          }
-          // Publish the provider (+ any name change) so peers see our icon.
-          updatePresenceInDB();
-        } else {
-          // Signed out: show the Sign In section again, clear the provider.
-          myProvider = null;
-          if (authSec) authSec.style.display = 'block';
-          if (profSec) profSec.style.display = 'none';
-          updatePresenceInDB();
-        }
-      });
-
-      const googleBtn = document.getElementById('btn-auth-google');
-      if (googleBtn) {
-        googleBtn.addEventListener('click', () => {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          auth.signInWithPopup(provider).catch(err => uiAlert("Google Auth Failed: " + err.message));
-        });
-      }
+      // Re-render the collab widget's auth state whenever the Firebase session
+      // OR the GitHub token changes. NOTE: "signed in" for this app means EITHER
+      // a Firebase session exists OR we hold a GitHub OAuth token — because the
+      // GitHub account-link path (account-exists-with-different-credential)
+      // authorizes commits via a captured token WITHOUT a Firebase user. Keying
+      // the UI only on auth.currentUser is why the panel never swapped.
+      auth.onAuthStateChanged(() => updateAuthUI());
 
       const githubBtn = document.getElementById('btn-auth-github');
       if (githubBtn) {
@@ -4386,10 +4372,14 @@
       const logoutBtn = document.getElementById('btn-auth-logout');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-          auth.signOut();
+          // Clear the GitHub token FIRST so updateAuthUI (triggered by signOut's
+          // auth-state change) sees us as fully signed out.
           gitHubToken = null;
           isMudlarkMember = false;
           githubUsername = null;
+          myProvider = null;
+          auth.signOut().then(updateAuthUI).catch(updateAuthUI);
+          updateAuthUI();
         });
       }
     }
