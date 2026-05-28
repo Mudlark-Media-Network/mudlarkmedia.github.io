@@ -1,20 +1,20 @@
 {
   "board": "testboard1",
-  "generatedAt": "2026-05-28T18:49:03.569Z",
+  "generatedAt": "2026-05-28T19:13:17.434Z",
   "generatedBy": "LVMaestri",
   "fileCount": 1,
   "files": [
     {
-      "filename": "Resistance-to-Civil-Government.pdf",
-      "storedName": "1779994138017_o6uugi_Resistance-to-Civil-Government.pdf",
-      "path": "website/Database/Mindmap Uploads/testboard1/1779994138017_o6uugi_Resistance-to-Civil-Government.pdf",
+      "filename": "Prepared-to-die-20-April-1964-speech-final.pdf",
+      "storedName": "1779995593372_dz39mr_Prepared-to-die-20-April-1964-speech-final.pdf",
+      "path": "website/Database/Mindmap Uploads/testboard1/1779995593372_dz39mr_Prepared-to-die-20-April-1964-speech-final.pdf",
       "type": "application/pdf",
-      "size": 1385928,
-      "title": "Resistance to Civil Government",
+      "size": 203214,
+      "title": "Prepared to die 20 April 1964 speech final",
       "description": "",
-      "date": "2026-05-28T18:48:58.017Z",
+      "date": "2026-05-28T19:13:13.372Z",
       "uploader": "LVMaestri",
-      "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Database/Mindmap%20Uploads/testboard1/1779994138017_o6uugi_Resistance-to-Civil-Government.pdf",
+      "url": "https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Database/Mindmap%20Uploads/testboard1/1779995593372_dz39mr_Prepared-to-die-20-April-1964-speech-final.pdf",
       "attachedTo": {
         "kind": "node",
         "id": 17
