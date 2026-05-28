@@ -449,6 +449,27 @@
       line-height: 1;
     }
     .attachment-item .remove:hover { color: #ff8080; }
+    /* Stacked layout: title row + filename/description row */
+    .attachment-item { flex-wrap: wrap; }
+    .attachment-item .att-main { display: flex; align-items: center; gap: 6px; width: 100%; }
+    .attachment-item .att-sub {
+      width: 100%; color: rgba(255,255,255,0.4); font-size: 9px; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .att-badge {
+      flex-shrink: 0; font-size: 8px; letter-spacing: 0.4px; text-transform: uppercase;
+      padding: 1px 5px; border-radius: 2px; border: 1px solid transparent; cursor: help;
+    }
+    .att-badge.site  { color: #7bed9f; border-color: rgba(123,237,159,0.4); background: rgba(123,237,159,0.08); }
+    .att-badge.temp  { color: #eccc68; border-color: rgba(236,204,104,0.4); background: rgba(236,204,104,0.08); }
+    .att-badge.local { color: #70a1ff; border-color: rgba(112,161,255,0.4); background: rgba(112,161,255,0.08); }
+    .att-bar-bg { width: 100%; height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
+    .att-bar-fg { height: 100%; background: #4caf50; transition: width .15s; }
+    .att-bar-fg.indeterminate {
+      width: 40%; background: linear-gradient(90deg, rgba(76,175,80,0.15), #4caf50, rgba(76,175,80,0.15));
+      animation: att-slide 1.1s linear infinite;
+    }
+    @keyframes att-slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
 
     /* ── Attribution (always visible, bottom-right) ───────────── */
     #attribution {
@@ -2399,77 +2420,121 @@
       });
       renderAttachmentList(list, target);
     }
-    function handleFiles(files, target, list) {
+    async function handleFiles(files, target, list) {
+      const boardId = getBoardId();
+      const authorized = !!gitHubToken && isMudlarkMember;
+      let warnedUnsaved = false;
       for (const file of files) {
-        // If Firebase Storage is available, upload there for small payload + cross-browser sync
-        if (storage && firebaseInitialized) {
-          const boardId = getBoardId();
-          const uniqueName = Date.now() + '_' + Math.random().toString(36).substr(2, 6) + '_' + file.name;
-          const storageRef = storage.ref(`boards/${boardId}/attachments/${uniqueName}`);
-          const uploadTask = storageRef.put(file);
+        // 1) Collect user metadata before doing anything. Skip = don't add it.
+        const meta = await promptFileMetadata(file);
+        if (!meta) continue;
 
-          // Show a temporary "uploading..." entry
-          const tempAtt = {
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            dataUrl: '',
-            uploading: true,
-            progress: 0
-          };
-          target.attachments.push(tempAtt);
+        const att = {
+          name: file.name, type: file.type, size: file.size,
+          title: meta.title, description: meta.description,
+          date: new Date().toISOString(),
+          uploader: githubUsername || myName || 'anonymous',
+          dataUrl: '', url: '', location: 'pending',
+          uploading: true, progress: 0, indeterminate: false
+        };
+        target.attachments.push(att);
+        renderAttachmentList(list, target);
+
+        // 2a) AUTHORIZED → commit straight to GitHub. The Contents API gives no
+        //     progress events, so show an indeterminate "committing…" state
+        //     instead of a 0% bar that would look frozen.
+        if (authorized) {
+          att.indeterminate = true;
           renderAttachmentList(list, target);
-
-          uploadTask.on('state_changed', 
-            (snapshot) => {
-              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              tempAtt.progress = progress;
-              renderAttachmentList(list, target);
-            }, 
-            (err) => {
-              console.error('Firebase Storage upload failed, falling back to base64:', err);
-              // Fallback: read as base64
-              const reader = new FileReader();
-              reader.onload = (ev) => {
-                tempAtt.uploading = false;
-                tempAtt.dataUrl = ev.target.result;
-                renderAttachmentList(list, target);
-                scheduleRender();
-                scheduleUnifiedSave();
-              };
-              reader.readAsDataURL(file);
-            }, 
-            () => {
-              uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-                tempAtt.uploading = false;
-                tempAtt.dataUrl = downloadURL;
-                tempAtt.storagePath = `boards/${boardId}/attachments/${uniqueName}`;
-                renderAttachmentList(list, target);
-                scheduleRender();
-                // Persist the finished file. Without this the attachment lives
-                // only in memory, so the next remote echo (local ≠ remote)
-                // tears the board down and the file vanishes.
-                scheduleUnifiedSave();
-              });
-            }
-          );
-        } else {
-          // Fallback: embed as base64 dataUrl (only works for very small files)
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            target.attachments.push({
-              name: file.name,
-              type: file.type,
-              size: file.size,
-              dataUrl: ev.target.result
-            });
+          const storedName = Date.now() + '_' + Math.random().toString(36).substr(2, 6) + '_' + file.name.replace(/[^\w.\-]+/g, '_');
+          att.storedName = storedName;
+          try {
+            const { path, downloadUrl } = await commitFileToGithub(boardId, file, storedName);
+            att.uploading = false; att.indeterminate = false;
+            att.location = 'github'; att.githubPath = path;
+            att.url = downloadUrl; att.dataUrl = downloadUrl;
             renderAttachmentList(list, target);
             scheduleRender();
             scheduleUnifiedSave();
-          };
-          reader.readAsDataURL(file);
+            updateBoardManifest(boardId);   // best-effort; never blocks the file
+          } catch (err) {
+            console.error('GitHub commit failed:', err);
+            att.uploading = false; att.indeterminate = false;
+            alert('Could not commit "' + file.name + '" to the site:\n' + err.message +
+                  '\n\nKeeping a local copy instead — use Save to download it.');
+            await embedLocally(file, att, list, target);
+          }
+          continue;
         }
+
+        // 2b) NOT AUTHORIZED → the file is NOT saved to the site. Warn once, then
+        //     stage to Firebase (temporary) with a watchdog so the bar can't hang.
+        if (!warnedUnsaved) {
+          warnedUnsaved = true;
+          alert(
+            (gitHubToken
+              ? "You're signed in but not yet an authorized member of the Mudlark Media org, "
+              : "You're not signed in with an authorized GitHub account, ") +
+            "so uploaded files are NOT saved to the site — only staged temporarily.\n\n" +
+            "Use the Save button to download a local copy (ZIP) so your files aren't lost."
+          );
+        }
+        await stageToFirebaseOrLocal(file, att, list, target, boardId);
       }
+    }
+
+    // base64-embed a file into an attachment (the always-works local fallback).
+    function embedLocally(file, att, list, target) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          att.uploading = false; att.indeterminate = false;
+          att.dataUrl = ev.target.result; att.url = '';
+          att.location = 'local';
+          renderAttachmentList(list, target);
+          scheduleRender();
+          scheduleUnifiedSave();
+          resolve();
+        };
+        reader.onerror = () => { att.uploading = false; renderAttachmentList(list, target); resolve(); };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Stage an unauthorized upload to Firebase Storage (temp). A 30s watchdog
+    // falls back to a local base64 copy if Storage stalls, so the bar never
+    // freezes (this was the old "stuck loading bar" failure mode).
+    function stageToFirebaseOrLocal(file, att, list, target, boardId) {
+      return new Promise((resolve) => {
+        if (!(storage && firebaseInitialized)) { embedLocally(file, att, list, target).then(resolve); return; }
+        const uniqueName = Date.now() + '_' + Math.random().toString(36).substr(2, 6) + '_' + file.name;
+        const storagePath = `boards/${boardId}/attachments/${uniqueName}`;
+        const uploadTask = storage.ref(storagePath).put(file);
+        let done = false;
+        const finish = () => { if (done) return; done = true; clearTimeout(watch); resolve(); };
+        const watch = setTimeout(() => {
+          if (done) return;
+          try { uploadTask.cancel(); } catch (_) {}   // cancel → error handler → embedLocally
+        }, 30000);
+        uploadTask.on('state_changed',
+          (snap) => { att.progress = (snap.bytesTransferred / snap.totalBytes) * 100; renderAttachmentList(list, target); },
+          (err) => {
+            console.warn('Firebase Storage staging failed, embedding locally:', err && err.message);
+            embedLocally(file, att, list, target).then(finish);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then(url => {
+              att.uploading = false; att.indeterminate = false;
+              att.dataUrl = url; att.url = url;
+              att.location = 'firebase'; att.storagePath = storagePath;
+              renderAttachmentList(list, target);
+              scheduleRender();
+              scheduleUnifiedSave();
+              finish();
+            }).catch(() => embedLocally(file, att, list, target).then(finish));
+          }
+        );
+      });
     }
     function renderAttachmentList(list, target) {
       list.innerHTML = '';
@@ -2477,65 +2542,87 @@
         const item = document.createElement('div');
         item.className = 'attachment-item';
 
+        // In-flight: uploading to Firebase (percentage) or committing to GitHub
+        // (indeterminate). Either way show a live progress row, never a dead link.
         if (att.uploading) {
-          // Show uploading indicator with progress bar
           const container = document.createElement('div');
           container.className = 'name';
-          container.style.opacity = '0.7';
+          container.style.opacity = '0.85';
           container.style.flex = '1';
-          
+
           const text = document.createElement('div');
-          text.textContent = att.name + ' (uploading...)';
-          text.style.fontSize = '0.9em';
-          text.style.marginBottom = '4px';
+          text.textContent = (att.title || att.name) + (att.indeterminate ? ' — committing to site…' : ' — uploading…');
+          text.style.cssText = 'font-size:0.9em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
           container.appendChild(text);
 
           const barBg = document.createElement('div');
-          barBg.style.width = '100%';
-          barBg.style.height = '4px';
-          barBg.style.background = '#444';
-          barBg.style.borderRadius = '2px';
-          barBg.style.overflow = 'hidden';
-          
+          barBg.className = 'att-bar-bg';
           const barFg = document.createElement('div');
-          barFg.style.width = (att.progress || 0) + '%';
-          barFg.style.height = '100%';
-          barFg.style.background = '#4caf50';
+          barFg.className = 'att-bar-fg' + (att.indeterminate ? ' indeterminate' : '');
+          if (!att.indeterminate) barFg.style.width = (att.progress || 0) + '%';
           barBg.appendChild(barFg);
-          
           container.appendChild(barBg);
+
           item.appendChild(container);
           list.appendChild(item);
           return;
         }
 
+        // Finished: title row (link + location badge + size + remove).
+        const main = document.createElement('div');
+        main.className = 'att-main';
+
         const a = document.createElement('a');
         a.className = 'name';
-        a.href = att.dataUrl;
-        // If it's a Firebase Storage URL (not a data: URL), open in new tab
-        if (att.dataUrl && !att.dataUrl.startsWith('data:')) {
-          a.target = '_blank';
-          a.rel = 'noopener';
-        } else {
-          a.download = att.name;
+        const href = att.url || att.dataUrl || '';
+        a.href = href || '#';
+        if (href && !href.startsWith('data:')) { a.target = '_blank'; a.rel = 'noopener'; }
+        else if (href) { a.download = att.name; }
+        a.textContent = att.title || att.name;
+        a.title = (att.description ? att.description + '\n\n' : '') + att.name;
+        main.appendChild(a);
+
+        // Location badge — where this file actually lives.
+        const loc = att.location;
+        if (loc === 'github' || loc === 'firebase' || loc === 'local') {
+          const badge = document.createElement('span');
+          if (loc === 'github')      { badge.className = 'att-badge site';  badge.textContent = 'On site'; badge.title = att.githubPath || 'Committed to the site repo'; }
+          else if (loc === 'firebase'){ badge.className = 'att-badge temp';  badge.textContent = 'Temp';    badge.title = 'Staged to Firebase only — save locally to keep it'; }
+          else                        { badge.className = 'att-badge local'; badge.textContent = 'Local';   badge.title = 'Embedded in this board only — save locally to keep it'; }
+          main.appendChild(badge);
         }
-        a.textContent = att.name;
-        a.title = att.name;
+
         const size = document.createElement('span');
         size.className = 'size';
         size.textContent = formatSize(att.size);
+        main.appendChild(size);
+
         const rm = document.createElement('button');
         rm.className = 'remove';
         rm.textContent = '×';
         rm.title = 'Remove';
         rm.addEventListener('click', () => {
+          const wasGithub = att.location === 'github';
           target.attachments.splice(i, 1);
           renderAttachmentList(list, target);
           scheduleRender();
+          scheduleUnifiedSave();
+          // Keep the GitHub folder index accurate (the blob stays in history).
+          if (wasGithub && gitHubToken && isMudlarkMember) updateBoardManifest(getBoardId());
         });
-        item.appendChild(a);
-        item.appendChild(size);
-        item.appendChild(rm);
+        main.appendChild(rm);
+        item.appendChild(main);
+
+        // Secondary line: filename · type · description preview.
+        const sub = document.createElement('div');
+        sub.className = 'att-sub';
+        let subText = att.name;
+        if (att.type) subText += ' · ' + att.type;
+        if (att.description) subText += ' — ' + att.description;
+        sub.textContent = subText;
+        sub.title = subText;
+        item.appendChild(sub);
+
         list.appendChild(item);
       });
     }
@@ -2927,7 +3014,7 @@
           sizeBase: p.sizeBase, fillColor: p.fillColor, fillAlpha: p.fillAlpha,
           borderColor: p.borderColor, borderWidth: p.borderWidth,
           glowDistance: p.glowDistance, glowBrightness: p.glowBrightness,
-          metadata: p.metadata, attachments: (p.attachments || []).filter(a => !a.uploading).map(a => ({ name: a.name, type: a.type, size: a.size, dataUrl: a.dataUrl, storagePath: a.storagePath }))
+          metadata: p.metadata, attachments: (p.attachments || []).filter(a => !a.uploading).map(a => ({ name: a.name, type: a.type, size: a.size, dataUrl: a.dataUrl, storagePath: a.storagePath, storedName: a.storedName, title: a.title, description: a.description, date: a.date, uploader: a.uploader, location: a.location, url: a.url, githubPath: a.githubPath }))
         })),
         nodes: nodes.map(n => ({
           id: n.id, lat: n.lat, lng: n.lng,
@@ -2935,7 +3022,7 @@
           bgColor: n.bgColor, bgAlpha: n.bgAlpha, textColor: n.textColor,
           indicatorColor: n.indicatorColor, borderColor: n.borderColor, borderWidth: n.borderWidth,
           glowDistance: n.glowDistance, glowBrightness: n.glowBrightness,
-          flipped: n.flipped, attachments: (n.attachments || []).filter(a => !a.uploading).map(a => ({ name: a.name, type: a.type, size: a.size, dataUrl: a.dataUrl, storagePath: a.storagePath }))
+          flipped: n.flipped, attachments: (n.attachments || []).filter(a => !a.uploading).map(a => ({ name: a.name, type: a.type, size: a.size, dataUrl: a.dataUrl, storagePath: a.storagePath, storedName: a.storedName, title: a.title, description: a.description, date: a.date, uploader: a.uploader, location: a.location, url: a.url, githubPath: a.githubPath }))
         })),
         lines: lines.map(l => ({
           id: l.id, fromId: l.fromId, fromDock: l.fromDock,
@@ -3082,9 +3169,14 @@
 
     // ── GitHub commit config (fork-time, like the Firebase keys above) ──────
     // Committing data files to the repo is gated on membership of this org.
-    // CONFIRM these two values for your org/repo before commits will work.
-    const GITHUB_ORG = "MudlarkMedia";          // GitHub org slug (case-sensitive in URLs)
-    const GITHUB_REPO = "MudlarkMedia/desmata-link"; // owner/name of the data-file repo
+    // CONFIRM these values for your org/repo before commits will work.
+    const GITHUB_ORG = "Mudlark-Media-Network";   // GitHub org slug (case-sensitive in URLs)
+    const GITHUB_REPO = "Mudlark-Media-Network/mudlarkmedia.github.io"; // owner/name of the site repo
+    const GITHUB_BRANCH = "main";                  // branch the live site is served from
+    // Uploaded files live under this folder, nested per board:
+    //   {GITHUB_UPLOADS_BASE}/{boardId}/{file}   plus one _manifest.json index per board.
+    // Served live at https://www.mudlarkmedia.net/<this path> (note the literal space).
+    const GITHUB_UPLOADS_BASE = "website/Database/Mindmap Uploads";
 
     let firebaseInitialized = false;
     let database = null;
@@ -3644,6 +3736,147 @@
         return false;
       }
       return true;
+    }
+
+    // ── GitHub Contents API: commit files + per-board manifest ─────────────
+    // Files:    {GITHUB_UPLOADS_BASE}/{boardId}/{storedName}
+    // Manifest: {GITHUB_UPLOADS_BASE}/{boardId}/_manifest.json  (indexes ALL the
+    // board's files' metadata — the self-describing folder index the user asked
+    // for). RTDB still holds the live attachment metadata; the manifest mirrors it.
+    function githubApiHeaders() {
+      return {
+        Authorization: `Bearer ${gitHubToken}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      };
+    }
+    // Encode each path segment but keep the slashes (spaces -> %20, etc.).
+    function ghEncodePath(path) {
+      return path.split('/').map(encodeURIComponent).join('/');
+    }
+    // base64-encode a File/Blob's bytes (without the data: prefix) for the API.
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error || new Error('read failed'));
+        reader.onload = () => {
+          const res = reader.result || '';
+          const comma = res.indexOf(',');
+          resolve(comma >= 0 ? res.slice(comma + 1) : res);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    // Current sha of a path (needed to UPDATE an existing file), or null if new.
+    async function githubGetSha(path) {
+      const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${ghEncodePath(path)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
+      try {
+        const res = await fetch(url, { headers: githubApiHeaders() });
+        if (res.ok) return (await res.json()).sha || null;
+      } catch (_) {}
+      return null;
+    }
+    // PUT base64 content to a path (create or update). Returns committed metadata.
+    async function githubPutFile(path, base64Content, message) {
+      const sha = await githubGetSha(path);
+      const body = { message: message || `Desmata Link: ${path}`, content: base64Content, branch: GITHUB_BRANCH };
+      if (sha) body.sha = sha;
+      const res = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO}/contents/${ghEncodePath(path)}`,
+        { method: 'PUT', headers: githubApiHeaders(), body: JSON.stringify(body) }
+      );
+      if (!res.ok) throw new Error(`GitHub commit failed (${res.status}): ${await res.text()}`);
+      return res.json();
+    }
+    // Commit one uploaded file to the board folder. Resolves to its public URL.
+    async function commitFileToGithub(boardId, file, storedName) {
+      const base64 = await fileToBase64(file);
+      const path = `${GITHUB_UPLOADS_BASE}/${boardId}/${storedName}`;
+      const result = await githubPutFile(path, base64, `Add ${storedName} to board ${boardId}`);
+      const downloadUrl = (result.content && result.content.download_url) || '';
+      return { path, downloadUrl };
+    }
+    // Rewrite the board's _manifest.json from every GitHub-hosted attachment
+    // currently on the board. Best-effort: a manifest failure never blocks a file.
+    async function updateBoardManifest(boardId) {
+      if (!gitHubToken) return;
+      const entries = [];
+      const collect = (owner, ownerKind) => {
+        (owner.attachments || []).forEach(a => {
+          if (a.location === 'github' && a.githubPath) {
+            entries.push({
+              filename: a.name, storedName: a.storedName || a.name, path: a.githubPath,
+              type: a.type || '', size: a.size || 0, title: a.title || '',
+              description: a.description || '', date: a.date || '', uploader: a.uploader || '',
+              url: a.url || '', attachedTo: { kind: ownerKind, id: owner.id }
+            });
+          }
+        });
+      };
+      pins.forEach(p => collect(p, 'pin'));
+      nodes.forEach(n => collect(n, 'node'));
+      const manifest = {
+        board: boardId, generatedAt: new Date().toISOString(),
+        generatedBy: githubUsername || myName || 'unknown',
+        fileCount: entries.length, files: entries
+      };
+      const base64 = btoa(unescape(encodeURIComponent(JSON.stringify(manifest, null, 2))));
+      try {
+        await githubPutFile(`${GITHUB_UPLOADS_BASE}/${boardId}/_manifest.json`, base64, `Update manifest for board ${boardId}`);
+      } catch (e) {
+        console.error('Manifest update failed:', e);
+      }
+    }
+
+    // ── Per-file metadata popup ────────────────────────────────────────────
+    // Collects a user-defined title + description before upload; auto-captures
+    // filename, type, size, date. Resolves to {title, description} or null (skip).
+    function promptFileMetadata(file) {
+      return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-dialog';
+        const kb = file.size < 1024*1024 ? (file.size/1024).toFixed(1)+' KB' : (file.size/1048576).toFixed(2)+' MB';
+        const safeName = (file.name || '').replace(/</g, '&lt;');
+        const defaultTitle = (file.name || '').replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').trim();
+        overlay.innerHTML = `
+          <div class="modal-content" style="max-width:380px;">
+            <h3>File details</h3>
+            <p class="file-summary">
+              <b>${safeName}</b><br>
+              ${file.type || 'unknown type'} &middot; ${kb}
+            </p>
+            <div class="field" style="margin-bottom:12px;">
+              <label>Title</label>
+              <input type="text" id="meta-title" placeholder="A name for this file">
+            </div>
+            <div class="field" style="margin-bottom:20px;">
+              <label>Description</label>
+              <textarea id="meta-desc" rows="3" placeholder="What is this? (optional)"></textarea>
+            </div>
+            <div class="modal-buttons">
+              <button class="btn-dialog btn-secondary" id="meta-skip">Skip file</button>
+              <button class="btn-dialog" id="meta-ok">Add file</button>
+            </div>
+          </div>`;
+        document.body.appendChild(overlay);
+        const titleEl = overlay.querySelector('#meta-title');
+        const descEl = overlay.querySelector('#meta-desc');
+        titleEl.value = defaultTitle;
+        setTimeout(() => { titleEl.focus(); titleEl.select(); }, 30);
+        const close = (val) => { overlay.remove(); resolve(val); };
+        overlay.querySelector('#meta-ok').addEventListener('click', () =>
+          close({ title: titleEl.value.trim() || file.name, description: descEl.value.trim() }));
+        overlay.querySelector('#meta-skip').addEventListener('click', () => close(null));
+        overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(null); });
+        const submit = () => close({ title: titleEl.value.trim() || file.name, description: descEl.value.trim() });
+        overlay.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') { close(null); return; }
+          // Enter submits, except inside the description box (where it makes a
+          // newline) — there, Cmd/Ctrl+Enter submits.
+          if (e.key === 'Enter' && e.target !== descEl) { e.preventDefault(); submit(); }
+          else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); }
+        });
+      });
     }
 
     function setupAuthSystem() {
