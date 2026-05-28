@@ -1,0 +1,4211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled — Map</title>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: #cfd2d6; }
+    button, input, textarea, select { font-family: inherit; }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+      background-color: #1e2024;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='110'><text x='12' y='28' font-family='monospace' font-size='13' fill='rgba(255,255,255,0.05)' letter-spacing='2'>ERROR</text><text x='120' y='78' font-family='monospace' font-size='13' fill='rgba(255,255,255,0.05)' letter-spacing='2'>ERROR</text></svg>");
+    }
+    #map img { user-select: none; -webkit-user-select: none; -webkit-user-drag: none; }
+
+    /* ── Element layer ─────────────────────────────────────────── */
+    #element-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+      pointer-events: none;
+    }
+    #lines-svg {
+      position: absolute;
+      top: -100000px; left: -100000px;
+      width: 200000px; height: 200000px;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .edge-path { fill: none; pointer-events: none; }
+    .edge-catcher {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 18px;
+      cursor: pointer;
+      pointer-events: stroke;
+    }
+    .edge-handle {
+      position: absolute;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      border: 1.5px solid rgba(255,255,255,0.85);
+      box-shadow: 0 0 8px rgba(255,255,255,0.55);
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      pointer-events: auto;
+      z-index: 300;
+    }
+    .edge-handle:active { cursor: grabbing; }
+
+    /* ── Pin (real SVG triangle) ───────────────────────────────── */
+    .pin {
+      position: absolute;
+      pointer-events: auto;
+      cursor: grab;
+      z-index: 20;
+      overflow: visible;
+    }
+    .pin:active { cursor: grabbing; }
+    .pin svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .pin.selected .pin-shape {
+      stroke-width: 1.5;
+    }
+
+    /* ── Node ──────────────────────────────────────────────────── */
+    .node {
+      position: absolute;
+      pointer-events: auto;
+      cursor: grab;
+      z-index: 25;
+      perspective: 1200px;
+    }
+    .node:active { cursor: grabbing; }
+    .node .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .node.flipped .card { transform: rotateY(180deg); }
+
+    .card-front, .card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 8px 10px;
+      overflow: hidden;
+    }
+    .card-front {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      overflow-y: auto;
+      padding: 8px 10px 10px;
+    }
+    .node-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.92);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+    .node-indicator {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 0 6px rgba(255,255,255,0.7);
+      flex-shrink: 0;
+    }
+    .metadata-header {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 4px;
+      flex-shrink: 0;
+    }
+    .metadata-item {
+      font-size: 10px;
+      padding: 4px 7px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      color: rgba(255,255,255,0.85);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .node.selected .card-front,
+    .node.selected .card-back {
+      border-color: rgba(255,255,255,0.95);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+    }
+
+    /* ── Box-select (marquee, type-filter popup, line highlight) ─ */
+    .marquee {
+      position: fixed;
+      z-index: 1500;
+      border: 1px solid rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      pointer-events: none;
+      border-radius: 2px;
+    }
+    .edge-path.edge-sel {
+      filter: drop-shadow(0 0 2px rgba(255,255,255,0.95));
+    }
+    .sel-popup {
+      position: fixed;
+      z-index: 1600;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      background: rgba(15,17,20,0.82);
+      backdrop-filter: blur(18px) saturate(120%);
+      -webkit-backdrop-filter: blur(18px) saturate(120%);
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    .sel-popup .sel-chip {
+      background: transparent;
+      color: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 5px 11px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .sel-popup .sel-chip:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+    .sel-popup .sel-chip.danger:hover {
+      background: rgba(255,80,80,0.18);
+      border-color: rgba(255,120,120,0.7);
+      color: #fff;
+    }
+    .sel-popup .sel-count {
+      font-size: 9px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      padding: 0 4px 0 6px;
+    }
+
+    /* ── Toolbars (top-left / top-center / top-right) ──────────── */
+    .toolbar {
+      position: absolute;
+      top: 16px;
+      z-index: 1000;
+      display: flex;
+      align-items: stretch;
+      gap: 7px;
+      background: rgba(15,17,20,0.72);
+      backdrop-filter: blur(18px) saturate(120%);
+      -webkit-backdrop-filter: blur(18px) saturate(120%);
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    #toolbar-left   { left: 16px; }
+    #toolbar-right  { right: 16px; }
+    #toolbar-center {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #project-title {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.92);
+      font-size: 14px;
+      letter-spacing: 2px;
+      padding: 8px 16px;
+      outline: none;
+      text-transform: uppercase;
+      min-width: 200px;
+      max-width: 360px;
+      text-align: center;
+      font-family: inherit;
+    }
+    #project-title:focus {
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+    }
+    .toolbar button {
+      background: transparent;
+      color: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 8px 18px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      font-family: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .toolbar button:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+
+    /* ── Sidebar editor ───────────────────────────────────────── */
+    #sidebar {
+      position: absolute;
+      top: 0; right: 0;
+      width: 340px;
+      height: 100%;
+      background: rgba(12,14,16,0.88);
+      backdrop-filter: blur(24px) saturate(120%);
+      -webkit-backdrop-filter: blur(24px) saturate(120%);
+      border-left: 1px solid rgba(255,255,255,0.06);
+      box-shadow: -20px 0 60px rgba(0,0,0,0.7);
+      z-index: 2000;
+      box-sizing: border-box;
+      padding: 26px 22px 30px;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #sidebar.open { display: flex; }
+    #sidebar h3 {
+      margin: 0;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 12px;
+    }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field label {
+      font-size: 9px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    .field input, .field textarea, .field select {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      color: rgba(255,255,255,0.92);
+      padding: 7px 9px;
+      font-size: 11px;
+      outline: none;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(0,0,0,0.6);
+    }
+    .field input[type="color"] {
+      padding: 2px;
+      height: 30px;
+      cursor: pointer;
+    }
+    .field input[type="range"] {
+      padding: 0;
+      height: 6px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      background: rgba(255,255,255,0.08);
+      border: none;
+    }
+    .field input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.85);
+      cursor: pointer;
+      border: none;
+    }
+    .field textarea { resize: vertical; min-height: 80px; font-family: inherit; line-height: 1.45; }
+    .sidebar-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 6px;
+    }
+    .sidebar-actions button {
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 7px 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+    .sidebar-actions button:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .sidebar-actions .btn-danger {
+      color: rgba(220, 90, 90, 0.85);
+      border-color: rgba(220, 90, 90, 0.4);
+      margin-right: auto;
+    }
+    .sidebar-actions .btn-danger:hover {
+      background: rgba(220, 90, 90, 0.15);
+      color: #ff8080;
+      border-color: rgba(220, 90, 90, 0.7);
+    }
+
+    /* ── File drop zone (in sidebar) ──────────────────────────── */
+    .drop-zone {
+      border: 1.5px dashed rgba(255,255,255,0.15);
+      border-radius: 3px;
+      padding: 16px 12px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.8);
+    }
+    .drop-zone .drop-link { text-decoration: underline; }
+    .drop-zone .drop-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .attachment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .attachment-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2px;
+      font-size: 10px;
+    }
+    .attachment-item .name {
+      flex: 1;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .attachment-item .name:hover { color: #fff; text-decoration: underline; }
+    .attachment-item .size {
+      color: rgba(255,255,255,0.4);
+      font-size: 9px;
+      flex-shrink: 0;
+    }
+    .attachment-item .remove {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      padding: 2px 5px;
+      font-size: 13px;
+      line-height: 1;
+    }
+    .attachment-item .remove:hover { color: #ff8080; }
+    /* Stacked layout: title row + filename/description row */
+    .attachment-item { flex-wrap: wrap; }
+    .attachment-item .att-main { display: flex; align-items: center; gap: 6px; width: 100%; }
+    .attachment-item .att-sub {
+      width: 100%; color: rgba(255,255,255,0.4); font-size: 9px; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .att-badge {
+      flex-shrink: 0; font-size: 8px; letter-spacing: 0.4px; text-transform: uppercase;
+      padding: 1px 5px; border-radius: 2px; border: 1px solid transparent; cursor: help;
+    }
+    .att-badge.site  { color: #7bed9f; border-color: rgba(123,237,159,0.4); background: rgba(123,237,159,0.08); }
+    .att-badge.temp  { color: #eccc68; border-color: rgba(236,204,104,0.4); background: rgba(236,204,104,0.08); }
+    .att-badge.local { color: #70a1ff; border-color: rgba(112,161,255,0.4); background: rgba(112,161,255,0.08); }
+    .att-bar-bg { width: 100%; height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
+    .att-bar-fg { height: 100%; background: #4caf50; transition: width .15s; }
+    .att-bar-fg.indeterminate {
+      width: 40%; background: linear-gradient(90deg, rgba(76,175,80,0.15), #4caf50, rgba(76,175,80,0.15));
+      animation: att-slide 1.1s linear infinite;
+    }
+    @keyframes att-slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+
+    /* ── Attribution (always visible, bottom-right) ───────────── */
+    #attribution {
+      position: absolute;
+      bottom: 4px;
+      right: 8px;
+      z-index: 100;
+      font-size: 9px;
+      letter-spacing: 0.4px;
+      color: rgba(255,255,255,0.35);
+      pointer-events: auto;
+      background: rgba(0,0,0,0.4);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+    #attribution a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+    }
+    #attribution a:hover {
+      color: rgba(255,255,255,0.95);
+      text-decoration: underline;
+    }
+
+    /* ── Custom dialog modal ───────────────────────────────────── */
+    .modal-dialog {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-dialog[style*="display: none"] { display: none !important; }
+    .modal-content {
+      background: rgba(18,20,24,0.96);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 28px 32px;
+      max-width: 360px;
+      color: rgba(255,255,255,0.85);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.85);
+    }
+    .modal-content h3 {
+      margin: 0 0 12px 0;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .modal-content p {
+      margin: 0 0 20px 0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .btn-dialog {
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 16px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-family: inherit;
+    }
+    .btn-dialog:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.6);
+      color: #fff;
+    }
+    .btn-dialog.btn-secondary {
+      color: rgba(255,255,255,0.6);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    /* ── Welcome modal ─────────────────────────────────────────── */
+    #welcome {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #welcome.hidden { display: none; }
+    .welcome-card {
+      background: rgba(18,20,24,0.96);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 30px 36px 28px;
+      max-width: 560px;
+      max-height: 86vh;
+      overflow-y: auto;
+      color: rgba(255,255,255,0.85);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.85);
+    }
+    .welcome-card h2 {
+      margin: 0 0 14px 0;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .welcome-card h3 {
+      margin: 22px 0 8px 0;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 6px;
+    }
+    .welcome-card p, .welcome-card ul {
+      font-size: 12px;
+      line-height: 1.65;
+      margin: 8px 0;
+    }
+    .welcome-card ul {
+      padding-left: 18px;
+      line-height: 1.85;
+    }
+    .welcome-card ul b { color: rgba(255,255,255,0.98); }
+    .welcome-card a { color: rgba(180, 200, 255, 0.9); }
+    .welcome-card a:hover { color: #fff; }
+    .welcome-card button {
+      margin-top: 22px;
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 10px 28px;
+      font-size: 10px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 3px;
+      font-family: inherit;
+    }
+    .welcome-card button:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.65);
+      color: #fff;
+    }
+
+    /* ── Collaboration styles ───────────────────────────────────── */
+    .collab-presence-widget {
+      position: absolute;
+      top: auto;
+      bottom: 60px;
+      left: 16px;
+      right: auto;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(15,17,20,0.72);
+      backdrop-filter: blur(18px) saturate(120%);
+      -webkit-backdrop-filter: blur(18px) saturate(120%);
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      width: 180px;
+      font-size: 11px;
+      transition: all 0.3s ease;
+    }
+    .collab-presence-widget.open {
+      display: flex;
+    }
+    .collab-toggle-btn {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      z-index: 1000;
+      background: rgba(15,17,20,0.72);
+      backdrop-filter: blur(18px) saturate(120%);
+      -webkit-backdrop-filter: blur(18px) saturate(120%);
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      color: rgba(255,255,255,0.78);
+      cursor: pointer;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .collab-toggle-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .collab-presence-widget h4 {
+      margin: 0 0 4px 0;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 6px;
+    }
+    .collab-user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .collab-user-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .collab-user-badge {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px currentColor;
+    }
+    .collab-user-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: rgba(255,255,255,0.85);
+    }
+    .collab-user-name.self {
+      font-weight: bold;
+      color: #fff;
+      border-radius: 3px;
+    }
+    .collab-user-name.selected {
+      background: rgba(30,144,255,0.45);
+      box-shadow: 0 0 0 1px rgba(30,144,255,0.7);
+      padding: 0 4px;
+    }
+    input.collab-user-name {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(30,144,255,0.8);
+      border-radius: 3px;
+      padding: 0 4px;
+      font: inherit;
+      outline: none;
+    }
+    .collab-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 8px;
+    }
+    .collab-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .collab-row input[type="text"] {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      color: rgba(255,255,255,0.92);
+      padding: 4px 6px;
+      font-size: 10px;
+      outline: none;
+      flex: 1;
+      font-family: inherit;
+    }
+    .collab-row input[type="text"]:focus {
+      border-color: rgba(255,255,255,0.4);
+    }
+    .collab-row input[type="color"] {
+      background: transparent;
+      border: none;
+      width: 24px;
+      height: 20px;
+      padding: 0;
+      cursor: pointer;
+    }
+    .collab-auth-btn {
+      background: transparent;
+      color: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex: 1;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .collab-auth-btn:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+    .collab-auth-btn svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+    .collab-email-form {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .collab-email-form.open {
+      display: flex;
+    }
+    .collab-email-form input {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      color: rgba(255,255,255,0.92);
+      padding: 4px 6px;
+      font-size: 10px;
+      outline: none;
+      font-family: inherit;
+    }
+    .collab-email-form input:focus {
+      border-color: rgba(255,255,255,0.4);
+    }
+    .collab-status {
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .collab-status.online { color: #2ed573; }
+    .collab-status.offline { color: #ff4757; }
+    .collab-status.unconfigured { color: #ffa502; }
+    
+    .collab-peer-cursor {
+      position: absolute;
+      pointer-events: none;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transform-origin: 0 0;
+      will-change: transform;
+      transition: transform 0.1s linear;
+    }
+    .collab-peer-cursor svg {
+      filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
+    }
+    .collab-peer-cursor .cursor-nametag {
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 9px;
+      font-weight: bold;
+      margin-left: 12px;
+      margin-top: -6px;
+      white-space: nowrap;
+      background: none;
+      box-shadow: none;
+      border: none;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.5);
+    }
+
+    /* Diagnostics Styling */
+    .collab-diagnostics {
+      margin-top: 6px;
+      border-top: 1px dashed rgba(255,255,255,0.08);
+      padding-top: 6px;
+    }
+    .collab-diag-toggle {
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.15s ease;
+      text-decoration: none;
+    }
+    .collab-diag-toggle:hover {
+      color: #fff;
+    }
+    .collab-diag-content {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 6px;
+      background: rgba(0,0,0,0.25);
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .collab-diag-content.open {
+      display: flex;
+    }
+    .collab-diag-error {
+      color: #ff4757;
+      font-family: monospace;
+      font-size: 9px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background: rgba(255,71,87,0.08);
+      padding: 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,71,87,0.15);
+    }
+    .collab-diag-success {
+      color: #2ed573;
+      font-size: 9px;
+      background: rgba(46,213,115,0.08);
+      padding: 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(46,213,115,0.15);
+    }
+    .collab-diag-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 8px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      margin-top: 4px;
+    }
+    .collab-diag-input-row {
+      display: flex;
+      gap: 4px;
+    }
+    .collab-diag-input-row input {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      color: #fff;
+      padding: 3px 5px;
+      font-size: 9px;
+      flex: 1;
+      font-family: monospace;
+      outline: none;
+    }
+    .collab-diag-input-row button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      padding: 3px 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 8px;
+      text-transform: uppercase;
+    }
+    .collab-diag-input-row button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="toolbar-left" class="toolbar">
+    <button id="btn-add-pin">+ Pin</button>
+    <button id="btn-add-node">+ Node</button>
+  </div>
+  <div id="toolbar-center" class="toolbar">
+    <input id="project-title" type="text" value="Untitled" maxlength="80" spellcheck="false" />
+  </div>
+  <div id="toolbar-right" class="toolbar">
+    <button id="btn-save">Save</button>
+    <button id="btn-load">Load</button>
+    <button id="btn-new">New</button>
+  </div>
+
+  <aside id="sidebar"></aside>
+
+  <!-- Floating Collaboration & Presence Widget -->
+  <button id="btn-collab-toggle" class="collab-toggle-btn">
+    Collab
+    <span id="collab-user-count" style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px;">1</span>
+  </button>
+  <div class="collab-presence-widget" id="collab-widget">
+    <h4>Collaboration</h4>
+    
+    <!-- Connection Status -->
+    <div id="collab-status-text" class="collab-status unconfigured">
+      <span class="collab-user-badge" style="background: currentColor;"></span>
+      Initializing...
+    </div>
+
+    <!-- Active User List -->
+    <div class="collab-user-list" id="collab-user-list">
+      <!-- Synced users will appear here -->
+    </div>
+
+    <!-- User Profile Settings -->
+    <div class="collab-section">
+      <div class="collab-status" style="color:rgba(255,255,255,0.4)">My Identity</div>
+      <div class="collab-row">
+        <span class="collab-identity-hint" style="flex:1;color:rgba(255,255,255,0.4);font-size:11px;">Click your name above to rename</span>
+        <input type="color" id="collab-my-color" title="Cursor Color" value="#1e90ff" />
+      </div>
+    </div>
+
+    <!-- Auth Section -->
+    <div class="collab-section" id="collab-auth-section">
+      <div class="collab-status" style="color:rgba(255,255,255,0.4)">Sign In</div>
+      <div class="collab-row">
+        <!-- Google Sign-in -->
+        <button class="collab-auth-btn" id="btn-auth-google" title="Sign in with Google">
+          <svg viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114A5.94 5.94 0 0 1 8 12.576a5.94 5.94 0 0 1 5.99-5.943c1.55 0 2.97.59 4.065 1.556l3.226-3.226C19.31 3.116 16.84 2 13.99 2 8.163 2 3.424 6.74 3.424 12.576S8.163 23.15 13.99 23.15c5.762 0 10.28-4.053 10.28-9.89 0-.649-.078-1.285-.216-1.902l-11.814-.073z"/></svg>
+          Google
+        </button>
+        <!-- GitHub Sign-in -->
+        <button class="collab-auth-btn" id="btn-auth-github" title="Sign in with GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </button>
+      </div>
+    </div>
+    
+    <!-- Logged in state -->
+    <div class="collab-section" id="collab-profile-section" style="display:none;">
+      <div class="collab-row">
+        <div class="collab-user-name" id="collab-profile-name" style="font-weight:bold;">Signed In</div>
+        <button class="collab-auth-btn" id="btn-auth-logout" style="flex:0; padding:4px 8px;">Logout</button>
+      </div>
+    </div>
+
+    <!-- Diagnostics Panel -->
+    <div class="collab-diagnostics">
+      <a href="#" class="collab-diag-toggle" id="collab-diag-toggle">⚙️ Diagnostics</a>
+      <div class="collab-diag-content" id="collab-diag-content">
+        <div class="collab-diag-label">Active Connection Log</div>
+        <div id="collab-diag-status" class="collab-diag-success">No active initialization or connection errors.</div>
+        
+        <div class="collab-diag-label">Database URL</div>
+        <div class="collab-diag-input-row">
+          <input type="text" id="collab-diag-db-url" placeholder="https://..." spellcheck="false" />
+          <button id="btn-collab-reconnect">Save</button>
+        </div>
+        <div style="font-size:8px; color:rgba(255,255,255,0.3); margin-top:2px; line-height:1.2;">
+          If status shows "Rules Blocked" or "Offline": (1) Check Firebase Console → Realtime Database → Rules — set <code style="font-size:8px;color:rgba(255,200,100,0.7)">{".read":true,".write":true}</code> for testing. (2) Verify the DB URL below matches your region (e.g. europe-west1).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="attribution">
+    Built on <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a> ·
+    Tiles © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a> ·
+    Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors
+  </div>
+
+  <div id="dialog-new-board" class="modal-dialog" style="display: none;">
+    <div class="modal-content">
+      <h3>Create New Board?</h3>
+      <p>Current board will be cleared.</p>
+      <div class="modal-buttons">
+        <button class="btn-dialog" id="dialog-save">Save & New</button>
+        <button class="btn-dialog btn-secondary" id="dialog-discard">Discard</button>
+        <button class="btn-dialog btn-secondary" id="dialog-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="welcome">
+    <div class="welcome-card">
+      <h2>Welcome</h2>
+      <p>An interactive geographic mind-map. Pin places, write nodes, draw connections — all anchored to real lat/lng coordinates on a live tile map.</p>
+
+      <h3>Quick Start</h3>
+      <ul>
+        <li><b>Right-click + drag</b> to pan the map. <b>Scroll</b> to zoom.</li>
+        <li>Toolbar <b>+ Pin</b> / <b>+ Node</b> creates an element at the current center.</li>
+        <li><b>Single-click</b> any element to open its editor in the right sidebar.</li>
+        <li><b>Double-click</b> a node to flip it (front title ↔ back metadata).</li>
+        <li>Hover <b>near</b> an element (not directly on it) — cursor turns to crosshair — then click-drag to another element to draw a connecting line.</li>
+        <li>Click a line to reveal its endpoint handles — drag handles to re-anchor along edges or to another element.</li>
+        <li><b>Drag files</b> into the editor's drop zone to attach images and documents.</li>
+      </ul>
+
+      <h3>Storage</h3>
+      <p>Your work lives in this browser's local memory. Browser cleanup utilities or clearing site data will wipe it. <b>Back up often</b> using the Save button.</p>
+
+      <h3>Attribution</h3>
+      <p>Built on <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a>. Map tiles by <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a> (dark_all basemap). Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors. IP geolocation via <a href="https://ipwho.is/" target="_blank" rel="noopener">ipwho.is</a>.</p>
+
+      <button id="welcome-close">Get Started</button>
+    </div>
+  </div>
+
+  <!-- Firebase App, Auth & Database V8 CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+  <script>
+    // ====================================================================
+    // Tile map (base) + element layer (pins, nodes, lines)
+    // ====================================================================
+
+    // ── Constants ───────────────────────────────────────────────────────
+    const TILE_SIZE = 256;
+    const TILE_BUFFER = 2;
+    const MIN_ZOOM = 4;
+    const MAX_ZOOM = 16;
+    const LAT_MAX = 85.05112878;
+    const TILE_CACHE_LIMIT = 600;
+    const RETINA = (window.devicePixelRatio || 1) > 1 ? '@2x' : '';
+
+    // 2× per zoom step matches the map's world-pixel scaling EXACTLY.
+    // No clamping anywhere — elements scale 1:1 with the canvas, period.
+    const REF_ZOOM = 8;
+    const ZOOM_SIZE_BASE = 2.0;
+
+    // Pin aspect ratio (matches the original 20:24 viewBox).
+    const PIN_W_RATIO = 20 / 24;
+
+    // Hover ring (in SCREEN pixels) around an element that arms line-drawing.
+    const DOCK_RING = 26;
+
+    // ── View state ──────────────────────────────────────────────────────
+    const view = { lat: 39.5, lng: -98.35, zoom: 6 };
+
+    // ── Math: Web Mercator ──────────────────────────────────────────────
+    function project(lat, lng, z) {
+      const scale = TILE_SIZE * Math.pow(2, z);
+      const x = (lng + 180) / 360 * scale;
+      const sinLat = Math.sin(lat * Math.PI / 180);
+      const y = (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale;
+      return { x, y };
+    }
+    function unproject(x, y, z) {
+      const scale = TILE_SIZE * Math.pow(2, z);
+      const lng = x / scale * 360 - 180;
+      const n = Math.PI - 2 * Math.PI * y / scale;
+      const lat = (180 / Math.PI) * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
+      return { lat, lng };
+    }
+    const clampLat = lat => Math.max(-LAT_MAX, Math.min(LAT_MAX, lat));
+    const clampLng = lng => Math.max(-180, Math.min(180, lng));
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+    // ── DOM scaffolding ─────────────────────────────────────────────────
+    const mapEl = document.getElementById('map');
+
+    const bgTileLayer = document.createElement('div');
+    bgTileLayer.style.cssText = 'position:absolute; top:0; left:0; width:0; height:0; transform-origin:0 0; will-change:transform;';
+    mapEl.appendChild(bgTileLayer);
+
+    const tileLayer = document.createElement('div');
+    tileLayer.style.cssText = 'position:absolute; top:0; left:0; width:0; height:0; transform-origin:0 0; will-change:transform;';
+    mapEl.appendChild(tileLayer);
+
+    const elementLayer = document.createElement('div');
+    elementLayer.id = 'element-layer';
+    mapEl.appendChild(elementLayer);
+
+    const linesSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    linesSvg.setAttribute('id', 'lines-svg');
+    const svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    linesSvg.appendChild(svgDefs);
+    // Arrow markers
+    const arrowEnd = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+    arrowEnd.setAttribute('id', 'arrow-end');
+    arrowEnd.setAttribute('viewBox', '0 0 10 10');
+    arrowEnd.setAttribute('refX', '8'); arrowEnd.setAttribute('refY', '5');
+    arrowEnd.setAttribute('markerWidth', '6'); arrowEnd.setAttribute('markerHeight', '6');
+    arrowEnd.setAttribute('orient', 'auto-start-reverse');
+    arrowEnd.innerHTML = '<path d="M 0 2 L 6 5 L 0 8 z" fill="context-stroke"/>';
+    svgDefs.appendChild(arrowEnd);
+    const arrowStart = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+    arrowStart.setAttribute('id', 'arrow-start');
+    arrowStart.setAttribute('viewBox', '0 0 10 10');
+    arrowStart.setAttribute('refX', '2'); arrowStart.setAttribute('refY', '5');
+    arrowStart.setAttribute('markerWidth', '6'); arrowStart.setAttribute('markerHeight', '6');
+    arrowStart.setAttribute('orient', 'auto-start-reverse');
+    arrowStart.innerHTML = '<path d="M 10 2 L 4 5 L 10 8 z" fill="context-stroke"/>';
+    svgDefs.appendChild(arrowStart);
+    elementLayer.appendChild(linesSvg);
+
+    // ── Tile cache + loader ─────────────────────────────────────────────
+    const tileCache = new Map();
+    const visibleKeys = new Set();
+    let lastUsedTick = 0;
+    let bgScaleFactor = 1;
+
+    function tileUrl(z, x, y) {
+      const sub = 'abcd'[(x + y) % 4];
+      return `https://${sub}.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}${RETINA}.png`;
+    }
+    function getTile(z, x, y) {
+      const key = `${z}/${x}/${y}`;
+      let entry = tileCache.get(key);
+      if (!entry) {
+        const img = document.createElement('img');
+        img.style.cssText = `position:absolute; left:${x * TILE_SIZE}px; top:${y * TILE_SIZE}px; width:${TILE_SIZE}px; height:${TILE_SIZE}px; pointer-events:none;`;
+        img.draggable = false;
+        img.src = tileUrl(z, x, y);
+        if (!img.complete) {
+          img.addEventListener('load',  onTileLoaded, { once: true });
+          img.addEventListener('error', onTileLoaded, { once: true });
+        }
+        entry = { img, key, lastUsed: 0 };
+        tileCache.set(key, entry);
+      }
+      entry.lastUsed = ++lastUsedTick;
+      return entry;
+    }
+    function onTileLoaded() {
+      if (visibleKeys.size === 0) return;
+      for (const key of visibleKeys) {
+        const entry = tileCache.get(key);
+        if (!entry || !entry.img.complete) return;
+      }
+      while (bgTileLayer.firstChild) bgTileLayer.removeChild(bgTileLayer.firstChild);
+    }
+    function evictColdTiles() {
+      if (tileCache.size <= TILE_CACHE_LIMIT) return;
+      const evictable = [];
+      for (const entry of tileCache.values()) {
+        if (!visibleKeys.has(entry.key) && !entry.img.parentNode) evictable.push(entry);
+      }
+      evictable.sort((a, b) => a.lastUsed - b.lastUsed);
+      const target = Math.max(0, tileCache.size - TILE_CACHE_LIMIT);
+      for (let i = 0; i < target && i < evictable.length; i++) {
+        tileCache.delete(evictable[i].key);
+      }
+    }
+
+    // ====================================================================
+    // ELEMENTS — pins, nodes, lines (all geographically anchored)
+    // ====================================================================
+
+    let nextId = 1;
+    const pins = [];
+    const nodes = [];
+    const lines = [];
+
+    function newId() { return nextId++; }
+    function findPin(id)  { return pins.find(p => p.id === id); }
+    function findNode(id) { return nodes.find(n => n.id === id); }
+    function findLine(id) { return lines.find(l => l.id === id); }
+
+    const DEFAULT_PIN = {
+      sizeBase: 34,
+      fillColor: '#000000', fillAlpha: 0.25,
+      borderColor: '#ffffff', borderWidth: 1.5,
+      glowDistance: 1.4, glowBrightness: 3,
+      metadata: '',
+      attachments: []
+    };
+    const DEFAULT_NODE = {
+      wBase: 180,
+      title: 'Node',
+      metadata: '',
+      bgColor: '#000000', bgAlpha: 0.5,
+      textColor: '#ffffff',
+      indicatorColor: '#ffffff',
+      borderColor: '#ffffff', borderWidth: 1,
+      glowDistance: 1.4, glowBrightness: 3,
+      flipped: false,
+      attachments: []
+    };
+    // Fixed back-face height for a flipped node (base px; scaled by zoom + node width).
+    // Metadata longer than this scrolls (.card-back has overflow-y:auto).
+    // Nodes must NEVER grow to fit their content — they resize only on flip.
+    const NODE_BACK_HEIGHT = 150;
+    const DEFAULT_LINE = {
+      color: '#ffffff', weight: 1.5,
+      glowDistance: 1.4, glowBrightness: 3,
+      arrows: 'none'
+    };
+
+    // ── Zoom scaling — direct multiplication, no clamps ─────────────────
+    function zoomScaleFactor(z) {
+      return Math.pow(ZOOM_SIZE_BASE, z - REF_ZOOM);
+    }
+
+    // ── Color utils ─────────────────────────────────────────────────────
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1,3), 16);
+      const g = parseInt(hex.slice(3,5), 16);
+      const b = parseInt(hex.slice(5,7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // ── Glow ────────────────────────────────────────────────────────────
+    // Unified glow system: DISTANCE (halo spread) and BRIGHTNESS (intensity).
+    // Uses box-shadow with spread parameter for both pins and nodes.
+    // Identical behavior across all element types.
+    function cssGlow(hex, distance, brightness) {
+      if (distance <= 0 || brightness <= 0) return 'none';
+      const blur = 8 * distance;
+      const spread = Math.min(distance * 0.6, 12);
+      const alpha = Math.min(brightness / 10, 1);
+      return `0 0 ${blur}px ${spread}px ${hexToRgba(hex, alpha)}`;
+    }
+
+    // ── Pin (real SVG triangle with SVG-filter glow) ───────────────────
+    // The pin IS a <polygon> — not a square pretending to be a triangle.
+    // The glow is a feGaussianBlur applied to a second polygon of the same
+    // shape, so the halo follows the triangle's edges exactly.
+    function createPinEl(pin) {
+      const el = document.createElement('div');
+      el.className = 'pin';
+      el.dataset.id = pin.id;
+      el.dataset.kind = 'pin';
+      const fid = `pin-glow-${pin.id}`;
+      // viewBox 20x24, polygon points downward: tip at (10,24), top edge 0,0 → 20,0
+      el.innerHTML = `
+        <svg viewBox="0 0 20 24" preserveAspectRatio="none">
+          <defs>
+            <filter id="${fid}" x="-300%" y="-300%" width="700%" height="700%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+            </filter>
+          </defs>
+          <polygon class="pin-glow"  points="10,24 0,0 20,0" filter="url(#${fid})"/>
+          <polygon class="pin-shape" points="10,24 0,0 20,0"/>
+        </svg>
+      `;
+      attachElementHandlers(el, pin.id);
+      pin.el = el;
+      pin.glowPoly  = el.querySelector('.pin-glow');
+      pin.shapePoly = el.querySelector('.pin-shape');
+      pin.glowBlur  = el.querySelector(`#${fid} feGaussianBlur`);
+      elementLayer.appendChild(el);
+      restylePin(pin);
+      return el;
+    }
+    function restylePin(pin) {
+      if (pin.shapePoly) {
+        pin.shapePoly.setAttribute('fill',   hexToRgba(pin.fillColor, pin.fillAlpha));
+        pin.shapePoly.setAttribute('stroke', pin.borderColor);
+        pin.shapePoly.setAttribute('stroke-linejoin', 'round');
+      }
+      if (pin.glowPoly) {
+        pin.glowPoly.setAttribute('fill', pin.borderColor);
+      }
+    }
+    function placePin(pin, z) {
+      if (pin._lastZ === z && pin._lastLat === pin.lat && pin._lastLng === pin.lng && pin._lastScale === pin.scale && pin._lastSize === pin.sizeBase) return;
+      pin._lastZ = z; pin._lastLat = pin.lat; pin._lastLng = pin.lng; pin._lastScale = pin.scale; pin._lastSize = pin.sizeBase;
+
+      const scale = zoomScaleFactor(z);
+      const h = pin.sizeBase * scale;
+      const w = h * PIN_W_RATIO;
+      const { x, y } = project(pin.lat, pin.lng, z);
+      // Tip = bottom-center, anchored to lat/lng.
+      pin.el.style.left   = `${x - w/2}px`;
+      pin.el.style.top    = `${y - h}px`;
+      pin.el.style.width  = `${w}px`;
+      pin.el.style.height = `${h}px`;
+
+      // Stroke width in viewBox units (constant — SVG scales it with size).
+      if (pin.shapePoly) {
+        pin.shapePoly.setAttribute('stroke-width', String(pin.borderWidth));
+      }
+      // Emissive: glow distance → blur stdDeviation, brightness → opacity.
+      // Both are in viewBox units so they scale with the pin automatically.
+      if (pin.glowBlur) {
+        pin.glowBlur.setAttribute('stdDeviation', String(pin.glowDistance));
+      }
+      if (pin.glowPoly) {
+        pin.glowPoly.setAttribute('opacity', String(Math.min(pin.glowBrightness / 10, 1)));
+      }
+    }
+
+    // ── Node ────────────────────────────────────────────────────────────
+    function createNodeEl(node) {
+      const el = document.createElement('div');
+      el.className = 'node';
+      el.dataset.id = node.id;
+      el.dataset.kind = 'node';
+      el.innerHTML = `
+        <div class="card">
+          <div class="card-front">
+            <span class="node-title"></span>
+            <span class="node-indicator"></span>
+          </div>
+          <div class="card-back">
+            <div class="metadata-header">METADATA</div>
+            <div class="metadata-body"></div>
+          </div>
+        </div>
+      `;
+      attachElementHandlers(el, node.id);
+      el.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        node.flipped = !node.flipped;
+        el.classList.toggle('flipped', node.flipped);
+        if (window.getSelection) window.getSelection().removeAllRanges();
+        scheduleRender();
+      });
+      node.el = el;
+      node.dom = {
+        front: el.querySelector('.card-front'),
+        back: el.querySelector('.card-back'),
+        title: el.querySelector('.node-title'),
+        indicator: el.querySelector('.node-indicator'),
+        metaBody: el.querySelector('.metadata-body'),
+        header: el.querySelector('.metadata-header'),
+        items: []
+      };
+      elementLayer.appendChild(el);
+      restyleNode(node);
+      return el;
+    }
+    function restyleNode(node) {
+      const { front, back, title, indicator, metaBody } = node.dom;
+
+      const bgRgba = hexToRgba(node.bgColor, node.bgAlpha);
+      const borderRgba = hexToRgba(node.borderColor, 1);
+
+      for (const face of [front, back]) {
+        face.style.background = bgRgba;
+        face.style.borderColor = borderRgba;
+        face.style.borderWidth = `${node.borderWidth}px`;
+        // box-shadow is set in placeNode (zoom-scaled)
+      }
+      title.style.color = node.textColor;
+      title.textContent = node.title;
+      indicator.style.background = node.indicatorColor;
+      indicator.style.boxShadow = `0 0 6px ${node.indicatorColor}`;
+
+      metaBody.innerHTML = '';
+      node.dom.items = [];
+      const lines = (node.metadata || '').split('\n').map(s => s.trim()).filter(Boolean);
+      if (lines.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'metadata-item';
+        empty.style.opacity = '0.5';
+        empty.textContent = '(no metadata)';
+        metaBody.appendChild(empty);
+        node.dom.items.push(empty);
+      } else {
+        for (const ln of lines) {
+          const item = document.createElement('div');
+          item.className = 'metadata-item';
+          item.textContent = ln;
+          metaBody.appendChild(item);
+          node.dom.items.push(item);
+        }
+      }
+      node.el.classList.toggle('flipped', !!node.flipped);
+    }
+    function placeNode(node, z) {
+      if (node._lastZ === z && node._lastLat === node.lat && node._lastLng === node.lng && node._lastFlipped === node.flipped && node._lastWBase === node.wBase) return;
+      node._lastZ = z; node._lastLat = node.lat; node._lastLng = node.lng; node._lastFlipped = node.flipped; node._lastWBase = node.wBase;
+
+      const scale = zoomScaleFactor(z);
+      const elementScale = (node.wBase / DEFAULT_NODE.wBase) * scale;  // Scales with both zoom AND element size
+      const w = DEFAULT_NODE.wBase * elementScale;
+      const fontPx = 11 * elementScale;
+      const padV = 8 * elementScale;
+      const padH = 10 * elementScale;
+      const frontH = fontPx + padV * 2 + 4;
+
+      node.el.style.width = `${w}px`;
+      const { title, items, header, indicator, front, back } = node.dom;
+      
+      title.style.fontSize = `${fontPx}px`;
+      items.forEach(i => i.style.fontSize = `${10 * elementScale}px`);
+      if (header) header.style.fontSize = `${9 * elementScale}px`;
+      
+      if (indicator) {
+        const indSize = 7 * elementScale;
+        indicator.style.width = `${indSize}px`;
+        indicator.style.height = `${indSize}px`;
+        indicator.style.boxShadow = `0 0 ${6 * elementScale}px ${node.indicatorColor}`;
+      }
+      
+      front.style.padding = `${padV}px ${padH}px`;
+      back.style.padding = `${padV}px ${padH}px ${padV + 2}px`;
+
+      let h = frontH;
+      if (node.flipped) {
+        // Fixed size when flipped; extra metadata scrolls inside .card-back.
+        h = NODE_BACK_HEIGHT * elementScale;
+      }
+      node.el.style.height = `${h}px`;
+      node._h = h;
+      node._wPx = w;
+      node._frontH = frontH;
+
+      const { x, y } = project(node.lat, node.lng, z);
+      node.el.style.left = `${x - w/2}px`;
+      node.el.style.top  = `${y - frontH/2}px`;
+
+      // Zoom-scaled glow
+      const shadow = cssGlow(node.borderColor, node.glowDistance * scale, node.glowBrightness);
+      front.style.boxShadow = shadow;
+      back.style.boxShadow = shadow;
+    }
+
+    function nodeBox(node, z) {
+      const { x, y } = project(node.lat, node.lng, z);
+      const w = node._wPx || (node.wBase * zoomScaleFactor(z));
+      const frontH = node._frontH || 22;
+      const totalH = node._h || frontH;
+      return {
+        left: x - w/2,
+        top:  y - frontH/2,
+        right: x + w/2,
+        bottom: y - frontH/2 + totalH,
+        cx: x, cy: y,
+        w, frontH, totalH
+      };
+    }
+
+    // ── Dock math ───────────────────────────────────────────────────────
+    function getDockWorld(elementId, dock, z) {
+      const pin = findPin(elementId);
+      if (pin) return project(pin.lat, pin.lng, z);
+      const node = findNode(elementId);
+      if (!node) return { x: 0, y: 0 };
+      const b = nodeBox(node, z);
+      const [side, fracStr] = dock.split('-');
+      const f = clamp(parseFloat(fracStr || '0.5'), 0, 1);
+      switch (side) {
+        case 'top':    return { x: b.left + b.w * f, y: b.top };
+        case 'bottom': return { x: b.left + b.w * f, y: b.top + b.totalH };
+        case 'left':   return { x: b.left,           y: b.top + b.totalH * f };
+        case 'right':  return { x: b.right,          y: b.top + b.totalH * f };
+        default:       return { x: b.cx, y: b.cy };
+      }
+    }
+    function closestNodeDock(node, wx, wy, z) {
+      const b = nodeBox(node, z);
+      const cx = clamp(wx, b.left, b.right);
+      const cy = clamp(wy, b.top, b.top + b.totalH);
+      const dTop = Math.abs(wy - b.top);
+      const dBot = Math.abs(wy - (b.top + b.totalH));
+      const dLft = Math.abs(wx - b.left);
+      const dRgt = Math.abs(wx - b.right);
+      const m = Math.min(dTop, dBot, dLft, dRgt);
+      if (m === dTop) return { dock: `top-${((cx - b.left) / b.w).toFixed(3)}`,    x: cx, y: b.top };
+      if (m === dBot) return { dock: `bottom-${((cx - b.left) / b.w).toFixed(3)}`, x: cx, y: b.top + b.totalH };
+      if (m === dLft) return { dock: `left-${((cy - b.top) / b.totalH).toFixed(3)}`, x: b.left,  y: cy };
+      return { dock: `right-${((cy - b.top) / b.totalH).toFixed(3)}`, x: b.right, y: cy };
+    }
+
+    // ── Line rendering ──────────────────────────────────────────────────
+    const SVG_OFFSET = 100000;
+
+    function ensureLineDom(line) {
+      let g = document.getElementById(`edge-${line.id}`);
+      if (!g) {
+        g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('id', `edge-${line.id}`);
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('id', `edge-path-${line.id}`);
+        path.setAttribute('class', 'edge-path');
+        const catcher = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        catcher.setAttribute('id', `edge-catcher-${line.id}`);
+        catcher.setAttribute('class', 'edge-catcher');
+        catcher.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectLine(line.id);
+        });
+        catcher.addEventListener('dblclick', (e) => e.stopPropagation());
+        g.appendChild(path);
+        g.appendChild(catcher);
+        linesSvg.appendChild(g);
+      }
+      return g;
+    }
+    function renderLine(line, z) {
+      const fromObj = findNode(line.fromId) || findPin(line.fromId);
+      const toObj = findNode(line.toId) || findPin(line.toId);
+      if (!fromObj || !toObj) return;
+
+      const fromIsPin = !!findPin(line.fromId);
+      const toIsPin = !!findPin(line.toId);
+      const fromSize = fromIsPin ? fromObj.sizeBase : fromObj.wBase;
+      const toSize = toIsPin ? toObj.sizeBase : toObj.wBase;
+      const fromH = fromObj._h || 0;
+      const toH = toObj._h || 0;
+      const fromW = fromObj._wPx || 0;
+      const toW = toObj._wPx || 0;
+
+      if (line._lastZ === z && 
+          line._lastFromLat === fromObj.lat && line._lastFromLng === fromObj.lng &&
+          line._lastToLat === toObj.lat && line._lastToLng === toObj.lng &&
+          line._lastFromDock === line.fromDock && line._lastToDock === line.toDock &&
+          line._lastColor === line.color && line._lastWeight === line.weight && 
+          line._lastArrows === line.arrows &&
+          line._lastFromSize === fromSize && line._lastToSize === toSize &&
+          line._lastFromH === fromH && line._lastToH === toH &&
+          line._lastFromW === fromW && line._lastToW === toW) return;
+          
+      line._lastZ = z;
+      line._lastFromLat = fromObj.lat; line._lastFromLng = fromObj.lng;
+      line._lastToLat = toObj.lat; line._lastToLng = toObj.lng;
+      line._lastFromDock = line.fromDock; line._lastToDock = line.toDock;
+      line._lastColor = line.color; line._lastWeight = line.weight; line._lastArrows = line.arrows;
+      line._lastFromSize = fromSize; line._lastToSize = toSize;
+      line._lastFromH = fromH; line._lastToH = toH;
+      line._lastFromW = fromW; line._lastToW = toW;
+
+      ensureLineDom(line);
+      const path = document.getElementById(`edge-path-${line.id}`);
+      const catcher = document.getElementById(`edge-catcher-${line.id}`);
+      const p1 = getDockWorld(line.fromId, line.fromDock, z);
+      const p2 = getDockWorld(line.toId,   line.toDock,   z);
+      const hasPin = fromIsPin || toIsPin;
+      let d;
+      if (hasPin) {
+        d = `M ${p1.x + SVG_OFFSET} ${p1.y + SVG_OFFSET} L ${p2.x + SVG_OFFSET} ${p2.y + SVG_OFFSET}`;
+      } else {
+        const c1 = controlPoint(p1, line.fromDock, p2, line.fromId);
+        const c2 = controlPoint(p2, line.toDock, p1, line.toId);
+        d = `M ${p1.x + SVG_OFFSET} ${p1.y + SVG_OFFSET} C ${c1.x + SVG_OFFSET} ${c1.y + SVG_OFFSET}, ${c2.x + SVG_OFFSET} ${c2.y + SVG_OFFSET}, ${p2.x + SVG_OFFSET} ${p2.y + SVG_OFFSET}`;
+      }
+      const scale = zoomScaleFactor(z);
+      path.setAttribute('d', d);
+      catcher.setAttribute('d', d);
+      path.setAttribute('stroke', line.color);
+      path.setAttribute('stroke-width', String(line.weight * scale));
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('opacity', '0.95');
+      if (line.arrows === 'start' || line.arrows === 'both') path.setAttribute('marker-start', 'url(#arrow-start)');
+      else path.removeAttribute('marker-start');
+      if (line.arrows === 'end' || line.arrows === 'both') path.setAttribute('marker-end', 'url(#arrow-end)');
+      else path.removeAttribute('marker-end');
+    }
+    function controlPoint(anchor, dock, other, fromId) {
+      const span = Math.max(40, Math.hypot(anchor.x - other.x, anchor.y - other.y) * 0.45);
+      const side = (dock || '').split('-')[0];
+      if (findPin(fromId)) {
+        const ax = (other.x - anchor.x) * 0.5;
+        const ay = (other.y - anchor.y) * 0.5;
+        return { x: anchor.x + ax, y: anchor.y + ay };
+      }
+      switch (side) {
+        case 'top':    return { x: anchor.x,         y: anchor.y - span };
+        case 'bottom': return { x: anchor.x,         y: anchor.y + span };
+        case 'left':   return { x: anchor.x - span,  y: anchor.y };
+        case 'right':  return { x: anchor.x + span,  y: anchor.y };
+      }
+      return { x: anchor.x, y: anchor.y };
+    }
+    function renderAllLines(z) {
+      for (const line of lines) renderLine(line, z);
+      renderLineHandles(z);
+    }
+    function removeLine(id) {
+      const g = document.getElementById(`edge-${id}`);
+      if (g) g.remove();
+      const i = lines.findIndex(l => l.id === id);
+      if (i !== -1) lines.splice(i, 1);
+      if (selectedLineId === id) selectedLineId = null;
+      renderLineHandles(view.zoom);
+    }
+
+    // ── Line endpoint handles ───────────────────────────────────────────
+    let selectedLineId = null;
+    
+    const persistentHandleFrom = document.createElement('div');
+    persistentHandleFrom.className = 'edge-handle';
+    persistentHandleFrom.dataset.end = 'from';
+    persistentHandleFrom.style.display = 'none';
+
+    const persistentHandleTo = document.createElement('div');
+    persistentHandleTo.className = 'edge-handle';
+    persistentHandleTo.dataset.end = 'to';
+    persistentHandleTo.style.display = 'none';
+
+    elementLayer.appendChild(persistentHandleFrom);
+    elementLayer.appendChild(persistentHandleTo);
+
+    persistentHandleFrom.addEventListener('mousedown', (e) => {
+      if (selectedLineId !== null) startHandleDrag(e, selectedLineId, 'from');
+    });
+    persistentHandleTo.addEventListener('mousedown', (e) => {
+      if (selectedLineId !== null) startHandleDrag(e, selectedLineId, 'to');
+    });
+
+    function renderLineHandles(z) {
+      if (selectedLineId === null) {
+        persistentHandleFrom.style.display = 'none';
+        persistentHandleTo.style.display = 'none';
+        return;
+      }
+      const line = findLine(selectedLineId);
+      if (!line) {
+        persistentHandleFrom.style.display = 'none';
+        persistentHandleTo.style.display = 'none';
+        return;
+      }
+      const p1 = getDockWorld(line.fromId, line.fromDock, z);
+      const p2 = getDockWorld(line.toId,   line.toDock,   z);
+      
+      persistentHandleFrom.style.display = 'block';
+      persistentHandleFrom.style.left = `${p1.x}px`;
+      persistentHandleFrom.style.top = `${p1.y}px`;
+      
+      persistentHandleTo.style.display = 'block';
+      persistentHandleTo.style.left = `${p2.x}px`;
+      persistentHandleTo.style.top = `${p2.y}px`;
+    }
+
+    // ====================================================================
+    // Render loop
+    // ====================================================================
+    let renderScheduled = false;
+    function scheduleRender() {
+      if (renderScheduled) return;
+      renderScheduled = true;
+      requestAnimationFrame(() => { renderScheduled = false; render(); });
+    }
+
+    function render() {
+      const z = view.zoom;
+      const centerPt = project(view.lat, view.lng, z);
+      const w = mapEl.clientWidth;
+      const h = mapEl.clientHeight;
+      const viewLeft = Math.floor(centerPt.x - w / 2);
+      const viewTop  = Math.floor(centerPt.y - h / 2);
+
+      tileLayer.style.transform = `translate3d(${-viewLeft}px, ${-viewTop}px, 0)`;
+      elementLayer.style.transform = `translate3d(${-viewLeft}px, ${-viewTop}px, 0)`;
+      if (bgTileLayer.firstChild) {
+        bgTileLayer.style.transform = `translate3d(${-viewLeft}px, ${-viewTop}px, 0) scale(${bgScaleFactor})`;
+      }
+
+      const txMin = Math.floor(viewLeft / TILE_SIZE) - TILE_BUFFER;
+      const txMax = Math.floor((viewLeft + w) / TILE_SIZE) + TILE_BUFFER;
+      const tyMin = Math.floor(viewTop / TILE_SIZE) - TILE_BUFFER;
+      const tyMax = Math.floor((viewTop + h) / TILE_SIZE) + TILE_BUFFER;
+      const worldTiles = 1 << z;
+
+      const stillVisible = new Set();
+      for (let ty = tyMin; ty <= tyMax; ty++) {
+        if (ty < 0 || ty >= worldTiles) continue;
+        for (let tx = txMin; tx <= txMax; tx++) {
+          if (tx < 0 || tx >= worldTiles) continue;
+          const entry = getTile(z, tx, ty);
+          stillVisible.add(entry.key);
+          if (entry.img.parentNode !== tileLayer) tileLayer.appendChild(entry.img);
+        }
+      }
+      for (const key of visibleKeys) {
+        if (stillVisible.has(key)) continue;
+        const entry = tileCache.get(key);
+        if (entry && entry.img.parentNode === tileLayer) tileLayer.removeChild(entry.img);
+      }
+      visibleKeys.clear();
+      for (const k of stillVisible) visibleKeys.add(k);
+      evictColdTiles();
+      onTileLoaded();
+
+      for (const pin of pins) placePin(pin, z);
+      for (const node of nodes) placeNode(node, z);
+      renderAllLines(z);
+
+      // Update collaborative cursors
+      if (typeof peerCursors !== 'undefined') {
+        for (const cursorEl of peerCursors.values()) {
+          const cLat = parseFloat(cursorEl.dataset.lat);
+          const cLng = parseFloat(cursorEl.dataset.lng);
+          placePeerCursor(cursorEl, cLat, cLng, z);
+        }
+      }
+    }
+
+    // ====================================================================
+    // Input — pan, zoom, element interactions
+    // ====================================================================
+    window.addEventListener('contextmenu', e => e.preventDefault());
+
+    let panState = null;
+    mapEl.addEventListener('mousedown', (e) => {
+      if (e.button !== 2) return;
+      panState = {
+        startX: e.clientX,
+        startY: e.clientY,
+        startCenterPt: project(view.lat, view.lng, view.zoom),
+      };
+      mapEl.style.cursor = 'grabbing';
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!panState) return;
+      const dx = e.clientX - panState.startX;
+      const dy = e.clientY - panState.startY;
+      const newCenter = unproject(panState.startCenterPt.x - dx, panState.startCenterPt.y - dy, view.zoom);
+      view.lat = clampLat(newCenter.lat);
+      view.lng = clampLng(newCenter.lng);
+      bgTileLayer.style.transition = 'none';
+      render();
+    });
+    document.addEventListener('mouseup', (e) => {
+      if (e.button !== 2 || !panState) return;
+      panState = null;
+      mapEl.style.cursor = 'default';
+    });
+
+    const ZOOM_ANIM_MS = 200;
+    let zoomTimer = null;
+    let zoomAnchor = null;
+
+    mapEl.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const oldZoom = view.zoom;
+      const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, oldZoom + (e.deltaY < 0 ? 1 : -1)));
+      if (newZoom === oldZoom) return;
+
+      const rect = mapEl.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      const w = mapEl.clientWidth;
+      const h = mapEl.clientHeight;
+      const cOld = project(view.lat, view.lng, oldZoom);
+      const cursorWorldOld = { x: cOld.x - w/2 + mouseX, y: cOld.y - h/2 + mouseY };
+      const cursorLL = unproject(cursorWorldOld.x, cursorWorldOld.y, oldZoom);
+      const cursorWorldNew = project(cursorLL.lat, cursorLL.lng, newZoom);
+      const centerNewLL = unproject(cursorWorldNew.x - (mouseX - w/2), cursorWorldNew.y - (mouseY - h/2), newZoom);
+
+      const oldVL = Math.floor(cOld.x - w/2);
+      const oldVT = Math.floor(cOld.y - h/2);
+
+      view.zoom = newZoom;
+      view.lat = clampLat(centerNewLL.lat);
+      view.lng = clampLng(centerNewLL.lng);
+
+      if (zoomAnchor === null) {
+        zoomAnchor = oldZoom;
+        while (bgTileLayer.firstChild) bgTileLayer.removeChild(bgTileLayer.firstChild);
+        const tileImgs = Array.from(tileLayer.children);
+        for (const child of tileImgs) bgTileLayer.appendChild(child);
+        visibleKeys.clear();
+        bgTileLayer.style.transition = 'none';
+        bgTileLayer.style.transform = `translate3d(${-oldVL}px, ${-oldVT}px, 0) scale(1)`;
+        bgTileLayer.offsetHeight;
+        bgTileLayer.style.transition = `transform ${ZOOM_ANIM_MS}ms ease-out`;
+      }
+      bgScaleFactor = Math.pow(2, newZoom - zoomAnchor);
+      bgTileLayer.style.transition = `transform ${ZOOM_ANIM_MS}ms ease-out`;
+
+      render();
+
+      clearTimeout(zoomTimer);
+      zoomTimer = setTimeout(() => {
+        zoomAnchor = null;
+        bgTileLayer.style.transition = 'none';
+      }, ZOOM_ANIM_MS + 50);
+    }, { passive: false });
+
+    window.addEventListener('resize', render);
+
+    // ====================================================================
+    // Element interactions
+    // ====================================================================
+    let dragState = null;
+    let lineDrawState = null;
+    let handleDragState = null;
+    let suppressNextClick = false;  // set after a real drag so it doesn't open an editor
+
+    function eventToWorld(e) {
+      const rect = mapEl.getBoundingClientRect();
+      const sx = e.clientX - rect.left;
+      const sy = e.clientY - rect.top;
+      const centerPt = project(view.lat, view.lng, view.zoom);
+      const wx = centerPt.x - mapEl.clientWidth/2 + sx;
+      const wy = centerPt.y - mapEl.clientHeight/2 + sy;
+      return { wx, wy, sx, sy };
+    }
+
+    function attachElementHandlers(el, id) {
+      el.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        e.stopPropagation();
+        const kind = el.dataset.kind;
+        const obj = (kind === 'pin') ? findPin(id) : findNode(id);
+        if (!obj) return;
+        const z = view.zoom;
+        if (mselTotal() > 1 && mselHas(kind, id)) {
+          // Part of a multi-selection → drag the whole group together.
+          const members = [];
+          msel.pins.forEach(pid => { const p = findPin(pid); if (p) { const w = project(p.lat, p.lng, z); members.push({ kind: 'pin', id: pid, wx: w.x, wy: w.y }); } });
+          msel.nodes.forEach(nid => { const n = findNode(nid); if (n) { const w = project(n.lat, n.lng, z); members.push({ kind: 'node', id: nid, wx: w.x, wy: w.y }); } });
+          dragState = { mode: 'group-move', id, kind, startMx: e.clientX, startMy: e.clientY, members, moved: false };
+          return;
+        }
+        const pt = eventToWorld(e);
+        dragState = {
+          mode: 'move',
+          id, kind,
+          startMx: e.clientX, startMy: e.clientY,
+          startLat: obj.lat, startLng: obj.lng,
+          startWx: pt.wx, startWy: pt.wy,
+          moved: false
+        };
+      });
+      el.addEventListener('click', (e) => {
+        if (e.button !== 0) return;
+        if (suppressNextClick) { suppressNextClick = false; return; }
+        if (dragState && dragState.moved) return;
+        e.stopPropagation();
+        const kind = el.dataset.kind;
+        if (kind === 'pin') openPinEditor(id);
+        else openNodeEditor(id);
+      });
+    }
+
+    let nearestDock = null;
+
+    document.addEventListener('mousemove', (e) => {
+      if (marqueeState) { updateMarquee(e); return; }
+      if (dragState && dragState.mode === 'move') {
+        const dx = e.clientX - dragState.startMx;
+        const dy = e.clientY - dragState.startMy;
+        if (!dragState.moved && (Math.abs(dx) + Math.abs(dy) > 3)) dragState.moved = true;
+        if (dragState.moved) {
+          const newWx = dragState.startWx + dx;
+          const newWy = dragState.startWy + dy;
+          const ll = unproject(newWx, newWy, view.zoom);
+          const obj = dragState.kind === 'pin' ? findPin(dragState.id) : findNode(dragState.id);
+          if (obj) {
+            obj.lat = clampLat(ll.lat);
+            obj.lng = clampLng(ll.lng);
+            scheduleRender();
+          }
+        }
+        return;
+      }
+      if (dragState && dragState.mode === 'group-move') {
+        const dx = e.clientX - dragState.startMx;
+        const dy = e.clientY - dragState.startMy;
+        if (!dragState.moved && (Math.abs(dx) + Math.abs(dy) > 3)) dragState.moved = true;
+        if (dragState.moved) {
+          for (const m of dragState.members) {
+            const ll = unproject(m.wx + dx, m.wy + dy, view.zoom);
+            const obj = m.kind === 'pin' ? findPin(m.id) : findNode(m.id);
+            if (obj) { obj.lat = clampLat(ll.lat); obj.lng = clampLng(ll.lng); }
+          }
+          scheduleRender();
+          if (selPopup.style.display !== 'none') showSelPopup();
+        }
+        return;
+      }
+      if (lineDrawState || handleDragState || panState) return;
+      updateNearestDock(e);
+    });
+
+    let lastDockUpdate = 0;
+    function updateNearestDock(e) {
+      const now = Date.now();
+      if (now - lastDockUpdate < 30) return;
+      lastDockUpdate = now;
+
+      const target = e.target;
+      const overElement = target && target.closest && (target.closest('.pin') || target.closest('.node') || target.closest('.edge-catcher') || target.closest('.edge-handle'));
+      if (overElement) {
+        nearestDock = null;
+        mapEl.style.cursor = '';
+        return;
+      }
+      const z = view.zoom;
+      const pt = eventToWorld(e);
+      let best = null;
+      for (const pin of pins) {
+        const w = project(pin.lat, pin.lng, z);
+        const dx = pt.wx - w.x, dy = pt.wy - w.y;
+        const d = Math.hypot(dx, dy);
+        const size = pin.sizeBase * zoomScaleFactor(z);
+        if (d <= size * 0.6 + DOCK_RING) {
+          if (d > size * 0.55 && (!best || d < best.dist)) {
+            best = { kind: 'pin', id: pin.id, dock: 'center', wx: w.x, wy: w.y, dist: d };
+          }
+        }
+      }
+      for (const node of nodes) {
+        const b = nodeBox(node, z);
+        const ix = clamp(pt.wx, b.left, b.right);
+        const iy = clamp(pt.wy, b.top, b.top + b.totalH);
+        const dx = pt.wx - ix, dy = pt.wy - iy;
+        const d = Math.hypot(dx, dy);
+        if (pt.wx >= b.left && pt.wx <= b.right && pt.wy >= b.top && pt.wy <= b.top + b.totalH) continue;
+        if (d > 0 && d <= DOCK_RING && (!best || d < best.dist)) {
+          const cd = closestNodeDock(node, pt.wx, pt.wy, z);
+          best = { kind: 'node', id: node.id, dock: cd.dock, wx: cd.x, wy: cd.y, dist: d };
+        }
+      }
+      nearestDock = best;
+      mapEl.style.cursor = best ? 'crosshair' : '';
+    }
+
+    mapEl.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      if (e.target.closest('.pin') || e.target.closest('.node') || e.target.closest('.edge-catcher') || e.target.closest('.edge-handle')) return;
+      if (nearestDock) {
+        e.preventDefault();
+        startLineDraw(nearestDock);
+      } else {
+        startMarquee(e);
+      }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      if (e.button !== 0) return;
+      if (marqueeState) { finishMarquee(e); return; }
+      if (dragState) { if (dragState.moved) suppressNextClick = true; dragState = null; }
+      if (lineDrawState) finishLineDraw(e);
+      if (handleDragState) finishHandleDrag(e);
+    });
+
+    // ── Line drawing ────────────────────────────────────────────────────
+    function startLineDraw(seed) {
+      const preview = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      preview.setAttribute('stroke', 'rgba(255,255,255,0.85)');
+      preview.setAttribute('stroke-width', '1.5');
+      preview.setAttribute('stroke-dasharray', '4,4');
+      preview.setAttribute('fill', 'none');
+      preview.setAttribute('pointer-events', 'none');
+      linesSvg.appendChild(preview);
+      lineDrawState = { fromId: seed.id, fromDock: seed.dock, startWx: seed.wx, startWy: seed.wy, previewPath: preview };
+      // If the drag began from an element that's part of a multi-selection,
+      // connect EVERY selected pin/node to the drop target in one gesture.
+      if (mselHas('pin', seed.id) || mselHas('node', seed.id)) {
+        const sources = [...msel.pins, ...msel.nodes];
+        if (sources.length > 1) lineDrawState.multiSources = sources;
+      }
+      mapEl.style.cursor = 'crosshair';
+    }
+    document.addEventListener('mousemove', (e) => {
+      if (!lineDrawState) return;
+      const pt = eventToWorld(e);
+      const p1 = { x: lineDrawState.startWx, y: lineDrawState.startWy };
+      const p2 = { x: pt.wx, y: pt.wy };
+      const dx = Math.abs(p2.x - p1.x) * 0.4 + 30;
+      const d = `M ${p1.x + SVG_OFFSET} ${p1.y + SVG_OFFSET} C ${p1.x + dx + SVG_OFFSET} ${p1.y + SVG_OFFSET}, ${p2.x - dx + SVG_OFFSET} ${p2.y + SVG_OFFSET}, ${p2.x + SVG_OFFSET} ${p2.y + SVG_OFFSET}`;
+      lineDrawState.previewPath.setAttribute('d', d);
+      updateNearestDock(e);
+    });
+    function finishLineDraw(e) {
+      lineDrawState.previewPath.remove();
+      let target = null;
+      const z = view.zoom;
+      const overEl = e.target.closest && e.target.closest('.pin, .node');
+      if (overEl) {
+        const id = parseInt(overEl.dataset.id, 10);
+        const kind = overEl.dataset.kind;
+        if (kind === 'pin') {
+          target = { id, dock: 'center' };
+        } else {
+          const pt = eventToWorld(e);
+          const node = findNode(id);
+          const cd = closestNodeDock(node, pt.wx, pt.wy, z);
+          target = { id, dock: cd.dock };
+        }
+      } else if (nearestDock) {
+        target = { id: nearestDock.id, dock: nearestDock.dock };
+      }
+      if (target && lineDrawState.multiSources) {
+        const tp = getDockWorld(target.id, target.dock, z);
+        for (const srcId of lineDrawState.multiSources) {
+          if (srcId === target.id) continue;
+          let fromDock = 'center';
+          const sNode = findNode(srcId);
+          if (sNode) fromDock = closestNodeDock(sNode, tp.x, tp.y, z).dock;
+          const line = { id: newId(), fromId: srcId, fromDock, toId: target.id, toDock: target.dock, ...DEFAULT_LINE };
+          lines.push(line);
+          renderLine(line, z);
+        }
+        scheduleRender();
+      } else if (target && target.id !== lineDrawState.fromId) {
+        const id = newId();
+        const line = { id, fromId: lineDrawState.fromId, fromDock: lineDrawState.fromDock, toId: target.id, toDock: target.dock, ...DEFAULT_LINE };
+        lines.push(line);
+        renderLine(line, z);
+        scheduleRender();
+      }
+      lineDrawState = null;
+      mapEl.style.cursor = '';
+    }
+
+    // ── Line endpoint handle drag ───────────────────────────────────────
+    function startHandleDrag(e, lineId, end) {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      e.preventDefault();
+      const preview = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      preview.setAttribute('stroke', 'rgba(255,255,255,0.85)');
+      preview.setAttribute('stroke-width', '1.5');
+      preview.setAttribute('stroke-dasharray', '4,4');
+      preview.setAttribute('fill', 'none');
+      preview.setAttribute('pointer-events', 'none');
+      linesSvg.appendChild(preview);
+      handleDragState = { lineId, end, previewPath: preview };
+      mapEl.style.cursor = 'crosshair';
+    }
+    document.addEventListener('mousemove', (e) => {
+      if (!handleDragState) return;
+      const line = findLine(handleDragState.lineId);
+      if (!line) return;
+      const z = view.zoom;
+      const anchor = handleDragState.end === 'from'
+        ? getDockWorld(line.toId, line.toDock, z)
+        : getDockWorld(line.fromId, line.fromDock, z);
+      const pt = eventToWorld(e);
+      const dx = Math.abs(pt.wx - anchor.x) * 0.4 + 30;
+      const d = `M ${anchor.x + SVG_OFFSET} ${anchor.y + SVG_OFFSET} C ${anchor.x + dx + SVG_OFFSET} ${anchor.y + SVG_OFFSET}, ${pt.wx - dx + SVG_OFFSET} ${pt.wy + SVG_OFFSET}, ${pt.wx + SVG_OFFSET} ${pt.wy + SVG_OFFSET}`;
+      handleDragState.previewPath.setAttribute('d', d);
+      updateNearestDock(e);
+    });
+    function finishHandleDrag(e) {
+      const line = findLine(handleDragState.lineId);
+      handleDragState.previewPath.remove();
+      mapEl.style.cursor = '';
+      if (!line) { handleDragState = null; return; }
+      const z = view.zoom;
+      let target = null;
+      const overEl = e.target.closest && e.target.closest('.pin, .node');
+      if (overEl) {
+        const id = parseInt(overEl.dataset.id, 10);
+        const kind = overEl.dataset.kind;
+        if (kind === 'pin') target = { id, dock: 'center' };
+        else {
+          const pt = eventToWorld(e);
+          const node = findNode(id);
+          const cd = closestNodeDock(node, pt.wx, pt.wy, z);
+          target = { id, dock: cd.dock };
+        }
+      } else if (nearestDock) {
+        target = { id: nearestDock.id, dock: nearestDock.dock };
+      }
+      if (target) {
+        const otherId = handleDragState.end === 'from' ? line.toId : line.fromId;
+        if (target.id !== otherId) {
+          if (handleDragState.end === 'from') { line.fromId = target.id; line.fromDock = target.dock; }
+          else { line.toId = target.id; line.toDock = target.dock; }
+        }
+      }
+      handleDragState = null;
+      renderLine(line, z);
+      renderLineHandles(z);
+      scheduleRender();
+    }
+
+    // ── Selection / sidebar opening ─────────────────────────────────────
+    let selectedId = null;
+    let selectedKind = null;
+    function selectElement(kind, id) {
+      mselClear();
+      clearSelectionVisuals();
+      selectedKind = kind;
+      selectedId = id;
+      if (kind === 'pin') {
+        const p = findPin(id);
+        if (p) p.el.classList.add('selected');
+      } else if (kind === 'node') {
+        const n = findNode(id);
+        if (n) n.el.classList.add('selected');
+      }
+    }
+    function selectLine(id) {
+      mselClear();
+      clearSelectionVisuals();
+      selectedKind = 'line';
+      selectedId = id;
+      selectedLineId = id;
+      renderLineHandles(view.zoom);
+      openLineEditor(id);
+    }
+    function clearSelectionVisuals() {
+      pins.forEach(p => p.el && p.el.classList.remove('selected'));
+      nodes.forEach(n => n.el && n.el.classList.remove('selected'));
+      selectedLineId = null;
+      renderLineHandles(view.zoom);
+    }
+    function clearSelection() {
+      clearSelectionVisuals();
+      selectedKind = null;
+      selectedId = null;
+      closeSidebar();
+      mselClear();
+    }
+
+    // ====================================================================
+    // Multi-selection — box (marquee) select, type filter, group move,
+    // group connect, group delete. Works across pins, nodes and lines.
+    // ====================================================================
+    const msel = { pins: new Set(), nodes: new Set(), lines: new Set() };
+    function mselTotal() { return msel.pins.size + msel.nodes.size + msel.lines.size; }
+    function mselHas(kind, id) {
+      return kind === 'line' ? msel.lines.has(id)
+           : kind === 'pin'  ? msel.pins.has(id)
+           : msel.nodes.has(id);
+    }
+
+    function mselApplyVisuals() {
+      pins.forEach(p => p.el && p.el.classList.toggle('selected', msel.pins.has(p.id)));
+      nodes.forEach(n => n.el && n.el.classList.toggle('selected', msel.nodes.has(n.id)));
+      lines.forEach(l => {
+        const path = document.getElementById(`edge-path-${l.id}`);
+        if (path) path.classList.toggle('edge-sel', msel.lines.has(l.id));
+      });
+    }
+
+    function mselClear() {
+      msel.pins.clear(); msel.nodes.clear(); msel.lines.clear();
+      pins.forEach(p => p.el && p.el.classList.remove('selected'));
+      nodes.forEach(n => n.el && n.el.classList.remove('selected'));
+      lines.forEach(l => {
+        const path = document.getElementById(`edge-path-${l.id}`);
+        if (path) path.classList.remove('edge-sel');
+      });
+      hideSelPopup();
+    }
+
+    // Convert an element's geographic position to screen (viewport) coords.
+    function worldToClient(wx, wy) {
+      const rect = mapEl.getBoundingClientRect();
+      const c = project(view.lat, view.lng, view.zoom);
+      return { x: wx - c.x + mapEl.clientWidth / 2 + rect.left,
+               y: wy - c.y + mapEl.clientHeight / 2 + rect.top };
+    }
+
+    // Select everything inside a screen rectangle (viewport coords).
+    function mselFromRect(x0, y0, x1, y1) {
+      const z = view.zoom;
+      const rect = mapEl.getBoundingClientRect();
+      const c = project(view.lat, view.lng, z);
+      // rect corners -> world
+      const toWorld = (cx, cy) => ({
+        wx: cx - rect.left - mapEl.clientWidth / 2 + c.x,
+        wy: cy - rect.top  - mapEl.clientHeight / 2 + c.y
+      });
+      const a = toWorld(Math.min(x0, x1), Math.min(y0, y1));
+      const b = toWorld(Math.max(x0, x1), Math.max(y0, y1));
+      const inRect = (wx, wy) => wx >= a.wx && wx <= b.wx && wy >= a.wy && wy <= b.wy;
+
+      msel.pins.clear(); msel.nodes.clear(); msel.lines.clear();
+      for (const p of pins) {
+        const w = project(p.lat, p.lng, z);
+        if (inRect(w.x, w.y)) msel.pins.add(p.id);
+      }
+      for (const n of nodes) {
+        const box = nodeBox(n, z);
+        // box-intersection so large cards still select sensibly
+        if (box.right >= a.wx && box.left <= b.wx &&
+            (box.top + box.totalH) >= a.wy && box.top <= b.wy) msel.nodes.add(n.id);
+      }
+      for (const l of lines) {
+        const p1 = getDockWorld(l.fromId, l.fromDock, z);
+        const p2 = getDockWorld(l.toId, l.toDock, z);
+        if (inRect(p1.x, p1.y) && inRect(p2.x, p2.y)) msel.lines.add(l.id);
+      }
+      mselApplyVisuals();
+    }
+
+    function mselDeleteAll() {
+      [...msel.lines].forEach(id => removeLine(id));
+      [...msel.pins].forEach(id => deletePin(id));
+      [...msel.nodes].forEach(id => deleteNode(id));
+      mselClear();
+      scheduleRender();
+    }
+
+    // ── Type-filter popup ───────────────────────────────────────────────
+    const selPopup = document.createElement('div');
+    selPopup.className = 'sel-popup';
+    selPopup.style.display = 'none';
+    document.body.appendChild(selPopup);
+    selPopup.addEventListener('mousedown', e => e.stopPropagation());
+
+    function hideSelPopup() { selPopup.style.display = 'none'; selPopup.innerHTML = ''; }
+
+    function showSelPopup() {
+      const present = [
+        { kind: 'nodes', label: 'Nodes', n: msel.nodes.size },
+        { kind: 'pins',  label: 'Pins',  n: msel.pins.size },
+        { kind: 'lines', label: 'Lines', n: msel.lines.size },
+      ].filter(t => t.n > 0);
+      if (present.length === 0) { hideSelPopup(); return; }
+
+      selPopup.innerHTML = '';
+      // Only offer type-narrowing when more than one type is present.
+      if (present.length > 1) {
+        present.forEach(t => {
+          const chip = document.createElement('button');
+          chip.className = 'sel-chip';
+          chip.textContent = `${t.label} ${t.n}`;
+          chip.addEventListener('click', () => mselNarrowTo(t.kind));
+          selPopup.appendChild(chip);
+        });
+      } else {
+        const count = document.createElement('span');
+        count.className = 'sel-count';
+        count.textContent = `${present[0].label} ${present[0].n}`;
+        selPopup.appendChild(count);
+      }
+      const del = document.createElement('button');
+      del.className = 'sel-chip danger';
+      del.textContent = 'Delete';
+      del.addEventListener('click', mselDeleteAll);
+      selPopup.appendChild(del);
+
+      // Anchor above the selection's screen bounding box.
+      const box = mselScreenBounds();
+      selPopup.style.display = 'flex';
+      const pw = selPopup.offsetWidth, ph = selPopup.offsetHeight;
+      let left = box.cx - pw / 2;
+      let top = box.top - ph - 10;
+      left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+      if (top < 8) top = box.bottom + 10;
+      selPopup.style.left = `${left}px`;
+      selPopup.style.top = `${top}px`;
+    }
+
+    function mselScreenBounds() {
+      const z = view.zoom;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      const add = (cx, cy) => { minX = Math.min(minX, cx); minY = Math.min(minY, cy); maxX = Math.max(maxX, cx); maxY = Math.max(maxY, cy); };
+      msel.pins.forEach(id => { const p = findPin(id); if (p) { const w = project(p.lat, p.lng, z); const s = worldToClient(w.x, w.y); add(s.x, s.y); } });
+      msel.nodes.forEach(id => { const n = findNode(id); if (n) { const b = nodeBox(n, z); const tl = worldToClient(b.left, b.top); const br = worldToClient(b.right, b.top + b.totalH); add(tl.x, tl.y); add(br.x, br.y); } });
+      msel.lines.forEach(id => { const l = findLine(id); if (l) { const p1 = getDockWorld(l.fromId, l.fromDock, z); const p2 = getDockWorld(l.toId, l.toDock, z); const s1 = worldToClient(p1.x, p1.y); const s2 = worldToClient(p2.x, p2.y); add(s1.x, s1.y); add(s2.x, s2.y); } });
+      if (minX === Infinity) return { cx: window.innerWidth / 2, top: 80, bottom: 80 };
+      return { cx: (minX + maxX) / 2, top: minY, bottom: maxY };
+    }
+
+    function mselNarrowTo(kind) {
+      if (kind === 'nodes') { msel.pins.clear(); msel.lines.clear(); }
+      else if (kind === 'pins') { msel.nodes.clear(); msel.lines.clear(); }
+      else if (kind === 'lines') { msel.nodes.clear(); msel.pins.clear(); }
+      mselApplyVisuals();
+      showSelPopup();
+    }
+
+    // ── Marquee drag ─────────────────────────────────────────────────────
+    let marqueeState = null;
+    const marqueeEl = document.createElement('div');
+    marqueeEl.className = 'marquee';
+    marqueeEl.style.display = 'none';
+    document.body.appendChild(marqueeEl);
+
+    function startMarquee(e) {
+      e.preventDefault();
+      mselClear();
+      marqueeState = { x0: e.clientX, y0: e.clientY, moved: false };
+      marqueeEl.style.display = 'block';
+      marqueeEl.style.left = `${e.clientX}px`;
+      marqueeEl.style.top = `${e.clientY}px`;
+      marqueeEl.style.width = '0px';
+      marqueeEl.style.height = '0px';
+    }
+    function updateMarquee(e) {
+      const { x0, y0 } = marqueeState;
+      const x1 = e.clientX, y1 = e.clientY;
+      if (Math.abs(x1 - x0) + Math.abs(y1 - y0) > 3) marqueeState.moved = true;
+      marqueeEl.style.left = `${Math.min(x0, x1)}px`;
+      marqueeEl.style.top = `${Math.min(y0, y1)}px`;
+      marqueeEl.style.width = `${Math.abs(x1 - x0)}px`;
+      marqueeEl.style.height = `${Math.abs(y1 - y0)}px`;
+    }
+    function finishMarquee(e) {
+      marqueeEl.style.display = 'none';
+      const moved = marqueeState.moved;
+      const { x0, y0 } = marqueeState;
+      marqueeState = null;
+      if (!moved) { clearSelection(); return; }
+      mselFromRect(x0, y0, e.clientX, e.clientY);
+      if (mselTotal() > 0) showSelPopup(); else hideSelPopup();
+    }
+
+    // ====================================================================
+    // Sidebar editors (live updates — no Apply button)
+    // ====================================================================
+    const sidebar = document.getElementById('sidebar');
+
+    function openSidebar(html) {
+      sidebar.innerHTML = html;
+      sidebar.classList.add('open');
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      sidebar.innerHTML = '';
+      selectedKind = null;
+      selectedId = null;
+    }
+
+    sidebar.addEventListener('mousedown', e => e.stopPropagation());
+    document.addEventListener('mousedown', (e) => {
+      if (!sidebar.classList.contains('open')) return;
+      if (sidebar.contains(e.target)) return;
+      if (e.target.closest && (e.target.closest('.pin') || e.target.closest('.node') || e.target.closest('.edge-catcher') || e.target.closest('.edge-handle'))) return;
+      if (e.target.closest && e.target.closest('.toolbar')) return;
+      clearSelection();
+    });
+
+    function field({ label, type, id, value, min, max, step, rows }) {
+      if (type === 'textarea') {
+        return `<div class="field"><label>${label}</label><textarea id="${id}" rows="${rows || 4}">${(value || '').replace(/</g, '&lt;')}</textarea></div>`;
+      }
+      const attrs = [
+        `id="${id}"`, `type="${type}"`,
+        value !== undefined ? `value="${value}"` : '',
+        min !== undefined ? `min="${min}"` : '',
+        max !== undefined ? `max="${max}"` : '',
+        step !== undefined ? `step="${step}"` : ''
+      ].filter(Boolean).join(' ');
+      return `<div class="field"><label>${label}</label><input ${attrs}></div>`;
+    }
+    function selectField({ label, id, value, options }) {
+      const opts = options.map(o => `<option value="${o.v}"${o.v === value ? ' selected' : ''}>${o.l}</option>`).join('');
+      return `<div class="field"><label>${label}</label><select id="${id}">${opts}</select></div>`;
+    }
+    function dropZoneField() {
+      return `
+        <div class="field">
+          <label>Attachments</label>
+          <div class="drop-zone">
+            Drop files here, or <span class="drop-link">browse</span>
+            <input type="file" multiple class="drop-input" />
+          </div>
+          <div class="attachment-list"></div>
+        </div>
+      `;
+    }
+
+    // ── Attachment / drop-zone wiring ───────────────────────────────────
+    function setupDropZone(target) {
+      if (!target.attachments) target.attachments = [];
+      const zone = sidebar.querySelector('.drop-zone');
+      const list = sidebar.querySelector('.attachment-list');
+      const input = zone.querySelector('.drop-input');
+      if (!zone || !list || !input) return;
+
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('dragover');
+      });
+      zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        if (e.dataTransfer && e.dataTransfer.files) handleFiles(e.dataTransfer.files, target, list);
+      });
+      input.addEventListener('change', () => {
+        handleFiles(input.files, target, list);
+        input.value = '';
+      });
+      renderAttachmentList(list, target);
+    }
+    async function handleFiles(files, target, list) {
+      const boardId = getBoardId();
+      // Re-verify at upload time: if we hold a token but membership hasn't been
+      // confirmed yet (async race right after sign-in), check it now so a valid
+      // owner/member isn't wrongly treated as unauthorized.
+      let authorized = !!gitHubToken && isMudlarkMember;
+      if (gitHubToken && !isMudlarkMember) authorized = await refreshMudlarkMembership(githubUsername);
+      let warnedUnsaved = false;
+      for (const file of files) {
+        // 1) Collect user metadata before doing anything. Skip = don't add it.
+        const meta = await promptFileMetadata(file);
+        if (!meta) continue;
+
+        const att = {
+          name: file.name, type: file.type, size: file.size,
+          title: meta.title, description: meta.description,
+          date: new Date().toISOString(),
+          uploader: githubUsername || myName || 'anonymous',
+          dataUrl: '', url: '', location: 'pending',
+          uploading: true, progress: 0, indeterminate: false
+        };
+        target.attachments.push(att);
+        renderAttachmentList(list, target);
+
+        // 2a) AUTHORIZED → commit straight to GitHub. The Contents API gives no
+        //     progress events, so show an indeterminate "committing…" state
+        //     instead of a 0% bar that would look frozen.
+        if (authorized) {
+          att.indeterminate = true;
+          renderAttachmentList(list, target);
+          const storedName = Date.now() + '_' + Math.random().toString(36).substr(2, 6) + '_' + file.name.replace(/[^\w.\-]+/g, '_');
+          att.storedName = storedName;
+          try {
+            const { path, downloadUrl } = await commitFileToGithub(boardId, file, storedName);
+            att.uploading = false; att.indeterminate = false;
+            att.location = 'github'; att.githubPath = path;
+            att.url = downloadUrl; att.dataUrl = downloadUrl;
+            refreshAttachments(target);
+            scheduleRender();
+            scheduleUnifiedSave();
+            updateBoardManifest(boardId);   // best-effort; never blocks the file
+          } catch (err) {
+            console.error('GitHub commit failed:', err);
+            att.uploading = false; att.indeterminate = false;
+            uiAlert('Could not commit "' + file.name + '" to the site:\n' + err.message +
+                  '\n\nKeeping a local copy instead — use Save to download it.');
+            await embedLocally(file, att, list, target);
+          }
+          continue;
+        }
+
+        // 2b) NOT AUTHORIZED → the file is NOT saved to the site. Warn once, then
+        //     stage to Firebase (temporary) with a watchdog so the bar can't hang.
+        if (!warnedUnsaved) {
+          warnedUnsaved = true;
+          uiAlert(
+            (gitHubToken
+              ? "You're signed in but not yet an authorized member of the Mudlark Media org, "
+              : "You're not signed in with an authorized GitHub account, ") +
+            "so uploaded files are NOT saved to the site — only staged temporarily.\n\n" +
+            "Use the Save button to download a local copy (ZIP) so your files aren't lost."
+          );
+        }
+        await stageToFirebaseOrLocal(file, att, list, target, boardId);
+      }
+    }
+
+    // base64-embed a file into an attachment (the always-works local fallback).
+    function embedLocally(file, att, list, target) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          att.uploading = false; att.indeterminate = false;
+          att.dataUrl = ev.target.result; att.url = '';
+          att.location = 'local';
+          refreshAttachments(target);
+          scheduleRender();
+          scheduleUnifiedSave();
+          resolve();
+        };
+        reader.onerror = () => { att.uploading = false; refreshAttachments(target); resolve(); };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Stage an unauthorized upload to Firebase Storage (temp). A 30s watchdog
+    // falls back to a local base64 copy if Storage stalls, so the bar never
+    // freezes (this was the old "stuck loading bar" failure mode).
+    function stageToFirebaseOrLocal(file, att, list, target, boardId) {
+      return new Promise((resolve) => {
+        if (!(storage && firebaseInitialized)) { embedLocally(file, att, list, target).then(resolve); return; }
+        const uniqueName = Date.now() + '_' + Math.random().toString(36).substr(2, 6) + '_' + file.name;
+        const storagePath = `boards/${boardId}/attachments/${uniqueName}`;
+        const uploadTask = storage.ref(storagePath).put(file);
+        let done = false;
+        const finish = () => { if (done) return; done = true; clearTimeout(watch); resolve(); };
+        const watch = setTimeout(() => {
+          if (done) return;
+          try { uploadTask.cancel(); } catch (_) {}   // cancel → error handler → embedLocally
+        }, 30000);
+        uploadTask.on('state_changed',
+          (snap) => { att.progress = (snap.bytesTransferred / snap.totalBytes) * 100; refreshAttachments(target); },
+          (err) => {
+            console.warn('Firebase Storage staging failed, embedding locally:', err && err.message);
+            embedLocally(file, att, list, target).then(finish);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then(url => {
+              att.uploading = false; att.indeterminate = false;
+              att.dataUrl = url; att.url = url;
+              att.location = 'firebase'; att.storagePath = storagePath;
+              refreshAttachments(target);
+              scheduleRender();
+              scheduleUnifiedSave();
+              finish();
+            }).catch(() => embedLocally(file, att, list, target).then(finish));
+          }
+        );
+      });
+    }
+    function renderAttachmentList(list, target) {
+      list.innerHTML = '';
+      (target.attachments || []).forEach((att, i) => {
+        const item = document.createElement('div');
+        item.className = 'attachment-item';
+
+        // In-flight: uploading to Firebase (percentage) or committing to GitHub
+        // (indeterminate). Either way show a live progress row, never a dead link.
+        if (att.uploading) {
+          const container = document.createElement('div');
+          container.className = 'name';
+          container.style.opacity = '0.85';
+          container.style.flex = '1';
+
+          const text = document.createElement('div');
+          text.textContent = (att.title || att.name) + (att.indeterminate ? ' — committing to site…' : ' — uploading…');
+          text.style.cssText = 'font-size:0.9em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+          container.appendChild(text);
+
+          const barBg = document.createElement('div');
+          barBg.className = 'att-bar-bg';
+          const barFg = document.createElement('div');
+          barFg.className = 'att-bar-fg' + (att.indeterminate ? ' indeterminate' : '');
+          if (!att.indeterminate) barFg.style.width = (att.progress || 0) + '%';
+          barBg.appendChild(barFg);
+          container.appendChild(barBg);
+
+          item.appendChild(container);
+          list.appendChild(item);
+          return;
+        }
+
+        // Finished: title row (link + location badge + size + remove).
+        const main = document.createElement('div');
+        main.className = 'att-main';
+
+        const a = document.createElement('a');
+        a.className = 'name';
+        const href = att.url || att.dataUrl || '';
+        a.href = href || '#';
+        if (href && !href.startsWith('data:')) { a.target = '_blank'; a.rel = 'noopener'; }
+        else if (href) { a.download = att.name; }
+        a.textContent = att.title || att.name;
+        a.title = (att.description ? att.description + '\n\n' : '') + att.name;
+        main.appendChild(a);
+
+        // Location badge — where this file actually lives.
+        const loc = att.location;
+        if (loc === 'github' || loc === 'firebase' || loc === 'local') {
+          const badge = document.createElement('span');
+          if (loc === 'github')      { badge.className = 'att-badge site';  badge.textContent = 'On site'; badge.title = att.githubPath || 'Committed to the site repo'; }
+          else if (loc === 'firebase'){ badge.className = 'att-badge temp';  badge.textContent = 'Temp';    badge.title = 'Staged to Firebase only — save locally to keep it'; }
+          else                        { badge.className = 'att-badge local'; badge.textContent = 'Local';   badge.title = 'Embedded in this board only — save locally to keep it'; }
+          main.appendChild(badge);
+        }
+
+        const size = document.createElement('span');
+        size.className = 'size';
+        size.textContent = formatSize(att.size);
+        main.appendChild(size);
+
+        const rm = document.createElement('button');
+        rm.className = 'remove';
+        rm.textContent = '×';
+        rm.title = 'Remove';
+        rm.addEventListener('click', () => {
+          const wasGithub = att.location === 'github';
+          target.attachments.splice(i, 1);
+          renderAttachmentList(list, target);
+          scheduleRender();
+          scheduleUnifiedSave();
+          // Keep the GitHub folder index accurate (the blob stays in history).
+          if (wasGithub && gitHubToken && isMudlarkMember) updateBoardManifest(getBoardId());
+        });
+        main.appendChild(rm);
+        item.appendChild(main);
+
+        // Secondary line: filename · type · description preview.
+        const sub = document.createElement('div');
+        sub.className = 'att-sub';
+        let subText = att.name;
+        if (att.type) subText += ' · ' + att.type;
+        if (att.description) subText += ' — ' + att.description;
+        sub.textContent = subText;
+        sub.title = subText;
+        item.appendChild(sub);
+
+        list.appendChild(item);
+      });
+    }
+    function formatSize(bytes) {
+      if (bytes < 1024) return `${bytes}B`;
+      if (bytes < 1024*1024) return `${(bytes/1024).toFixed(1)}KB`;
+      return `${(bytes/1024/1024).toFixed(1)}MB`;
+    }
+    // Normalise an attachment for persistence. CRITICAL: Firebase .set() rejects
+    // any object containing `undefined`, and a GitHub-hosted attachment has no
+    // `storagePath` (and vice-versa), so the raw object would throw and the whole
+    // board save would silently fail — which is why committed files vanished on
+    // refresh. Defaulting every field to a defined value fixes that.
+    function cleanAttachment(a) {
+      return {
+        name: a.name || '', type: a.type || '', size: a.size || 0,
+        dataUrl: a.dataUrl || '', storagePath: a.storagePath || '',
+        storedName: a.storedName || '', title: a.title || '',
+        description: a.description || '', date: a.date || '',
+        uploader: a.uploader || '', location: a.location || '',
+        url: a.url || '', githubPath: a.githubPath || ''
+      };
+    }
+    // Re-render the attachment list against the CURRENTLY-LIVE sidebar element.
+    // The `list` node captured when an upload started can go stale if the sidebar
+    // is rebuilt mid-upload, which left finished uploads invisible until the panel
+    // was closed and reopened. Re-querying the live node fixes that.
+    function refreshAttachments(target) {
+      if (selectedId !== target.id) return;            // editor moved elsewhere
+      const liveList = sidebar.querySelector('.attachment-list');
+      if (liveList) renderAttachmentList(liveList, target);
+    }
+
+    // ── Themed dialogs (replace native alert/confirm) ──────────────────────
+    // Match the rest of the app (.modal-dialog / .modal-content / .btn-dialog)
+    // instead of the browser's stock window.alert popups.
+    function uiDialog({ title, message, buttons }) {
+      return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-dialog';
+        const content = document.createElement('div');
+        content.className = 'modal-content';
+        const h = document.createElement('h3');
+        h.textContent = title || 'Notice';
+        const p = document.createElement('p');
+        p.style.whiteSpace = 'pre-line';   // honour \n in messages
+        p.textContent = message || '';
+        const row = document.createElement('div');
+        row.className = 'modal-buttons';
+        const secondary = buttons.find(b => b.secondary);
+        const primary = buttons.find(b => b.primary) || buttons[buttons.length - 1];
+        const onKey = (e) => {
+          if (e.key === 'Escape') { e.preventDefault(); close(secondary ? secondary.value : (primary && primary.value)); }
+          else if (e.key === 'Enter') { e.preventDefault(); close(primary && primary.value); }
+        };
+        const close = (val) => { document.removeEventListener('keydown', onKey); overlay.remove(); resolve(val); };
+        buttons.forEach(b => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-dialog' + (b.secondary ? ' btn-secondary' : '');
+          btn.textContent = b.label;
+          btn.addEventListener('click', () => close(b.value));
+          row.appendChild(btn);
+        });
+        content.appendChild(h); content.appendChild(p); content.appendChild(row);
+        overlay.appendChild(content);
+        overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(secondary ? secondary.value : undefined); });
+        document.body.appendChild(overlay);
+        document.addEventListener('keydown', onKey);
+        const focusBtn = row.querySelector('.btn-dialog:not(.btn-secondary)') || row.querySelector('.btn-dialog');
+        if (focusBtn) setTimeout(() => focusBtn.focus(), 30);
+      });
+    }
+    function uiAlert(message, title) {
+      return uiDialog({ title: title || 'Notice', message, buttons: [{ label: 'OK', value: true, primary: true }] });
+    }
+    function uiConfirm(message, title) {
+      return uiDialog({ title: title || 'Confirm', message, buttons: [
+        { label: 'Cancel', value: false, secondary: true },
+        { label: 'OK', value: true, primary: true }
+      ] });
+    }
+
+    // ── Pin editor ──────────────────────────────────────────────────────
+    function openPinEditor(id) {
+      const p = findPin(id);
+      if (!p) return;
+      selectElement('pin', id);
+      const html = `
+        <h3>Pin</h3>
+        <div class="field-row">
+          ${field({ label: 'Size', type: 'number', id: 'f-size', value: p.sizeBase, min: 1, step: 1 })}
+          ${field({ label: 'Border Width', type: 'number', id: 'f-bdw', value: p.borderWidth, min: 0, step: 0.5 })}
+        </div>
+        <div class="field-row">
+          ${field({ label: 'Glow Distance', type: 'range', id: 'f-gdist', value: p.glowDistance, min: 0, max: 10, step: 0.05 })}
+          ${field({ label: 'Glow Brightness', type: 'range', id: 'f-gbri', value: p.glowBrightness, min: 0, max: 10, step: 0.1 })}
+        </div>
+        <div class="field-row">
+          ${field({ label: 'Fill Color', type: 'color', id: 'f-fill', value: p.fillColor })}
+          ${field({ label: 'Fill Opacity', type: 'range', id: 'f-fillA', value: p.fillAlpha, min: 0, max: 1, step: 0.01 })}
+        </div>
+        ${field({ label: 'Border Color', type: 'color', id: 'f-bd', value: p.borderColor })}
+        ${field({ label: 'Metadata', type: 'textarea', id: 'f-meta', value: p.metadata, rows: 6 })}
+        ${dropZoneField()}
+        <div class="sidebar-actions">
+          <button class="btn-danger" id="f-del">Delete</button>
+          <button id="f-close">Close</button>
+        </div>
+      `;
+      openSidebar(html);
+      const live = () => {
+        p.sizeBase       = parseFloat(document.getElementById('f-size').value) || DEFAULT_PIN.sizeBase;
+        p.glowDistance   = parseFloat(document.getElementById('f-gdist').value);
+        p.glowBrightness = parseFloat(document.getElementById('f-gbri').value);
+        p.fillColor      = document.getElementById('f-fill').value;
+        p.fillAlpha      = parseFloat(document.getElementById('f-fillA').value);
+        p.borderColor    = document.getElementById('f-bd').value;
+        p.borderWidth    = parseFloat(document.getElementById('f-bdw').value);
+        p.metadata       = document.getElementById('f-meta').value;
+        restylePin(p);
+        scheduleRender();
+      };
+      ['f-size','f-gdist','f-gbri','f-fill','f-fillA','f-bd','f-bdw','f-meta'].forEach(fid => {
+        document.getElementById(fid).addEventListener('input', live);
+      });
+      setupDropZone(p);
+      document.getElementById('f-del').addEventListener('click', () => {
+        deletePin(id);
+        clearSelection();
+      });
+      document.getElementById('f-close').addEventListener('click', clearSelection);
+    }
+
+    function deletePin(id) {
+      for (const l of [...lines]) {
+        if (l.fromId === id || l.toId === id) removeLine(l.id);
+      }
+      const i = pins.findIndex(p => p.id === id);
+      if (i === -1) return;
+      pins[i].el.remove();
+      pins.splice(i, 1);
+    }
+
+    // ── Node editor ─────────────────────────────────────────────────────
+    function openNodeEditor(id) {
+      const n = findNode(id);
+      if (!n) return;
+      selectElement('node', id);
+      const html = `
+        <h3>Node</h3>
+        ${field({ label: 'Title', type: 'text', id: 'f-title', value: n.title })}
+        ${field({ label: 'Metadata (one per line)', type: 'textarea', id: 'f-meta', value: n.metadata, rows: 5 })}
+        <div class="field-row">
+          ${field({ label: 'Width', type: 'number', id: 'f-w', value: n.wBase, min: 1, step: 5 })}
+          ${field({ label: 'Border Width', type: 'number', id: 'f-bdw', value: n.borderWidth, min: 0, step: 0.5 })}
+        </div>
+        <div class="field-row">
+          ${field({ label: 'Glow Distance', type: 'range', id: 'f-gdist', value: n.glowDistance, min: 0, max: 10, step: 0.05 })}
+          ${field({ label: 'Glow Brightness', type: 'range', id: 'f-gbri', value: n.glowBrightness, min: 0, max: 10, step: 0.1 })}
+        </div>
+        <div class="field-row">
+          ${field({ label: 'Background', type: 'color', id: 'f-bg', value: n.bgColor })}
+          ${field({ label: 'BG Opacity', type: 'range', id: 'f-bgA', value: n.bgAlpha, min: 0, max: 1, step: 0.01 })}
+        </div>
+        <div class="field-row">
+          ${field({ label: 'Text Color', type: 'color', id: 'f-text', value: n.textColor })}
+          ${field({ label: 'Indicator', type: 'color', id: 'f-ind', value: n.indicatorColor })}
+        </div>
+        ${field({ label: 'Border Color', type: 'color', id: 'f-bd', value: n.borderColor })}
+        ${dropZoneField()}
+        <div class="sidebar-actions">
+          <button class="btn-danger" id="f-del">Delete</button>
+          <button id="f-close">Close</button>
+        </div>
+      `;
+      openSidebar(html);
+      const live = () => {
+        n.title          = document.getElementById('f-title').value;
+        n.metadata       = document.getElementById('f-meta').value;
+        n.wBase          = parseFloat(document.getElementById('f-w').value) || DEFAULT_NODE.wBase;
+        n.glowDistance   = parseFloat(document.getElementById('f-gdist').value);
+        n.glowBrightness = parseFloat(document.getElementById('f-gbri').value);
+        n.bgColor        = document.getElementById('f-bg').value;
+        n.bgAlpha        = parseFloat(document.getElementById('f-bgA').value);
+        n.textColor      = document.getElementById('f-text').value;
+        n.indicatorColor = document.getElementById('f-ind').value;
+        n.borderColor    = document.getElementById('f-bd').value;
+        n.borderWidth    = parseFloat(document.getElementById('f-bdw').value);
+        restyleNode(n);
+        scheduleRender();
+      };
+      ['f-title','f-meta','f-w','f-gdist','f-gbri','f-bg','f-bgA','f-text','f-ind','f-bd','f-bdw'].forEach(fid => {
+        document.getElementById(fid).addEventListener('input', live);
+      });
+      setupDropZone(n);
+      document.getElementById('f-del').addEventListener('click', () => {
+        deleteNode(id);
+        clearSelection();
+      });
+      document.getElementById('f-close').addEventListener('click', clearSelection);
+    }
+
+    function deleteNode(id) {
+      for (const l of [...lines]) {
+        if (l.fromId === id || l.toId === id) removeLine(l.id);
+      }
+      const i = nodes.findIndex(n => n.id === id);
+      if (i === -1) return;
+      nodes[i].el.remove();
+      nodes.splice(i, 1);
+    }
+
+    // ── Line editor ─────────────────────────────────────────────────────
+    function openLineEditor(id) {
+      const l = findLine(id);
+      if (!l) return;
+      const html = `
+        <h3>Line</h3>
+        ${field({ label: 'Color', type: 'color', id: 'f-color', value: l.color })}
+        ${field({ label: 'Weight', type: 'number', id: 'f-w', value: l.weight, min: 0.1, step: 0.25 })}
+        ${selectField({ label: 'Arrows', id: 'f-arr', value: l.arrows, options: [
+          { v: 'none',  l: 'None' },
+          { v: 'start', l: 'Start' },
+          { v: 'end',   l: 'End' },
+          { v: 'both',  l: 'Both' }
+        ] })}
+        <div class="sidebar-actions">
+          <button class="btn-danger" id="f-del">Delete</button>
+          <button id="f-close">Close</button>
+        </div>
+      `;
+      openSidebar(html);
+      const live = () => {
+        l.color  = document.getElementById('f-color').value;
+        l.weight = parseFloat(document.getElementById('f-w').value);
+        l.arrows = document.getElementById('f-arr').value;
+        renderLine(l, view.zoom);
+      };
+      ['f-color','f-w','f-arr'].forEach(fid => {
+        document.getElementById(fid).addEventListener('input', live);
+      });
+      document.getElementById('f-del').addEventListener('click', () => {
+        removeLine(id);
+        clearSelection();
+      });
+      document.getElementById('f-close').addEventListener('click', clearSelection);
+    }
+
+    // ====================================================================
+    // Toolbar: title, add, save/load
+    // ====================================================================
+    const titleInput = document.getElementById('project-title');
+    titleInput.addEventListener('input', () => {
+      const t = titleInput.value.trim() || 'Untitled';
+      document.title = `${t} — Map`;
+      // Update URL to reflect board name
+      const boardId = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'default';
+      const newKey = `mindmap_${boardId}`;
+      if (newKey !== lastBoardKey) {
+        // Switching to a different board name
+        const state = serializeState();
+        try {
+          localStorage.setItem(newKey, JSON.stringify(state));
+        } catch (e) {
+          console.error('Failed to save to new board key:', e);
+        }
+        lastBoardKey = newKey;
+      }
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set('b', boardId);
+      window.history.replaceState({}, '', newUrl);
+      scheduleUnifiedSave();
+    });
+
+    document.getElementById('btn-add-pin').addEventListener('click', () => {
+      const pin = { id: newId(), lat: view.lat, lng: view.lng, ...DEFAULT_PIN, attachments: [] };
+      pins.push(pin);
+      createPinEl(pin);
+      placePin(pin, view.zoom);
+      openPinEditor(pin.id);
+      scheduleUnifiedSave();
+    });
+    document.getElementById('btn-add-node').addEventListener('click', () => {
+      const node = { id: newId(), lat: view.lat, lng: view.lng, ...DEFAULT_NODE, attachments: [] };
+      nodes.push(node);
+      createNodeEl(node);
+      placeNode(node, view.zoom);
+      openNodeEditor(node.id);
+      scheduleUnifiedSave();
+    });
+
+    // ── ZIP Export/Import ──────────────────────────────────────────────
+    document.getElementById('btn-save').addEventListener('click', async () => {
+      try {
+        const state = serializeState();
+        
+        // Standard ZIP download
+        const zip = new JSZip();
+        zip.file('board.json', JSON.stringify(state, null, 2));
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const boardName = (new URLSearchParams(window.location.search).get('b') || 'default').replace(/[^a-z0-9-]/gi, '_');
+        a.href = url;
+        a.download = `${boardName}-board.zip`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        /* GitHub commit-on-save DEFERRED — see disabled pushToGithub() below.
+        if (typeof gitHubToken !== 'undefined' && gitHubToken) {
+          const meta = getGithubRepoMeta();
+          if (meta) {
+            pushToGithub(gitHubToken, meta.owner, meta.repo, 'board_state.json', JSON.stringify(state, null, 2))
+              .then(ok => {
+                if (ok) console.log("Committed state back to GitHub Pages!");
+              });
+          }
+        }
+        */
+      } catch (e) {
+        uiAlert('Failed to export: ' + e.message);
+      }
+    });
+
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.zip';
+      input.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          const zip = new JSZip();
+          await zip.loadAsync(file);
+          const jsonFile = zip.file('board.json');
+          if (!jsonFile) throw new Error('board.json not found in ZIP');
+          const jsonText = await jsonFile.async('text');
+          const state = JSON.parse(jsonText);
+          if (deserializeState(state)) {
+            scheduleUnifiedSave();
+            uiAlert('Board loaded successfully!');
+          } else {
+            uiAlert('Failed to load board data');
+          }
+        } catch (e) {
+          uiAlert('Failed to import: ' + e.message);
+        }
+      });
+      input.click();
+    });
+
+    function createNewBoard() {
+      pins.forEach(p => p.el?.remove());
+      nodes.forEach(n => n.el?.remove());
+      pins.length = 0;
+      nodes.length = 0;
+      lines.length = 0;
+      document.querySelectorAll('[id^="edge-"]').forEach(el => el.remove());
+      titleInput.value = 'Untitled';
+      document.title = 'Untitled — Map';
+      view.lat = 39.5;
+      view.lng = -98.35;
+      view.zoom = 6;
+      nextId = 1;
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set('b', 'default');
+      window.history.replaceState({}, '', newUrl);
+      lastBoardKey = storageKey();
+      clearSelection();
+      scheduleRender();
+      scheduleUnifiedSave();
+    }
+
+    document.getElementById('btn-new').addEventListener('click', () => {
+      const hasContent = pins.length > 0 || nodes.length > 0 || lines.length > 0;
+      if (!hasContent) {
+        createNewBoard();
+        return;
+      }
+      document.getElementById('dialog-new-board').style.display = 'flex';
+    });
+
+    document.getElementById('dialog-save').addEventListener('click', () => {
+      document.getElementById('dialog-new-board').style.display = 'none';
+      document.getElementById('btn-save').click();
+      setTimeout(createNewBoard, 100);
+    });
+    document.getElementById('dialog-discard').addEventListener('click', () => {
+      document.getElementById('dialog-new-board').style.display = 'none';
+      createNewBoard();
+    });
+    document.getElementById('dialog-cancel').addEventListener('click', () => {
+      document.getElementById('dialog-new-board').style.display = 'none';
+    });
+
+    // ====================================================================
+    // Welcome modal
+    // ====================================================================
+    const welcomeEl = document.getElementById('welcome');
+    document.getElementById('welcome-close').addEventListener('click', () => {
+      welcomeEl.classList.add('hidden');
+    });
+
+    // ====================================================================
+    // Keyboard
+    // ====================================================================
+    document.addEventListener('keydown', (e) => {
+      const tag = document.activeElement && document.activeElement.tagName;
+      const inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+      if (inInput) return;
+      if (e.key === 'Escape') {
+        if (!welcomeEl.classList.contains('hidden')) {
+          welcomeEl.classList.add('hidden');
+          return;
+        }
+        clearSelection();
+        return;
+      }
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (mselTotal() > 0) { mselDeleteAll(); return; }
+        if (selectedKind === 'pin')  { deletePin(selectedId);  clearSelection(); }
+        if (selectedKind === 'node') { deleteNode(selectedId); clearSelection(); }
+        if (selectedKind === 'line') { removeLine(selectedId); clearSelection(); }
+      }
+    });
+
+    // ====================================================================
+    // IP geolocation: nudge the initial center toward the user
+    // ====================================================================
+    async function loadInitialView() {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 2000);
+        const res = await fetch('https://ipwho.is/', { signal: ctrl.signal });
+        clearTimeout(t);
+        const data = await res.json();
+        if (data && data.success && typeof data.latitude === 'number') {
+          view.lat = clampLat(data.latitude);
+          view.lng = clampLng(data.longitude);
+          render();
+        }
+      } catch (_) {}
+    }
+
+    // ====================================================================
+    // Storage — localStorage autosave + ZIP export/import + cross-tab sync
+    // ====================================================================
+    let lastBoardKey = null;  // Set after DOM ready
+    const storageKey = () => {
+      const params = new URLSearchParams(window.location.search);
+      const boardName = params.get('b') || 'default';
+      return `mindmap_${boardName}`;
+    };
+    lastBoardKey = storageKey();  // Initialize now that storageKey is defined
+
+    function serializeState() {
+      return {
+        title: titleInput.value,
+        view: { ...view },
+        pins: pins.map(p => ({
+          id: p.id, lat: p.lat, lng: p.lng,
+          sizeBase: p.sizeBase, fillColor: p.fillColor, fillAlpha: p.fillAlpha,
+          borderColor: p.borderColor, borderWidth: p.borderWidth,
+          glowDistance: p.glowDistance, glowBrightness: p.glowBrightness,
+          metadata: p.metadata, attachments: (p.attachments || []).filter(a => !a.uploading).map(cleanAttachment)
+        })),
+        nodes: nodes.map(n => ({
+          id: n.id, lat: n.lat, lng: n.lng,
+          title: n.title, wBase: n.wBase, metadata: n.metadata,
+          bgColor: n.bgColor, bgAlpha: n.bgAlpha, textColor: n.textColor,
+          indicatorColor: n.indicatorColor, borderColor: n.borderColor, borderWidth: n.borderWidth,
+          glowDistance: n.glowDistance, glowBrightness: n.glowBrightness,
+          flipped: n.flipped, attachments: (n.attachments || []).filter(a => !a.uploading).map(cleanAttachment)
+        })),
+        lines: lines.map(l => ({
+          id: l.id, fromId: l.fromId, fromDock: l.fromDock,
+          toId: l.toId, toDock: l.toDock,
+          color: l.color, weight: l.weight,
+          glowDistance: l.glowDistance, glowBrightness: l.glowBrightness,
+          arrows: l.arrows
+        })),
+        nextId
+      };
+    }
+
+    function deserializeState(data) {
+      if (!data) return false;
+      try {
+        titleInput.value = data.title || 'Untitled';
+        document.title = `${data.title || 'Untitled'} — Map`;
+        view.lat = data.view.lat;
+        view.lng = data.view.lng;
+        view.zoom = data.view.zoom;
+        nextId = data.nextId || 1;
+
+        // Clear existing elements
+        pins.forEach(p => p.el?.remove());
+        nodes.forEach(n => n.el?.remove());
+        pins.length = 0;
+        nodes.length = 0;
+        lines.length = 0;
+        document.querySelectorAll('[id^="edge-"]').forEach(el => el.remove());
+
+        // Restore pins — force an OWN attachments array. Firebase strips empty
+        // arrays, so a missing field would otherwise alias the shared
+        // DEFAULT_PIN.attachments and leak one element's files into every element.
+        for (const p of (data.pins || [])) {
+          const pin = { ...DEFAULT_PIN, ...p, el: null };
+          pin.attachments = Array.isArray(p.attachments) ? p.attachments : [];
+          pins.push(pin);
+          createPinEl(pin);
+        }
+
+        // Restore nodes — same own-array guard as pins above.
+        for (const n of (data.nodes || [])) {
+          const node = { ...DEFAULT_NODE, ...n, el: null };
+          node.attachments = Array.isArray(n.attachments) ? n.attachments : [];
+          nodes.push(node);
+          createNodeEl(node);
+        }
+
+        // Restore lines
+        for (const l of (data.lines || [])) {
+          const line = { ...DEFAULT_LINE, ...l };
+          lines.push(line);
+        }
+
+        render();
+        return true;
+      } catch (e) {
+        console.error('Failed to deserialize state:', e);
+        return false;
+      }
+    }
+
+    // Unified debounced save (LocalStorage, BroadcastChannel, Firebase)
+    let unifiedSaveTimer = null;
+    function scheduleUnifiedSave() {
+      clearTimeout(unifiedSaveTimer);
+      unifiedSaveTimer = setTimeout(() => {
+        if (typeof isApplyingFirebaseUpdate !== 'undefined' && isApplyingFirebaseUpdate) return;
+        
+        const state = serializeState();
+        
+        // 1. LocalStorage
+        try {
+          localStorage.setItem(lastBoardKey, JSON.stringify(state));
+        } catch (e) {
+          console.error('Failed to autosave:', e);
+        }
+        
+        // 2. BroadcastChannel
+        if (broadcastChannel) {
+          try {
+            broadcastChannel.postMessage({
+              type: 'state-update',
+              boardName: storageKey(),
+              state: state
+            });
+          } catch (_) {}
+        }
+        
+        // 3. Firebase
+        if (typeof firebaseInitialized !== 'undefined' && firebaseInitialized && typeof initialLoadComplete !== 'undefined' && initialLoadComplete) {
+          const boardId = getBoardId();
+          database.ref(`boards/${boardId}/state`).set(state).catch(e => {
+            console.error("Firebase save failed:", e);
+            logCollabError("Failed to save board state. Check database rules.", e);
+          });
+        }
+      }, 300); // 300ms debounce for responsiveness without spamming
+    }
+
+    // Load from localStorage on boot
+    function loadFromStorage() {
+      try {
+        const data = JSON.parse(localStorage.getItem(storageKey()));
+        if (data) {
+          deserializeState(data);
+          return true;
+        }
+      } catch (e) {
+        console.error('Failed to load from storage:', e);
+      }
+      return false;
+    }
+
+    // BroadcastChannel for cross-tab sync
+    let broadcastChannel = null;
+    try {
+      broadcastChannel = new BroadcastChannel('mindmap-sync');
+      broadcastChannel.onmessage = (e) => {
+        if (e.data.type === 'state-update' && e.data.boardName === storageKey()) {
+          deserializeState(e.data.state);
+        }
+      };
+    } catch (_) {
+      // BroadcastChannel not supported
+    }
+
+    // broadcastStateChange is now handled inside scheduleUnifiedSave
+
+    // ====================================================================
+    // FIREBASE COLLABORATION & SYNCING SYSTEM
+    // ====================================================================
+    const savedDbUrl = localStorage.getItem('collab_database_url') || "https://mudlark-media-live-collab-default-rtdb.firebaseio.com";
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyAsNxhW4pnot_51DogHB4_P7pnRaDsZh7k",
+      authDomain: "mudlark-media-live-collab.firebaseapp.com",
+      projectId: "mudlark-media-live-collab",
+      storageBucket: "mudlark-media-live-collab.appspot.com",
+      databaseURL: savedDbUrl,
+      messagingSenderId: "842430875051",
+      appId: "1:842430875051:web:4a7c7116f2b9bccdb37eee",
+      measurementId: "G-WH5HDT7PTD"
+    };
+
+    // ── GitHub commit config (fork-time, like the Firebase keys above) ──────
+    // Committing data files to the repo is gated on membership of this org.
+    // CONFIRM these values for your org/repo before commits will work.
+    const GITHUB_ORG = "Mudlark-Media-Network";   // GitHub org slug (case-sensitive in URLs)
+    const GITHUB_REPO = "Mudlark-Media-Network/mudlarkmedia.github.io"; // owner/name of the site repo
+    const GITHUB_BRANCH = "main";                  // branch the live site is served from
+    // Uploaded files live under this folder, nested per board:
+    //   {GITHUB_UPLOADS_BASE}/{boardId}/{file}   plus one _manifest.json index per board.
+    // Served live at https://www.mudlarkmedia.net/<this path> (note the literal space).
+    const GITHUB_UPLOADS_BASE = "website/Database/Mindmap Uploads";
+
+    let firebaseInitialized = false;
+    let database = null;
+    let auth = null;
+    let storage = null;
+    
+    let myUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+    let myName = localStorage.getItem('collab_username') || '';
+    let myColor = localStorage.getItem('collab_usercolor') || '';
+    let myPresenceRef = null;
+    // GitHub OAuth access token — IN MEMORY ONLY (never localStorage). Captured
+    // at sign-in; lost on refresh by design, re-acquired by re-auth when committing.
+    let gitHubToken = null;
+    let githubUsername = null;
+    let isMudlarkMember = false;  // true only after a verified active org membership
+
+    const RANDOM_NAMES = [
+      "Star Voyager", "Deep Diver", "Sky Weaver", "Pixel Wizard", "Code Ranger",
+      "Mind Mapper", "Cyber Scout", "Neon Nomad", "Shadow Runner", "Quantum Explorer"
+    ];
+    const RANDOM_COLORS = [
+      "#ff4757", "#2ed573", "#1e90ff", "#ffa502", "#ff6b81", "#70a1ff", "#7bed9f", "#eccc68", "#ff6348", "#9b59b6"
+    ];
+
+    if (!myName) {
+      myName = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)] + " " + Math.floor(Math.random() * 900 + 100);
+      localStorage.setItem('collab_username', myName);
+    }
+    if (!myColor) {
+      myColor = RANDOM_COLORS[Math.floor(Math.random() * RANDOM_COLORS.length)];
+      localStorage.setItem('collab_usercolor', myColor);
+    }
+
+    function logCollabError(msg, err) {
+      console.warn("Collab error logged:", msg, err);
+      const diagStatus = document.getElementById('collab-diag-status');
+      if (diagStatus) {
+        diagStatus.className = 'collab-diag-error';
+        const detail = err ? `\n(${err.code || err.message || err})` : '';
+        diagStatus.textContent = msg + detail;
+      }
+    }
+
+    // Initialize UI inputs
+    document.addEventListener('DOMContentLoaded', () => {
+      const nameInput = document.getElementById('collab-my-name');
+      const colorInput = document.getElementById('collab-my-color');
+      if (nameInput) nameInput.value = myName;
+      if (colorInput) colorInput.value = myColor;
+
+      // Diagnostics panel toggling
+      const toggle = document.getElementById('collab-diag-toggle');
+      const content = document.getElementById('collab-diag-content');
+      if (toggle && content) {
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          content.classList.toggle('open');
+        });
+      }
+
+      // Fill in current database URL
+      const dbInput = document.getElementById('collab-diag-db-url');
+      if (dbInput) {
+        dbInput.value = FIREBASE_CONFIG.databaseURL;
+      }
+
+      // Reconnect button
+      const reconnectBtn = document.getElementById('btn-collab-reconnect');
+      if (reconnectBtn && dbInput) {
+        reconnectBtn.addEventListener('click', () => {
+          const newUrl = dbInput.value.trim();
+          if (newUrl) {
+            localStorage.setItem('collab_database_url', newUrl);
+            window.location.reload();
+          }
+        });
+      }
+    });
+
+    function initFirebase() {
+      if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.startsWith("YOUR_")) {
+        console.warn("Firebase is unconfigured. Running in offline fallback mode.");
+        setCollabStatus('unconfigured', '⚠️ Collaboration Offline');
+        return;
+      }
+
+      try {
+        firebase.initializeApp(FIREBASE_CONFIG);
+        database = firebase.database();
+        auth = firebase.auth();
+        // Keep the signed-in identity across refreshes (default is LOCAL, but be
+        // explicit). NOTE: the GitHub OAuth *token* is still in-memory only by
+        // design and must be re-acquired after a refresh to commit new files —
+        // already-committed files persist via RTDB and need no token to display.
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .catch(e => console.warn('Auth persistence:', e && e.message));
+        storage = firebase.storage();
+        firebaseInitialized = true;
+        
+        setupAuthSystem();
+        setupPresenceSystem();
+        setupBoardSyncSystem();
+      } catch (e) {
+        console.error("Firebase failed to initialize:", e);
+        setCollabStatus('offline', '⚠️ Collaboration Offline');
+        logCollabError("Failed to initialize Firebase", e);
+      }
+    }
+
+    function setCollabStatus(statusClass, text) {
+      const statusEl = document.getElementById('collab-status-text');
+      if (!statusEl) return;
+      statusEl.className = `collab-status ${statusClass}`;
+      const badge = statusEl.querySelector('.collab-user-badge');
+      statusEl.innerHTML = '';
+      if (badge) {
+        badge.style.background = statusClass === 'online' ? '#2ed573' : (statusClass === 'offline' ? '#ff4757' : '#ffa502');
+        statusEl.appendChild(badge);
+      }
+      statusEl.appendChild(document.createTextNode(' ' + text));
+    }
+
+    const activeUsers = {};
+    const peerCursors = new Map();
+
+    function setupPresenceSystem() {
+      const connectedRef = database.ref('.info/connected');
+      myPresenceRef = database.ref(`presence/${getBoardId()}/${myUserId}`);
+
+      connectedRef.on('value', (snap) => {
+        if (snap.val() === true) {
+          myPresenceRef.onDisconnect().remove();
+          updatePresenceInDB();
+          // Test write to verify our rules actually allow access.
+          // .info/connected is true even when rules block everything else.
+          database.ref(`presence/${getBoardId()}/${myUserId}/ping`).set(Date.now())
+            .then(() => {
+              setCollabStatus('online', 'Connected');
+            })
+            .catch(err => {
+              setCollabStatus('offline', 'Rules Blocked');
+              logCollabError(
+                `DB rules are blocking writes.\nOpen Firebase Console → Realtime Database → Rules and set:\n{ "rules": { ".read": true, ".write": true } }`,
+                err
+              );
+            });
+        } else {
+          setCollabStatus('offline', 'Offline');
+        }
+      }, (err) => {
+        logCollabError("Connection listener blocked", err);
+      });
+
+      const nameInput = document.getElementById('collab-my-name');
+      const colorInput = document.getElementById('collab-my-color');
+
+      const handleProfileChange = () => {
+        const newName = nameInput ? nameInput.value.trim() : myName;
+        const newColor = colorInput.value;
+
+        if (newName) {
+          myName = newName;
+          localStorage.setItem('collab_username', myName);
+          localStorage.setItem('collab_username_custom', 'true');
+        }
+        myColor = newColor;
+        localStorage.setItem('collab_usercolor', myColor);
+
+        updatePresenceInDB();
+      };
+
+      if (nameInput) nameInput.addEventListener('change', handleProfileChange);
+      if (colorInput) colorInput.addEventListener('input', handleProfileChange);
+
+      database.ref(`presence/${getBoardId()}`).on('value', (snapshot) => {
+        const users = snapshot.val() || {};
+        updateUsersList(users);
+        updatePeerCursors(users);
+      }, (err) => {
+        logCollabError("Could not load users list. Check database rules.", err);
+      });
+    }
+
+    function updatePresenceInDB() {
+      if (!firebaseInitialized || !myPresenceRef) return;
+      myPresenceRef.update({
+        id: myUserId,
+        name: myName,
+        color: myColor,
+        lastActive: firebase.database.ServerValue.TIMESTAMP
+      }).catch(err => {
+        console.error("Presence update failed:", err);
+        logCollabError("Presence write failed. Check database rules.", err);
+      });
+    }
+
+    function getBoardId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('b') || 'default';
+    }
+
+    // File-explorer style rename state for the self entry:
+    //  - 1st click selects (highlights), 2nd click on an already-selected name
+    //    swaps to an inline <input> for editing. Enter/blur commits, Escape cancels.
+    let selfNameSelected = false;   // is the self row currently highlighted?
+    let renamingSelf = false;       // is the inline editor open? (blocks presence re-render)
+    let lastUsersSnapshot = {};      // latest presence snapshot, for re-render after edit
+
+    function updateUsersList(users) {
+      lastUsersSnapshot = users;
+      // Don't clobber the inline editor while the user is typing their new name.
+      if (renamingSelf) return;
+
+      const listEl = document.getElementById('collab-user-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      const count = Object.keys(users).length;
+      const countEl = document.getElementById('collab-user-count');
+      if (countEl) countEl.textContent = count;
+
+      for (const [userId, user] of Object.entries(users)) {
+        const isSelf = userId === myUserId;
+        const item = document.createElement('div');
+        item.className = 'collab-user-item';
+
+        const badge = document.createElement('span');
+        badge.className = 'collab-user-badge';
+        badge.style.color = user.color || '#fff';
+        badge.style.backgroundColor = user.color || '#fff';
+
+        const name = document.createElement('span');
+        name.className = `collab-user-name ${isSelf ? 'self' : ''}`;
+        name.textContent = user.name + (isSelf ? ' (You)' : '');
+
+        if (isSelf) {
+          name.style.cursor = 'pointer';
+          if (selfNameSelected) name.classList.add('selected');
+          name.title = 'Click to rename';
+          name.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (selfNameSelected) {
+              beginInlineRename(item, name);
+            } else {
+              selfNameSelected = true;
+              name.classList.add('selected');
+            }
+          });
+        }
+
+        item.appendChild(badge);
+        item.appendChild(name);
+        listEl.appendChild(item);
+      }
+    }
+
+    // Clicking anywhere else clears the "selected" highlight on the self name.
+    document.addEventListener('click', () => {
+      if (selfNameSelected && !renamingSelf) {
+        selfNameSelected = false;
+        updateUsersList(lastUsersSnapshot);
+      }
+    });
+
+    function beginInlineRename(item, nameSpan) {
+      renamingSelf = true;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'collab-user-name self';
+      input.maxLength = 30;
+      input.spellcheck = false;
+      input.value = myName;
+      input.style.flex = '1';
+      input.style.minWidth = '0';
+      item.replaceChild(input, nameSpan);
+      input.focus();
+      input.select();
+
+      let finished = false;
+      const commit = (save) => {
+        if (finished) return;
+        finished = true;
+        if (save) {
+          const newName = input.value.trim();
+          if (newName && newName !== myName) {
+            myName = newName;
+            localStorage.setItem('collab_username', myName);
+            localStorage.setItem('collab_username_custom', 'true');
+            updatePresenceInDB();
+          }
+        }
+        renamingSelf = false;
+        selfNameSelected = false;
+        updateUsersList(lastUsersSnapshot);
+      };
+
+      input.addEventListener('click', (e) => e.stopPropagation());
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); commit(true); }
+        else if (e.key === 'Escape') { e.preventDefault(); commit(false); }
+      });
+      input.addEventListener('blur', () => commit(true));
+    }
+
+    // Mouse movement listener on the map
+    let myLastCursorTx = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+      const mapEl = document.getElementById('map');
+      if (!mapEl) return;
+
+      mapEl.addEventListener('mousemove', (e) => {
+        if (!firebaseInitialized || !myPresenceRef) return;
+        const now = Date.now();
+        if (now - myLastCursorTx < 100) return;
+        myLastCursorTx = now;
+
+        const pt = eventToWorld(e);
+        const ll = unproject(pt.wx, pt.wy, view.zoom);
+        
+        myPresenceRef.child('cursor').update({
+          lat: ll.lat,
+          lng: ll.lng
+        });
+      });
+
+      mapEl.addEventListener('mouseleave', () => {
+        if (myPresenceRef) {
+          myPresenceRef.child('cursor').remove();
+        }
+      });
+      
+      const collabToggleBtn = document.getElementById('btn-collab-toggle');
+      if (collabToggleBtn) {
+        collabToggleBtn.addEventListener('click', () => {
+          document.getElementById('collab-widget').classList.toggle('open');
+        });
+      }
+    });
+
+    function updatePeerCursors(users) {
+      const currentIds = new Set();
+      
+      for (const [userId, user] of Object.entries(users)) {
+        if (userId === myUserId) continue;
+        
+        if (user.cursor && typeof user.cursor.lat === 'number' && typeof user.cursor.lng === 'number') {
+          currentIds.add(userId);
+          let cursorEl = peerCursors.get(userId);
+          if (!cursorEl) {
+            cursorEl = document.createElement('div');
+            cursorEl.className = 'collab-peer-cursor';
+            cursorEl.innerHTML = `
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M4.5 3V17.25L8.75 13L13.75 21.75L16.25 20.25L11.25 11.5H18L4.5 3Z" fill="${user.color || '#fff'}" stroke="white" stroke-width="1.5"/>
+              </svg>
+              <span class="cursor-nametag" style="color: ${user.color || '#fff'};">${user.name}</span>
+            `;
+            elementLayer.appendChild(cursorEl);
+            peerCursors.set(userId, cursorEl);
+          } else {
+            const tag = cursorEl.querySelector('.cursor-nametag');
+            if (tag) {
+              tag.textContent = user.name;
+              tag.style.color = user.color || '#fff';
+            }
+            const path = cursorEl.querySelector('path');
+            if (path) {
+              path.setAttribute('fill', user.color || '#fff');
+            }
+          }
+          
+          cursorEl.dataset.lat = user.cursor.lat;
+          cursorEl.dataset.lng = user.cursor.lng;
+          
+          placePeerCursor(cursorEl, user.cursor.lat, user.cursor.lng, view.zoom);
+        }
+      }
+      
+      for (const [userId, cursorEl] of peerCursors.entries()) {
+        if (!currentIds.has(userId)) {
+          cursorEl.remove();
+          peerCursors.delete(userId);
+        }
+      }
+    }
+
+    function placePeerCursor(el, lat, lng, z) {
+      const { x, y } = project(lat, lng, z);
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    }
+
+    let isApplyingFirebaseUpdate = false;
+    let initialLoadComplete = false;   // True only after the first once() read finishes
+    let firebaseSaveTimer = null;
+
+    function setupBoardSyncSystem() {
+      const boardId = getBoardId();
+      const boardRef = database.ref(`boards/${boardId}/state`);
+
+      // Step 1: do a ONE-TIME read to get the authoritative remote state.
+      // We deliberately do NOT attach the stream listener until this resolves,
+      // so the .on() below never fires a duplicate "initial" emission.
+      boardRef.once('value').then((snapshot) => {
+        const remoteState = snapshot.val();
+        if (remoteState) {
+          isApplyingFirebaseUpdate = true;
+          deserializeState(remoteState);
+          // Use a microtask delay so scheduleRender (called by deserializeState)
+          // fully completes before we clear the flag and open the stream.
+          Promise.resolve().then(() => {
+            isApplyingFirebaseUpdate = false;
+            initialLoadComplete = true;
+            attachBoardStream(boardRef);
+          });
+        } else {
+          // Nothing in Firebase yet — try a hosted JSON fallback, then open stream.
+          fetchRepoState().finally(() => {
+            isApplyingFirebaseUpdate = false;
+            initialLoadComplete = true;
+            attachBoardStream(boardRef);
+          });
+        }
+      }).catch(err => {
+        console.error("Board sync once failed:", err);
+        logCollabError("Could not load board state. Check database rules.", err);
+        isApplyingFirebaseUpdate = false;
+        initialLoadComplete = true;
+        attachBoardStream(boardRef);
+      });
+    }
+
+    function attachBoardStream(boardRef) {
+      // Attach the real-time listener AFTER the initial load is done.
+      // The first emission from .on() would be the same snapshot we already
+      // processed in once(), so we skip it.
+      let firstEmission = true;
+      boardRef.on('value', (snapshot) => {
+        if (firstEmission) { firstEmission = false; return; }
+        if (isApplyingFirebaseUpdate) return;
+        const remoteState = snapshot.val();
+        if (remoteState) {
+          const localStateStr = JSON.stringify(serializeState());
+          const remoteStateStr = JSON.stringify(remoteState);
+          if (localStateStr !== remoteStateStr) {
+            isApplyingFirebaseUpdate = true;
+            deserializeState(remoteState);
+            Promise.resolve().then(() => { isApplyingFirebaseUpdate = false; });
+          }
+        }
+      }, (err) => {
+        console.error("Board sync stream failed:", err);
+        logCollabError("Could not stream board state. Check database rules.", err);
+      });
+    }
+
+    // scheduleFirebaseSave is now handled inside scheduleUnifiedSave
+
+    /* GitHub push DEFERRED. Re-enable only with per-account authorization and a
+       dedicated save/naming convention (separate from current Save/localStorage/Firebase).
+    function getGithubRepoMeta() {
+      const host = window.location.hostname;
+      const path = window.location.pathname;
+      if (host.endsWith('.github.io')) {
+        const owner = host.split('.')[0];
+        const segments = path.split('/').filter(Boolean);
+        const repo = segments[0] || '';
+        return { owner, repo };
+      }
+      return null;
+    }
+    */
+
+    async function fetchRepoState() {
+      try {
+        const res = await fetch('board_state.json');
+        if (res.ok) {
+          const data = await res.json();
+          isApplyingFirebaseUpdate = true;
+          deserializeState(data);
+          // scheduleFirebaseSave is intentionally NOT called here;
+          // the caller (setupBoardSyncSystem) will set initialLoadComplete
+          // and open the stream, which will handle writes via user actions.
+        }
+      } catch (e) {
+        console.log("No hosted board_state.json found.");
+      }
+    }
+
+    /* GitHub push DEFERRED — disabled until the proper auth/naming design lands.
+    async function pushToGithub(token, owner, repo, path, contentText) {
+      const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+      let sha = null;
+      try {
+        const res = await fetch(getUrl, {
+          headers: { 'Authorization': `token ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          sha = data.sha;
+        }
+      } catch (_) {}
+
+      const putUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+      const body = {
+        message: "Update board state via Desmata Link",
+        content: btoa(unescape(encodeURIComponent(contentText))),
+        sha: sha
+      };
+
+      try {
+        const res = await fetch(putUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          alert('State successfully committed to GitHub Pages!');
+          return true;
+        }
+      } catch (e) {
+        console.error("Error pushing to GitHub:", e);
+      }
+      return false;
+    }
+    */
+
+    // ── GitHub sign-in result handling ─────────────────────────────────────
+    // signInWithPopup already signs in an existing GitHub user (no separate
+    // sign-up). The only failure that looks like "account already there" is
+    // account-exists-with-different-credential: the email was first registered
+    // via another provider (e.g. Google). We resolve it by signing into that
+    // provider and LINKING GitHub onto it, so the user lands as the same user.
+    function captureGithubResult(result) {
+      // SECURITY: keep the OAuth token in memory only — never localStorage
+      // (a repo-scoped token in localStorage is XSS-exfiltratable). Firebase
+      // does not persist it, so after a refresh the user re-auths to commit.
+      const cred = result && result.credential;
+      // Only capture GitHub tokens — getRedirectResult also fires for Google
+      // sign-ins, whose accessToken must NOT be mistaken for a GitHub token.
+      const isGithub = cred && (cred.providerId === 'github.com' || cred.signInMethod === 'github.com');
+      if (!isGithub) return;
+      if (cred.accessToken) gitHubToken = cred.accessToken;
+      const username = result && result.additionalUserInfo
+        && result.additionalUserInfo.username;
+      refreshMudlarkMembership(username);
+    }
+
+    async function handleGithubAuthError(err) {
+      // Benign: user closed/cancelled the popup themselves — say nothing.
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
+      if (err.code !== 'auth/account-exists-with-different-credential') {
+        uiAlert("GitHub sign-in failed: " + (err.message || err.code));
+        return;
+      }
+      const pendingCred = err.credential;
+      const email = err.email;
+
+      // (1) We ALREADY hold a valid GitHub OAuth token in the pending credential.
+      //     Capture it now so uploads/commits work this session regardless of
+      //     whether the Firebase account-link below succeeds. (This is why the
+      //     old flow showed "unauthorized": the link popup was blocked before we
+      //     ever captured the token.)
+      if (pendingCred && pendingCred.accessToken) {
+        gitHubToken = pendingCred.accessToken;
+        await refreshMudlarkMembership(null);
+      }
+
+      // (2) If a Firebase user is already signed in (e.g. via Google in a prior
+      //     session), link GitHub straight onto it — NO second popup, so nothing
+      //     for the browser to block.
+      if (auth.currentUser) {
+        try {
+          await auth.currentUser.linkWithCredential(pendingCred);
+          await refreshMudlarkMembership(githubUsername);
+        } catch (e) {
+          // Already linked, or credential in use elsewhere — non-fatal; the
+          // token from step (1) still makes commits work.
+          console.warn('GitHub link skipped:', e && e.message);
+        }
+        return;
+      }
+
+      // (3) Not signed in yet → land them as their existing account. Use a
+      //     REDIRECT (never popup-blocked) instead of the auto popup that was
+      //     failing. After they return signed in, clicking GitHub once more hits
+      //     branch (2) and links cleanly.
+      try {
+        const methods = await auth.fetchSignInMethodsForEmail(email);
+        if (methods.includes('google.com')) {
+          uiAlert("Your email is already registered with Google.\n\n" +
+                "You're authorized to upload for this session. We'll now send you to Google to sign in so your accounts link — when you return, click GitHub once more to finish linking.");
+          const gp = new firebase.auth.GoogleAuthProvider();
+          gp.setCustomParameters({ login_hint: email });
+          await auth.signInWithRedirect(gp);
+        } else if (methods.includes('password')) {
+          uiAlert(`This email (${email}) is registered with an email/password login.\n` +
+                "Sign in with email first, then click GitHub to link it.\n\n" +
+                "(You can still upload this session — your GitHub access is active.)");
+        } else {
+          uiAlert("You're authorized to upload this session. Click GitHub again if you also need to be signed in.");
+        }
+      } catch (e) {
+        console.warn('Could not start link redirect:', e && e.message);
+      }
+    }
+
+    // ── Mudlark Media org-membership gate ──────────────────────────────────
+    // Local save is free for everyone. Committing data files to the repo
+    // requires being an ACTIVE member of the Mudlark Media GitHub org — org
+    // membership is what carries the TOS the committer must have agreed to.
+    async function refreshMudlarkMembership(username) {
+      githubUsername = username || githubUsername;
+      isMudlarkMember = false;
+      if (!gitHubToken) { updateCommitAvailabilityUI(); return false; }
+      const headers = { Authorization: `Bearer ${gitHubToken}`, Accept: 'application/vnd.github+json' };
+      if (!githubUsername) {
+        try {
+          const me = await fetch('https://api.github.com/user', { headers });
+          if (me.ok) githubUsername = (await me.json()).login;
+        } catch (_) {}
+      }
+
+      // (a) Org membership — the intended TOS gate. 'active' = full member.
+      //     Requires the read:org scope. May 404 if GITHUB_ORG is actually a
+      //     personal account or the token lacks read:org — that's why (b) exists.
+      try {
+        const res = await fetch(`https://api.github.com/user/memberships/orgs/${GITHUB_ORG}`, { headers });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.state === 'active') isMudlarkMember = true;
+          console.log('[Desmata] org membership:', data.state, '/', data.role);
+        } else {
+          console.warn('[Desmata] org membership check failed:', res.status, await res.text());
+        }
+      } catch (e) { console.warn('[Desmata] org membership error:', e); }
+
+      // (b) Fallback: anyone with push/admin access to the repo is authorized to
+      //     commit (repo owners, org members, direct collaborators). This is the
+      //     accurate "can they write to the repo" test and covers the owner even
+      //     when the org endpoint can't confirm membership.
+      if (!isMudlarkMember) {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, { headers });
+          if (res.ok) {
+            const data = await res.json();
+            const p = data.permissions || {};
+            if (p.push || p.admin || p.maintain) isMudlarkMember = true;
+            console.log('[Desmata] repo permissions:', JSON.stringify(p));
+          } else {
+            console.warn('[Desmata] repo permission check failed:', res.status, await res.text());
+          }
+        } catch (e) { console.warn('[Desmata] repo permission error:', e); }
+      }
+
+      console.log('[Desmata] authorized to commit:', isMudlarkMember, '(user:', githubUsername + ')');
+      updateCommitAvailabilityUI();
+      return isMudlarkMember;
+    }
+
+    function updateCommitAvailabilityUI() {
+      const btn = document.getElementById('btn-commit-repo');
+      if (btn) btn.style.display = isMudlarkMember ? 'inline-flex' : 'none';
+    }
+
+    // Call before any repo-commit action. Returns true only if allowed; otherwise
+    // it tells a signed-in non-member how to join the org (which carries the TOS).
+    async function requireMudlarkMembership() {
+      if (!gitHubToken) {
+        uiAlert("Sign in (or re-authorize) with GitHub to commit to the Mudlark Media repo.\n\nThe GitHub token is kept in memory only and is cleared on refresh, so you may need to click the GitHub button again.\n\n(Local save with the Save button is always available without signing in.)");
+        return false;
+      }
+      const member = await refreshMudlarkMembership(githubUsername);
+      if (!member) {
+        const join = await uiConfirm(
+          "Committing files to the Mudlark Media repo requires being an authorized member of the Mudlark Media GitHub organization.\n\n" +
+          "Org membership is also where you agree to the project's Terms of Service.\n\n" +
+          "You can always save locally without joining. Open the org page to request to join now?"
+        );
+        if (join) window.open(`https://github.com/orgs/${GITHUB_ORG}/people`, '_blank', 'noopener');
+        return false;
+      }
+      return true;
+    }
+
+    // ── GitHub Contents API: commit files + per-board manifest ─────────────
+    // Files:    {GITHUB_UPLOADS_BASE}/{boardId}/{storedName}
+    // Manifest: {GITHUB_UPLOADS_BASE}/{boardId}/_manifest.json  (indexes ALL the
+    // board's files' metadata — the self-describing folder index the user asked
+    // for). RTDB still holds the live attachment metadata; the manifest mirrors it.
+    function githubApiHeaders() {
+      return {
+        Authorization: `Bearer ${gitHubToken}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      };
+    }
+    // Encode each path segment but keep the slashes (spaces -> %20, etc.).
+    function ghEncodePath(path) {
+      return path.split('/').map(encodeURIComponent).join('/');
+    }
+    // base64-encode a File/Blob's bytes (without the data: prefix) for the API.
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error || new Error('read failed'));
+        reader.onload = () => {
+          const res = reader.result || '';
+          const comma = res.indexOf(',');
+          resolve(comma >= 0 ? res.slice(comma + 1) : res);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    // Current sha of a path (needed to UPDATE an existing file), or null if new.
+    async function githubGetSha(path) {
+      const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${ghEncodePath(path)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
+      try {
+        const res = await fetch(url, { headers: githubApiHeaders() });
+        if (res.ok) return (await res.json()).sha || null;
+      } catch (_) {}
+      return null;
+    }
+    // PUT base64 content to a path (create or update). Returns committed metadata.
+    async function githubPutFile(path, base64Content, message) {
+      const sha = await githubGetSha(path);
+      const body = { message: message || `Desmata Link: ${path}`, content: base64Content, branch: GITHUB_BRANCH };
+      if (sha) body.sha = sha;
+      const res = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO}/contents/${ghEncodePath(path)}`,
+        { method: 'PUT', headers: githubApiHeaders(), body: JSON.stringify(body) }
+      );
+      if (!res.ok) throw new Error(`GitHub commit failed (${res.status}): ${await res.text()}`);
+      return res.json();
+    }
+    // Commit one uploaded file to the board folder. Resolves to its public URL.
+    async function commitFileToGithub(boardId, file, storedName) {
+      const base64 = await fileToBase64(file);
+      const path = `${GITHUB_UPLOADS_BASE}/${boardId}/${storedName}`;
+      const result = await githubPutFile(path, base64, `Add ${storedName} to board ${boardId}`);
+      const downloadUrl = (result.content && result.content.download_url) || '';
+      return { path, downloadUrl };
+    }
+    // Rewrite the board's _manifest.json from every GitHub-hosted attachment
+    // currently on the board. Best-effort: a manifest failure never blocks a file.
+    async function updateBoardManifest(boardId) {
+      if (!gitHubToken) return;
+      const entries = [];
+      const collect = (owner, ownerKind) => {
+        (owner.attachments || []).forEach(a => {
+          if (a.location === 'github' && a.githubPath) {
+            entries.push({
+              filename: a.name, storedName: a.storedName || a.name, path: a.githubPath,
+              type: a.type || '', size: a.size || 0, title: a.title || '',
+              description: a.description || '', date: a.date || '', uploader: a.uploader || '',
+              url: a.url || '', attachedTo: { kind: ownerKind, id: owner.id }
+            });
+          }
+        });
+      };
+      pins.forEach(p => collect(p, 'pin'));
+      nodes.forEach(n => collect(n, 'node'));
+      const manifest = {
+        board: boardId, generatedAt: new Date().toISOString(),
+        generatedBy: githubUsername || myName || 'unknown',
+        fileCount: entries.length, files: entries
+      };
+      const base64 = btoa(unescape(encodeURIComponent(JSON.stringify(manifest, null, 2))));
+      try {
+        await githubPutFile(`${GITHUB_UPLOADS_BASE}/${boardId}/_manifest.json`, base64, `Update manifest for board ${boardId}`);
+      } catch (e) {
+        console.error('Manifest update failed:', e);
+      }
+    }
+
+    // ── Per-file metadata popup ────────────────────────────────────────────
+    // Collects a user-defined title + description before upload; auto-captures
+    // filename, type, size, date. Resolves to {title, description} or null (skip).
+    function promptFileMetadata(file) {
+      return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-dialog';
+        const kb = file.size < 1024*1024 ? (file.size/1024).toFixed(1)+' KB' : (file.size/1048576).toFixed(2)+' MB';
+        const safeName = (file.name || '').replace(/</g, '&lt;');
+        const defaultTitle = (file.name || '').replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').trim();
+        overlay.innerHTML = `
+          <div class="modal-content" style="max-width:380px;">
+            <h3>File details</h3>
+            <p class="file-summary">
+              <b>${safeName}</b><br>
+              ${file.type || 'unknown type'} &middot; ${kb}
+            </p>
+            <div class="field" style="margin-bottom:12px;">
+              <label>Title</label>
+              <input type="text" id="meta-title" placeholder="A name for this file">
+            </div>
+            <div class="field" style="margin-bottom:20px;">
+              <label>Description</label>
+              <textarea id="meta-desc" rows="3" placeholder="What is this? (optional)"></textarea>
+            </div>
+            <div class="modal-buttons">
+              <button class="btn-dialog btn-secondary" id="meta-skip">Skip file</button>
+              <button class="btn-dialog" id="meta-ok">Add file</button>
+            </div>
+          </div>`;
+        document.body.appendChild(overlay);
+        const titleEl = overlay.querySelector('#meta-title');
+        const descEl = overlay.querySelector('#meta-desc');
+        titleEl.value = defaultTitle;
+        setTimeout(() => { titleEl.focus(); titleEl.select(); }, 30);
+        const close = (val) => { overlay.remove(); resolve(val); };
+        overlay.querySelector('#meta-ok').addEventListener('click', () =>
+          close({ title: titleEl.value.trim() || file.name, description: descEl.value.trim() }));
+        overlay.querySelector('#meta-skip').addEventListener('click', () => close(null));
+        overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(null); });
+        const submit = () => close({ title: titleEl.value.trim() || file.name, description: descEl.value.trim() });
+        overlay.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') { close(null); return; }
+          // Enter submits, except inside the description box (where it makes a
+          // newline) — there, Cmd/Ctrl+Enter submits.
+          if (e.key === 'Enter' && e.target !== descEl) { e.preventDefault(); submit(); }
+          else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); }
+        });
+      });
+    }
+
+    function setupAuthSystem() {
+      const emailToggleBtn = document.getElementById('btn-auth-email-toggle');
+      const emailForm = document.getElementById('collab-email-form');
+      if (emailToggleBtn && emailForm) {
+        emailToggleBtn.addEventListener('click', () => {
+          emailForm.classList.toggle('open');
+        });
+      }
+
+      // Complete any redirect-based sign-in (used when a popup was blocked, or
+      // for the account-link fallback). captureGithubResult self-guards so a
+      // returning Google redirect won't be mistaken for a GitHub token.
+      auth.getRedirectResult()
+        .then((result) => { if (result && result.user && result.credential) captureGithubResult(result); })
+        .catch((err) => { if (err && err.code) handleGithubAuthError(err); });
+
+      auth.onAuthStateChanged((user) => {
+        const authSec = document.getElementById('collab-auth-section');
+        const profSec = document.getElementById('collab-profile-section');
+        const profName = document.getElementById('collab-profile-name');
+
+        if (user) {
+          if (authSec) authSec.style.display = 'none';
+          if (profSec) profSec.style.display = 'flex';
+          
+          let disp = user.displayName || user.email || 'Signed In';
+          if (user.providerData && user.providerData[0]) {
+            const provider = user.providerData[0].providerId;
+            if (provider === 'github.com') disp = '🐱 ' + disp;
+            else if (provider === 'google.com') disp = '🌐 ' + disp;
+            else disp = '✉️ ' + disp;
+          }
+          if (profName) profName.textContent = disp;
+          
+          if (user.displayName && !localStorage.getItem('collab_username_custom')) {
+            myName = user.displayName;
+            const nameInput = document.getElementById('collab-my-name');
+            if (nameInput) nameInput.value = myName;
+            localStorage.setItem('collab_username', myName);
+            updatePresenceInDB();
+          }
+        } else {
+          if (authSec) authSec.style.display = 'block';
+          if (profSec) profSec.style.display = 'none';
+        }
+      });
+
+      const googleBtn = document.getElementById('btn-auth-google');
+      if (googleBtn) {
+        googleBtn.addEventListener('click', () => {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          auth.signInWithPopup(provider).catch(err => uiAlert("Google Auth Failed: " + err.message));
+        });
+      }
+
+      const githubBtn = document.getElementById('btn-auth-github');
+      if (githubBtn) {
+        githubBtn.addEventListener('click', () => {
+          const provider = new firebase.auth.GithubAuthProvider();
+          // read:org  → check Mudlark Media org membership (the commit gate)
+          // public_repo → commit data files to the (public) Mudlark Media repo
+          // NOTE: full 'repo' scope is intentionally NOT requested; the repo is public.
+          provider.addScope('read:org');
+          provider.addScope('public_repo');
+          auth.signInWithPopup(provider)
+            .then(captureGithubResult)
+            .catch(err => {
+              // If the popup itself is blocked, retry via redirect (never blocked).
+              if (err && (err.code === 'auth/popup-blocked' || /unable to establish a connection|popup/i.test(err.message || ''))
+                       && err.code !== 'auth/account-exists-with-different-credential') {
+                auth.signInWithRedirect(provider).catch(e => uiAlert("GitHub sign-in failed: " + e.message));
+                return;
+              }
+              handleGithubAuthError(err);
+            });
+        });
+      }
+      const logoutBtn = document.getElementById('btn-auth-logout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          auth.signOut();
+          gitHubToken = null;
+          isMudlarkMember = false;
+          githubUsername = null;
+        });
+      }
+    }
+
+    // Hook save to all mutations
+    const originalScheduleRender = scheduleRender;
+    scheduleRender = function() {
+      originalScheduleRender.call(this);
+      scheduleUnifiedSave();
+    };
+
+    // ── Boot ────────────────────────────────────────────────────────────
+    if (!loadFromStorage()) {
+      render();
+      loadInitialView();
+    }
+    scheduleUnifiedSave();
+
+    // Start Firebase integration
+    initFirebase();
+
+    // Load JSZip for export/import
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    script.async = true;
+    document.head.appendChild(script);
+  </script>
+</body>
+</html>
