@@ -2422,7 +2422,11 @@
     }
     async function handleFiles(files, target, list) {
       const boardId = getBoardId();
-      const authorized = !!gitHubToken && isMudlarkMember;
+      // Re-verify at upload time: if we hold a token but membership hasn't been
+      // confirmed yet (async race right after sign-in), check it now so a valid
+      // owner/member isn't wrongly treated as unauthorized.
+      let authorized = !!gitHubToken && isMudlarkMember;
+      if (gitHubToken && !isMudlarkMember) authorized = await refreshMudlarkMembership(githubUsername);
       let warnedUnsaved = false;
       for (const file of files) {
         // 1) Collect user metadata before doing anything. Skip = don't add it.
@@ -3637,39 +3641,72 @@
       // (a repo-scoped token in localStorage is XSS-exfiltratable). Firebase
       // does not persist it, so after a refresh the user re-auths to commit.
       const cred = result && result.credential;
-      if (cred && cred.accessToken) gitHubToken = cred.accessToken;
+      // Only capture GitHub tokens — getRedirectResult also fires for Google
+      // sign-ins, whose accessToken must NOT be mistaken for a GitHub token.
+      const isGithub = cred && (cred.providerId === 'github.com' || cred.signInMethod === 'github.com');
+      if (!isGithub) return;
+      if (cred.accessToken) gitHubToken = cred.accessToken;
       const username = result && result.additionalUserInfo
         && result.additionalUserInfo.username;
       refreshMudlarkMembership(username);
     }
 
     async function handleGithubAuthError(err) {
+      // Benign: user closed/cancelled the popup themselves — say nothing.
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
       if (err.code !== 'auth/account-exists-with-different-credential') {
-        alert("GitHub Auth Failed: " + err.message);
+        alert("GitHub sign-in failed: " + (err.message || err.code));
         return;
       }
       const pendingCred = err.credential;
       const email = err.email;
+
+      // (1) We ALREADY hold a valid GitHub OAuth token in the pending credential.
+      //     Capture it now so uploads/commits work this session regardless of
+      //     whether the Firebase account-link below succeeds. (This is why the
+      //     old flow showed "unauthorized": the link popup was blocked before we
+      //     ever captured the token.)
+      if (pendingCred && pendingCred.accessToken) {
+        gitHubToken = pendingCred.accessToken;
+        await refreshMudlarkMembership(null);
+      }
+
+      // (2) If a Firebase user is already signed in (e.g. via Google in a prior
+      //     session), link GitHub straight onto it — NO second popup, so nothing
+      //     for the browser to block.
+      if (auth.currentUser) {
+        try {
+          await auth.currentUser.linkWithCredential(pendingCred);
+          await refreshMudlarkMembership(githubUsername);
+        } catch (e) {
+          // Already linked, or credential in use elsewhere — non-fatal; the
+          // token from step (1) still makes commits work.
+          console.warn('GitHub link skipped:', e && e.message);
+        }
+        return;
+      }
+
+      // (3) Not signed in yet → land them as their existing account. Use a
+      //     REDIRECT (never popup-blocked) instead of the auto popup that was
+      //     failing. After they return signed in, clicking GitHub once more hits
+      //     branch (2) and links cleanly.
       try {
         const methods = await auth.fetchSignInMethodsForEmail(email);
-        let result;
         if (methods.includes('google.com')) {
+          alert("Your email is already registered with Google.\n\n" +
+                "You're authorized to upload for this session. We'll now send you to Google to sign in so your accounts link — when you return, click GitHub once more to finish linking.");
           const gp = new firebase.auth.GoogleAuthProvider();
           gp.setCustomParameters({ login_hint: email });
-          result = await auth.signInWithPopup(gp);
+          await auth.signInWithRedirect(gp);
         } else if (methods.includes('password')) {
-          alert(`This email (${email}) is already registered with an email/password login.\nSign in with email first, then click GitHub again to link it.`);
-          return;
+          alert(`This email (${email}) is registered with an email/password login.\n` +
+                "Sign in with email first, then click GitHub to link it.\n\n" +
+                "(You can still upload this session — your GitHub access is active.)");
         } else {
-          // Some other GitHub identity already owns it — just sign in normally.
-          result = await auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
+          alert("You're authorized to upload this session. Click GitHub again if you also need to be signed in.");
         }
-        // Link the GitHub credential so future GitHub logins go straight through.
-        await result.user.linkWithCredential(pendingCred);
-        if (pendingCred.accessToken) gitHubToken = pendingCred.accessToken;
-        refreshMudlarkMembership(null);
-      } catch (linkErr) {
-        alert("Could not link your GitHub account: " + linkErr.message);
+      } catch (e) {
+        console.warn('Could not start link redirect:', e && e.message);
       }
     }
 
@@ -3680,35 +3717,48 @@
     async function refreshMudlarkMembership(username) {
       githubUsername = username || githubUsername;
       isMudlarkMember = false;
-      if (!gitHubToken) return false;
+      if (!gitHubToken) { updateCommitAvailabilityUI(); return false; }
+      const headers = { Authorization: `Bearer ${gitHubToken}`, Accept: 'application/vnd.github+json' };
       if (!githubUsername) {
         try {
-          const me = await fetch('https://api.github.com/user', {
-            headers: { Authorization: `Bearer ${gitHubToken}`, Accept: 'application/vnd.github+json' }
-          });
+          const me = await fetch('https://api.github.com/user', { headers });
           if (me.ok) githubUsername = (await me.json()).login;
         } catch (_) {}
       }
+
+      // (a) Org membership — the intended TOS gate. 'active' = full member.
+      //     Requires the read:org scope. May 404 if GITHUB_ORG is actually a
+      //     personal account or the token lacks read:org — that's why (b) exists.
       try {
-        // Authenticated-user membership: 'active' = full member, 'pending' = invited.
-        // Requires the read:org scope requested at sign-in.
-        const res = await fetch(
-          `https://api.github.com/user/memberships/orgs/${GITHUB_ORG}`,
-          { headers: {
-              Authorization: `Bearer ${gitHubToken}`,
-              Accept: 'application/vnd.github+json'
-          } }
-        );
+        const res = await fetch(`https://api.github.com/user/memberships/orgs/${GITHUB_ORG}`, { headers });
         if (res.ok) {
           const data = await res.json();
-          isMudlarkMember = data.state === 'active';
+          if (data.state === 'active') isMudlarkMember = true;
+          console.log('[Desmata] org membership:', data.state, '/', data.role);
         } else {
-          isMudlarkMember = false; // 404 = not a member
+          console.warn('[Desmata] org membership check failed:', res.status, await res.text());
         }
-      } catch (e) {
-        console.error('Org membership check failed:', e);
-        isMudlarkMember = false;
+      } catch (e) { console.warn('[Desmata] org membership error:', e); }
+
+      // (b) Fallback: anyone with push/admin access to the repo is authorized to
+      //     commit (repo owners, org members, direct collaborators). This is the
+      //     accurate "can they write to the repo" test and covers the owner even
+      //     when the org endpoint can't confirm membership.
+      if (!isMudlarkMember) {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, { headers });
+          if (res.ok) {
+            const data = await res.json();
+            const p = data.permissions || {};
+            if (p.push || p.admin || p.maintain) isMudlarkMember = true;
+            console.log('[Desmata] repo permissions:', JSON.stringify(p));
+          } else {
+            console.warn('[Desmata] repo permission check failed:', res.status, await res.text());
+          }
+        } catch (e) { console.warn('[Desmata] repo permission error:', e); }
       }
+
+      console.log('[Desmata] authorized to commit:', isMudlarkMember, '(user:', githubUsername + ')');
       updateCommitAvailabilityUI();
       return isMudlarkMember;
     }
@@ -3888,6 +3938,13 @@
         });
       }
 
+      // Complete any redirect-based sign-in (used when a popup was blocked, or
+      // for the account-link fallback). captureGithubResult self-guards so a
+      // returning Google redirect won't be mistaken for a GitHub token.
+      auth.getRedirectResult()
+        .then((result) => { if (result && result.user && result.credential) captureGithubResult(result); })
+        .catch((err) => { if (err && err.code) handleGithubAuthError(err); });
+
       auth.onAuthStateChanged((user) => {
         const authSec = document.getElementById('collab-auth-section');
         const profSec = document.getElementById('collab-profile-section');
@@ -3938,7 +3995,15 @@
           provider.addScope('public_repo');
           auth.signInWithPopup(provider)
             .then(captureGithubResult)
-            .catch(handleGithubAuthError);
+            .catch(err => {
+              // If the popup itself is blocked, retry via redirect (never blocked).
+              if (err && (err.code === 'auth/popup-blocked' || /unable to establish a connection|popup/i.test(err.message || ''))
+                       && err.code !== 'auth/account-exists-with-different-credential') {
+                auth.signInWithRedirect(provider).catch(e => alert("GitHub sign-in failed: " + e.message));
+                return;
+              }
+              handleGithubAuthError(err);
+            });
         });
       }
       const logoutBtn = document.getElementById('btn-auth-logout');
