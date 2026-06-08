@@ -484,6 +484,8 @@ main { flex: 1; padding: 0 var(--pad-x) 64px; }
 }
 .tl-entry .e i { color: var(--ink-soft); }
 .tl-entry .e b { color: var(--ink); font-weight: 600; }
+.tl-entry .e a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: var(--gold); }
+.tl-entry .e a:hover { color: var(--gold); text-decoration-color: var(--gold); }
 
 .tl-img {
   display: block;
@@ -546,6 +548,23 @@ main { flex: 1; padding: 0 var(--pad-x) 64px; }
 .ar-body p { margin: 0 0 20px; }
 .ar-body p i, .ar-body p em { color: var(--ink-soft); font-style: italic; }
 .ar-body p b, .ar-body p strong { color: var(--ink); font-weight: 600; }
+
+/* Article body links: always underlined, with a gentle pulsing underline */
+.ar-body a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--gold);
+  transition: color .15s ease, text-decoration-color .15s ease;
+  animation: ar-link-pulse 2.6s ease-in-out infinite;
+}
+.ar-body a:hover { color: var(--gold); text-decoration-color: var(--gold); animation: none; }
+@media (prefers-reduced-motion: reduce) { .ar-body a { animation: none; } }
+@keyframes ar-link-pulse {
+  0%, 100% { text-decoration-color: var(--gold); }
+  50%      { text-decoration-color: color-mix(in srgb, var(--gold) 30%, transparent); }
+}
 
 .ar-body .ar-lead-p {
   font-size: 19px;
@@ -698,6 +717,17 @@ main { flex: 1; padding: 0 var(--pad-x) 64px; }
 .ar-pull.is-gold em { color: var(--gold); }
 .ar-pull.is-blue  { background: var(--tint-blue); border-color: var(--blue); }
 .ar-pull.is-blue em { color: var(--blue); }
+
+/* ar-emline: an un-framed emphasis line (matches .ar-break rust emphasis) */
+.ar-emline {
+  margin: 32px 0;
+  font-family: var(--serif-d);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--rust);
+  font-variation-settings: 'opsz' 60, 'SOFT' 100;
+}
 
 /* ============================================================
    AR-RECEIPT  —  direct quoted message
@@ -1003,8 +1033,8 @@ main { flex: 1; padding: 0 var(--pad-x) 64px; }
   font-family: var(--serif-d);
   font-weight: 500;
   font-style: italic;
-  font-size: clamp(36px, 5vw, 64px);
-  line-height: 1.05;
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1.1;
   letter-spacing: -0.022em;
   color: var(--ink);
   font-variation-settings: 'opsz' 144, 'SOFT' 100;
@@ -1020,7 +1050,9 @@ main { flex: 1; padding: 0 var(--pad-x) 64px; }
    ============================================================ */
 .ar-end-meta {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
   gap: 28px;
   font-family: var(--mono);
   font-size: 11.5px;
@@ -1728,6 +1760,7 @@ footer {
         <p class="note">
           Sascha has reviewed this article in advance to confirm the statements attributed to them.
         </p>
+        <img class="tl-img" src="article-images/901_lead-note-leo-sends-draft-for-pre-publication-confirmation.jpg" alt="DM: Leo shares the draft with Sascha in advance; Sascha confirms the statements - 'I like the receipts'" />
       </div>
 
       <!--  DEC 2025  -->
@@ -1735,8 +1768,8 @@ footer {
 
       <div class="tl-entry tl-p1">
         <span class="d">Dec 31</span>
-        <div class="e">Troy is reported in local news about his Kickstarter.</div>
-        <img class="tl-img" src="article-images/002_Jan_16_Troys_first_post_about_Sascha.jpg" alt="FOX5 Las Vegas: novelist spreads mental health awareness on NYE" />
+        <div class="e">Troy is reported in <a href="https://www.fox5vegas.com/2025/12/31/las-vegas-novelist-spreads-mental-health-awareness-new-years-eve/" target="_blank" rel="noopener">local news</a> about his Kickstarter.</div>
+        <img class="tl-img" src="article-images/001_fox5-las-vegas-novelist-spreads-mental-health-awareness-on-n.jpg" alt="FOX5 Las Vegas: novelist spreads mental health awareness on NYE" />
       </div>
 
       <!--  JAN 2026  -->
@@ -1745,18 +1778,18 @@ footer {
       <div class="tl-entry tl-p1">
         <span class="d">Jan 16</span>
         <div class="e">Troy&rsquo;s first documented post about Sascha Barros (Riley).</div>
-        <img class="tl-img" src="article-images/003_Jan_22_Troys_Elementlings_Kickstarter_fails.jpg" alt="Troy's Jan 16 FB share of Dr. forensic psychologist's 'I believe Sasha Riley' post" />
+        <img class="tl-img" src="article-images/002_troy-s-jan-16-fb-share-of-dr-forensic-psychologist-s-i-belie.jpg" alt="Troy's Jan 16 FB share of Dr. forensic psychologist's 'I believe Sasha Riley' post" />
       </div>
       <div class="tl-entry tl-p1">
         <span class="d">Jan 22</span>
         <div class="e">Troy&rsquo;s Elementlings Kickstarter fails.</div>
-        <img class="tl-img" src="article-images/_1_of_1.jpg" alt="Elementlings Kickstarter — Funding Unsuccessful Jan 22, 2026" />
+        <img class="tl-img" src="article-images/003_elementlings-kickstarter-funding-unsuccessful-jan-22-2026.jpg" alt="Elementlings Kickstarter — Funding Unsuccessful Jan 22, 2026" />
       </div>
       <div class="tl-entry tl-p1">
         <span class="d">Jan 29</span>
         <div class="e">Fundraiser for Sascha appears under K2 Gives. Obfuscated to avoid traffic.</div>
-        <img class="tl-img" src="article-images/_1_of_2.jpg" alt="K2 Gives — Organizer card, created Jan 29, 2026" />
-        <img class="tl-img" src="article-images/_2_of_2.jpg" alt="Sascha Riley Awareness Fund banner" />
+        <img class="tl-img" src="article-images/004_k2-gives-organizer-card-created-jan-29-2026.jpg" alt="K2 Gives — Organizer card, created Jan 29, 2026" />
+        <img class="tl-img" src="article-images/005_sascha-riley-awareness-fund-banner.jpg" alt="Sascha Riley Awareness Fund banner" />
       </div>
 
       <!--  FEB 2026  -->
@@ -1764,8 +1797,8 @@ footer {
 
       <div class="tl-entry tl-p2">
         <span class="d">Feb 9</span>
-        <div class="e">Troy&rsquo;s first Substack post: <i>&ldquo;The World is Changing &mdash; And It Starts Now.&rdquo;</i></div>
-        <img class="tl-img" src="article-images/007_Feb_10_Troy_first_messages_Sascha.webp" alt="Troy's first Substack post" />
+        <div class="e">Troy&rsquo;s first Substack post: <i>&ldquo;<a href="https://thefalloutwithtbs.substack.com/p/the-world-is-changing-and-it-starts" target="_blank" rel="noopener">The World is Changing &mdash; And It Starts Now.</a>&rdquo;</i></div>
+        <img class="tl-img" src="article-images/006_troy-s-first-substack-post.webp" alt="Troy's first Substack post" />
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 10</span>
@@ -1774,11 +1807,11 @@ footer {
       <div class="tl-entry tl-p2">
         <span class="d">Feb 18</span>
         <div class="e">Lisa Voldeng publishes her first article on George Tonks.</div>
-        <img class="tl-img" src="article-images/006_Feb_09_Troys_first_Substack_post.jpg" alt="Lisa Voldeng's article on George Tonks" />
+        <img class="tl-img" src="article-images/007_lisa-voldeng-s-article-on-george-tonks.jpg" alt="Lisa Voldeng's article on George Tonks" />
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 18</span>
-        <div class="e"><b>Troy unloads &ldquo;The Architecture Was Built After 1945&rdquo;.</b> Part one of a series naming that builds up to reveal Sascha Barros. The series was posted over about 24 hours.</div>
+        <div class="e"><b>Troy unloads &ldquo;<a href="https://thefalloutwithtbs.substack.com/p/part-i-the-architecture-was-built" target="_blank" rel="noopener">The Architecture Was Built After 1945</a>&rdquo;.</b> Part one of a series naming that builds up to reveal Sascha Barros. The series was posted over about 24 hours.</div>
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 19</span>
@@ -1787,12 +1820,12 @@ footer {
       <div class="tl-entry tl-p2">
         <span class="d">Feb 22</span>
         <div class="e">Astra is calling on a public official to get attention for Sascha.</div>
-        <img class="tl-img" src="article-images/008_Feb_18_Architecture_Was_Built_After.jpg" alt="Astra calling on a public official" />
+        <img class="tl-img" src="article-images/008_astra-calling-on-a-public-official.jpg" alt="Astra calling on a public official" />
       </div>
       <div class="tl-entry tl-p2">
         <span class="d">Feb 26</span>
         <div class="e">Earliest evidence of Astra Crosby seeking to charm Sascha.</div>
-        <img class="tl-img" src="article-images/009_Feb_26_Earliest_evidence_Astra_Crosby.jpg" alt="Sascha + Astra 02/26/26 dog post exchange" />
+        <img class="tl-img" src="article-images/009_sascha-astra-02-26-26-dog-post-exchange.jpg" alt="Sascha + Astra 02/26/26 dog post exchange" />
       </div>
 
       <!--  MAR 2026  -->
@@ -1800,13 +1833,13 @@ footer {
 
       <div class="tl-entry tl-p3">
         <span class="d">Mar 02</span>
-        <div class="e">Grifter Nation domain registered.</div>
-        <img class="tl-img" src="article-images/010_Mar_02_Grifter_Nation_domain_registered.jpg" alt="grifter-nation.com WHOIS, registered 2026-03-02" />
+        <div class="e"><a href="https://grifter-nation.com/" target="_blank" rel="noopener">Grifter Nation</a> domain registered.</div>
+        <img class="tl-img" src="article-images/010_grifter-nation-com-whois-registered-2026-03-02.jpg" alt="grifter-nation.com WHOIS, registered 2026-03-02" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 10</span>
         <div class="e">Lisa Voldeng announces resignation of support for Sascha.</div>
-        <img class="tl-img" src="article-images/011_Mar_10_Lisa_Voldeng_announced_resignation.jpg" alt="LNV statement regarding Sascha Riley, March 10, 2026" />
+        <img class="tl-img" src="article-images/011_lnv-statement-regarding-sascha-riley-march-10-2026.jpg" alt="LNV statement regarding Sascha Riley, March 10, 2026" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 10</span>
@@ -1819,33 +1852,33 @@ footer {
       <div class="tl-entry tl-p3">
         <span class="d">Mar 14</span>
         <div class="e">Troy makes his first contribution to WhoWhatWhy.</div>
-        <img class="tl-img" src="article-images/012_Mar_10_First_part_of_The_Machine.jpg" alt="Troy's first WhoWhatWhy contribution" />
+        <img class="tl-img" src="article-images/012_troy-s-first-whowhatwhy-contribution.jpg" alt="Troy's first WhoWhatWhy contribution" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 17</span>
         <div class="e">Sascha returned from their interview with Brandy Zadrozny. Astra was overjoyed.</div>
-        <img class="tl-img" src="article-images/ACrosby_2026-04-14_194130.png" alt="Astra Crosby — screenshot 1" />
-        <img class="tl-img" src="article-images/ACrosby_2026-04-14_194207.png" alt="Astra Crosby — screenshot 2" />
-        <img class="tl-img" src="article-images/ACrosby_2026-04-14_194216.png" alt="Astra Crosby — screenshot 3" />
+        <img class="tl-img" src="article-images/013_astra-crosby-screenshot-1.png" alt="Astra Crosby — screenshot 1" />
+        <img class="tl-img" src="article-images/014_astra-crosby-screenshot-2.png" alt="Astra Crosby — screenshot 2" />
+        <img class="tl-img" src="article-images/015_astra-crosby-screenshot-3.png" alt="Astra Crosby — screenshot 3" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 27</span>
         <div class="e">Troy releases the interview and surrounding documents Voldeng had paywalled. He said she had no right. <b>Since deleted.</b></div>
-        <img class="tl-img" src="article-images/017_Mar_29_Astra_Crosby_lends_her_phone.jpg" alt="Troy releases Voldeng's interview and documents" />
+        <img class="tl-img" src="article-images/016_troy-releases-voldeng-s-interview-and-documents.jpg" alt="Troy releases Voldeng's interview and documents" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 29</span>
         <div class="e">Astra Crosby lends her phone to Sascha for a live interview arranged by Troy on TikTok. She replies to Kathy Griffin to help gain visibility for Sascha. Astra then goes nearly silent, making only one post on her profile for almost two weeks.</div>
-        <img class="tl-img" src="article-images/013_Mar_17_Sascha_returned_from_interview.jpg" alt="Astra entry — Sascha context" />
-        <img class="tl-img" src="article-images/019_Mar_30_Saschas_ex-wife_weapons-grade_damage.jpg" alt="Astra replying to Kathy Griffin" />
+        <img class="tl-img" src="article-images/017_astra-entry-sascha-context.jpg" alt="Astra entry — Sascha context" />
+        <img class="tl-img" src="article-images/018_astra-replying-to-kathy-griffin.jpg" alt="Astra replying to Kathy Griffin" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Mar 30</span>
         <div class="e">Sascha&rsquo;s ex-wife goes into &ldquo;weapons-grade&rdquo; damage control. The MSNOW article on Sascha had not yet been released. She knew what it was going to say before it released because she was likely told directly when interviewed by Brandy Zadrozny.</div>
-        <img class="tl-img" src="article-images/_1_of_4.jpg" alt="Ex-wife damage control 1 of 4" />
-        <img class="tl-img" src="article-images/_2_of_4.jpg" alt="Ex-wife damage control 2 of 4" />
-        <img class="tl-img" src="article-images/_3_of_4.jpg" alt="Ex-wife damage control 3 of 4" />
-        <img class="tl-img" src="article-images/_4_of_4.jpg" alt="Ex-wife damage control 4 of 4" />
+        <img class="tl-img" src="article-images/019_ex-wife-damage-control-1-of-4.jpg" alt="Ex-wife damage control 1 of 4" />
+        <img class="tl-img" src="article-images/020_ex-wife-damage-control-2-of-4.jpg" alt="Ex-wife damage control 2 of 4" />
+        <img class="tl-img" src="article-images/021_ex-wife-damage-control-3-of-4.jpg" alt="Ex-wife damage control 3 of 4" />
+        <img class="tl-img" src="article-images/022_ex-wife-damage-control-4-of-4.jpg" alt="Ex-wife damage control 4 of 4" />
       </div>
 
       <!--  APR 2026  -->
@@ -1857,66 +1890,68 @@ footer {
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 05</span>
-        <div class="e">Follow The Files domain registered.</div>
-        <img class="tl-img" src="article-images/018_Mar_29_gallery.jpg" alt="Follow The Files domain registration" />
+        <div class="e"><a href="https://followthefiles.com/" target="_blank" rel="noopener">Follow The Files</a> domain registered.</div>
+        <img class="tl-img" src="article-images/023_follow-the-files-domain-registration.jpg" alt="Follow The Files domain registration" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 06</span>
-        <div class="e">Amalgamated Army domain registered. Note: This name was chosen by Sascha. Troy owns the website but contact information on the website listed Sue Selle until &ldquo;The Riley Protocol&rdquo;. Sascha also claims Troy made these websites himself.</div>
-        <img class="tl-img" src="article-images/024_Apr_06_Amalgamated_Army_domain_registered.jpg" alt="Amalgamated Army domain registration" />
+        <div class="e"><a href="http://amalgamatedarmy.com/" target="_blank" rel="noopener">Amalgamated Army</a> domain registered. Note: This name was chosen by Sascha. Troy owns the website but contact information on the website listed Sue Selle until &ldquo;The Riley Protocol&rdquo;. Sascha also claims Troy made these websites himself.</div>
+        <img class="tl-img" src="article-images/024_amalgamated-army-domain-registration.jpg" alt="Amalgamated Army domain registration" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 09</span>
-        <div class="e">Brandy Zadrozny releases her article on Sascha for MSNOW. It is not a &ldquo;debunk&rdquo;.</div>
-        <img class="tl-img" src="article-images/031_Apr_15_standalone.jpg" alt="Brandy Zadrozny's MSNOW article" />
+        <div class="e">Brandy Zadrozny releases <a href="https://www.ms.now/news/sascha-riley-trump-epstein-conspiracy-theory" target="_blank" rel="noopener">her article on Sascha for MSNOW</a>. It is not a &ldquo;debunk&rdquo;.</div>
+        <img class="tl-img" src="article-images/025_brandy-zadrozny-s-msnow-article.jpg" alt="Brandy Zadrozny's MSNOW article" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 09</span>
         <div class="e">Troy releases a <i>special edition of The Machine</i> about Brandy Zadrozny and her article on Sascha Barros.</div>
-        <img class="tl-img" src="article-images/027_Apr_13_Astra_publicly_retracts_support.jpg" alt="Special edition of The Machine about Brandy" />
+        <img class="tl-img" src="article-images/026_special-edition-of-the-machine-about-brandy.jpg" alt="Special edition of The Machine about Brandy" />
       </div>
       <div class="tl-entry tl-p3">
         <span class="d">Apr 13</span>
         <div class="e">Astra publicly retracts their support for Sascha. She immediately begins intentionally misidentifying and deadnaming them. She also began deleting every previous comment I screenshotted for this article.</div>
-        <img class="tl-img" src="article-images/028_Apr_13_gallery_a.jpg" alt="Astra retraction gallery a" />
-        <img class="tl-img" src="article-images/029_Apr_13_gallery_b.png" alt="Astra retraction gallery b" />
-        <img class="tl-img" src="article-images/030_Apr_15_Troy_publishes_withdrawing_support.jpg" alt="Astra retraction — third image" />
+        <img class="tl-img" src="article-images/027_astra-retraction-gallery-a.jpg" alt="Astra retraction gallery a" />
+        <img class="tl-img" src="article-images/028_astra-retraction-gallery-b.png" alt="Astra retraction gallery b" />
+        <img class="tl-img" src="article-images/029_astra-retraction-third-image.jpg" alt="Astra retraction — third image" />
       </div>
 
       <div class="tl-entry tl-p4">
         <span class="d">Apr 15</span>
-        <div class="e">Troy publishes article withdrawing support for Sascha. He calls them a liar and dangerous. He weaponizes a vulnerable candid photo to do this.</div>
+        <div class="e">Troy publishes <a href="article-pdfs/the-machine-substack/the-machine-31-the-sixth-layer_2026-04-16.pdf" target="_blank" rel="noopener">article</a> withdrawing support for Sascha. He calls them a liar and dangerous. He weaponizes a vulnerable candid photo to do this.</div>
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 16 <span class="t">8:00 PM</span></span>
-        <div class="e">I post public callout of Troy on social media. He calls me little boy, clown, mocking my words and belittling me for my lack of education. He deleted all his comments. I didn&rsquo;t take many screenshots. He blocked me.</div>
-        <img class="tl-img" src="article-images/callout_2026-04-16_203342.png" alt="Callout — 8:33 PM" />
-        <img class="tl-img" src="article-images/callout_2026-04-16_210648.png" alt="Callout — 9:06 PM" />
-        <img class="tl-img" src="article-images/callout_2026-04-16_221142.png" alt="Callout — 10:11 PM" />
-        <img class="tl-img" src="article-images/callout_2026-04-16_221432.png" alt="Callout — 10:14 PM" />
-        <img class="tl-img" src="article-images/callout_2026-04-16_221500.png" alt="Callout — 10:15 PM" />
-        <img class="tl-img" src="article-images/callout_2026-04-16_222854.png" alt="Callout — 10:28 PM" />
+        <div class="e">I post <a href="https://www.threads.com/@snowmason/post/DXN6NbkFFB1" target="_blank" rel="noopener">public callout</a> of Troy on social media. He calls me little boy, clown, mocking my words and belittling me for my lack of education. He deleted all his comments. I didn&rsquo;t take many screenshots. He blocked me.</div>
+        <img class="tl-img" src="article-images/030_callout-8-33-pm.png" alt="Callout — 8:33 PM" />
+        <img class="tl-img" src="article-images/031_callout-9-06-pm.png" alt="Callout — 9:06 PM" />
+        <img class="tl-img" src="article-images/032_callout-10-11-pm.png" alt="Callout — 10:11 PM" />
+        <img class="tl-img" src="article-images/033_callout-10-14-pm.png" alt="Callout — 10:14 PM" />
+        <img class="tl-img" src="article-images/034_callout-10-15-pm.png" alt="Callout — 10:15 PM" />
+        <img class="tl-img" src="article-images/035_callout-10-28-pm.png" alt="Callout — 10:28 PM" />
+        <img class="tl-img" src="article-images/909_2026-04-16-public-callout-203351.png" alt="Apr 16 public callout — screenshot (8:33 PM)" />
+        <img class="tl-img" src="article-images/903_2026-04-16-dm-troy-engage-in-public-view.jpg" alt="DM: Troy refuses to engage publicly — 'engage me in public view'" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">5:00 AM</span></span>
-        <div class="e">He says the Apr 15 article wasn&rsquo;t his idea. That it was covert operation, actually, in order to get close to Astra. That there are dangerous people involved and he was putting his life on the line. He says Sascha will tell me.</div>
-        <img class="tl-img" src="article-images/040_Apr_17_5am_Troy_says_Part_II.jpg" alt="Third-party DM: 'putting our lives on the line to protect Sascha'" />
+        <div class="e">He says the Apr 15 article was a covert operation in order to get close to Astra. That there are dangerous people involved and he was putting his life on the line. He says Sascha will tell me.</div>
+        <img class="tl-img" src="article-images/036_troy-poses-as-third-party-putting-lives-on-the-line.jpg" alt="Troy poses as a third party for one message - 'putting our lives on the line to protect Sascha'" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">5:30 AM</span></span>
         <div class="e">Troy says &ldquo;Part II&rdquo; drops tomorrow. It is implied Part II would be something I would like.</div>
-        <img class="tl-img" src="article-images/043_Apr_17_8am_Sascha_responds_It_has_gotten.jpg" alt="Troy says Part II drops tomorrow" />
-        <img class="tl-img" src="article-images/Apr17_183657.png" alt="Part II drops tomorrow — built and ready" />
+        <img class="tl-img" src="article-images/037_troy-implies-part-ii-will-be-impressive.jpg" alt="Troy implies Part II will be impressive - 'Part II drops tomorrow'" />
+        <img class="tl-img" src="article-images/038_part-ii-drops-tomorrow-built-and-ready.png" alt="Part II drops tomorrow — built and ready" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">6:00 AM</span></span>
         <div class="e">Troy claims to be a therapist. Then immediately says he is &ldquo;more on the research side&rdquo;.</div>
-        <img class="tl-img" src="article-images/041_Apr_17_6am_Troy_claims_to_be.jpg" alt="Troy: I'm a therapist / Cognitive Neuroscientist / more on the research side" />
+        <img class="tl-img" src="article-images/039_troy-i-m-a-therapist-cognitive-neuroscientist-more-on-the-re.jpg" alt="Troy: I'm a therapist / Cognitive Neuroscientist / more on the research side" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">6:30 AM</span></span>
         <div class="e">I went to bed waiting for Sascha to respond to my questions about Troy.</div>
-        <img class="tl-img" src="article-images/042_Apr_17_630am_went_to_bed_waiting.jpg" alt="Both going to bed — I haven't slept in 48 hours" />
+        <img class="tl-img" src="article-images/040_both-going-to-bed-i-haven-t-slept-in-48-hours.jpg" alt="Both going to bed — I haven't slept in 48 hours" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">8:00 AM</span></span>
@@ -1927,23 +1962,23 @@ footer {
         <div class="e">When pressed, Sascha says: &ldquo;I really don&rsquo;t know.&rdquo;</div>
       </div>
       <div class="tl-entry tl-p4">
-        <span class="d">Apr 17 <span class="t">4:00 PM</span></span>
+        <span class="d">Apr 17 <span class="t">4:05 PM</span></span>
         <div class="e">Troy unblocks me on threads.</div>
-        <img class="tl-img" src="article-images/045_Apr_17_4pm_Troy_unblocks_me_threads.jpg" alt="Troy DM at 4:05 PM — Hey / mental health day" />
+        <img class="tl-img" src="article-images/041_troy-unblocks-me-on-threads.jpg" alt="Troy DM at 4:05 PM — Hey / mental health day" />
       </div>
       <div class="tl-entry tl-p4">
-        <span class="d">Apr 17 <span class="t">4:30 PM</span></span>
+        <span class="d">Apr 17 <span class="t">4:36 PM</span></span>
         <div class="e">Mediator contacts me.</div>
-        <img class="tl-img" src="article-images/044_Apr_17_1030am_when_pressed_Sascha_says.jpg" alt="Mediator contacts me" />
+        <img class="tl-img" src="article-images/042_mediator-contacts-me.jpg" alt="Mediator contacts me" />
       </div>
       <div class="tl-entry tl-p4">
         <span class="d">Apr 17 <span class="t">5:00 PM</span></span>
         <div class="e">&ldquo;I am not the architect.&rdquo; He then calls me a liar because he didn&rsquo;t believe I never got the confirmation he claimed.</div>
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 17 <span class="t">5:00 PM</span></span>
+        <span class="d">Apr 17 <span class="t">5:19 PM</span></span>
         <div class="e">He tells me he has the power to have me committed. I block him this time.</div>
-        <img class="tl-img" src="article-images/046_Apr_17_5pm_I_am_not_the.jpg" alt="Power to have me committed" />
+        <img class="tl-img" src="article-images/043_power-to-have-me-committed.jpg" alt="Power to have me committed" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">5:30 PM</span></span>
@@ -1952,194 +1987,212 @@ footer {
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">6:30 PM</span></span>
         <div class="e">I say Sascha never told me not to publish.</div>
+        <img class="tl-img" src="article-images/044_i-tell-troy-sascha-never-said-not-to-publish.jpg" alt="I tell Troy that Sascha never told me not to publish" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 17 <span class="t">9 PM&ndash;midnight</span></span>
+        <div class="e">Grocery store incident &mdash; sometime in this window. The debit-card app gives no exact time, so it can&rsquo;t be pinned down any more precisely than this.</div>
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">11:00 PM</span></span>
         <div class="e">We have our first breakthrough.</div>
-        <img class="tl-img" src="article-images/047_Apr_17_5pm_He_tells_me_he_has.jpg" alt="Long mediator chat closing at 11:06 PM" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_a.png" alt="First breakthrough — screenshot a" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_b.png" alt="First breakthrough — screenshot b" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_c.png" alt="First breakthrough — screenshot c" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_d.png" alt="First breakthrough — screenshot d" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_e.png" alt="First breakthrough — screenshot e" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_f.png" alt="First breakthrough — screenshot f" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_breakthrough_g.png" alt="First breakthrough — screenshot g" />
+        <img class="tl-img" src="article-images/045_first-breakthrough-screenshot-a.png" alt="First breakthrough — screenshot a" />
+        <img class="tl-img" src="article-images/046_first-breakthrough-screenshot-b.png" alt="First breakthrough — screenshot b" />
+        <img class="tl-img" src="article-images/047_first-breakthrough-screenshot-c.png" alt="First breakthrough — screenshot c" />
+        <img class="tl-img" src="article-images/048_first-breakthrough-screenshot-d.png" alt="First breakthrough — screenshot d" />
+        <img class="tl-img" src="article-images/049_first-breakthrough-screenshot-e.png" alt="First breakthrough — screenshot e" />
+        <img class="tl-img" src="article-images/050_first-breakthrough-screenshot-f.png" alt="First breakthrough — screenshot f" />
+        <img class="tl-img" src="article-images/051_first-breakthrough-screenshot-g.png" alt="First breakthrough — screenshot g" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">11:30 PM</span></span>
         <div class="e">I send apology and logic chain through mediator.</div>
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 17 <span class="t">night</span></span>
-        <div class="e">Grocery store incident. Debit card app does not give exact time.</div>
-      </div>
-      <div class="tl-entry tl-p5">
         <span class="d">Apr 17 <span class="t">11:43 PM</span></span>
         <div class="e">I am added to a group chat by the mediator.</div>
+        <img class="tl-img" src="article-images/084_group-chat-added-by-mediator.png" alt="Chat: the mediator adds me to the group (Fri Apr 17) — 'did you already get it?' 11:43 PM" />
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">2:00 AM</span></span>
+        <span class="d">Apr 18 <span class="t">2:27 AM</span></span>
         <div class="e">I send my article to Troy.</div>
+        <img class="tl-img" src="article-images/085_send-my-article-to-troy.png" alt="Chat: 'you think i should troy?' — I send the article as a .txt; Troy: 'I'll lay here and read it right now'" />
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">3:00 AM</span></span>
+        <span class="d">Apr 18 <span class="t">3:08 AM</span></span>
         <div class="e">Troy reads my article and says &ldquo;There is no denying what happened to Sascha.&rdquo;</div>
-        <img class="tl-img" src="article-images/056_Apr_18_2am_send_article_to.jpg" alt="Troy reads my article — redacted chat" />
-        <img class="tl-img" src="article-images/048_Apr_17_530pm_Work_truck_seen.jpg" alt="Troy reads my article — chat continuation" />
-        <img class="tl-img" src="article-images/049_Apr_17_11pm_first_breakthrough.jpg" alt="Troy reads my article — chat continuation" />
+        <img class="tl-img" src="article-images/053_troy-no-denying-what-happened-to-sascha.jpg" alt="Chat: Troy — 'There is no denying what happened to Sascha'" />
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">3:30 AM</span></span>
+        <span class="d">Apr 18 <span class="t">3:29 AM</span></span>
         <div class="e">Claims a PsyD, says &ldquo;no one needs to know that.&rdquo;</div>
+        <img class="tl-img" src="article-images/054_troy-claims-psyd-no-one-needs-to-know.jpg" alt="Chat: Troy — 'I have a PsyD btw but no one needs to know that'" />
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">4:30 AM</span></span>
-        <div class="e">I explain the danger if these threats and claims are real.</div>
-        <img class="tl-img" src="article-images/060_Apr_18_430am_explain_danger_if.jpg" alt="Explain danger" />
-        <img class="tl-img" src="article-images/061_Apr_18_gallery_a.jpg" alt="Apr 18 gallery a" />
-        <img class="tl-img" src="article-images/057_Apr_18_3am_Troy_reads_article.jpg" alt="Explain danger — chat" />
-        <img class="tl-img" src="article-images/058_Apr_18_330am_claims_PsyD_says_no.jpg" alt="Explain danger — chat" />
+        <span class="d">Apr 18 <span class="t">3:35 AM</span></span>
+        <div class="e">I give Troy two options: be called out or come clean. I offered to write a positive article instead.</div>
+        <img class="tl-img" src="article-images/052_troy-two-options-get-called-out-or-come-clean.png" alt="Chat (3:35 AM): 'there are two ways - you can either get called out by me, or do it yourself, admit you didn't find anything and say it was a ploy'; 'i'd back you up either way'" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 18 <span class="t">3:49 AM</span></span>
+        <div class="e">I explain the danger if these threats and claims are real. This is potentially sensitive information and not shown.</div>
+        <img class="tl-img" src="article-images/057_explain-danger-chat.jpg" alt="Chat: explaining the danger — 'much bigger than you think', '5-person tribunal'" />
+        <img class="tl-img" src="article-images/058_explain-danger-chat.jpg" alt="Chat: 'it's broader, cultural… in ourselves'; Troy says he's worried about my safety" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">7:00 AM</span></span>
         <div class="e">Sascha confirms the op was Troy&rsquo;s idea.</div>
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">11:00 AM</span></span>
-        <div class="e">I go to sleep.</div>
+        <span class="d">Apr 18 <span class="t">12:28 PM</span></span>
+        <div class="e">After I go to sleep, Troy responds affirmatively, but ignores the point entirely.</div>
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">12:30 PM</span></span>
-        <div class="e">Responds affirmatively, but ignores the point entirely.</div>
-        <img class="tl-img" src="article-images/059_Apr_18_4pm_two_options.jpg" alt="Signal group chat 12:28 PM — confirms Troy NV/PST" />
-      </div>
-      <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">1:30 PM</span></span>
+        <span class="d">Apr 18 <span class="t">1:19 PM</span></span>
         <div class="e">Says he&rsquo;s not a therapist or has a National Provider Identifier number.</div>
+        <img class="tl-img" src="article-images/086_npi-research-not-clinical.png" alt="Chat: Troy — 'I don't have a NPI number, Cognitive Neuroscience is RESEARCH based not clinical'" />
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">4:00 PM</span></span>
-        <div class="e">I give Troy two options: be called out or come clean. I offered to write a positive article instead.</div>
+        <span class="d">Apr 18 <span class="t">6:36 PM</span></span>
+        <div class="e">We decide on patience; waiting for him to address the actual point specifically.</div>
+        <img class="tl-img" src="article-images/082_patience-waiting-six-hours-till-release.jpg" alt="Chat: 'still like 6 hours till release… be swift but not panic'; reply: 'he probably will see the messages'" />
+        <img class="tl-img" src="article-images/083_patience-waiting-still-waiting-on-troy.jpg" alt="Chat: 'still just waiting on him, he said he was busy'; 'I just want this done with context that can keep people safe'" />
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">6:30 PM</span></span>
-        <div class="e">Patience waiting for him to address my point.</div>
-      </div>
-      <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">10:30 PM</span></span>
+        <span class="d">Apr 18 <span class="t">10:35 PM</span></span>
         <div class="e">I ask directly where Troy is. He responds within a minute.</div>
-        <img class="tl-img" src="article-images/062_Apr_18_7am_Sascha_confirms_op.jpg" alt="Chat 10:46–10:50 PM — Troy: 'I BROKE MY FOOT'" />
+        <img class="tl-img" src="article-images/056_i-ask-where-troy-is-he-responds-within-a-minute.jpg" alt="Chat: 'Where is Troy? Why are they taking so long?' — 'I'm at the ER, I think I broke my foot'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">10:52 PM</span></span>
         <div class="e">Sascha messages me directly with their own suspicions: &ldquo;Something&rsquo;s off.&rdquo;</div>
       </div>
       <div class="tl-entry tl-p5">
-        <span class="d">Apr 18 <span class="t">11:00 PM</span></span>
+        <span class="d">Apr 18 <span class="t">11:02 PM</span></span>
         <div class="e">Continues to divert and refuses to engage. I had stopped being rude nearly 24 hours before this, but I was losing my patience. I left the chat after this.</div>
-        <img class="tl-img" src="article-images/063_Apr_18_1230pm_responds_affirmatively.jpg" alt="Chat 11:02–11:04 PM — calling out Troy's diversion" />
+        <img class="tl-img" src="article-images/060_troy-continues-to-divert-i-broke-my-foot.jpg" alt="Chat (10:46-10:50 PM): Troy continues to divert to his broken foot - 'I BROKE MY FOOT', 'I am so over the drama'" />
+        <img class="tl-img" src="article-images/061_chat-11-02-11-04-pm-calling-out-troy-s-diversion.jpg" alt="Chat 11:02–11:04 PM — calling out Troy's diversion" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 18 <span class="t">11:30 PM</span></span>
         <div class="e">Threatens to release chats. &ldquo;Putting thousands of people in danger. Not because I tell them to but because that is protocol.&rdquo;</div>
-        <img class="tl-img" src="article-images/066_Apr_18_630pm_patience_waiting.jpg" alt="Troy threatens to release chats — 'that is protocol'" />
+        <img class="tl-img" src="article-images/062_troy-threatens-to-release-chats-that-is-protocol.jpg" alt="Troy threatens to release chats — 'that is protocol'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">12:00 AM</span></span>
         <div class="e">I suggest directly Troy may be an operative or asset. The first time I suggested it he understood and agreed. Troy responds this time by implying I am on drugs.</div>
+        <img class="tl-img" src="article-images/088_operative-how-much-meth.png" alt="Threads DM: 'you are a planted operative… release my side of these conversations'; Troy (Blocked): 'How much meth did you smoke today?' — 'I will stay quiet'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">12:30 AM</span></span>
         <div class="e">I show him an addition to my article about his threats without mentioning him directly.</div>
-        <img class="tl-img" src="article-images/069_Apr_18_1052pm_Sascha_messages_me_directly.jpg" alt="Troy diverts: 'About what operation?'" />
-        <img class="tl-img" src="article-images/070_Apr_18_gallery_b.jpg" alt="Article draft in text editor (110,574 characters)" />
+        <img class="tl-img" src="article-images/063_troy-diverts-about-what-operation.jpg" alt="Troy diverts: 'About what operation?'" />
+        <img class="tl-img" src="article-images/064_article-draft-in-text-editor-110-574-characters.jpg" alt="Article draft in text editor (110,574 characters)" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">12:30 AM</span></span>
-        <div class="e">Troy says my addition has to go. <b>Threatens to pull my Deadman&rsquo;s Switches</b> for the first time. Says he knows where I live and about my childhood.</div>
-        <img class="tl-img" src="article-images/image (38).jpg" alt="Troy: 'That whole thing needs to go'" />
-        <img class="tl-img" src="article-images/image (39).jpg" alt="Troy: 'I will pull the dead mans switch' / 'I know where you live'" />
-        <img class="tl-img" src="article-images/image (41).jpg" alt="Troy: 'If you post that paragraph it's over for you'" />
+        <div class="e">Troy says my addition has to go. <b>Threatens to pull my Deadman&rsquo;s Switches</b> for the first time. Says he knows where I live and about my childhood. He implies the same for Sascha.</div>
+        <img class="tl-img" src="article-images/065_troy-that-whole-thing-needs-to-go.jpg" alt="Troy: 'That whole thing needs to go'" />
+        <img class="tl-img" src="article-images/066_troy-i-will-pull-the-dead-mans-switch-i-know-where-you-live.jpg" alt="Troy: 'I will pull the dead mans switch' / 'I know where you live'" />
+        <img class="tl-img" src="article-images/067_troy-if-you-post-that-paragraph-it-s-over-for-you.jpg" alt="Troy: 'If you post that paragraph it's over for you'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">1:00 AM</span></span>
-        <div class="e">Says he knows Sascha&rsquo;s address, who they live with, and about their kids. &ldquo;I have the power. Don&rsquo;t make me use it.&rdquo;</div>
-        <img class="tl-img" src="article-images/image (42).jpg" alt="Troy: 'I even have their address / Information on their children / I have the power'" />
-        <img class="tl-img" src="article-images/image (40).jpg" alt="Troy: 'And so will Sascha. This is much bigger than just one person'" />
-        <img class="tl-img" src="article-images/image (44).jpg" alt="Troy: 'I warned you about me'" />
-        <img class="tl-img" src="article-images/image (45).jpg" alt="Troy: 'everything is officially ready to deploy if need be'" />
+        <div class="e">Says he knows Sascha&rsquo;s address, who they live with, and about their kids. &ldquo;I have the power. Don&rsquo;t make me use it&rdquo;. Then: &ldquo;;) I warned you about me&rdquo;</div>
+        <img class="tl-img" src="article-images/068_troy-i-even-have-their-address-information-on-their-children.jpg" alt="Troy: 'I even have their address / Information on their children / I have the power'" />
+        <img class="tl-img" src="article-images/069_troy-and-so-will-sascha-this-is-much-bigger-than-just-one-pe.jpg" alt="Troy: 'And so will Sascha. This is much bigger than just one person'" />
+        <img class="tl-img" src="article-images/070_troy-i-warned-you-about-me.jpg" alt="Troy: 'I warned you about me'" />
+        <img class="tl-img" src="article-images/071_troy-everything-is-officially-ready-to-deploy-if-need-be.jpg" alt="Troy: 'everything is officially ready to deploy if need be'" />
+      </div>
+      <div class="tl-entry tl-p5">
+        <span class="d">Apr 19 <span class="t">1:15 AM</span></span>
+        <div class="e">Part II flips from a promise into a threat from one message to the next.</div>
+        <img class="tl-img" src="article-images/072b_troy-part-ii-viral-promise-becomes-threat.png" alt="Troy: 'Part two, I promise you, will go viral' then 'Part two will come out if I even sense you whispering my name or anything about me to anyone'" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">1:30 AM</span></span>
         <div class="e">After direct threats to my roommate, she evacuates. Troy says it doesn&rsquo;t matter where she goes. She sees the dark vehicle with trailer.</div>
-        <img class="tl-img" src="article-images/image (43).jpg" alt="Troy: you can't hide, even focusing on roommate's safety" />
+        <img class="tl-img" src="article-images/072_troy-it-doesnt-matter-where-they-go-you-cant-hide.png" alt="Troy: 'It doesn't matter where they go' / 'You can't hide' — threats as my roommate evacuates" />
       </div>
       <div class="tl-entry tl-p5">
         <span class="d">Apr 19 <span class="t">2:00 AM</span></span>
         <div class="e">Sascha agreed to delay because of the threats.</div>
       </div>
-      <div class="tl-entry tl-p5">
-        <span class="d">Apr 19 <span class="t">6:19 AM</span></span>
-        <div class="e">Sound event. I text my roommate and Sascha.</div>
-      </div>
-      <div class="tl-entry tl-p5">
-        <span class="d">Apr 19 <span class="t">9:00 AM</span></span>
-        <div class="e">I flee my home. I am gone for days.</div>
-      </div>
-
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">2:00 AM</span></span>
         <div class="e">Troy claims the clinician is being monitored. He had already claimed he was working with thousands of others.</div>
-        <img class="tl-img" src="article-images/image (47).jpg" alt="Troy: 'Others are now keeping an eye on her as well. Shall I release it all?'" />
+        <img class="tl-img" src="article-images/073_troy-others-are-now-keeping-an-eye-on-her-as-well-shall-i-re.jpg" alt="Troy: 'Others are now keeping an eye on her as well. Shall I release it all?'" />
       </div>
       <div class="tl-entry tl-p6">
-        <span class="d">Apr 20 <span class="t">2:00 AM</span></span>
+        <span class="d">Apr 20 <span class="t">2:17 AM</span></span>
         <div class="e">He releases my article to Laura Robinson.</div>
-        <img class="tl-img" src="article-images/image (48).jpg" alt="Troy shows screenshots of his DM thread with Dr. Laura Robinson at 2:17–2:18 AM" />
+        <img class="tl-img" src="article-images/074_troy-shows-screenshots-of-his-dm-thread-with-dr-laura-robins.jpg" alt="Troy shows screenshots of his DM thread with Dr. Laura Robinson at 2:17–2:18 AM" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">3:14 AM</span></span>
         <div class="e">Troy&rsquo;s last message: <i>&ldquo;The deed is done.&rdquo;</i> I block him.</div>
+        <img class="tl-img" src="article-images/087_the-deed-is-done.png" alt="Chat: 'I can keep going / Or I can delete them / The deed is done / If you knew what I knew…'" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">4:00 AM</span></span>
-        <div class="e">Cold article released. This version removed everything he had a problem with. Note: Due to his actions I released early with the support of Sascha Barros.</div>
+        <div class="e"><a href="https://leomaestri.substack.com/p/the-horrors-were-always-real-the" target="_blank" rel="noopener">Cold article</a> released. This version removed everything he had a problem with. Note: Due to his actions I released early with the support of Sascha Barros.</div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">6:16 AM</span></span>
+        <div class="e">Sound event. I text my roommate and Sascha.</div>
+      </div>
+      <div class="tl-entry tl-p6">
+        <span class="d">Apr 20 <span class="t">9:00 AM</span></span>
+        <div class="e">I flee my home. I am gone for days.</div>
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">10:00 AM</span></span>
         <div class="e">Clinician: &ldquo;Your work reads like someone in their right mind.&rdquo;</div>
-        <img class="tl-img" src="article-images/image (49).jpg" alt="Clinician: 'Your work reads like a person in their right mind'" />
+        <img class="tl-img" src="article-images/075_clinician-your-work-reads-like-a-person-in-their-right-mind.jpg" alt="Clinician: 'Your work reads like a person in their right mind'" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 20 <span class="t">11:00 AM</span></span>
         <div class="e">His fake PhD was called out by others in the field. He then assumed it was because of a plot I orchestrated.</div>
-        <img class="tl-img" src="article-images/image (46).jpg" alt="Neurology peer publicly questioning Troy's claimed PhD" />
+        <img class="tl-img" src="article-images/076_neurology-peer-publicly-questioning-troy-s-claimed-phd.jpg" alt="Neurology peer publicly questioning Troy's claimed PhD" />
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 22</span>
-        <div class="e"><b>The Riley Protocol</b> &mdash; a &ldquo;congressional reference document&rdquo; with forensic-styled scoring. The day after he reposts its main thesis on Substack.</div>
+        <div class="e"><b><a href="article-pdfs/amalgamated-army/riley-protocol-00-introduction.pdf" target="_blank" rel="noopener">The Riley Protocol</a></b> &mdash; a &ldquo;congressional reference document&rdquo; with forensic-styled scoring. The day after he reposts its main thesis on Substack.</div>
       </div>
       <div class="tl-entry tl-p6">
         <span class="d">Apr 24 <span class="t">2:00 PM</span></span>
         <div class="e">More formal video evaluation and signed letter from clinician.</div>
-        <img class="tl-img" src="article-images/image (50).jpg" alt="LMFT signed letter dated April 24, 2026 — mental status normal" />
+        <img class="tl-img" src="article-images/077_lmft-signed-letter-dated-april-24-2026-mental-status-normal.jpg" alt="LMFT signed letter dated April 24, 2026 — mental status normal" />
       </div>
 
       <!--  MAY 2026  -->
-      <div class="tl-month">May 2026</div>
-      <div class="tl-entry tl-p6">
-        <span class="d">May 04</span>
-        <div class="e"><b>This article is filed.</b> Public version 2.0 merges the original report with the timeline and evidence appendix.</div>
+
+      <!--  PUBLIC GOVERNMENT RECORDS  -->
+      <div class="tl-month">Public records</div>
+      <div class="tl-entry tl-p1">
+        <span class="d">2007</span>
+        <div class="e">Pasco County, FL &mdash; fraud charge (worthless check, Fla. Stat. 832.05). Primary court record; adjudication withheld.</div>
+        <img class="tl-img" src="article-images/078_pasco-county-fl-primary-court-record-troy-r-barile-2007-frau.jpg" alt="Pasco County, FL primary court record — Troy R Barile, 2007 fraud charge (Fla. Stat. 832.05)" />
+      </div>
+      <div class="tl-entry tl-p1">
+        <span class="d">2022</span>
+        <div class="e">Jackson County, OR &mdash; United Finance Co small claims against Troy and a co-defendant; dismissed.</div>
+        <img class="tl-img" src="article-images/079_jackson-county-or-small-claims-record-united-finance-co-v-tr.jpg" alt="Jackson County, OR small claims record — United Finance Co v. Troy R Barile, 2022, dismissed" />
       </div>
 
-      <div class="tl-legend">
-        <div class="row"><span class="dot" style="background:var(--gold)"></span><span>Setup / backstory</span></div>
-        <div class="row"><span class="dot" style="background:var(--rust)"></span><span>First articles, first contact</span></div>
-        <div class="row"><span class="dot" style="background:var(--teal)"></span><span>Investigation builds</span></div>
-        <div class="row"><span class="dot" style="background:var(--pink)"></span><span>Trigger article + callout</span></div>
-        <div class="row"><span class="dot" style="background:#B33A2C"></span><span>Escalation + threats</span></div>
-        <div class="row"><span class="dot" style="background:var(--blue)"></span><span>Aftermath</span></div>
+      <!--  AGGREGATOR ENTRIES & NEWS  -->
+      <div class="tl-month">Aggregator &amp; news</div>
+      <div class="tl-entry tl-p1">
+        <span class="d">2021</span>
+        <div class="e">Aggregator entry: &ldquo;Theft From an Elder or Dependent Adult&rdquo; (case CR63105-1). Aggregators can be unreliable.</div>
+        <img class="tl-img" src="article-images/080_aggregator-entry-theft-from-an-elder-or-dependent-adult-troy.jpg" alt="Aggregator entry — Theft From an Elder or Dependent Adult, Troy Raymond Barile, 2021 (CR63105-1)" />
       </div>
+      <div class="tl-entry tl-p1">
+        <span class="d">News</span>
+        <div class="e">Rogue Valley Times: Troy Raymond Barile arrested in Medford for unauthorized use of a motor vehicle; lodged in the Jackson County Jail.</div>
+        <img class="tl-img" src="article-images/081_rogue-valley-times-news-report-troy-raymond-barile-arrested.jpg" alt="Rogue Valley Times news report — Troy Raymond Barile vehicle-theft arrest, Medford" />
+      </div>
+
 
     </aside>
 
@@ -2150,7 +2203,7 @@ footer {
       <div class="ar-break"><em>Who? What? Why?</em></div>
 
       <p class="ar-lead-p" id="sec-who">
-        Troy runs a Substack called <b>The Fallout Report</b>, including a series he calls <i>The Machine</i>, and a suite of adjacent properties. He sells an <b>OSINT workbook</b> for those wanting to learn investigative journalism. He contributes to <b>WhoWhatWhy</b>. He describes himself as a <b>survivor-centric investigative journalist</b> who has spent years mapping the network operating to rehabilitate Ghislaine Maxwell&rsquo;s public image and attack the credibility of Epstein survivors.
+        Troy presents himself as the lead investigative journalist into the story of Sascha Barros. He runs a Substack called <b><a href="https://thefalloutwithtbs.substack.com/" target="_blank" rel="noopener">The Fallout with TBS</a></b>, a series he calls <i>The Machine</i>, and a suite of adjacent properties: grifter-nation.com, grifter-nation.help, followthefiles.com. He sells a donation based, $10 suggested, <b>OSINT workbook</b> for those wanting to learn investigative journalism. He contributes to <b>WhoWhatWhy</b>. He describes himself as a <b>survivor-centric investigative journalist</b> who has spent years mapping the network operating to rehabilitate Ghislaine Maxwell&rsquo;s public image and attack the credibility of Epstein survivors.
       </p>
 
       <p>
@@ -2158,7 +2211,7 @@ footer {
       </p>
 
       <p>
-        What I believe is that <b>Troy Raymond Barile-Simleness is a fraud</b>. That he used false professional credentials to build his career, misled the people he represented, carelessly used illegal methods to gain his information, and even attempted to intimidate people into silence.
+        What I believe is that <b>Troy Barile-Simleness is a fraud</b>. I believe he used false professional credentials in order to build his career, mislead the people he represented, carelessly uses illegal methods to gain his information, and even to attempted to intimidate other people into silence.
       </p>
 
       <div class="ar-claims">
@@ -2171,7 +2224,7 @@ footer {
         <div class="ar-claim">
           <span class="n">02</span>
           <div class="body">
-            I can prove that he <b>threatened multiple people&rsquo;s lives, with joy</b>, as he made statements implying he had the power to end the lives of an amateur investigative journalist (myself), a clinician, another survivor, and Sascha themselves &mdash; and their children. This was in order to suppress my journalism, much of it <i>after I agreed to remove any mention of his actions, his name, his threats, or even any implication he threatened me</i>.
+            I can prove that he <b>threatened multiple people&rsquo;s lives, with joy</b>, as he made the statements that implied he had the power to end the lives of an amateur writer and investigative journalist(myself), as well as a clinician, another survivor, and Sascha themselves. This was in order to suppress my journalism, much of it <i>after I even agreed to remove any mention of his actions, threats, implications or even his name</i>.
           </div>
         </div>
         <div class="ar-claim">
@@ -2191,14 +2244,13 @@ footer {
       <!-- ================= FUNDRAISER ================= -->
       <div class="ar-break"><em>Fundraiser?</em></div>
 
-      <h2 id="sec-fundraiser">Money before tragedy</h2>
 
       <p>
         On <b>January 16th, 2026</b>, Troy posted his first documented acknowledgement of Sascha Barros (Riley) by sharing a post from a professional clinician. Troy has specifically stated he did not know Sascha Barros in January. He says he didn&rsquo;t know of Lisa Voldeng or Sascha until Voldeng platformed George Tonks &mdash; someone Troy has known since they were both young. Voldeng platformed Tonks on <b>February 18th</b>. This is the same day Troy unloaded <b>five rounds of premade articles</b> that named Sascha before its end. <b>He first messaged Sascha on the 10th</b> of that month &mdash; more than a week before the article released.
       </p>
 
       <p>
-        A few days after Troy&rsquo;s repost of Sascha&rsquo;s story, a Kickstarter campaign Troy ran for a fantasy novel series and collectible toy line called <i>The Elementlings</i> <b>closed without reaching its funding goal</b>. The project was described by a local news anchor as his life&rsquo;s work, motivated during a time of genuine grieving. He was interviewed by a local network after distributing little gift baggies; a toy and some heartfelt words. The interview shows a human being behind the modeling-style photographs of their internet presence.
+        A few days after Troy&rsquo;s repost of Sascha&rsquo;s story, a Kickstarter campaign Troy ran for a fantasy novel and collectible toy line called <i>The Elementlings: The Great Symphony - Book One</i> <b>closed without reaching its funding goal</b>. He raised $3,311 of an $18,000 target from 9 backers. The project was described by a local news anchor as his life&rsquo;s work, motivated during a time of genuine grieving. He was <a href="https://www.fox5vegas.com/2025/12/31/las-vegas-novelist-spreads-mental-health-awareness-new-years-eve/" target="_blank" rel="noopener">interviewed by a local network</a> after distributing little gift baggies; a toy and some heartfelt words. The interview shows a human being behind the modeling-style photographs of their internet presence.
       </p>
 
       <p>
@@ -2221,10 +2273,10 @@ footer {
       </p>
 
       <p>
-        While the fundraiser sits at zero donations, <b>it is seeded with high-profile influencer followers</b> that suggest a professional marketing infrastructure rather than a grassroots effort. The organization shares a naming convention with a Las Vegas digital marketing and web development company specializing in social strategy and search engine optimization. The majority of the founders of that company also have side projects as journalists. This mimics Troy&rsquo;s pattern exactly &mdash; <i>just with seemingly less fraud</i>.
+        While the fundraiser sits at zero donations, <b>it is seeded with high-profile influencer followers</b> that suggest a professional marketing infrastructure rather than a grassroots effort. This organization shares a profile with K2 Analytics, a Las Vegas digital marketing firm specializing in social strategy.
       </p>
 
-      <div class="ar-pull is-pink">
+      <div class="ar-emline">
         The lack of active promotion of this crowdfunding page suggests a &ldquo;ready-made&rdquo; financial vessel, positioned to be triggered during a moment of high visibility &mdash; or tragedy &mdash; to monetize their story.
       </div>
 
@@ -2247,7 +2299,6 @@ footer {
       </p>
 
       <!-- ================= THREE DOMAINS ================= -->
-      <h2 id="sec-domains">The three websites</h2>
 
       <p>
         Troy has at least three websites:
@@ -2255,21 +2306,21 @@ footer {
 
       <div class="ar-domains">
         <div class="ar-domain">
-          <div class="nm">Grifter Nation</div>
+          <div class="nm"><a href="https://grifter-nation.com/" target="_blank" rel="noopener">Grifter Nation</a></div>
           <div class="dt">Domain registered &middot; 03/02/26</div>
         </div>
         <div class="ar-domain">
-          <div class="nm">Follow The Files</div>
+          <div class="nm"><a href="https://followthefiles.com/" target="_blank" rel="noopener">Follow The Files</a></div>
           <div class="dt">Domain registered &middot; 04/05/26</div>
         </div>
         <div class="ar-domain">
-          <div class="nm">Amalgamated Army</div>
+          <div class="nm"><a href="http://amalgamatedarmy.com/" target="_blank" rel="noopener">Amalgamated Army</a></div>
           <div class="dt">Domain registered &middot; 04/06/26</div>
         </div>
       </div>
 
       <p>
-        It is worth noting that the choice of the last domain name came <b>directly from Sascha</b>, the website was made <b>for Sascha</b>, and Troy is just the one who owns it. He has since removed any positive mention of Sascha in exchange for <i>The Riley Protocol</i> and other documents strictly asserting Sascha is lying.
+        It is worth noting that the choice of the last domain name came <b>directly from Sascha</b>, the website was made <b>for Sascha</b>, and Troy is just the one who owns it. He has since removed any positive mention of Sascha in exchange for <i><a href="article-pdfs/amalgamated-army/riley-protocol-00-introduction.pdf" target="_blank" rel="noopener">The Riley Protocol</a></i> and other documents strictly asserting Sascha is lying.
       </p>
 
       <p class="ink-rust"><i>That&rsquo;s not illegal, but it&rsquo;s not right.</i></p>
@@ -2312,7 +2363,7 @@ footer {
       <h2 id="sec-real">The documented record</h2>
 
       <p>
-        Troy&rsquo;s documented professional background, confirmed on his own LinkedIn, has nothing to do with journalism, investigation, or even neuroscience. He spent <b>two and a half years as a Senior Model Scout</b> at Aesthetics PPD in the Greater Tampa Bay Area, scouting and booking individuals of all ages for fashion and editorial productions. He then moved to New York, where from 2009 to 2011 he co-owned and operated a <b>dog walking company</b>. His education is in marketing and business.
+        Troy&rsquo;s documented professional background, confirmed on his own <a href="https://www.linkedin.com/in/troy-barile-28569412" target="_blank" rel="noopener">LinkedIn</a>, has nothing to do with journalism, investigation, or even neuroscience. He spent <b>two and a half years as a Senior Model Scout</b> at Aesthetics PPD in the Greater Tampa Bay Area, scouting and booking individuals of all ages for fashion and editorial productions. He then moved to New York, where from 2009 to 2011 he co-owned and operated a <b>dog walking company</b>. His education is in marketing and business.
       </p>
 
       <p>
@@ -2400,7 +2451,7 @@ footer {
       <h2 id="sec-gov">Primary court records</h2>
 
       <p>
-        In <b>2007</b>, Troy was charged in Pasco County, Florida with fraud &mdash; an insufficient funds check, Florida statute 832.05. It is confirmed on the Pasco County clerk&rsquo;s primary court database. The judge declined to enter a formal conviction, instead placing him on probation and ordering restitution; a disposition that keeps the charge off a standard background check. But it is not an acquittal. <b>Wachovia Bank</b> appears as a bondsman, implying arrest. <b>Wells Fargo</b> appears as an expert witness. This is not a background aggregator entry. <b>This is a primary court record.</b>
+        In <b>2007</b>, Troy was charged in Pasco County, Florida &mdash; an insufficient funds check, <a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&amp;URL=0800-0899/0832/Sections/0832.05.html" target="_blank" rel="noopener">Florida statute 832.05</a> (case CTC0705042MMAW). It is confirmed on the Pasco County clerk&rsquo;s primary court database. The disposition was <b>Adjudication Withheld</b>: the judge declined to enter a formal conviction, which keeps the charge off a standard background check. But it is not an acquittal. This is not a background aggregator entry. <b>This is a primary court record.</b>
       </p>
 
       <p>
@@ -2414,7 +2465,7 @@ footer {
       <div class="evidence is-2">
         <figure class="ev-fig">
           <div data-slot="ev-pasco" data-slot-purpose="Pasco County record" class="art-redact" style="aspect-ratio: 4 / 3;"></div>
-          <figcaption class="ev-cap"><b>Pasco County, FL</b> &mdash; 2007 fraud charge (Fla. Stat. 832.05), Wachovia as bondsman.</figcaption>
+          <figcaption class="ev-cap"><b>Pasco County, FL</b> &mdash; 2007 worthless-check charge (Fla. Stat. 832.05), adjudication withheld.</figcaption>
         </figure>
         <figure class="ev-fig">
           <div data-slot="ev-jackson" data-slot-purpose="Jackson County record" class="art-redact" style="aspect-ratio: 4 / 3;"></div>
@@ -2430,7 +2481,7 @@ footer {
       </p>
 
       <p>
-        In <b>2006</b>, Troy was charged with obtaining property by worthless check over the felony threshold &mdash; a third-degree felony under Florida statute: <b>Adjudication Withheld</b>. The Hillsborough County clerk&rsquo;s public portal returns no result for his name, which in Florida is consistent with a record that has been expunged. <i>This charge appears 3 separate times on aggregators.</i>
+        In <b>2006</b>, Troy was charged with obtaining property by worthless check over the felony threshold &mdash; a third-degree felony under <a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&amp;URL=0800-0899/0832/Sections/0832.05.html" target="_blank" rel="noopener">Florida statute</a>: <b>Adjudication Withheld</b>. The Hillsborough County clerk&rsquo;s public portal returns no result for his name, which in Florida is consistent with a record that has been expunged. <i>This charge appears 3 separate times on aggregators.</i>
       </p>
 
       <p>
@@ -2448,22 +2499,21 @@ footer {
       <!-- ================= SO WHAT'S THE PROBLEM ================= -->
       <div class="ar-break"><em>So what&rsquo;s the problem, then?</em></div>
 
-      <h2 id="sec-problem">How I got involved</h2>
 
       <p>
-        When I began my own personal investigation into Sascha Barros, <b>I was not doing it as a &ldquo;believer&rdquo;</b>. I thought it was a set of good opportunities to test the skills in investigative journalism I had been learning for nearly a year. Eventually, after joining the discourse around the story, I began to feel <b>the level of organized hatred directed at Sascha was disproportionate</b> to what any ordinary person, even a liar, actually deserved. That disproportionality felt like a signal worth investigating.
+        When I began my own personal investigation into Sascha Barros, <b>I was not covering Sascha as a believer. I was skeptical.</b> At first I thought it was a set of good opportunities to test the skills in investigative journalism that I had been learning for nearly a year. Eventually after joining the discourse around the story, I began to feel <b>the level of organized hatred directed at Sascha was disproportionate</b> to what any ordinary person, even a person with a factitious disorder, actually deserved. That disproportionality felt like a signal worth investigating.
       </p>
 
       <p>
-        So I pushed my way in with <b>Iterative Adversarial Inquiry</b>, a framework released after these events specifically to test who in the discourse was a genuine actor and who was performing as one. I began calling out well-known figures on their hypocrisy and self-stated contradictions: <b>Laura Robinson</b>, <b>Brandy Zadrozny</b>. Eventually one of those targets was <b>Troy Raymond Barile-Simleness</b>.
+        So I pushed my way in with <b><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6659879" target="_blank" rel="noopener">Iterative Adversarial Inquiry</a></b> specifically to test who in the discourse was a genuine actor and who was performing as one. I began calling out well known figures on their hypocrisy and self-stated contradictions: <b><a href="https://substack.com/@laurarbnsn" target="_blank" rel="noopener">Laura Robinson</a></b>, <b><a href="https://www.ms.now/news/sascha-riley-trump-epstein-conspiracy-theory" target="_blank" rel="noopener">Brandy Zadrozny</a></b>, and eventually, one of those targets was <b>Troy Raymond Barile-Simleness</b>.
       </p>
 
       <p>
-        Troy published a Substack piece on <b>April 15th</b> that withdrew his support for Sascha, called them a liar, and labeled them dangerous. On its face, as journalism, it was indefensible. It attacked an alleged trafficking survivor&rsquo;s credibility with no new evidence and compounded the existing harassment campaign against them. Its thesis was that finding minor irregularities in great enough numbers would invalidate Sascha&rsquo;s story, even going further to say that because of these inconsistencies it also proved they were dangerous. <b>Its methodology was scientific, but applied to no scientific field.</b>
+        Troy published <a href="article-pdfs/the-machine-substack/the-machine-31-the-sixth-layer_2026-04-16.pdf" target="_blank" rel="noopener">a Substack piece</a> on <b>April 15th</b> that withdrew his support for Sascha, called them a liar, and labeled them dangerous. On its face, as journalism, it was indefensible, it attacked an alleged trafficking survivor&rsquo;s credibility with no new evidence and compounded the existing harassment campaign against them. Its&rsquo; entire methodology was built off the idea that finding minor irregularities in great enough numbers would invalidate their story, even going further to say that because of these inconsistencies it also proved Sascha was dangerous.
       </p>
 
       <p>
-        I called him out publicly, in direct terms. I called him <b>weak</b>. I called him a <b>bad investigator</b>. And most importantly: <b>I told him he was a liability in the space he worked in</b>. I told him he would make a good case study as someone who used cultural rhetoric to defend their worldview &mdash; an even better one than Laura Robinson.
+        I called him out publicly for it, in direct terms. I called him <b>weak</b>. I called him a <b>bad investigator</b>. And most importantly, <b>I told him he was a liability in the space he worked in</b>. I called him a coward, and refused to speak in private about these things, as I was responding to a public article he published. I told him he would make a good case study as someone who used cultural rhetoric to defend their worldview, and an even better one than my previous case study, Laura Robinson. This would be his focus for the next few days.
       </p>
 
       <p>
@@ -2471,7 +2521,7 @@ footer {
       </p>
 
       <p>
-        Troy eventually messaged me on another account, telling me that his entire article was actually a plot: a tactic designed primarily to <b>gain the trust of Astra Crosby</b>, with a secondary goal of regaining Sascha&rsquo;s vehicle that was left at her house. According to Troy, his article was the first stage of a covert operation designed to insert himself into Astra&rsquo;s social circle with the ultimate goal of gaining information about Lisa Voldeng. If he did take that vehicle, he could have been arrested for the same charge as his arrest in Medford, Oregon in 2023.
+        Troy eventually messaged me on another account, telling me that his entire article was actually a plot: it was a tactic designed to <b>gain the trust of Astra Crosby</b>, and regain Sascha&rsquo;s vehicle that was left at her house. According to Troy, his article was the first stage of a covert operation designed to insert himself into Astra&rsquo;s social circle with the ultimate goal of gaining information about Lisa Voldeng. In 2023, he was found in a stolen car in Medford OR and arrested, a possible comparable situation, but we can only speculate. He was quickly released.
       </p>
 
       <p>
@@ -2574,7 +2624,6 @@ footer {
       <!-- ================= I AM NOT THE ARCHITECT ================= -->
       <div class="ar-break"><em>&ldquo;I am not the architect&hellip;&rdquo;</em></div>
 
-      <h2 id="sec-architect">The threats become direct</h2>
 
       <p>
         That section title quote came from before I was invited into the group chat, when the threats were minor, and I was not scared for my life. It is extremely important that this context be understood for what followed. <b>He found my personal Facebook and messaged me there</b> after I left that group chat.
@@ -2599,7 +2648,7 @@ footer {
 
       <div class="ar-receipt">
         <span class="who">Troy</span>
-        <p>&ldquo;That whole thing needs to go. They&rsquo;re going to know who you are talking about. <b>These people are very protective of me.</b>&rdquo;</p>
+        <p>&ldquo;That whole thing needs to go. They&rsquo;re going to know who you are talking about. <b>These people are very protective of me.</b> You see my number on Signal?&rdquo;</p>
       </div>
 
       <p>
@@ -2619,11 +2668,10 @@ footer {
 
       <div class="ar-receipt">
         <span class="who">Troy</span>
-        <p>&ldquo;You have two choices. You don&rsquo;t publish it at all and at this point you don&rsquo;t mention me or my operation or anything that could even be tied back to me if my mother were to read it. That&rsquo;s all I have to say. I will pull the deadman&rsquo;s switch.&rdquo;</p>
-        <p>&ldquo;My safety comes before yours and before Sascha&rsquo;s and before everyone else&rsquo;s.&rdquo;</p>
-        <p>&ldquo;So what&rsquo;s it going to be? You have two choices, which are you choosing?&rdquo;</p>
-        <p>&ldquo;And you&rsquo;re absolutely right I do know who you are and I know where you live and I know about your family and I know about your childhood. And so do thousands of other people. Because the other day, when you were a threat, you were put at the top of the list of people to watch. I&rsquo;m waiting for your answer. <b>You have two minutes.</b>&rdquo;</p>
-        <p>&ldquo;1 minute. It&rsquo;s you who is putting Sascha in danger.&rdquo;</p>
+        <p>&ldquo;You have two choices. You dont publish it at all and at this point you don&rsquo;t mention me or my operation of anything that could even be tied back to me if my mother were to read it.&rdquo;</p>
+        <p>&ldquo;That&rsquo;s all I have to say, I will pull the Deadman&rsquo;s Switch. My safety comes before yours and Sascha&rsquo;s and before everyone else&rsquo;s. The damage I could do is astronomical so be careful because you&rsquo;re skating on thin ice.&rdquo;</p>
+        <p>&ldquo;So what&rsquo;s it going to be? You have two choices, which are you choosing&hellip;? And you&rsquo;re right I do know who you are and I know where you live and I know about your family and I know about your childhood. And so do thousands of other people. Because the other day, when you were a threat, you were put at the top of the list of people to watch. I&rsquo;m waiting for your answer. <b>You have two minutes.</b>&rdquo;</p>
+        <p>&ldquo;1 minute. Its you who is putting Sascha in danger.&rdquo;</p>
         <p>&ldquo;<b>30 seconds.</b>&rdquo;</p>
       </div>
 
@@ -2635,7 +2683,7 @@ footer {
 
       <div class="ar-receipt">
         <span class="who">Troy</span>
-        <p>&ldquo;[Then] it&rsquo;s over for Sascha too. I even have their address. I also know who they live with. And a whole fucking lot more. <b>Information on their children</b> and everything. The fact this is happening right now is hilarious. <b>I have the power. Don&rsquo;t make me use it.</b>&rdquo;</p>
+        <p>&ldquo;It&rsquo;s over for Sascha too. I even have their address. I also know who they live with. And a whole fucking lot more. <b>Information on their children</b> and everything. The fact this is happening right now is hilarious. <b>I have the power. Dont make me use it.</b>&rdquo;</p>
       </div>
 
       <p>
@@ -2672,9 +2720,7 @@ footer {
       </p>
 
       <!-- ================= REAL LIFE EVENTS ================= -->
-      <div class="ar-break"><em>At exactly 6:16, 3 hours later, something occurred in my own home.</em></div>
 
-      <h2 id="sec-real-life">The events that occurred in real life</h2>
 
       <p>
         I became more scared than I had ever been in my life. I suddenly believed everything Troy had said. <b>I fled my home to a hotel. I checked my car for GPS trackers.</b> I may have been posting about the threats I was receiving for the previous 24 hours, but this is the first moment I actually believed them.
@@ -2696,19 +2742,15 @@ footer {
         The car stopped directly in front of us, blocking our path, then turned perpendicular to the lanes in front of us, and too slowly began pulling away. It stopped diagonal in the road, cutting us off from the store, <b>effectively pinning us against the edge of the road</b>. As we quickly walked away, it turned back toward us as we entered the store. It only occurred to me once we were inside what it could have meant. I was still not yet paranoid.
       </p>
 
-      <div class="evidence is-2">
+      <div class="evidence">
         <figure class="ev-fig">
           <div data-slot="ev-duplex" data-slot-purpose="Duplex front" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
           <figcaption class="ev-cap"><b>Front of the duplex</b> &mdash; abandoned car gone, work truck in its place, 17 Apr.</figcaption>
         </figure>
-        <figure class="ev-fig">
-          <div data-slot="ev-grocery" data-slot-purpose="Grocery lane diagram" class="art-blueprint" style="aspect-ratio: 4 / 3;"></div>
-          <figcaption class="ev-cap"><b>Grocery store lane diagram</b> &mdash; car&rsquo;s path, blocking + pinning, 17 Apr night.</figcaption>
-        </figure>
       </div>
 
       <p>
-        That night, as my roommate evacuated from our home, and as she was pulling away, she drove past the place where the abandoned car had been, where the work truck had been earlier that very day. She says what she saw, given the context, <b>gave her chills</b>. A dark truck or van with a similarly blacked-out windshield, parked nearby, connected to a generic, windowless, white trailer. She was in so much fear she couldn&rsquo;t even bring herself to look at the vehicle. When she returned hours later to bring me to a hotel due to the sound event, <b>both the trailer and vehicle were gone</b>. In its place is only a patch of concrete, still covered with years of caked leaves on the ground.
+        That night, as my roommate evacuated from our home, and as she was pulling away, she drove past the place where the abandoned car had been, where the work truck had been earlier that very day. She says what she saw, given the context, <b>gave her chills</b>. She said she saw a dark truck or van with a similarly blacked-out windshield parked nearby. At that point, she was in so much fear she couldn&rsquo;t even bring herself to look at the vehicle. She cannot event identify if it was a truck with a bed, or a SUV or van. When she returned hours later to bring me to a hotel due to the next events that happened, <b>both the trailer and vehicle was were gone</b>.
       </p>
 
       <p>
@@ -2733,14 +2775,14 @@ footer {
         I have never been so scared in my life. Even now, I am not comfortable entertaining the idea this was anything but a hallucination inside my own head, <b>but I can&rsquo;t ignore the possibility</b>. I left after that and did not return for days, until drafting a series of statements, buying security cameras, and checking with a licensed therapist.
       </p>
 
-      <h3>Directional Ultrasonic Devices &mdash; commercially available.</h3>
+      <h3><a href="https://en.wikipedia.org/wiki/Sonic_weapon" target="_blank" rel="noopener">Directional Ultrasonic Devices</a> &mdash; commercially available.</h3>
 
       <p>
         These systems utilize ultrasonic transducers to create a <b>narrow, laser-like beam of sound</b> that only becomes audible when it interacts with a surface or the listener&rsquo;s head, allowing for precise targeting that leaves little acoustic trace in the surrounding environment. While once highly inaccessible technology, these devices are now widely accessible for legitimate uses in high-end retail displays, museums, and targeted advertising. Anyone determined enough can build a DIY acoustic device for as little as <b>$5 to $15 thousand dollars</b>.
       </p>
 
       <p>
-        This commercial availability means that any corrupt organized group, or any individual with a budget, can deploy these tools to harass a target or disrupt a space without the massive logistical footprint or power requirements of older, military-grade LRAD systems.
+        This commercial availability means that any corrupt organized group, or any individual with a budget, can deploy these tools to harass a target or disrupt a space without the massive logistical footprint or power requirements of older, military-grade <a href="https://en.wikipedia.org/wiki/Long-range_acoustic_device" target="_blank" rel="noopener">LRAD systems</a>.
       </p>
 
       <p>
@@ -2748,14 +2790,14 @@ footer {
       </p>
 
       <p>
-        Soon after I fled and before I returned home, I released a <i>&ldquo;cold&rdquo;</i> version of the article. I avoided mentioning Troy because of the threats. I have calmed since, and my perspective has changed.
+        Soon after I fled and before I returned home, I released a <a href="https://leomaestri.substack.com/p/the-horrors-were-always-real-the" target="_blank" rel="noopener"><i>&ldquo;cold&rdquo;</i> version of the article</a>. I avoided mentioning Troy because of the threats. I have calmed since, and my perspective has changed.
       </p>
 
       <!-- ================= THE RILEY PROTOCOL ================= -->
       <h2 id="sec-riley">His response document</h2>
 
       <p>
-        Troy dropped his next article about Sascha, called <b>The Riley Protocol</b>, about 48 hours later. Formatted as a <b>congressional reference document</b> on Sascha&rsquo;s own website, filled with academic citations, evidentiary tiers, and a forensic matrix that goes far beyond anything in his previous career. <i>Seven of nine narrative dimensions score below 30%</i> on a <b>&ldquo;credibility chart&rdquo; he built himself</b>.
+        Troy dropped his next article about Sascha, called <b><a href="article-pdfs/amalgamated-army/riley-protocol-00-introduction.pdf" target="_blank" rel="noopener">The Riley Protocol</a></b>, about 48 hours later. Formatted as a <b>congressional reference document</b> on Sascha&rsquo;s own website, filled with academic citations, evidentiary tiers, and a forensic matrix that goes far beyond anything in his previous career. <i>Seven of nine narrative dimensions score below 30%</i> on a <b>&ldquo;credibility chart&rdquo; he built himself</b>.
       </p>
 
       <div class="evidence is-2">
@@ -2768,6 +2810,15 @@ footer {
           <figcaption class="ev-cap"><b>Riley Protocol</b> &mdash; the self-built &ldquo;credibility chart&rdquo; with self-chosen scoring.</figcaption>
         </figure>
       </div>
+
+      <p class="ar-source" style="font-family: var(--mono); font-size: 13px; color: #6b6257; margin: 4px 0 22px;">
+        Amalgamated Army has since been taken offline. Archived copies:
+        <a href="article-pdfs/amalgamated-army/riley-protocol-00-introduction.pdf" target="_blank" rel="noopener">Introduction</a> &middot;
+        <a href="article-pdfs/amalgamated-army/riley-protocol-01-public-record.pdf" target="_blank" rel="noopener">Part I</a> &middot;
+        <a href="article-pdfs/amalgamated-army/riley-protocol-02-internal-record.pdf" target="_blank" rel="noopener">Part II</a> &middot;
+        <a href="article-pdfs/amalgamated-army/riley-protocol-03-integrated-assessment.pdf" target="_blank" rel="noopener">Part III</a> &middot;
+        <a href="article-pdfs/the-machine-substack/the-machine-32-man-on-the-inside-and-riley-protocol-part-iv_2026-04-23.pdf" target="_blank" rel="noopener">Part IV</a>.
+      </p>
 
       <p>
         The full response to its specific claims will be the subject of a separate piece. What needs to be said here is simpler and more foundational.
@@ -2796,19 +2847,19 @@ footer {
       </div>
 
       <p>
-        The &ldquo;credibility chart&rdquo; does not become data because it looks like data. Troy chose the numbers himself, applied them himself, and had it validated by no one but himself. He then <b>submitted it to congressional offices as forensic analysis</b>.
+        The &ldquo;credibility chart&rdquo; does not become data because it looks like data. Troy chose the number 14%, applied it himself, and had it validated by no one. He then <b>submitted it to congressional offices as forensic analysis</b>.
       </p>
 
       <p>Why? Was Congress actively investigating? <b>He didn&rsquo;t do this for Congress; he did it to fool everyone who read it into thinking it was a legitimate piece of journalism.</b></p>
 
       <p>
-        His own $10 OSINT workbook, sold to the same audience reading The Riley Protocol, explicitly states that an investigator&rsquo;s job is to present documented facts and let readers draw conclusions. He violated that on a foundational level with every scoring category he pulled out of his own ass to assert those conclusions himself. <b>The chart is his conclusion wearing a lab coat and a fake pair of glasses.</b>
+        His own $10 OSINT workbook, sold to the same audience reading The Riley Protocol, explicitly states that an investigator&rsquo;s job is to present documented facts and let readers draw conclusions. He violated that in every scoring category. <b>The chart is his conclusion wearing a lab coat.</b>
       </p>
 
       <h3>Memory science is not ambiguous.</h3>
 
       <p>
-        Inconsistent memory is normal, expected, and exceptions to that are so rare they are labeled: <b>Eidetic Memory</b>, <b>Savant Syndrome</b>, etc. Troy cites memory science in his own theoretical framework, which makes his intentional, knowledgeable misapplication of it inexcusable.
+        Inconsistent memory is normal, expected, and exceptions to that are so rare they are labeled: <b><a href="https://en.wikipedia.org/wiki/Eidetic_memory" target="_blank" rel="noopener">Eidetic Memory</a></b>, <b><a href="https://en.wikipedia.org/wiki/Savant_syndrome" target="_blank" rel="noopener">Savant Syndrome</a></b>, etc. Troy cites memory science in his own theoretical framework, which makes his application of it inexcusable.
       </p>
 
       <p>
@@ -2816,11 +2867,11 @@ footer {
       </p>
 
       <div class="ar-pull is-pink">
-        It is a standard calibrated specifically to make survivors impossible to believe, and Troy dressed it up in academic citations and called it forensic analysis.
+        It is a standard calibrated specifically to make survivors impossible to believe, and Troy dressed it up in academic citations and called it forensic analysis. It&rsquo;s pathetic.
       </div>
 
       <p>
-        This cognitive fragility is often culturally weaponized through the tactic of <b>DARVO</b>: <i>Deny, Attack; Reverse Victim and Offender</i>. By hyper-focusing on chronological errors, bad-faith actors poison the well, shifting public scrutiny from the actions of the accused to the flaws of the survivor.
+        This cognitive fragility is often culturally weaponized through the tactic of <b><a href="https://www.jjfreyd.com/darvo" target="_blank" rel="noopener">DARVO</a></b>: <i>Deny, Attack, and Reverse Victim and Offender</i>. By hyper-focusing on a single chronological error, bad-faith actors &ldquo;poison the well,&rdquo; shifting public scrutiny from the actions of the accused to the cognitive flaws of the survivor. This is often bolstered by a &ldquo;False Memory&rdquo; defense, which uses the history of induced memories to create a blanket shield for powerful entities.
       </p>
 
       <p>
@@ -2874,7 +2925,7 @@ footer {
           <span class="n">03</span>
           <div>
             <h4>Witness Tampering</h4>
-            <p>Troy threatened me if I published information about conduct connected to an ongoing matter involving Sascha Barros, a named party in publicly documented harassment and abuse allegations. Under federal witness tampering statute, attempting to intimidate, threaten, or corruptly persuade another person constitutes witness tampering regardless of whether formal proceedings have been initiated.</p>
+            <p>Troy threatened me if I published information about conduct connected to an ongoing matter involving Sascha Barros, a named party in publicly documented harassment and abuse allegations. Under <a href="https://www.law.cornell.edu/uscode/text/18/1512" target="_blank" rel="noopener">federal witness tampering statute</a>, attempting to intimidate, threaten, or corruptly persuade another person constitutes witness tampering regardless of whether formal proceedings have been initiated.</p>
           </div>
         </div>
         <div class="ar-crime">
@@ -2962,7 +3013,7 @@ footer {
       </p>
 
       <p>
-        His article on Sascha hit me in the face because all of his attacks on Sascha <b>applied to me directly as a survivor of abuse</b>. I told him this at the very beginning. Before any DMs had been exchanged, in my very first post tagging him about his article.
+        His article on Sascha hit me in the face because all of his attacks on Sascha <b>applied to me directly as a survivor of abuse</b>. I told him this at the very beginning. Before any DMs had been exchanged, in <a href="https://www.threads.com/@snowmason/post/DXN6NbkFFB1" target="_blank" rel="noopener">my very first post</a> tagging him about his article.
       </p>
 
       <p>
@@ -2982,11 +3033,8 @@ footer {
         <div class="msg troy" data-who="Troy">You&rsquo;re literally about to make me cry.</div>
         <div class="msg me" data-who="Me">And you need to understand.</div>
         <div class="msg troy" data-who="Troy">I want to understand.</div>
-      </div>
-
-      <div class="ar-pull is-gold">
-        Come back to safety, Troy. It&rsquo;s what we all want. It&rsquo;s what Sascha wants.
-        <cite>I begged.</cite>
+        <div class="msg me" data-who="Me">Come back to safety, Troy.</div>
+        <div class="msg me" data-who="Me">It&rsquo;s what we all want. It&rsquo;s what Sascha wants.</div>
       </div>
 
       <p>
@@ -3001,28 +3049,23 @@ footer {
         The severity of Troy&rsquo;s conduct lies in his willingness to transition from an ally to an aggressor the moment his narrative was challenged. His documented threats against a journalist, a clinician, a survivor, and even children, reveal <b>a pattern of behavior designed to induce terror</b> &mdash; and does not require credibility to be used as a weapon of fear.
       </p>
 
+      <div class="ar-close">
+        <p><em>He should be ashamed.</em></p>
+        <p class="is-final"><em>And he should leave.</em></p>
+      </div>
+
     </article>
   </div>
 
   <!-- ============================================================
        CLOSING BAND  —  the final two lines, large
        ============================================================ -->
-  <div class="ar-close">
-    <p><em>He should be ashamed.</em></p>
-    <p class="is-final"><em>And he should leave.</em></p>
-  </div>
 
   <!-- end-of-article meta — filed/author/edition, below the closing -->
   <div class="ar-end-meta" style="max-width: var(--art-max); margin: 0 auto; padding: 0 var(--pad-x) 64px;">
     <div>
-      <b>Filed</b> &middot; 04 May 2026 <br>
-      <b>Author</b> &middot; L. V. Maestri <br>
-      <b>Edition</b> &middot; v.2.0 (merged with appendix)
-    </div>
-    <div>
-      <b>Receipts</b> &middot; available on request <br>
-      <b>Excluded</b> &middot; private Signal chats involving Sascha <br>
-      <b>Next</b> &middot; a dedicated response to <i>The Riley Protocol</i>
+      04 May 2026 &middot; L. V. Maestri <br>
+      Version 2 is expanded and merged with the timeline and evidence appendix.
     </div>
   </div>
 
@@ -3273,7 +3316,6 @@ footer {
     { "id": "ev-pasco",      "purpose": "Pasco County",      "art": "art-redact" },
     { "id": "ev-jackson",    "purpose": "Jackson County",    "art": "art-redact" },
     { "id": "ev-duplex",     "purpose": "Duplex front",      "art": "art-blueprint" },
-    { "id": "ev-grocery",    "purpose": "Grocery lane",      "art": "art-blueprint" },
     { "id": "ev-riley1",     "purpose": "Riley Protocol cover","art": "art-graph" },
     { "id": "ev-riley2",     "purpose": "Riley Protocol chart","art": "art-graph" }
   ]
