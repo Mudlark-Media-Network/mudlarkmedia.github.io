@@ -59,105 +59,54 @@ body > .bg-pattern{ z-index:0; }
 .nav a.c-pink::before{background:var(--pink);} .nav a.c-blue::before{background:var(--blue);} .nav a.c-green::before{background:var(--green);}
 .nav a.c-cream::before{background:var(--ink-soft);}
 
-main{ flex:1; padding:0 var(--pad-x) 96px; }
+main{ flex:1; padding:0 var(--pad-x) 64px; }
 .wrap{ max-width:var(--max-w); margin:0 auto; }
 
 /* ============================ PAGE HEAD ============================ */
-.page-head{ padding:64px 0 32px; border-bottom:1px solid var(--rule); }
-.page-kicker{ font-family:var(--mono); font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--rust); margin-bottom:18px; }
-.page-h1{ font-family:var(--serif-d); font-weight:500; font-size:clamp(40px,5.2vw,72px); letter-spacing:-0.022em; line-height:0.98; max-width:18ch; margin-bottom:18px; }
+.page-head{ padding:44px 0 26px; border-bottom:1px solid var(--rule); text-align:center; }
+.page-h1{ font-family:var(--serif-d); font-weight:500; font-size:clamp(22px,2.6vw,32px); letter-spacing:0.03em; line-height:1.1; text-transform:uppercase; }
 .page-h1 em{ font-style:italic; color:var(--rust); }
-.page-deck{ font-family:var(--serif-b); font-size:17.5px; color:var(--ink-soft); max-width:64ch; }
 
-/* ============================ HERO BANNER ROWS ============================ */
-.heroes{ display:flex; flex-direction:column; gap:0; }
+/* ============================ ARCHIVE INDEX ============================ */
+.heroes{ display:flex; flex-direction:column; }
 
 .hero{
-  display:grid; grid-template-columns: 1.05fr 1fr;
-  gap:56px;
-  padding:64px 0;
+  display:block;
+  padding: 18px 0;
   border-bottom:1px solid var(--rule);
-  align-items:center;
 }
 .hero:hover .hero-head{ color:var(--accent, var(--rust)); }
 
-.hero-fig{
-  position:relative; aspect-ratio: 16 / 11;
-  background: color-mix(in srgb, var(--accent, var(--rust)) 18%, var(--bg-surf));
-  overflow:hidden;
-}
-.hero-fig .stamp{
-  position:absolute; top:14px; left:14px;
-  font-family:var(--mono); font-size:10.5px;
-  letter-spacing:0.08em; text-transform:uppercase;
-  color:var(--accent, var(--rust));
-  padding:4px 8px;
-  background: rgba(19,18,16,0.7);
-  backdrop-filter: blur(2px);
-}
-.hero-fig .cap{
-  position:absolute; bottom:14px; left:14px; right:14px;
-  display:flex; justify-content:space-between;
-  font-family:var(--mono); font-size:10.5px;
-  color:var(--ink-soft); letter-spacing:0.05em; text-transform:uppercase;
-}
-.hero-fig.is-draft{ background: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--accent, var(--rust)) 14%, transparent) 11px 12px), var(--bg-surf); }
-
-/* simple svg-ish geometric fills via gradients per article */
-.hero-fig.a1{ background:
-  radial-gradient(60% 50% at 30% 35%, color-mix(in srgb, var(--c-2) 40%, transparent), transparent),
-  radial-gradient(40% 40% at 75% 70%, color-mix(in srgb, var(--c-5) 35%, transparent), transparent),
-  var(--bg-surf);
-}
-.hero-fig.a2{ background:
-  linear-gradient(180deg, color-mix(in srgb, var(--c-2) 22%, transparent), transparent 70%),
-  repeating-linear-gradient(90deg, transparent 0 30px, color-mix(in srgb, var(--c-1) 12%, transparent) 30px 31px),
-  var(--bg-surf);
-}
-.hero-fig.a3{ background:
-  conic-gradient(from 220deg at 70% 40%, color-mix(in srgb, var(--c-5) 35%, transparent), transparent 40%),
-  repeating-linear-gradient(45deg, transparent 0 14px, color-mix(in srgb, var(--c-2) 12%, transparent) 14px 15px),
-  var(--bg-surf);
-}
-
-.hero-text{}
-.hero-kicker{ font-family:var(--mono); font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent, var(--rust)); margin-bottom:18px; }
-.hero-kicker .sep{ color:var(--ink-mute); margin:0 9px; }
+.hero-kicker{ font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:7px; }
+.hero-kicker .sep{ color:var(--ink-mute); margin:0 5px; }
 .hero-head{
   font-family:var(--serif-d); font-weight:500;
-  font-size:clamp(30px, 3.6vw, 50px);
-  letter-spacing:-0.022em; line-height:1.0;
-  margin-bottom:18px; max-width:22ch;
+  font-size:clamp(22px, 2.3vw, 30px);
+  letter-spacing:-0.018em; line-height:1.08;
+  margin-bottom:6px; max-width:40ch;
   transition: color 0.15s;
 }
 .hero-head em{ font-style:italic; color: var(--accent, var(--rust)); }
-.hero-deck{ font-family:var(--serif-b); font-size:17px; color:var(--ink-soft); max-width:54ch; margin-bottom:22px; }
-.hero-meta{ font-family:var(--sans); font-size:13px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:6px 16px; margin-bottom:22px; }
-.hero-meta .sep{ color:var(--ink-mute); }
+.hero-deck{ font-family:var(--serif-b); font-size:15px; line-height:1.42; color:var(--ink-soft); max-width:66ch; margin-bottom:9px; }
 .hero-go{
-  display:inline-flex; align-items:center; gap:10px;
-  font-family:var(--sans); font-size:14px; color:var(--ink);
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:var(--sans); font-size:12px; color:var(--ink-soft);
   border-bottom:1px solid var(--accent, var(--rust));
-  padding:6px 0 4px;
+  padding:4px 0 3px;
   transition: gap 0.15s, color 0.15s;
 }
-.hero-go:hover{ gap:14px; color:var(--accent, var(--rust)); }
+.hero-go:hover{ gap:13px; color:var(--accent, var(--rust)); }
 
 .hero.is-draft .hero-head em,
 .hero.is-draft .hero-kicker,
-.hero.is-draft .hero-fig .stamp,
 .hero.is-draft .hero-go{ color: var(--c-5); border-color: var(--c-5); }
 .hero.is-draft:hover .hero-head{ color: var(--c-5); }
 
 @media (max-width: 820px){
-  .hero{ grid-template-columns: 1fr; gap:28px; padding:48px 0; }
+  .hero{ padding:14px 0; }
 }
 
-/* ============================ FOOT NOTE ============================ */
-.foot-note{ padding:48px 0 0; font-family:var(--mono); font-size:12.5px; color:var(--ink-mute); max-width:64ch; }
-.foot-note a{ color:var(--ink); border-bottom:1px solid var(--rule); padding-bottom:1px; }
-.foot-note a:hover{ border-color:var(--rust); color:var(--rust); }
-
+/* ============================ FOOTER ============================ */
 footer{ border-top:1px solid var(--rule); padding:40px var(--pad-x); margin-top:auto; }
 .foot-inner{ max-width:var(--max-w); margin:0 auto; display:flex; justify-content:space-between; align-items:baseline; gap:24px; flex-wrap:wrap; }
 .foot-brand{ font-family:var(--sans); font-size:16px; letter-spacing:-0.01em; }
@@ -196,66 +145,38 @@ footer{ border-top:1px solid var(--rule); padding:40px var(--pad-x); margin-top:
 <main>
 
   <section class="wrap page-head">
-    <p class="page-kicker">Archive · Mudlark Media</p>
-    <h1 class="page-h1"><em>Articles</em>, in order of publication.</h1>
-    <p class="page-deck">
-      Two long-form pieces are currently live. A third is in draft and will be added when finished. Every published article carries its own timeline and evidence appendix.
-    </p>
+    <h1 class="page-h1">Articles and Publications</h1>
   </section>
 
   <section class="wrap heroes">
 
-    <!-- HERO 1 — Fallout -->
     <a class="hero" href="/website/pages/articles/fallout-troy-barile-simleness.html" style="--accent: var(--c-2);">
-      <figure class="hero-fig a1">
-        <span class="stamp">Article · 01</span>
-        <span class="cap"><span>Timeline &amp; Evidence Appendix</span><span>2025–2026</span></span>
-      </figure>
       <div class="hero-text">
-        <p class="hero-kicker">Posted 04 May 2026 <span class="sep">·</span> Long form</p>
+        <p class="hero-kicker">04 May 2026 <span class="sep">·</span> L.&nbsp;V.&nbsp;Maestri <span class="sep">·</span> ~50 min read</p>
         <h2 class="hero-head">My <em>Fallout</em> with Troy Barile-Simleness.</h2>
-        <p class="hero-deck">Academic fraud and weaponized trust — how an "investigative journalist" used fabricated authority to threaten lives and silence truth. Merged with the timeline and evidence appendix.</p>
-        <p class="hero-meta"><span>By L.&nbsp;V.&nbsp;Maestri</span><span class="sep">·</span><span>~50 min read</span></p>
+        <p class="hero-deck">Academic fraud and weaponized trust: how an "investigative journalist" used fabricated authority to threaten lives and silence truth.</p>
         <span class="hero-go">Read the article <span aria-hidden="true">→</span></span>
       </div>
     </a>
 
-    <!-- HERO 2 — Horrors -->
     <a class="hero" href="/website/pages/articles/the-horrors-were-always-real.html" style="--accent: var(--c-2);">
-      <figure class="hero-fig a2">
-        <span class="stamp">Article · 02</span>
-        <span class="cap"><span>The current reality &amp; truth of Sascha Barros</span><span>2026</span></span>
-      </figure>
       <div class="hero-text">
-        <p class="hero-kicker">Posted 25 Apr 2026 <span class="sep">·</span> Long form</p>
+        <p class="hero-kicker">25 Apr 2026 <span class="sep">·</span> L.&nbsp;V.&nbsp;Maestri <span class="sep">·</span> ~90 min read</p>
         <h2 class="hero-head">The Horrors Were <em>Always Real.</em></h2>
-        <p class="hero-deck">How bad actors have led the world astray about the story of Sascha&nbsp;Barros (THEY/THEM) — and why the dismissal of one survivor reflects the dismissal of all of them.</p>
-        <p class="hero-meta"><span>By L.&nbsp;V.&nbsp;Maestri</span><span class="sep">·</span><span>~90 min read</span></p>
+        <p class="hero-deck">How bad actors have led the world astray about the story of Sascha&nbsp;Barros (THEY/THEM), and why the dismissal of one survivor reflects the dismissal of all of them.</p>
         <span class="hero-go">Read the article <span aria-hidden="true">→</span></span>
       </div>
     </a>
 
-    <!-- HERO 3 — Conclusion Came First (forthcoming) -->
     <a class="hero is-draft" href="/website/pages/articles/the-conclusion-came-first.html" style="--accent: var(--c-5);">
-      <figure class="hero-fig a3 is-draft">
-        <span class="stamp">Article · 03 — forthcoming</span>
-        <span class="cap"><span>On the work of Brandy Zadrozny</span><span>~30 min</span></span>
-      </figure>
       <div class="hero-text">
-        <p class="hero-kicker">Forthcoming · 11 Apr 2026 (draft) <span class="sep">·</span> Long form</p>
+        <p class="hero-kicker">Forthcoming <span class="sep">·</span> L.&nbsp;V.&nbsp;Maestri <span class="sep">·</span> ~30 min read</p>
         <h2 class="hero-head">The <em>Conclusion</em> Came First.</h2>
-        <p class="hero-deck">How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead — at the cost of the people her work is supposed to protect.</p>
-        <p class="hero-meta"><span>By L.&nbsp;V.&nbsp;Maestri</span><span class="sep">·</span><span>~30 min read</span><span class="sep">·</span><span>Status: drafting</span></p>
-        <span class="hero-go">See the holding page <span aria-hidden="true">→</span></span>
+        <p class="hero-deck">How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead, at the cost of the people her work is supposed to protect.</p>
+        <span class="hero-go">See what's coming <span aria-hidden="true">→</span></span>
       </div>
     </a>
 
-  </section>
-
-  <section class="wrap foot-note">
-    <p>
-      Articles are released as they are ready, not on a schedule. Corrections are appended to the original piece, not buried. If you have evidence relevant to a live article, reach the network via <a href="/website/pages/contact.html">the contact page</a>.
-    </p>
   </section>
 
 </main>
