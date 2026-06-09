@@ -63,9 +63,20 @@ main{ flex:1; padding:0 var(--pad-x) 64px; }
 .wrap{ max-width:var(--max-w); margin:0 auto; }
 
 /* ============================ PAGE HEAD ============================ */
-.page-head{ padding:44px 0 26px; border-bottom:1px solid var(--rule); text-align:center; }
-.page-h1{ font-family:var(--serif-d); font-weight:500; font-size:clamp(22px,2.6vw,32px); letter-spacing:0.03em; line-height:1.1; text-transform:uppercase; }
+/* uppercase caps sit high in the line box, so bottom padding runs a touch larger to optically center the title */
+.page-head{ padding:33px 0 37px; border-bottom:1px solid var(--rule); }
+.page-head-row{ display:flex; align-items:center; justify-content:center; gap:clamp(14px,2.5vw,26px); }
+.ph-rule{ position:relative; flex:0 0 auto; width:clamp(22px,7vw,80px); height:1px; background:var(--rule); }
+.ph-rule::after{ content:''; position:absolute; top:50%; width:5px; height:5px; border-radius:50%; background:var(--rust); transform:translateY(-50%); }
+.ph-rule.l::after{ right:-2px; }
+.ph-rule.r::after{ left:-2px; }
+.page-h1{ font-family:var(--serif-d); font-weight:500; font-size:clamp(20px,2.4vw,30px); letter-spacing:0.08em; word-spacing:-0.12em; text-indent:0.08em; line-height:1.1; text-transform:uppercase; white-space:nowrap; text-align:center; color:var(--ink); }
 .page-h1 em{ font-style:italic; color:var(--rust); }
+
+@media (max-width:560px){
+  .ph-rule{ display:none; }
+  .page-h1{ white-space:normal; letter-spacing:0.05em; word-spacing:normal; }
+}
 
 /* ============================ ARCHIVE INDEX ============================ */
 .heroes{ display:flex; flex-direction:column; }
@@ -145,15 +156,19 @@ footer{ border-top:1px solid var(--rule); padding:40px var(--pad-x); margin-top:
 <main>
 
   <section class="wrap page-head">
-    <h1 class="page-h1">Articles and Publications</h1>
+    <div class="page-head-row">
+      <span class="ph-rule l" aria-hidden="true"></span>
+      <h1 class="page-h1">Articles and Publications</h1>
+      <span class="ph-rule r" aria-hidden="true"></span>
+    </div>
   </section>
 
   <section class="wrap heroes">
 
     <a class="hero" href="/website/pages/articles/fallout-troy-barile-simleness.html" style="--accent: var(--c-2);">
       <div class="hero-text">
-        <p class="hero-kicker">04 May 2026 <span class="sep">·</span> L.&nbsp;V.&nbsp;Maestri <span class="sep">·</span> ~50 min read</p>
-        <h2 class="hero-head">My <em>Fallout</em> with Troy Barile-Simleness.</h2>
+        <p class="hero-kicker">09 Jun 2026 <span class="sep">·</span> L.&nbsp;V.&nbsp;Maestri <span class="sep">·</span> ~50 min read</p>
+        <h2 class="hero-head">My <em>Fallout</em> with Troy Barile-Simleness. v2</h2>
         <p class="hero-deck">Academic fraud and weaponized trust: how an "investigative journalist" used fabricated authority to threaten lives and silence truth.</p>
         <span class="hero-go">Read the article <span aria-hidden="true">→</span></span>
       </div>
