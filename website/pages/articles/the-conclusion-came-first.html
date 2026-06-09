@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Conclusion Came First &mdash; Mudlark Media</title>
-<meta name="description" content="Under construction. An upcoming piece on Brandy Zadrozny's reporting methods and the cost to victims.">
+<meta name="description" content="How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead, at the cost of the people her work is supposed to protect.">
 
 <style>
+/* ============================== FONTS ============================== */
 @font-face {
   font-family: 'Michroma';
   src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Michroma/Michroma-Regular.ttf') format('truetype');
@@ -16,6 +17,11 @@
   font-family: 'Public Sans';
   src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Public_Sans/static/PublicSans-Regular.ttf') format('truetype');
   font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Public Sans';
+  src: url('https://raw.githubusercontent.com/Mudlark-Media-Network/mudlarkmedia.github.io/main/website/Style Guide/Fonts/Public_Sans/static/PublicSans-Italic.ttf') format('truetype');
+  font-weight: 100 1000; font-style: italic; font-display: swap;
 }
 @font-face {
   font-family: 'Orbitron';
@@ -28,30 +34,40 @@
   font-weight: 300 700; font-style: normal; font-display: swap;
 }
 
+/* ============================== ROOT ============================== */
 :root {
-  --bg:       var(--c-7);
-  --bg-surf:  var(--c-8);
-  --rule:     color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
-  --ink:      var(--c-9);
-  --ink-soft: var(--c-10);
-  --ink-mute: color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
+  --bg:        var(--c-7);
+  --bg-surf:   var(--c-8);
+  --rule:      color-mix(in srgb, var(--c-7) 88%, var(--c-9) 12%);
+  --rule-on:   color-mix(in srgb, var(--c-7) 78%, var(--c-9) 22%);
+  --ink:       var(--c-9);
+  --ink-soft:  var(--c-10);
+  --ink-mute:  color-mix(in srgb, var(--c-7) 40%, var(--c-10) 60%);
   --gold: var(--c-1); --rust: var(--c-2); --teal: var(--c-3);
   --blue: var(--c-4); --pink: var(--c-5); --green: var(--c-6);
+
+  --tint-gold: color-mix(in srgb, transparent 93%, var(--c-1));
+  --tint-rust: color-mix(in srgb, transparent 93%, var(--c-2));
+  --tint-teal: color-mix(in srgb, transparent 93%, var(--c-3));
+  --tint-blue: color-mix(in srgb, transparent 93%, var(--c-4));
+  --tint-pink: color-mix(in srgb, transparent 93%, var(--c-5));
 
   --serif-d: 'Michroma', 'Georgia', serif;
   --serif-b: 'Public Sans', 'Georgia', serif;
   --sans:    'Orbitron', system-ui, sans-serif;
   --mono:    'Azeret Mono', ui-monospace, monospace;
 
-  --pad-x: clamp(20px, 4vw, 56px);
   --max-w: 1360px;
+  --art-max: 1180px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: var(--bg); color: var(--ink); font-family: var(--serif-b); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+html { background: var(--bg); color: var(--ink); font-family: var(--serif-b); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 body { min-height: 100vh; display: flex; flex-direction: column; }
 a { color: inherit; text-decoration: none; }
 ::selection { background: var(--gold); color: var(--bg); }
+img { max-width: 100%; display: block; }
+b, strong { font-weight: 600; }
 
 .bg-pattern { position: fixed; inset: 0; z-index: 0; pointer-events: none; color: var(--bg-pattern-color); opacity: var(--bg-pattern-alpha); }
 body > * { position: relative; z-index: 1; }
@@ -83,49 +99,177 @@ body > .bg-pattern { z-index: 0; }
 .nav a.c-green::before { background: var(--green); }
 .nav a.c-cream::before { background: var(--ink-soft); }
 
-main { flex: 1; padding: 0 var(--pad-x) 96px; }
+main { flex: 1; padding: 0 var(--pad-x) 64px; }
 .wrap { max-width: var(--max-w); margin: 0 auto; }
 
-.uc {
-  display: flex; flex-direction: column; align-items: flex-start;
-  padding: 96px 0;
+/* ============================== ARTICLE HEADER ============================== */
+.ar-header {
+  padding: calc(56px * var(--rhythm)) 0 48px;
   border-bottom: 1px solid var(--rule);
+  max-width: var(--art-max);
+  margin: 0 auto;
 }
-.uc-kicker {
-  font-family: var(--mono); font-size: 11.5px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--rust); margin-bottom: 24px;
+.ar-header-kicker {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-mute); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 16px;
 }
-.uc-head {
+.ar-header-kicker::before {
+  content: ''; display: block; width: 32px; height: 1px;
+  background: var(--rust); flex-shrink: 0;
+}
+.ar-header-id { color: var(--ink-soft); margin-left: 4px; }
+.ar-header-title {
   font-family: var(--serif-d); font-weight: 500;
-  font-size: clamp(36px, 4.6vw, 64px);
-  line-height: 0.98; letter-spacing: -0.022em;
-  margin-bottom: 24px; max-width: 18ch;
+  font-variation-settings: 'opsz' 144, 'SOFT' 20;
+  font-size: calc(clamp(44px, 7vw, 92px) * var(--headline-scale));
+  line-height: 0.94; letter-spacing: -0.028em;
+  color: var(--ink); margin-bottom: 36px; max-width: 18ch;
 }
-.uc-head em { font-style: italic; color: var(--rust); }
-.uc-deck {
-  font-family: var(--serif-b); font-size: 17.5px;
-  line-height: 1.55; color: var(--ink-soft);
-  max-width: 56ch; margin-bottom: 28px;
+.ar-header-title em {
+  font-style: italic; color: var(--rust);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
 }
-.uc-meta {
-  font-family: var(--mono); font-size: 11.5px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink-mute); margin-bottom: 32px;
+.ar-header-deck {
+  font-family: var(--serif-b); font-size: 18px; line-height: 1.55;
+  color: var(--ink-soft); max-width: 68ch; margin-bottom: 28px;
 }
-.uc-meta b { color: var(--ink-soft); font-weight: 400; }
-.uc-back {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--sans); font-size: 14px;
-  padding: 12px 22px; background: var(--c-2); color: var(--c-9);
-  transition: background 0.15s;
+.ar-header-meta {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute);
 }
-.uc-back:hover { background: var(--pink); }
+.ar-header-who { color: var(--ink-soft); }
 
+/* ============================== AR-SOLO / AR-BODY ============================== */
+.ar-solo { max-width: 760px; margin: 0 auto; padding: 56px 0 32px; }
+.ar-body {
+  font-family: var(--serif-b); font-size: 17px;
+  line-height: 1.65; color: var(--ink); max-width: 68ch;
+}
+.ar-body p { margin: 0 0 20px; }
+.ar-body p i, .ar-body p em { color: var(--rust); font-style: italic; }
+.ar-body p b, .ar-body p strong { color: var(--ink); font-weight: 600; }
+.ar-body .ar-lead-p {
+  font-size: 18.5px; line-height: 1.6; color: var(--ink); font-weight: 500;
+  border-left: 3px solid var(--gold); padding-left: 22px; margin-left: -26px;
+}
+
+/* ============================== SECTION DIVIDERS ============================== */
+.sec-div { margin: 72px 0 36px; position: relative; height: 1px; background: var(--rule); }
+.sec-div::before { content: ''; position: absolute; left: 0; top: -2px; width: 48px; height: 5px; background: var(--rust); }
+
+/* ============================== AR-BODY H2 ============================== */
+.ar-body h2 {
+  margin: 80px 0 28px; padding: 20px 0 20px 24px;
+  border-left: 5px solid var(--rust);
+  font-family: var(--serif-d); font-weight: 500;
+  font-variation-settings: 'opsz' 80, 'SOFT' 30;
+  font-size: calc(clamp(26px, 2.8vw, 36px) * var(--headline-scale));
+  letter-spacing: -0.016em; line-height: 1.2; color: var(--ink);
+}
+
+.ar-break {
+  margin: 56px 0 24px; display: flex; align-items: center; gap: 18px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-mute);
+}
+.ar-break em { font-style: normal; color: var(--rust); letter-spacing: 0.14em; }
+.ar-break::before { content: ''; flex: 1; height: 1px; background: var(--rule-on); }
+.ar-break::after { content: ''; display: block; width: 28px; height: 1px; background: var(--rule-on); }
+
+/* color helpers */
+.ink-pink  { color: var(--pink); }
+.ink-rust  { color: var(--rust); }
+.ink-gold  { color: var(--gold); }
+.ink-soft  { color: var(--ink-soft); }
+
+/* ============================== AR-PULL ============================== */
+.ar-pull {
+  margin: 44px -40px; padding: 32px 48px;
+  background: var(--tint-gold); border-left: 4px solid var(--gold);
+  font-family: var(--serif-d); font-weight: 500; font-style: italic;
+  font-size: 23px; line-height: 1.35; color: var(--ink);
+  font-variation-settings: 'opsz' 60, 'SOFT' 100; letter-spacing: -0.008em;
+}
+.ar-pull em { color: var(--gold); font-style: italic; }
+.ar-pull cite {
+  display: block; margin-top: 14px; font-family: var(--mono); font-style: normal;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
+}
+.ar-pull.is-rust  { background: var(--tint-rust); border-color: var(--rust); }
+.ar-pull.is-rust em { color: var(--rust); }
+.ar-pull.is-pink  { background: var(--tint-pink); border-color: var(--pink); }
+.ar-pull.is-pink em { color: var(--pink); }
+.ar-pull.is-gold  { background: var(--tint-gold); border-color: var(--gold); }
+.ar-pull.is-gold em { color: var(--gold); }
+
+/* ============================== AR-RECEIPT ============================== */
+.ar-receipt {
+  margin: 28px 0; padding: 22px 26px;
+  background: var(--bg-surf); border: 1px solid var(--rule-on);
+  position: relative; font-family: var(--serif-b); font-size: 15.5px; line-height: 1.55;
+}
+.ar-receipt .who {
+  display: block; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); margin-bottom: 10px;
+}
+.ar-receipt p { margin-bottom: 10px; color: var(--ink); }
+.ar-receipt p:last-child { margin-bottom: 0; }
+.ar-receipt p b { color: var(--ink); font-weight: 600; }
+.ar-receipt p i, .ar-receipt p em { color: var(--rust); font-style: italic; }
+
+/* ============================== AR-WARN ============================== */
+.ar-warn {
+  margin: 32px 0; padding: 22px 26px;
+  background: color-mix(in srgb, transparent 92%, #B33A2C);
+  border-left: 3px solid #B33A2C;
+}
+.ar-warn .label {
+  display: block; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #B33A2C; margin-bottom: 12px;
+}
+.ar-warn p { font-family: var(--serif-b); font-size: 15.5px; line-height: 1.55; color: var(--ink); margin-bottom: 12px; }
+.ar-warn p:last-child { margin-bottom: 0; }
+.ar-warn p b { color: var(--ink); font-weight: 600; }
+.ar-warn p i, .ar-warn p em { color: var(--gold); font-style: italic; }
+
+/* ============================== AR-CLOSE ============================== */
+.ar-close {
+  max-width: var(--art-max); margin: 56px auto 14px;
+  padding: 48px var(--pad-x) 28px; border-top: 1px solid var(--rule); text-align: center;
+}
+.ar-close p {
+  font-family: var(--serif-d); font-weight: 500; font-style: italic;
+  font-size: clamp(32px, 4.6vw, 56px); line-height: 1.08;
+  letter-spacing: -0.022em; color: var(--ink);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+.ar-close p em { color: var(--rust); font-style: italic; }
+.ar-close p.is-final { margin-top: 14px; color: var(--rust); }
+
+/* ============================== AR-END-META ============================== */
+.ar-end-meta {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.7;
+  color: var(--ink-soft); letter-spacing: 0.04em;
+}
+.ar-end-meta b { color: var(--ink); font-weight: 400; }
+.ar-end-meta i { color: var(--gold); font-style: italic; }
+.ar-end-meta .fair { font-size: 10.5px; line-height: 1.6; color: var(--ink-mute); letter-spacing: 0.02em; }
+
+/* ============================== FOOTER ============================== */
 footer { border-top: 1px solid var(--rule); padding: 40px var(--pad-x); margin-top: auto; }
 .foot-inner { max-width: var(--max-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; flex-wrap: wrap; }
 .foot-brand { font-family: var(--sans); font-size: 16px; letter-spacing: -0.01em; }
 .foot-tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ============================== RESPONSIVE ============================== */
+@media (max-width: 720px) {
+  .ar-pull { margin-left: 0; margin-right: 0; padding: 24px 26px; font-size: 20px; }
+  .ar-body .ar-lead-p { margin-left: 0; }
+  .ar-end-meta { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -158,15 +302,398 @@ footer { border-top: 1px solid var(--rule); padding: 40px var(--pad-x); margin-t
 </header>
 
 <main>
-  <section class="wrap uc">
-    <p class="uc-kicker">Under Construction · 11 Apr 2026</p>
-    <h1 class="uc-head">The <em>Conclusion</em> Came First.</h1>
-    <p class="uc-deck">
-      How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead — at the cost of victims.
-    </p>
-    <p class="uc-meta">By <b>L. V. Maestri</b> · ~30 min · forthcoming</p>
-    <a href="/website/pages/home.html" class="uc-back">← Back to home</a>
-  </section>
+
+  <!-- ARTICLE HEADER -->
+  <header class="ar-header wrap" data-section="lead">
+    <p class="ar-header-kicker">Media Criticism <span class="ar-header-id">The Fallout Report</span></p>
+    <h1 class="ar-header-title">The <em>Conclusion</em> Came First.</h1>
+    <p class="ar-header-deck">How Brandy Zadrozny uses her investigative and writing skills to write opinion pieces instead, at the cost of the people her work is supposed to protect.</p>
+    <p class="ar-header-meta">By <span class="ar-header-who">L.&nbsp;V.&nbsp;Maestri</span> &middot; ~30 min read &middot; 11 Apr 2026</p>
+  </header>
+
+  <!-- ============================================================
+       SINGLE-COLUMN ARTICLE BODY
+       ============================================================ -->
+  <div class="ar-solo">
+    <article class="ar-body">
+
+      <div class="ar-warn">
+        <span class="label">Content Note</span>
+        <p>This article discusses child sexual abuse, child sexual abuse material, and the public dismissal of survivors. Readers are encouraged to prioritize their own wellbeing.</p>
+      </div>
+
+      <!-- ============================== § WHO BRANDY IS ============================== -->
+      <h2>Who Brandy Is</h2>
+
+      <p class="ar-lead-p">
+        Brandy Zadrozny is one of the most visible journalists in American media right now. Her byline appears on stories about vaccine policy, extremism and political violence, and the Epstein files. She is a Senior Enterprise Reporter at MS&nbsp;NOW, carries an Emmy, and is described in professional profiles as an investigative journalist.
+      </p>
+
+      <p>
+        That label is in contrast to other MS&nbsp;NOW titles that clearly specify they are investigative <i>correspondents</i>. This doesn&rsquo;t mean Brandy isn&rsquo;t an investigative journalist, but it means that is not her job. <b>Investigative journalist</b> as a title carries a specific, heavy weight in a political climate where trust is collapsing and credibility is scarce. It implies a standard of practice: follow the evidence, report what you find, let the facts determine the conclusion.
+      </p>
+
+      <p>
+        The problem is that Brandy does not do that; she does not even attempt to. That is not her job, it is not her goal, and more importantly, that is not her methodology. What she does instead is something much more common and much less honest: <b>she decides what a story means before she even decides to report on it</b>, then uses the tools of investigative journalism to build toward that conclusion while intentionally excluding anything that contradicts it. The result is opinion dressed as reporting, carrying the institutional authority of a major network and the professional credibility of &ldquo;an award-winning investigative journalist.&rdquo;
+      </p>
+
+      <p>
+        Her most famous early investigative work, a series on pickup artists that was a finalist for a Deadline Club award in 2017, covered men who had already been charged. The subjects were known to authorities before she wrote about them. The reporting drew on court records and victim accounts, which is solid journalism, but it is accountability journalism built on existing public record rather than original discovery. She also won two Webby awards from the International Academy of Digital Arts and Sciences for her work on disinformation and vaccines.
+      </p>
+
+      <p>
+        The Emmy that anchors Brandy&rsquo;s investigative reputation was awarded for Outstanding Live Breaking News coverage of January&nbsp;6, 2021, shared across the NBC News team of more than 50 people. Breaking news aggregation during an unfolding public event is a legitimate and skilled form of journalism. But it is not investigative journalism. The distinction matters because investigative journalism means uncovering information that was not previously known. The January&nbsp;6 Emmy recognized real-time synthesis of publicly visible events, which is a different kind of reporting entirely.
+      </p>
+
+      <!-- ============================== § WHAT BRANDY DOES ============================== -->
+      <h2>What Brandy Does</h2>
+
+      <p>
+        This distinction would be unremarkable if Brandy did not consistently present herself, and allow herself to be presented, as an investigative journalist. It isn&rsquo;t a lie, but it is actually more important than a lie would be. She is not just widely marketed as an investigative journalist &mdash; she uses those skills as a weapon, directed at places that oppose her worldview, not at cases needing more investigation. She accepts that framing in interviews and public appearances. The label shapes how her conclusions are received by the people who read them. When an investigative journalist says something did not happen, readers assume that determination followed from investigation. <b>In Brandy&rsquo;s case, the record suggests the determination often came first.</b>
+      </p>
+
+      <p>
+        In September 2022, she published an article: &ldquo;Satanic panic is making a comeback, fueled by QAnon believers and GOP influencers.&rdquo; This is an article mostly, and weirdly indirectly, focused on the case of David Hamblin, an alleged abuser according to claims from his own daughters. The focus of the article is on asserting this alleged abuse as satanic panic, but also, more notably, on framing Utah County Attorney David Leavitt &mdash; notably accused alongside Hamblin in at least one of the cases being investigated at the time &mdash; as an innocent victim of harassment. He was working on a case in which he was one of the alleged abusers of a child. Nearly all the article is focused on countering the harassment and public outcry against Leavitt, both for his alleged participation and this specific conflict of interest.
+      </p>
+
+      <p>
+        Nowhere in the article are the victims mentioned. No grace is given to them, nor were their lives mentioned as deserving of justice, despite her assertion of that for Leavitt.
+      </p>
+
+      <p>
+        In 2020, Leavitt disbanded the Utah County SVU (Special Victims Unit). After Utah County Sheriff Mike Smith opened an investigation into the alleged abuse ring that named Leavitt in a victim statement, Leavitt then demanded Smith&rsquo;s resignation, accusing his office of being used for political purposes. Smith refused to resign, won re-election, then eventually won the Utah Sheriffs&rsquo; Association Lawman of the Year award in 2025, while Leavitt lost his seat. It&rsquo;s worth noting that Leavitt called his accuser mentally ill at least five times in his counter-statements. He was eventually confronted, then pivoted to just saying she had her &ldquo;facts completely wrong.&rdquo;
+      </p>
+
+      <p>
+        Hamblin was arrested the same month as Brandy&rsquo;s article, and eventually the case was dismissed with prejudice. It was dismissed because the prosecutors withheld evidence from the defense, not because the allegations were ruled false. The abuse these victims described had documentation going back as far as the &rsquo;80s, and they are being dismissed by Brandy on the grounds that, in 2022, Leavitt was running for office and that old accusations against Hamblin were being brought up again to discredit Leavitt&rsquo;s bid. In reality, Hamblin&rsquo;s abuse had been repeatedly documented over the last 40 years; the cases were dropped on technicality, not on a declaration of innocence. Hamblin is still facing felony charges in other counties. His ex-wife was arrested the next year on related charges.
+      </p>
+
+      <p>
+        I do not know if the implication here is true &mdash; I have no reason to believe so &mdash; but if I were an investigative journalist who specialized in dispelling misinformation, I would certainly investigate and mention my findings in my work on the case, especially if I wanted to dispel misinformation about Leavitt. His conflict of interest is a signal I would follow.
+      </p>
+
+      <!-- ============================== § WHAT BRANDY SAYS SHE BELIEVES ============================== -->
+      <h2>What Brandy Says She Believes</h2>
+
+      <p>
+        In 2023, after the arrest of Hamblin&rsquo;s ex-wife for assault on a child, Brandy contacted a journalist covering the Utah County Sheriff&rsquo;s investigation. When asked whether she would take victim statements seriously if the case developed further, she replied that what matters is whether <i>&ldquo;someone with some sort of authority feels that they are real.&rdquo;</i> She explained that victim statements alone, particularly those involving claims of mass abuse and organized conspiracy, were not sufficient for her to pursue a story as real.
+      </p>
+
+      <div class="ar-pull is-rust">
+        Brandy only cares if the crime <em>wasn&rsquo;t</em> committed. If it happened, then she doesn&rsquo;t &mdash; because if it happened, her worldview crumbles, and her ability to write the article completely disappears.
+      </div>
+
+      <div class="ar-receipt">
+        <span class="who">Brandy Zadrozny, on belief</span>
+        <p>
+          &ldquo;I believe people, inherently, especially &mdash; I am a woman and a mother, my inclination is to believe people, but I also think we have a bar to reach on the other side before we go straight to believing them.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        She made this statement immediately before she wrote her article about David Leavitt and satanic panic. She made it in an interview about the David Hamblin case, while she was &ldquo;investigating&rdquo; it. It was clear at that time she did not believe the accusations, but instead of walking away she spun it to suit her premade conclusions. She uses QAnon and GOP conspiracy theorists to frame this case as &ldquo;nearly impossible&rdquo; while ignoring the fact the accused was a popular member of the GOP.
+      </p>
+
+      <p>
+        What&rsquo;s that about, Brandy? Are you just trying to fit everyone into the ideological categories they might not belong to in order to discredit them? You wouldn&rsquo;t be trying to stuff everyone into specifically colored boxes, would you? With no obvious foreshadowing:
+      </p>
+
+      <p>
+        In October 2025, she published a piece built around an interview with independent journalist Ken Klippenstein about the wave of politically ambiguous mass shootings. The piece is one of her better ones, largely because Klippenstein is doing the actual reporting and she is platforming it. In that piece, Klippenstein describes the failure of media coverage of the Kirk and Dallas shootings in precise terms: journalists jammed the shooters into ideological boxes based on incomplete evidence, reached conclusions before the facts were established, and missed the actual story as a result.
+      </p>
+
+      <p>
+        She agreed with him. She described the media scramble to assign political meaning to violence as a recurring failure. She asked Klippenstein to explain the nuance that most coverage missed, and engaged with these statements with a seemingly genuine belief.
+      </p>
+
+      <!-- ============================== § HER INVESTIGATION INTO SASCHA ============================== -->
+      <h2>Her &ldquo;Investigation&rdquo; Into Sascha Barros</h2>
+
+      <p>
+        A few months later, she published her piece on Sascha Barros, an Iraq War veteran with two decades of service, whose recovered memories of childhood abuse had attracted a large online following. The piece is built on the same failure she and Klippenstein had just finished describing &mdash; it frames the case as a left-wing conspiracy. It reaches its conclusion in the subtitle, puts the subject&rsquo;s own language in scare quotes before the reader has any context, opens with a framing device designed to associate the story with conspiracy theorists, and proceeds to exclude documented evidence that contradicts its predetermined verdict.
+      </p>
+
+      <p>
+        The gap between the standard she articulated in October and the standard she applied in that piece is not subtle. The Barros piece presents itself as an investigation into an unverifiable claim. What it delivers is an emblematic dismissal constructed to look like investigation &mdash; in a way that only the practiced writing and nuanced articulation that years in professional writing can do.
+      </p>
+
+      <p>
+        It&rsquo;s a lot, but it&rsquo;s actually a good lesson in how you can be led by the nose by good writing. The title immediately begins to inoculate us against anything that might sound coherent. &ldquo;The conspiratorial left&rdquo; bleeds into &ldquo;needed proof.&rdquo; The subtitle puts &ldquo;unlocked&rdquo; in quotation marks. The cherry: the intentional deadname and misidentification. Story over &mdash; it&rsquo;s pretty well done. <i>&ldquo;It&rsquo;s a conspiracy, they just hate Trump, and it&rsquo;s all a lie, there is no proof, he is even just cis, all at once.&rdquo;</i> Easy. She even implied a lack of proof without actually directly claiming Sascha was the one without it. She addressed both the left and right at the same time. These are not accidents; these are the skills of a good writer. We are now primed to read what comes next.
+      </p>
+
+      <p>
+        Brandy opens not with Barros but with a grandmother at a county commissioners meeting protesting against ICE&rsquo;s partnership with the county, and a &ldquo;left-wing&rdquo; activist at a city council meeting protesting against their tax money going to a &ldquo;sadistic pedophile.&rdquo;
+      </p>
+
+      <p>
+        Before a single direct statement is presented &mdash; just from title and subtitle &mdash; the reader has been told anyone who believes him is a conspiracy theorist, Q or BlueAnon, and soon she will be making the case that supporters of justice for Sascha Barros are dangerous. But there is one type of person who is hard to make those kinds of claims about.
+      </p>
+
+      <p>
+        By leading with the most sympathetic possible face of Barros&rsquo; supporters, Brandy controls how the reader processes everyone who comes after. The grandmother functions simultaneously as the most innocent version of the community and as proof that the community cannot be taken seriously. The grandmother is a victim, in her eyes &mdash; a victim of Sascha and his supporters, despite her being a supporter of Sascha herself. She&rsquo;s a victim, not a member, of a cult-like group of people &ldquo;trauma bonding&rdquo; over the internet. That assertion was made on Brandy&rsquo;s social media the day after she posted this article.
+      </p>
+
+      <p>
+        The next is someone, a &ldquo;left-winger,&rdquo; speaking against sending their taxes to fund the &ldquo;sadistic pedophile&rdquo; in the White House. This again gives us the other side&rsquo;s good faith. The left supports the grandmother against the implied deceit she is supposedly a victim of, while the right condemns the &ldquo;left-winger&rdquo; and anything they believe. Again, both sides satisfied.
+      </p>
+
+      <p>
+        Next she moves to go over all the biggest claims at once, obviously front-loading you with the height of the claims before ever actually talking about the story. Epstein, Congress, Supreme Court justices, and Trump. She mentions CSAM, fight clubs, animal killings, and snuff films. She brings up QAnon and BlueAnon, smears real journalists as &ldquo;self-styled investigators&rdquo; and supporters as &ldquo;creators who have packaged the narratives for millions of followers.&rdquo; She then implies a comparison of Sascha&rsquo;s story with first Sandy Hook, then Gateway Pundit&rsquo;s harassment campaign on election workers, then Pizzagate &mdash; not through actually typing anything, but through hyperlinking her words within the statement:
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">From Zadrozny&rsquo;s piece on Sascha Barros</span>
+        <p>
+          &ldquo;Like QAnon, this community has self-styled investigators who have compiled specious evidence, and creators who have packaged the narratives for millions of followers. Along the way, they too have ensnared regular, innocent people into their false theories, a practice that has time and again led to real harm.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        She then implies Sascha&rsquo;s story is being used to call the entire Epstein scandal a hoax, by again hyperlinking &mdash; this time to a time Trump himself called the Epstein files a &ldquo;Democratic hoax.&rdquo; Trump has never mentioned Sascha&rsquo;s story, but the implication is clear: it&rsquo;s Sascha and other survivors speaking up without evidence that gives those involved ammunition against people who make claims of abuse. She says this in the same article attacking the credibility of a survivor of CSA.
+      </p>
+
+      <p>
+        To be clear: we have enough evidence of Sascha&rsquo;s CSA that warrants an investigation. What we don&rsquo;t have is proof of who did it or how. We will get to that, because it&rsquo;s key in proving that Brandy never investigated with any intent to learn anything new &mdash; only to give her callous dismissal credit. There was enough evidence to show abuse likely happened, and that it was caught on camera in material distributed within our own military.
+      </p>
+
+      <p>
+        It&rsquo;s only now we are introduced to Sascha. Everything before this has happened before addressing the alleged victim directly, and she immediately confirms her dismissal of their identity. It&rsquo;s worth going over in full:
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">From Zadrozny&rsquo;s piece on Sascha Barros</span>
+        <p>
+          &ldquo;&hellip;for the past several months, believers have shown up at city council meetings and flooded social media with Riley&rsquo;s claims, which have targeted not just Trump but regular people in Riley&rsquo;s orbit. In January, Rosie O&rsquo;Donnell urged 2.9 million TikTok followers to &lsquo;bear witness&rsquo; to Riley&rsquo;s story.
+        </p>
+        <p>So, in March, I did.</p>
+        <p>
+          I met Sascha Riley in the lobby of a hotel in downtown Victoria, British Columbia, on a gray morning. In his profile photos, Riley has long blond hair and wears sunglasses. But when I met him, he wore his hair short and was dressed professionally: in a mustard button-down, khakis and loafers. We walked for hours through the spitting rain, along the harbor and into downtown, eventually settling into a tiny Filipino coffee shop.
+        </p>
+        <p>
+          Victoria, with its harbor vistas and progressive politics, was a &lsquo;little slice of heaven,&rsquo; he said, a welcome change from Duncan, Oklahoma, where he lived until August.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        Another masterclass of framing and writing skill. She connects Sascha to the most easy-to-dismiss person in the story yet, using her framing to enter us into the scene &mdash; once again, with us already primed. She says the image of them on their social media isn&rsquo;t what she saw. She mentions their haircut, and their khakis. Sascha uses they/them pronouns, and she knows that, because it&rsquo;s on the social media accounts she references herself. Mentioning their haircut in contrast to that social media presence validates erasing that identity to anyone who was already wanting to do so. Sascha&rsquo;s sunglasses are mentioned to invoke coolness, a person outside the status quo.
+      </p>
+
+      <p>
+        This is countered by her mentioning Sascha&rsquo;s khakis, which also works as an example of her framing of Sascha as just another cishet man to be ignored. Their literal clothes are being used to contrast against &ldquo;long blond hair and wears sunglasses,&rdquo; to invalidate their identity. There is no accident here. Brandy Zadrozny is a skilled writer. This was done on purpose, showing clearly that she will use anything to discredit someone she doesn&rsquo;t believe, even their basic identity. But more importantly, all of this frames Sascha as someone who has <i>gained</i> from their claims, and that they now live in &ldquo;a little slice of heaven.&rdquo; By focusing on how nice Sascha looks, how put-together they are, she is signaling that they are now entirely okay &mdash; that they are not suffering, and, by extension, not a victim, and not worthy of justice.
+      </p>
+
+      <p>If she were not a professional writer, this could be an accident. A manifestation of her biases. Misguided, but not intentional.</p>
+
+      <div class="ar-pull is-rust">But she is not.</div>
+
+      <!-- ============================== § DISBELIEF AS EVIDENCE ============================== -->
+      <h2>Her Weighting of Disbelief as Evidence</h2>
+
+      <p>
+        This next section is an important one, but I&rsquo;m sure most of you are already familiar with the newly viral egomaniac Lisa Voldeng. Instead of focusing on her as a person, we will instead focus on exactly what is getting caught in her grasp as the story passed through her, how it easily allowed Brandy to discredit the whole case, and how this is unlikely to be an accident on the part of Lisa. We don&rsquo;t have access to everything that Brandy was told directly by Sascha, but we do have the interview of Sascha by Lisa. Some things become clearer when going over those interviews.
+      </p>
+
+      <p>
+        Sascha claims their adopted father was around Epstein, and sometimes transported people connected to Epstein, and that they might have seen him once &mdash; and they clearly specify that they can barely remember him. Sascha does <i>not</i> claim their adopted father was Epstein&rsquo;s pilot.
+      </p>
+
+      <p>
+        On Trump, Sascha only encountered him a few times. They do not indicate Trump was a constant figure in their life, only that he was one of the scarier ones. The implication of these ideas was emphasized by Lisa, and she intentionally kept the focus of the interview on Trump and Epstein the entire time. Trump and Epstein were hyperfixations of Lisa. It is she who puts forth the idea that Sascha&rsquo;s abuse could be involved in ritualistic satanism &mdash; which Sascha pushed back on immediately.
+      </p>
+
+      <p>
+        But it does show where she was trying to go: satanic panic. That&rsquo;s not a connection to Brandy &mdash; just a coincidence, a premade tool used by anyone wanting to ignore something intense enough to endanger their worldview. It is the same framing often used to discredit the stories of survivors. Lisa is consistent with one thing during the interview: her &ldquo;special connections,&rdquo; contacts in law enforcement as well as her advisory counsel to law enforcement. She mentions the International Criminal Court, and name-drops people like Aaron Parnas and Don Lemon, mentioning how they follow her on social media.
+      </p>
+
+      <p>
+        It was just talk, designed to get Sascha to trust her, for the listeners to trust her, and to get Sascha to tell her what she wanted to hear. She did this to a victim of CSA who admits to having issues with their memory. Lisa&rsquo;s entire methodology &mdash; summarizing events back in stronger terms than the subject used and then seeking confirmation &mdash; is the same methodology that caused multiple licensed therapists to lose their credentials during the recovered memory controversies of the 1980s and 1990s. The NICHD forensic interview protocol exists specifically to prevent it. Lisa holds no credentials to lose, but the technique is documented, named, and professionally condemned regardless of who uses it. Every one of these framings from Lisa Voldeng was used by Brandy in the article to discredit Sascha, and only came from Lisa herself. Sascha firmly stated they do not believe the abuse was satanic or ritualistic &mdash; not just to Lisa directly before she told that to Brandy, but publicly.
+      </p>
+
+      <p>
+        It&rsquo;s worth clearly stating: Sascha&rsquo;s story is one that is, at most, adjacent to Trump and Epstein. Sascha is not a victim of &ldquo;the Trump-Epstein ring&rdquo;; they are a victim of extreme organized child abuse that eventually expanded to include abusers outside of their family &mdash; first with family friends, then continuing into selling Sascha to anyone they could. The networks at play in the story of Sascha Barros are not the same ones that operate at the highest level. It&rsquo;s a story of familial abuse, organized crime, and military corruption. And now, in its aftermath, we sit in the discourse around the story as if it were quicksand, pulling us into misunderstandings caused by failures of journalism that affect much more than the topic at hand.
+      </p>
+
+      <!-- ============================== § HOW BRANDY "DISPROVED" ============================== -->
+      <h2>How Brandy &ldquo;Disproved&rdquo; Sascha&rsquo;s Story</h2>
+
+      <p>
+        Next we come to the main body of her case. No more diversion, no more sly insults, no more burying the lead. Seven unnamed family members are presented as meaningful evidence against Barros&rsquo; account.
+      </p>
+
+      <div class="ar-pull is-rust">
+        Done. That&rsquo;s it. That&rsquo;s the actual investigation. <em>The family denies it.</em>
+      </div>
+
+      <p>
+        Anyone with working knowledge of child sexual abuse cases knows that family denial is the baseline response, not exculpatory evidence. It is so predictable that its absence would be remarkable. Brandy&rsquo;s entire body of work requires an understanding of that knowledge. Presenting family denial as meaningful without acknowledging this dynamic is either ignorance or dishonesty, and given her years defending vulnerable populations, ignorance is not available to her.
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">From the piece &middot; on the sheriff&rsquo;s visit</span>
+        <p>
+          &ldquo;&lsquo;This is a small county,&rsquo; Gordon County Sheriff&rsquo;s Chief Deputy Robert Paris said when I went to verify their visit. &lsquo;We know most of the people &mdash; and are related to a lot of them. I don&rsquo;t know anything about tunnels or people being trafficked.&rsquo;&hellip; [Bill] seemed like a very nice man.&rdquo;
+        </p>
+      </div>
+
+      <p>
+        This LEO seems to believe part of the claims involve tunnels under Bill&rsquo;s home. There was never any claim of tunnels in any location, let alone the current residence of Bill Riley. This means it was likely made up by whoever called in the report &mdash; someone who believed Sascha and also believed the legal system was not doing enough.
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">From the piece &middot; her stated investigation</span>
+        <p>&ldquo;I asked Sascha and Voldeng for documents and records that might support his specific claims. They didn&rsquo;t provide any.&rdquo;</p>
+        <p>&ldquo;I reached out to dozens of people who knew Sascha in real life and as a child. Seven family members spoke with me.&rdquo;</p>
+        <p>&ldquo;I reached out to everyone Sascha alleged to have been present at the criminal child abuse parties in the 1980s. None of them agreed to speak on the record.&rdquo;</p>
+        <p>&ldquo;I inquired with local police departments mentioned by Sascha in Alabama and Oklahoma. They had no corroborating reports from the time.&rdquo;</p>
+      </div>
+
+      <p>
+        Sascha does not allege abuse occurred in Oklahoma; that is where they were living as an adult when they returned from Iraq, not where they lived as a child. That was just where the report Sascha filed for Sammy was filed. She did not even reach out to Detective Donald Pauley or Special Agent Lindsey Adamson &mdash; the names she would be reaching out to if she were investigating anything in Oklahoma. I restate: the only thing to find in Oklahoma is a missing persons report Sascha filed as an adult.
+      </p>
+
+      <p>
+        In Alabama, police were called because of the sounds of a beating, which was common at the time and not followed up on. Sascha claims blood was found, but that wouldn&rsquo;t even be suspicious in a world where it was legal and common to beat your wife and kids. Alabama was one of a few locations where Sascha claims there was CPS involvement. Although police reports during Sascha&rsquo;s childhood mostly occurred in Texas, Tennessee, and Florida, CPS reports would not have been uncovered by this line of inquiry, and Brandy would know this. This is another clear example of a time we cannot just give her the benefit of the doubt.
+      </p>
+
+      <p>
+        As she begins to conclude, she does something sly &mdash; something, I admit, that maybe I&rsquo;m reading into. But so far, in the nearly hundred articles of hers I have read, she knows how to write. She begins her conclusion:
+      </p>
+
+      <div class="ar-receipt">
+        <span class="who">From the piece &middot; her conclusion</span>
+        <p>
+          &ldquo;Something may have happened to Sascha. I don&rsquo;t know. But what he said happened almost certainly did not. One person who grew up with him, and found themselves caught up in his accusations, told me they were livid. Not with Sascha, but his followers.&rdquo;
+        </p>
+        <p>
+          &ldquo;I really wish you guys would just stop putting this on the internet,&rsquo; the family member said. &lsquo;It&rsquo;s really bad, and it&rsquo;s been bad his whole life. It&rsquo;s just not fair for him to be paraded around &mdash; because a lot of it is just about politics and it&rsquo;s just not fair. He doesn&rsquo;t deserve that. I know he&rsquo;s causing this, but it&rsquo;s not really his fault.&rsquo;&rdquo;
+        </p>
+      </div>
+
+      <p>
+        This is a careful statement. What is your read on who this person is? A family friend, or maybe even a friend of Sascha during their childhood? It&rsquo;s one of the same seven family members &mdash; and one who apparently can&rsquo;t even respect Sascha&rsquo;s identity, it&rsquo;s worth noting. I don&rsquo;t talk to my own they/them sibling at all anymore, but I don&rsquo;t misgender them, either.
+      </p>
+
+      <p>
+        This person is brought up in a way that first implies they were not a part of that group, then sneakily retracts it in a way most won&rsquo;t notice. She buries the detail of this being a family member between the quotes &mdash; in the tiny little section we all commonly skip, the part where a writing teacher would tell you not to use the word &ldquo;said,&rdquo; because it&rsquo;s boring and people don&rsquo;t like to read it. Maybe I&rsquo;m reading into it, but considering her entire case is attempting to assert that her interviews count as an investigation, using her credentials as a weapon, I&rsquo;d guess not.
+      </p>
+
+      <!-- ============================== § WHAT BRANDY IGNORED ============================== -->
+      <h2>What Brandy Ignored To Suit Her Conclusions</h2>
+
+      <p>
+        Most significantly of all, the piece ignores documented evidence that a real event connected to Barros&rsquo; account occurred. In May 2009, two soldiers at Fort Carson, Colorado, were arrested by a joint Colorado Springs Police and military criminal investigation for distributing child sexual abuse material through a peer-to-peer network. This was reported by the <i>Denver Post</i> at the time. Barros was stationed at Fort Carson during that period.
+      </p>
+
+      <p>
+        Michael Balis, identified through military records as Sascha&rsquo;s First Sergeant at Fort Carson, gave a statement that he was present when command questioned Sascha about whether they appeared in a video during that investigation. Although Balis seems defensive due to the nature of the case, he did not contest the context of that questioning. That context is clear: Sascha was asked to confirm identification in CSAM by the commanding officers who questioned both Sascha and Balis, alongside the military and police investigators in an investigation into the peer-to-peer CSAM network within the Army. Sascha was identified as underage in the video &mdash; and that must be the case, not just because Sascha says so, but because if they weren&rsquo;t, they would have been arrested. This doesn&rsquo;t prove Sascha&rsquo;s entire story, but it proves abuse took place, and that it involved CSAM production.
+      </p>
+
+      <p>
+        Knowing this, does it seem responsible to make the article that Brandy did? She clearly knows the stigma and vitriol survivors receive. She just doesn&rsquo;t care, because she had already decided Sascha was a liar, and she doesn&rsquo;t think about the consequences of her writing &mdash; no matter how dangerous, and no matter how many others it would affect. This will become more apparent after we move from Sascha onto her other writings, but it is worth stating now that this is not the extent of my case here.
+      </p>
+
+      <p>
+        Brandy did not engage with any of this. The piece does not mention Fort Carson, the 2009 investigation, or Balis. It concludes that Sascha&rsquo;s claims are unverifiable without acknowledging the evidence that something involving Sascha and a military CSAM investigation occurred at their confirmed duty station.
+      </p>
+
+      <p>
+        Her published conclusion is &ldquo;something may have happened to Sascha, I don&rsquo;t know.&rdquo; That is an honest take for someone to have, defensible even. On her social media since the article, however, she is much more direct:
+      </p>
+
+      <div class="ar-pull is-rust">
+        &ldquo;Sascha Riley is not believable.&rdquo;
+        <cite>&mdash; Zadrozny, on social media after publication</cite>
+      </div>
+
+      <p>
+        The first construction is designed to sound sensitive and professional. The second is what she actually thought from the beginning. <b>The gap between them is the methodology made visible.</b>
+      </p>
+
+      <!-- ============================== § DANGEROUS AND UNFETTERED ============================== -->
+      <h2>Brandy&rsquo;s Writing Is Dangerous And Unfettered</h2>
+
+      <p>
+        In February 2014, Brandy wrote a piece for the <i>Daily Beast</i> titled &ldquo;The Home Birth Rebellion,&rdquo; framing the debate between doctors and midwives as a war between two equally entrenched ideologies. She presented a pro-homebirth study from the Midwives Alliance of North America alongside peer-reviewed research from Cornell as though both were equally credible &mdash; a false balance that was then criticized by a medical expert for her failure to read the underlying data. She was sympathetic to women&rsquo;s choices and explicitly critical of anti-homebirth advocates for being &ldquo;demagogic.&rdquo;
+      </p>
+
+      <p>
+        Four months later, in June 2014, Brandy wrote &ldquo;Natural Childbirth Is Not a Cult,&rdquo; a direct rebuttal to a columnist who had applied that label to the natural childbirth movement. She argued the characterization was unfair, called &ldquo;mother shaming&rdquo; unacceptable, quoted experts who described homebirth advocates as &ldquo;serious people with legitimate concerns,&rdquo; and disclosed that her own son was born without pain medication, positioning herself as a sympathetic insider. The women she spoke to, in her words, were &ldquo;informed and passionate.&rdquo;
+      </p>
+
+      <p>
+        Six months after that, she wrote an article about a baby in Texas that died after a home birth, titled &ldquo;Are Water Births Toxic to Babies?&rdquo; In it she takes a neutral tone, admitting this event was done unsafely, but concludes that water births are safe when done properly, under supervision. It&rsquo;s a balanced take, and I also support the choices of mothers to choose the space they give birth in. But what it doesn&rsquo;t do is mention that Brandy herself had been defending at-home births and purposely framing those against home birth as unreasonable, generalizing them into people who are calling women &ldquo;ignorant, gullible, and selfish.&rdquo; I might support the rights of mothers to make their own choices, but I also wasn&rsquo;t writing pro-homebirth op-eds for a large news outlet.
+      </p>
+
+      <p>
+        These three pieces are surrounded by other articles with titles like &ldquo;Best Cities to Find Love,&rdquo; &ldquo;Video Games Make You (More) Racist,&rdquo; and &ldquo;Why the Muppet Movie Is a Mess.&rdquo; That&rsquo;s pretty normal for the <i>Daily Beast</i>. Then she moved to NBC. Articles there take a more serious tone.
+      </p>
+
+      <p>
+        In February 2020, she published a deeply powerful piece for NBC about a woman, alias Judith, who lost her baby after following freebirth communities online. The article is truly intense; it&rsquo;s clear about the horrors involved in these sorts of events when they occur, and takes a clear stance against misinformation. It is hard to read, and it is graphic. It is very clear about the dangers of freebirth &mdash; a tone shift. The article was titled &ldquo;I Brainwashed Myself with the Internet&rdquo; and subtitled &ldquo;Nearly 45 weeks pregnant, she wanted a &lsquo;freebirth&rsquo; with no doctors. Online groups convinced her it would be OK.&rdquo; This piece, in sharp contrast to her previous ones on the same topic, treats freebirth advocacy as a dangerous radicalization pipeline.
+      </p>
+
+      <p>
+        It does not acknowledge that Brandy spent 2014 writing pieces that functioned as legitimizing content for the same community and ideology she was now treating as a radicalization pipeline. I do understand that would not be the time to mention that. But I think the time to mention it was <i>before</i> she wrote the article.
+      </p>
+
+      <p>
+        The 2020 piece even invokes the concept of algorithmic radicalization &mdash; the process by which platforms nudge users toward increasingly extreme content &mdash; without noting that her own earlier work occupied a position in exactly that pipeline for readers who encountered it. I wonder if Judith ever read one of Brandy&rsquo;s articles on the topic. I wonder if she would recognize Brandy even if she had.
+      </p>
+
+      <p>
+        The piece was powerful. It doesn&rsquo;t pull punches. But the hypocrisy is truly appalling. I hope somewhere I missed an apology she made to any victims who may have read her articles and used them to help make the decision that led to the loss of their child. I looked. If it exists, it&rsquo;s buried somewhere on her social media in the last twelve years.
+      </p>
+
+      <p>
+        Brandy has built her entire professional identity on the argument that words and framing shape behavior &mdash; that online content radicalizes people by giving them permission structures and echo chambers that validate dangerous choices. She understands this better than most working journalists. Which makes her failure to apply that understanding to her own earlier work, or to acknowledge its connection to the harm she was documenting, into something more than just an oversight.
+      </p>
+
+      <div class="sec-div"></div>
+
+      <p>
+        This article was not a comprehensive accounting of the way that Zadrozny lies &mdash; between the words, in the omissions she is too experienced to make on accident, and in the way her framing invalidates her stated core values. The only lies I covered were in her coverage of Sascha Barros. That isn&rsquo;t the point of this work. The point is to show her, clearly, as a writer of op-eds, not an investigative journalist; to show her as biased to a degree that compromises her integrity as a journalist; to show that her methodology is to find a conclusion before she even begins to research; and to show she does not concern herself with the consequences of what she writes.
+      </p>
+
+      <p>
+        She is too smart a person and too skilled a writer to outright phrase anything directly enough to be a lie. But she still lies. She is either lying constantly &mdash; by omission, in phrasing, in implication &mdash; or she doesn&rsquo;t know she is doing it because she is stupid. And I clearly don&rsquo;t think she is stupid. I think she is an extremely talented writer, a trained investigator, and a biased, unreliable voice. <b>Her close alignment to my own ideology does not make her an ally when she doesn&rsquo;t understand what the ideology even means or why it is important to be consistent about it.</b>
+      </p>
+
+      <p>
+        When someone carrying the institutional authority of MS&nbsp;NOW and NBC, and the professional credibility of an Emmy-winning investigative journalist, publishes a conclusion, readers have no way of knowing that the conclusion preceded the investigation. They assume the opposite. The subjects of those conclusions &mdash; whether a struggling veteran whose account contains documented corroboration, or a grieving mother whose community Brandy once legitimized &mdash; have no equivalent platform to respond.
+      </p>
+
+      <p>
+        Investigative journalism is the highest standard in the profession because it carries the most responsibility. You are not just reporting what happened. You are determining, with the authority the label implies, what is true and what is not. That authority requires the standard to be real, not performed. When the conclusion comes first and the investigation is constructed to support it, the label becomes a tool for laundering opinion as fact.
+      </p>
+
+      <p>
+        That is what Brandy Zadrozny does. Not always. Not in every piece. But consistently enough, and on subjects consequential enough, that the record deserves to be stated &mdash; for the record.
+      </p>
+
+    </article>
+  </div>
+
+  <!-- ============================================================
+       CLOSING BAND
+       ============================================================ -->
+  <div class="ar-close">
+    <p>When the conclusion comes first, the label becomes a tool for <em>laundering opinion as fact.</em></p>
+    <p class="is-final"><em>That is what Brandy Zadrozny does.</em></p>
+  </div>
+
+  <!-- end-of-article meta -->
+  <div class="ar-end-meta" style="max-width: var(--art-max); margin: 0 auto; padding: 0 var(--pad-x) 64px;">
+    <div>
+      <b>Filed</b> &middot; 11 Apr 2026 <br>
+      <b>Author</b> &middot; L. V. Maestri <br>
+      <b>Subject</b> &middot; the reporting methods of Brandy Zadrozny <br>
+      <b>Companion piece</b> &middot; <i>The Horrors Were Always Real</i>
+    </div>
+    <div class="fair">
+      The thumbnail image was photographed by Ralph Bavaro for MS&nbsp;NOW and is used here under fair use for the purpose of commentary and criticism. No affiliation with or endorsement by MS&nbsp;NOW or NBCUniversal is implied. This image was created as promotional material for MSNBC&rsquo;s rebrand to MS&nbsp;NOW, and its use here does not substitute for or compete with any commercial licensing market for the original work. The use is transformative in nature; the image illustrates critical commentary on the subject matter of this article rather than serving its promotional purpose. The visual elements of the image &mdash; specifically the LEFT&nbsp;LED and RIGHT&nbsp;LED calibration labels &mdash; are used here as editorial commentary on the political framing practices discussed in this article, a reading entirely distinct from the image&rsquo;s original promotional intent.
+    </div>
+  </div>
+
 </main>
 
 <footer>
